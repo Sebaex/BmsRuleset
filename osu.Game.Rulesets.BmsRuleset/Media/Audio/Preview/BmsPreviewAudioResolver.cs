@@ -14,7 +14,7 @@ internal static class BmsPreviewAudioResolver
         var candidates = new List<string>();
         var seenPaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-        foreach (var candidate in getDedicatedPreviewCandidates(previewFile))
+        foreach (var candidate in getDedicatedPreviewCandidates(basePath, previewFile))
         {
             foreach (var resolvedPath in resolveCandidatePaths(fileStore, candidate))
             {
@@ -28,13 +28,40 @@ internal static class BmsPreviewAudioResolver
         return candidates;
     }
 
-    private static IEnumerable<string> getDedicatedPreviewCandidates(string? previewFile)
+    private static IEnumerable<string> getDedicatedPreviewCandidates(string basePath, string? previewFile)
     {
         if (!string.IsNullOrWhiteSpace(previewFile))
             yield return previewFile;
 
-        foreach (var extension in BmsAudioResourceStore.Extensions)
-            yield return $"preview.{extension}";
+        var fallbackCandidates = new List<string>();
+
+        foreach (var file in Directory.EnumerateFiles(basePath, "*", SearchOption.AllDirectories))
+        {
+            var fileName = Path.GetFileName(file);
+
+            if (!fileName.Contains("preview", StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            var extension = Path.GetExtension(file).TrimStart('.');
+
+            foreach (var supportedExtension in BmsAudioResourceStore.Extensions)
+            {
+                if (!extension.Equals(supportedExtension, StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                var relativePath = Path.GetRelativePath(basePath, file);
+
+                if (fileName.Equals($"preview.{supportedExtension}", StringComparison.OrdinalIgnoreCase))
+                    yield return relativePath;
+                else
+                    fallbackCandidates.Add(relativePath);
+
+                break;
+            }
+        }
+
+        foreach (var candidate in fallbackCandidates)
+            yield return candidate;
     }
 
     private static IEnumerable<string> resolveCandidatePaths(BmsFileResourceStore fileStore, string candidate)
