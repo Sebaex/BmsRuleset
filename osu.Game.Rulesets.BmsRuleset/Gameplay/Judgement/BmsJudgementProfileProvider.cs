@@ -60,7 +60,19 @@ public static class BmsJudgementProfileProvider
 
     public static double RateForExRank(BmsLayoutVariant layout, double exRank)
         // BMSPlayerRule first converts DEFEXRANK to an integer percentage.
-        => exRank > 0 ? Math.Truncate(Math.Truncate(exRank) * Math.Round(RateForRank(layout, 2) * 100) / 100) / 100 : RateForRank(layout, 2);
+    {
+        if (exRank <= 0)
+            return RateForRank(layout, 2);
+
+        var integerExRank = Math.Truncate(exRank);
+        var rate = Math.Truncate(integerExRank * Math.Round(RateForRank(layout, 2) * 100) / 100) / 100;
+
+        // Keep EXRANK-derived rates distinct from the discrete #RANK profile markers.
+        if (integerExRank != 100 && Array.IndexOf(rank_rates, rate) >= 0)
+            rate = Math.BitIncrement(rate);
+
+        return rate;
+    }
 
     private static BmsJudgementWindowTable getTable(BmsLayoutVariant layout, int column, double judgementRate, bool tail)
     {
@@ -107,12 +119,52 @@ public static class BmsJudgementProfileProvider
     private static BmsJudgementProfile createProfile(BmsLayoutVariant layout, double rate)
         => layout switch
         {
-            BmsLayoutVariant.Bms5K or BmsLayoutVariant.Bms5K2P or BmsLayoutVariant.Bms5KDouble => fiveKeys(rate),
+            BmsLayoutVariant.Bms5K or BmsLayoutVariant.Bms5K2P or BmsLayoutVariant.Bms5KDouble => lr2Profile(rate),
             // ReSharper disable once RedundantSwitchExpressionArms
-            BmsLayoutVariant.Bme7K or BmsLayoutVariant.Bme7K2P or BmsLayoutVariant.Bme7KDouble => sevenKeys(rate),
-            BmsLayoutVariant.Pms9K or BmsLayoutVariant.Pms9K2P or BmsLayoutVariant.Pms9KDouble => pms(rate),
-            _ => sevenKeys(rate),
+            BmsLayoutVariant.Bme7K or BmsLayoutVariant.Bme7K2P or BmsLayoutVariant.Bme7KDouble => lr2Profile(rate),
+            BmsLayoutVariant.Pms9K or BmsLayoutVariant.Pms9K2P or BmsLayoutVariant.Pms9KDouble => lr2Profile(rate),
+            _ => lr2Profile(rate),
         };
+
+    private static BmsJudgementProfile lr2Profile(double rate)
+    {
+        // #RANK 4 (Very Easy) is not listed in the LR2 reference, so it shares Easy windows.
+        var rank = Array.IndexOf(rank_rates, rate);
+        var perfect = 18d;
+        var great = 40d;
+        var good = 100d;
+
+        switch (rank)
+        {
+            case 0:
+                (perfect, great, good) = (8, 24, 40);
+                break;
+            case 1:
+                (perfect, great, good) = (15, 30, 60);
+                break;
+            case 3 or 4:
+                (perfect, great, good) = (21, 60, 120);
+                break;
+            default:
+                // EXRANK scales PG/GR/GD relative to RANK 2 (Normal).
+                rate /= rank_rates[2];
+                perfect *= rate;
+                great *= rate;
+                good *= rate;
+                break;
+        }
+
+        var windows = new (double slow, double fast)[]
+        {
+            (-perfect, perfect),
+            (-great, great),
+            (-good, good),
+            (-200, 200),
+            (-1000, 1000),
+        };
+        var table = createTable(1, false, windows, fixedBadAndPoor: true);
+        return new BmsJudgementProfile(table, table, table, table);
+    }
 
     private readonly record struct ProfileKey(BmsLayoutVariant Layout, double Rate);
 
@@ -134,23 +186,6 @@ public static class BmsJudgementProfileProvider
     public static bool EmptyPoorBreaksCombo(BmsLayoutVariant layout)
         => IsPms(layout) || layout is BmsLayoutVariant.Bms5K or BmsLayoutVariant.Bms5K2P or BmsLayoutVariant.Bms5KDouble;
 
-    private static BmsJudgementProfile fiveKeys(double rate) => new(
-        head(rate, (-20, 20), (-50, 50), (-100, 100), (-150, 150), (-150, 500)),
-        head(rate, (-30, 30), (-60, 60), (-110, 110), (-160, 160), (-160, 500)),
-        tail(rate, (-120, 120), (-150, 150), (-200, 200), (-250, 250)),
-        tail(rate, (-130, 130), (-160, 160), (-110, 110), (-260, 260)));
-
-    private static BmsJudgementProfile sevenKeys(double rate) => new(
-        head(rate, (-20, 20), (-60, 60), (-150, 150), (-280, 220), (-150, 500)),
-        head(rate, (-30, 30), (-70, 70), (-160, 160), (-290, 230), (-160, 500)),
-        tail(rate, (-120, 120), (-160, 160), (-200, 200), (-280, 220)),
-        tail(rate, (-130, 130), (-170, 170), (-210, 210), (-290, 230)));
-
-    private static BmsJudgementProfile pms(double rate) => new(
-        pmsHead(rate, (-20, 20), (-50, 50), (-117, 117), (-183, 183), (-175, 500)),
-        pmsHead(rate, (-20, 20), (-50, 50), (-117, 117), (-183, 183), (-175, 500)),
-        pmsTail(rate, (-120, 120), (-150, 150), (-217, 217), (-283, 283)),
-        pmsTail(rate, (-120, 120), (-150, 150), (-217, 217), (-283, 283)));
 
     private static BmsJudgementWindowTable pmsHead(
         double rate,
@@ -159,7 +194,7 @@ public static class BmsJudgementProfileProvider
         (double slow, double fast) good,
         (double slow, double fast) bad,
         (double slow, double fast) miss)
-        => createTable(rate, true, perfect, great, good, bad, miss);
+        => createTable(rate, true, [perfect, great, good, bad, miss]);
 
     private static BmsJudgementWindowTable pmsTail(
         double rate,
@@ -167,34 +202,16 @@ public static class BmsJudgementProfileProvider
         (double slow, double fast) great,
         (double slow, double fast) good,
         (double slow, double fast) bad)
-        => createTable(rate, true, perfect, great, good, bad);
+        => createTable(rate, true, [perfect, great, good, bad]);
 
-    private static BmsJudgementWindowTable head(
-        double rate,
-        (double slow, double fast) perfect,
-        (double slow, double fast) great,
-        (double slow, double fast) good,
-        (double slow, double fast) bad,
-        (double slow, double fast) miss)
-        => createTable(rate, false, perfect, great, good, bad, miss);
-
-    private static BmsJudgementWindowTable tail(
-        double rate,
-        (double slow, double fast) perfect,
-        (double slow, double fast) great,
-        (double slow, double fast) good,
-        (double slow, double fast) bad)
-        => createTable(rate, false, perfect, great, good, bad);
-
-    private static BmsJudgementWindowTable createTable(double rate, bool pms,
-                                                       params (double slow, double fast)[] rows)
+    private static BmsJudgementWindowTable createTable(double rate, bool pms, (double slow, double fast)[] rows, bool fixedBadAndPoor = false)
     {
         HitResult[] results = [HitResult.Perfect, HitResult.Great, HitResult.Good, HitResult.Ok, HitResult.Miss];
         var windows = new BmsJudgementWindow[rows.Length];
         for (var i = 0; i < rows.Length; i++)
         {
-            var fixedWindow = i == 4 || (pms && i is 0 or 3);
-            // beatoraja stores integral microseconds, including after rank multiplication.
+            var fixedWindow = i == 4 || (pms && i is 0 or 3) || (fixedBadAndPoor && i is 3 or 4);
+            // LR2's BAD and empty-POOR windows remain fixed when EXRANK scales PG/GR/GD.
             var slow = fixedWindow ? rows[i].slow : Math.Truncate(rows[i].slow * 1000 * rate) / 1000;
             var fast = fixedWindow ? rows[i].fast : Math.Truncate(rows[i].fast * 1000 * rate) / 1000;
             if (pms && i is 1 or 2)

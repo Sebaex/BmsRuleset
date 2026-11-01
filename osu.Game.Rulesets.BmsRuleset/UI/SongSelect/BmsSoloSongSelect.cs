@@ -188,7 +188,10 @@ public partial class BmsSoloSongSelect : BmsSongSelect
             }
             else
             {
-                player = new SoloPlayer();
+                player = new SoloPlayer(new PlayerConfiguration
+                {
+                    AllowPause = false,
+                });
             }
 
             return player;
