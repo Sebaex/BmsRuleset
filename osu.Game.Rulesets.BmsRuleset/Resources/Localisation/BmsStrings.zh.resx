@@ -431,4 +431,9 @@
   <data name="scratch_position_second_player" xml:space="preserve">
     <value>2P（右侧）</value>
   </data>
+  <data name="table_download_timed_out" xml:space="preserve">
+    <value>难度表下载超时，请重试。</value>
+  </data>
+  <data name="table_metadata_download_failed" xml:space="preserve"><value>无法下载难度表元数据（HTTP {0}）。</value></data>
+  <data name="table_data_download_failed" xml:space="preserve"><value>无法下载难度表数据（HTTP {0}）。</value></data>
 </root>

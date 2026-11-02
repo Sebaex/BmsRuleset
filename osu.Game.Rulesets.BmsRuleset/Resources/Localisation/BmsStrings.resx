@@ -431,4 +431,9 @@
   <data name="scratch_position_second_player" xml:space="preserve">
     <value>2P (right)</value>
   </data>
+  <data name="table_download_timed_out" xml:space="preserve">
+    <value>Difficulty table download timed out. Please try again.</value>
+  </data>
+  <data name="table_metadata_download_failed" xml:space="preserve"><value>Could not download table metadata (HTTP {0}).</value></data>
+  <data name="table_data_download_failed" xml:space="preserve"><value>Could not download table data (HTTP {0}).</value></data>
 </root>

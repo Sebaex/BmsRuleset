@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using osu.Framework.Logging;
 
 namespace osu.Game.Rulesets.BmsRuleset.Gameplay.DifficultyTable;
 
@@ -27,19 +28,16 @@ public static class BmsTableJsonParser
     /// </summary>
     public static ParseResult? Parse(string json)
     {
-        JsonDocument doc;
         try
         {
-            doc = JsonDocument.Parse(json, new JsonDocumentOptions { CommentHandling = JsonCommentHandling.Skip });
-        }
-        catch (JsonException)
-        {
-            return null;
-        }
+            var text = json.AsMemory();
+            if (text.Length > 0 && text.Span[0] == '\ufeff')
+                text = text[1..];
 
-        using (doc)
-        {
+            using var doc = JsonDocument.Parse(text, new JsonDocumentOptions { CommentHandling = JsonCommentHandling.Skip });
             var root = doc.RootElement;
+            if (root.ValueKind is not (JsonValueKind.Object or JsonValueKind.Array))
+                throw new JsonException("Expected a table object or chart array.", "$", null, null);
 
             // Avoid calling TryGetProperty on non-object types (e.g. plain arrays)
             RawTableData? header = root.ValueKind == JsonValueKind.Object ? parseHeader(root) : null;
@@ -52,6 +50,14 @@ public static class BmsTableJsonParser
                 return null;
 
             return new ParseResult(header, charts);
+        }
+        catch (Exception e) when (e is JsonException or InvalidOperationException)
+        {
+            // JsonElement reports mismatched field types as InvalidOperationException.
+            // Invalid table input must follow the same failure contract as malformed JSON.
+            var path = (e as JsonException)?.Path ?? "$";
+            BmsLogger.Log($"Failed to parse difficulty table JSON at {path}: {e.Message}", LogLevel.Important, e);
+            return null;
         }
     }
 
@@ -186,8 +192,15 @@ public static class BmsTableJsonParser
         var dataUrl = root.TryGetProperty("data_url", out var d) ? d.GetString() : null;
 
         string[]? levelOrder = null;
-        if (root.TryGetProperty("level_order", out var lo) && lo.ValueKind == JsonValueKind.Array)
-            levelOrder = lo.EnumerateArray().Select(item => item.GetString() ?? string.Empty).ToArray();
+        if (root.TryGetProperty("level_order", out var lo) && lo.ValueKind != JsonValueKind.Null)
+        {
+            if (lo.ValueKind != JsonValueKind.Array)
+                throw new JsonException("Expected an array for level_order.", "$.level_order", null, null);
+
+            levelOrder = new string[lo.GetArrayLength()];
+            for (var i = 0; i < levelOrder.Length; i++)
+                levelOrder[i] = readLevel(lo[i], $"$.level_order[{i}]") ?? string.Empty;
+        }
 
         return new RawTableData
         {
@@ -276,17 +289,26 @@ public static class BmsTableJsonParser
         JsonElement array;
         if (root.ValueKind == JsonValueKind.Array)
             array = root;
-        else if (root.TryGetProperty("charts", out var c) && c.ValueKind == JsonValueKind.Array)
+        else if (root.TryGetProperty("charts", out var c) && c.ValueKind != JsonValueKind.Null)
+        {
+            if (c.ValueKind != JsonValueKind.Array)
+                throw new JsonException("Expected an array for charts.", "$.charts", null, null);
+
             array = c;
+        }
         else
             return null;
 
         var charts = new List<RawChartItem>();
         foreach (var item in array.EnumerateArray())
         {
+            var path = root.ValueKind == JsonValueKind.Array ? $"$[{charts.Count}]" : $"$.charts[{charts.Count}]";
+            if (item.ValueKind != JsonValueKind.Object)
+                throw new JsonException("Expected a chart object.", path, null, null);
+
             charts.Add(new RawChartItem
             {
-                Level = item.TryGetProperty("level", out var l) ? l.GetString() : null,
+                Level = item.TryGetProperty("level", out var l) ? readLevel(l, $"{path}.level") : null,
                 Md5 = item.TryGetProperty("md5", out var m) ? m.GetString() : null,
                 Sha256 = item.TryGetProperty("sha256", out var sh) ? sh.GetString() : null,
                 Title = item.TryGetProperty("title", out var t) ? t.GetString() : null,
@@ -298,6 +320,13 @@ public static class BmsTableJsonParser
 
         return charts;
     }
+
+    private static string? readLevel(JsonElement element, string path) => element.ValueKind switch
+    {
+        JsonValueKind.String or JsonValueKind.Null => element.GetString(),
+        JsonValueKind.Number => element.GetRawText(),
+        _ => throw new JsonException($"Expected a string, number or null for a level; found {element.ValueKind}.", path, null, null),
+    };
 }
 
 /// <summary>

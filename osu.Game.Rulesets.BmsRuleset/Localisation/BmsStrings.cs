@@ -612,6 +612,12 @@ public static class BmsStrings
 
     public static LocalisableString PreparingImport => get("preparing_import");
 
+    public static LocalisableString TableMetadataDownloadFailed(int status) => get("table_metadata_download_failed", status);
+
+    public static LocalisableString TableDataDownloadFailed(int status) => get("table_data_download_failed", status);
+
+    public static LocalisableString TableDownloadTimedOut => get("table_download_timed_out");
+
     public static LocalisableString ImportWasCancelled => get("import_was_cancelled");
 
     public static LocalisableString ImportCancelledProgress(int imported, int total) => get("import_cancelled_progress", imported, total);

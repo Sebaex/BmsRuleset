@@ -2,9 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using osu.Game.Database;
 using osu.Game.Overlays.Notifications;
@@ -31,7 +36,9 @@ public partial class DifficultyTableStore
     /// </summary>
     public DifficultyNameUpdater? DifficultyNameUpdater { get; set; }
 
-    private static readonly HttpClient http_client = new();
+    private static readonly HttpClient http_client = new() { Timeout = Timeout.InfiniteTimeSpan };
+
+    internal TimeSpan DownloadTimeout { get; set; } = BmsTableDownload.Timeout;
 
     private readonly List<DifficultyTable> tables = [];
 
@@ -83,7 +90,7 @@ public partial class DifficultyTableStore
 
             DifficultyTable? table = null;
 
-            if (source.StartsWith("http://", StringComparison.Ordinal) || source.StartsWith("https://", StringComparison.Ordinal))
+            if (source.StartsWith("http://", StringComparison.OrdinalIgnoreCase) || source.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
             {
                 // Restore from cache if present; no HTTP at startup
                 var cachePath = cacheFileForUrl(source);
@@ -105,15 +112,29 @@ public partial class DifficultyTableStore
     /// <summary>
     /// User-initiated import: download/read, parse, index, update markers + collections.
     /// </summary>
-    public async Task<ImportResult?> ImportAsync(string source, ProgressNotification notification, DifficultyTable? tableToReplace = null)
+    public async Task<ImportResult?> ImportAsync(string source, ProgressNotification notification, DifficultyTable? tableToReplace = null, CancellationToken cancellationToken = default, Action<Action>? scheduleNotification = null)
     {
+        void notify(Action action)
+        {
+            if (scheduleNotification != null)
+                scheduleNotification(action);
+            else
+                action();
+        }
+        async Task<(string Content, Uri Uri)> download(string url, bool chartData = false)
+        {
+            try { return await BmsTableDownload.GetAsync(http_client, url, DownloadTimeout, cancellationToken).ConfigureAwait(false); }
+            catch (HttpRequestException e) { throw new BmsTableDownloadException(chartData, e); }
+        }
+        cancellationToken.ThrowIfCancellationRequested();
         if (string.IsNullOrWhiteSpace(source)) return null;
 
-        notification.Progress = 0f;
+        notify(() => notification.Progress = 0f);
 
         // ── Stage 1: Read + Parse ──
         string json;
         string effectiveSource;
+        string? dataJson = null;
 
         var isUrl = source.StartsWith("http://", StringComparison.OrdinalIgnoreCase)
                     || source.StartsWith("https://", StringComparison.OrdinalIgnoreCase);
@@ -121,7 +142,9 @@ public partial class DifficultyTableStore
         if (isUrl)
         {
             effectiveSource = source;
-            var body = await http_client.GetStringAsync(source).ConfigureAwait(false);
+            var firstResponse = await download(source).ConfigureAwait(false);
+            var body = firstResponse.Content;
+            effectiveSource = firstResponse.Uri.AbsoluteUri;
 
             var trimmed = body.TrimStart();
             if (trimmed.Length > 0 && (trimmed[0] == '{' || trimmed[0] == '['))
@@ -131,41 +154,42 @@ public partial class DifficultyTableStore
             else
             {
                 // HTML — look for bmstable meta tag
-                var jsonUrl = resolveUrlFromHtml(body, source);
+                var jsonUrl = resolveUrlFromHtml(body, effectiveSource);
                 if (jsonUrl == null)
                 {
-                    notification.CompletionText = BmsStrings.MissingBmstableMeta(source);
-                    notification.State = ProgressNotificationState.Cancelled;
+                    notify(() => notification.CompletionText = BmsStrings.MissingBmstableMeta(source));
+                    notify(() => notification.State = ProgressNotificationState.Cancelled);
                     return null;
                 }
 
-                json = await http_client.GetStringAsync(jsonUrl).ConfigureAwait(false);
+                var headerResponse = await download(jsonUrl).ConfigureAwait(false);
+                json = headerResponse.Content;
+                effectiveSource = headerResponse.Uri.AbsoluteUri;
             }
 
-            // Write to cache
-            var cachePath = cacheFileForUrl(source);
-            await File.WriteAllTextAsync(cachePath, json).ConfigureAwait(false);
+
         }
         else
         {
             if (!File.Exists(source))
             {
-                notification.CompletionText = BmsStrings.FileDoesNotExist;
-                notification.State = ProgressNotificationState.Cancelled;
+                notify(() => notification.CompletionText = BmsStrings.FileDoesNotExist);
+                notify(() => notification.State = ProgressNotificationState.Cancelled);
                 return null;
             }
 
             effectiveSource = source;
-            json = await File.ReadAllTextAsync(source).ConfigureAwait(false);
+            json = await File.ReadAllTextAsync(source, cancellationToken).ConfigureAwait(false);
         }
 
-        notification.Progress = 0.5f;
+        notify(() => notification.Progress = 0.5f);
 
+        cancellationToken.ThrowIfCancellationRequested();
         var parsed = BmsTableJsonParser.Parse(json);
         if (parsed == null)
         {
-            notification.CompletionText = BmsStrings.FailedToParseTable(source);
-            notification.State = ProgressNotificationState.Cancelled;
+            notify(() => notification.CompletionText = BmsStrings.FailedToParseTable(source));
+            notify(() => notification.State = ProgressNotificationState.Cancelled);
             return null;
         }
 
@@ -174,37 +198,55 @@ public partial class DifficultyTableStore
         var headerDataUrl = parsed.Header?.DataUrl;
         if (charts == null && headerDataUrl != null && isUrl)
         {
-            var dataUrl = headerDataUrl.StartsWith("http", StringComparison.Ordinal)
-                ? headerDataUrl
-                : new Uri(new Uri(effectiveSource), headerDataUrl).ToString();
-
-            BmsLogger.Log($"Fetching chart data from {dataUrl}");
-            var dataJson = await http_client.GetStringAsync(dataUrl).ConfigureAwait(false);
-
-            // Cache data separately so startup can restore without re-downloading.
-            var dataCachePath = cacheFileForUrl(dataUrl);
-            await File.WriteAllTextAsync(dataCachePath, dataJson).ConfigureAwait(false);
-
+            if (!Uri.TryCreate(new Uri(effectiveSource), headerDataUrl, out var dataUri)
+                || (dataUri.Scheme != Uri.UriSchemeHttp && dataUri.Scheme != Uri.UriSchemeHttps))
+                throw new InvalidDataException("Unsupported difficulty table data URL.");
+            dataJson = (await download(dataUri.AbsoluteUri, true).ConfigureAwait(false)).Content;
             var dataParsed = BmsTableJsonParser.Parse(dataJson);
             charts = dataParsed?.Charts;
+            if (charts == null)
+            {
+                notify(() => notification.CompletionText = BmsStrings.FailedToParseTable(source));
+                notify(() => notification.State = ProgressNotificationState.Cancelled);
+                return null;
+            }
         }
 
         // ── Stage 2: Merge + Index ──
         var tableSource = isUrl ? TableSource.RemoteUrl : TableSource.LocalFile;
-        var table = BmsTableJsonParser.Merge(effectiveSource, tableSource, parsed.Header, charts);
+        var table = BmsTableJsonParser.Merge(source, tableSource, parsed.Header, charts);
 
         if (table == null)
         {
-            notification.CompletionText = BmsStrings.NoValidTableEntries(source);
-            notification.State = ProgressNotificationState.Cancelled;
+            notify(() => notification.CompletionText = BmsStrings.NoValidTableEntries(source));
+            notify(() => notification.State = ProgressNotificationState.Cancelled);
             return null;
         }
 
+        cancellationToken.ThrowIfCancellationRequested();
+        if (isUrl)
+        {
+            // A single combined snapshot makes header and data one atomic cache generation.
+            var snapshot = json;
+            if (dataJson != null)
+            {
+                var headerNode = JsonNode.Parse(json.TrimStart('\uFEFF'), documentOptions: new JsonDocumentOptions { CommentHandling = JsonCommentHandling.Skip })!.AsObject();
+                var dataNode = JsonNode.Parse(dataJson.TrimStart('\uFEFF'), documentOptions: new JsonDocumentOptions { CommentHandling = JsonCommentHandling.Skip })!;
+                headerNode["data_url"] = new Uri(new Uri(effectiveSource), headerDataUrl!).AbsoluteUri;
+                headerNode["charts"] = dataNode is JsonArray ? dataNode : dataNode["charts"]!.DeepClone();
+                snapshot = headerNode.ToJsonString();
+            }
+            await writeCacheAsync(cacheFileForUrl(source), snapshot, cancellationToken).ConfigureAwait(false);
+        }
+        // The cache rename is the commit boundary; cancellation afterwards must
+        // not leave the memory index on the previous cache generation.
+        // Marker refresh runs in the background and must not update a finished
+        // or superseded import notification.
         if (tableToReplace == null)
-            AddTable(table, notification);
+            AddTable(table);
         else
-            ReplaceTable(tableToReplace, table, notification);
-        notification.Progress = 1;
+            ReplaceTable(tableToReplace, table);
+        notify(() => notification.Progress = 1);
         return new ImportResult(table);
     }
 
@@ -384,6 +426,20 @@ public partial class DifficultyTableStore
 
     #region Cache
 
+    private static async Task writeCacheAsync(string path, string json, CancellationToken token)
+    {
+        var temporary = path + "." + Guid.NewGuid().ToString("N") + ".tmp";
+        try
+        {
+            await File.WriteAllTextAsync(temporary, json, token).ConfigureAwait(false);
+            token.ThrowIfCancellationRequested();
+            File.Move(temporary, path, true);
+        }
+        finally
+        {
+            if (File.Exists(temporary)) File.Delete(temporary);
+        }
+    }
     private string cacheFileForUrl(string url)
     {
         var hash = Convert.ToHexString(SHA256.HashData(
@@ -416,7 +472,7 @@ public partial class DifficultyTableStore
                 }
             }
 
-            var source = sourcePath.StartsWith("http", StringComparison.Ordinal)
+            var source = sourcePath.StartsWith("http", StringComparison.OrdinalIgnoreCase)
                 ? TableSource.RemoteUrl
                 : TableSource.LocalFile;
 
@@ -431,7 +487,7 @@ public partial class DifficultyTableStore
 
     #endregion
 
-    #region HTML parsing (unchanged)
+    #region HTML parsing
 
     private static string? resolveUrlFromHtml(string html, string pageUrl)
     {
@@ -440,24 +496,29 @@ public partial class DifficultyTableStore
 
         if (string.IsNullOrWhiteSpace(content)) return null;
 
-        if (content.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
-            content.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
-            return content;
-
-        return new Uri(new Uri(pageUrl), content).ToString();
+        return Uri.TryCreate(new Uri(pageUrl), content, out var uri)
+               && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps)
+            ? uri.AbsoluteUri
+            : null;
     }
 
     private static string? extractMetaContent(string html, string name)
     {
-        var pattern = $"<meta name=\"{name}\" content=\"";
-        var start = html.IndexOf(pattern, StringComparison.OrdinalIgnoreCase);
-        if (start < 0) return null;
-
-        start += pattern.Length;
-        var end = html.IndexOf('"', start);
-        return end < 0 ? null : html[start..end];
+        // Examples in comments or raw script/style text are not document metadata.
+        html = Regex.Replace(html, @"<!--.*?-->|<script\b[^>]*>.*?</script\s*>|<style\b[^>]*>.*?</style\s*>", "",
+            RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.CultureInvariant, TimeSpan.FromSeconds(1));
+        foreach (Match tag in Regex.Matches(html, @"<meta\b[^>]*>", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant, TimeSpan.FromSeconds(1)))
+        {
+            var attributes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            foreach (Match attribute in Regex.Matches(tag.Value,
+                         """([\w:-]+)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+))""",
+                         RegexOptions.CultureInvariant, TimeSpan.FromSeconds(1)))
+                attributes.TryAdd(attribute.Groups[1].Value, WebUtility.HtmlDecode(attribute.Groups[2].Success ? attribute.Groups[2].Value : attribute.Groups[3].Success ? attribute.Groups[3].Value : attribute.Groups[4].Value));
+            if (attributes.TryGetValue("name", out var tagName) && tagName.Equals(name, StringComparison.OrdinalIgnoreCase)
+                && attributes.TryGetValue("content", out var content)) return content;
+        }
+        return null;
     }
-
     #endregion
 
 }
