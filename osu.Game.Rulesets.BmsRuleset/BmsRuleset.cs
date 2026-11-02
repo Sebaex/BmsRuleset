@@ -120,12 +120,20 @@ public partial class BmsRuleset : Ruleset
     };
 
     public override int GetVariantForBeatmap(IBeatmapInfo beatmapInfo, IReadOnlyList<Mod>? mods = null)
+        // The framework requires an integer variant even for unsupported metadata; preferences use the nullable result.
+        => (int)(TryGetLayoutVariantForBeatmap(beatmapInfo)
+                 ?? BmsLayout.VariantFromTotalColumns(BmsDifficultyInfo.GetKeyCount(beatmapInfo.Difficulty)));
+
+    internal static BmsLayoutVariant? TryGetLayoutVariantForBeatmap(IBeatmapInfo beatmapInfo)
     {
         var foreignConverter = BmsForeignBeatmapConverterRegistry.FindConverter(beatmapInfo);
+        if (foreignConverter == null && beatmapInfo.Ruleset.ShortName != Constant.SHORT_NAME)
+            return null;
+
         var keyCount = foreignConverter?.GetConvertedDifficultyInfo(beatmapInfo).KeyCount
                        ?? BmsDifficultyInfo.GetKeyCount(beatmapInfo.Difficulty);
 
-        return (int)BmsLayout.VariantFromTotalColumns(keyCount);
+        return BmsLayout.IsKnownTotalColumns(keyCount) ? BmsLayout.VariantFromTotalColumns(keyCount) : null;
     }
 
     public override IEnumerable<KeyBinding> GetDefaultKeyBindings(int variant = 0) =>
@@ -185,7 +193,6 @@ public partial class BmsRuleset : Ruleset
 
             new BmsModMirror(),
             new BmsModInvert(),
-            new BmsModSecondPlayer(),
         ],
         ModType.Fun =>
         [
@@ -196,6 +203,7 @@ public partial class BmsRuleset : Ruleset
         ],
         ModType.System =>
         [
+            new BmsModSecondPlayer(),
             new BmsModBranchReplay(),
             new BmsModPaused(),
             new BmsModClassGauge(),

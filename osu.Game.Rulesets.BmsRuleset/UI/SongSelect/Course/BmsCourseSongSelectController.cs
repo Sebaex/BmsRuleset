@@ -248,6 +248,7 @@ internal partial class BmsCourseSongSelectController : CompositeDrawable, IKeyBi
                     return;
                 }
 
+                selectedMods = this.songSelect.ApplyScratchPositionToCourse(selectedMods, resolvedStages.Select(stage => stage!.Beatmap)).ToArray();
                 var gaugeType = BmsCourseSession.ResolveCourseGaugeType(selectedMods);
                 var mods = BmsCourseSession.CreateCourseMods(selectedMods, gaugeType, course.Constraints);
                 var session = new BmsCourseSession(course, resolvedStages.Cast<BmsResolvedCourseStage>(), mods, gaugeType);

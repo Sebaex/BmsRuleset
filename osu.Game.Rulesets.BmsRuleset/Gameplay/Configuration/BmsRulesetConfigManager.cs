@@ -24,6 +24,7 @@ public class BmsRulesetConfigManager(SettingsStore? settings, RulesetInfo rulese
         SetDefault(BmsRulesetSetting.SoftConstant, false);
         SetDefault(BmsRulesetSetting.SoftConstantFadeIn, 0.0, -1000.0, 1000.0, 1.0);
         SetDefault(BmsRulesetSetting.JudgementAlgorithm, BmsJudgementAlgorithm.Combo);
+        SetDefault(BmsRulesetSetting.DefaultScratchPosition, BmsScratchPosition.FirstPlayer);
         SetDefault(BmsRulesetSetting.BgaDim, 0.7, 0, 1, 0.01);
         SetDefault(BmsRulesetSetting.VisualOffset, 0.0, MIN_VISUAL_OFFSET, MAX_VISUAL_OFFSET, 1.0);
         SetDefault(BmsRulesetSetting.LongNoteTailVisualOffset, 0.0, MIN_LONG_NOTE_TAIL_VISUAL_OFFSET, MAX_LONG_NOTE_TAIL_VISUAL_OFFSET, 1.0);
@@ -68,4 +69,5 @@ public enum BmsRulesetSetting
     ShowInvisibleNotes,
     SoftConstant,
     SoftConstantFadeIn,
+    DefaultScratchPosition,
 }

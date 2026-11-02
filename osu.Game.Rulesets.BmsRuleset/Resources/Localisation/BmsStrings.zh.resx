@@ -419,4 +419,16 @@
   <data name="course_gauge_profile" xml:space="preserve">
     <value>段位血条规则</value>
   </data>
+  <data name="default_scratch_position" xml:space="preserve">
+    <value>转盘位置</value>
+  </data>
+  <data name="default_scratch_position_hint" xml:space="preserve">
+    <value>选择新开始的单人 5K/7K 游玩的转盘位置。</value>
+  </data>
+  <data name="scratch_position_first_player" xml:space="preserve">
+    <value>1P（左侧）</value>
+  </data>
+  <data name="scratch_position_second_player" xml:space="preserve">
+    <value>2P（右侧）</value>
+  </data>
 </root>

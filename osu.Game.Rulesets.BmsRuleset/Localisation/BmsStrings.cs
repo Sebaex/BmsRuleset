@@ -33,6 +33,14 @@ public static class BmsStrings
 
     public static LocalisableString Layout => get("layout");
 
+    public static LocalisableString DefaultScratchPosition => get("default_scratch_position");
+
+    public static LocalisableString DefaultScratchPositionHint => get("default_scratch_position_hint");
+
+    public static LocalisableString ScratchPositionFirstPlayer => get("scratch_position_first_player");
+
+    public static LocalisableString ScratchPositionSecondPlayer => get("scratch_position_second_player");
+
     public static LocalisableString ShowInvisibleNotes => get("show_invisible_notes");
 
     public static LocalisableString ShowInvisibleNotesHint => get("show_invisible_notes_hint");

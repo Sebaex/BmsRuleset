@@ -69,6 +69,27 @@ public partial class TestSceneBmsResultComparison : OsuTestScene
     }
 
     [Test]
+    public void TestSecondPlayerPersonalBest([Values] bool currentSecondPlayer, [Values] bool hideScratch)
+    {
+        var current = score(70);
+        var best = score(90);
+        var normal = score(80);
+        var autoplay = score(100);
+        current.Mods = currentSecondPlayer ? [new BmsModSecondPlayer()] : [];
+        best.Mods = [new BmsModSecondPlayer()];
+        autoplay.Mods = [new BmsModSecondPlayer(), new BmsModAutoplay()];
+
+        if (hideScratch)
+        {
+            current.Mods = [.. current.Mods, new BmsModHideScratch()];
+            best.Mods = [.. best.Mods, new BmsModHideScratch()];
+            autoplay.Mods = [.. autoplay.Mods, new BmsModHideScratch()];
+        }
+
+        assertBest([autoplay, normal, best], current, best);
+    }
+
+    [Test]
     public void TestIncludesOfflineScores()
     {
         var current = score(70);

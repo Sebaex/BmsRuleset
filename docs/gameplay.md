@@ -192,7 +192,6 @@ matching the selected mods.
 | Double Time / Half Time  |                                                                 | Speed; adjust pitch                                |
 | Mirror                   | Mirrors the key layout                                          |         |
 | Invert (IN)              | Converts each note except the lane's last into a hold note      | Randomise LN length; seed                          |
-| 2P                       | Switches the layout from 1P to 2P                               |         |
 | Constant (CN)            | Disables scroll-speed changes, including #SPEED/#SCROLL/BPM     |         |
 | Hide Scratch (HS)        | Removes scratch notes and hides the lane                        |         |
 | No Mine (NM)             | Removes all landmines, including those in scratch lanes         |         |
@@ -220,6 +219,7 @@ matching the selected mods.
 | Scroll speed | 8.0 | 1.0–50.0, step 0.1 | Note fall speed; in-game controls adjust it temporarily. |
 | Reference BPM                 | Main BPM | Start BPM, Max BPM, Main BPM, or Min BPM   | Scroll-speed reference used when a chart has no `#BASEBPM`. Main BPM uses the BPM containing the most playable notes; ties use the earliest occurrence.                                       |
 | Judgement selection algorithm | Combo priority (LR2) | Combo priority (LR2), Time difference priority (AC), Earliest note priority, Score priority | Selects which note receives a press when windows overlap. See [selection rules](#judgement-selection-algorithms). |
+| Scratch position | 1P (left) | 1P (left), 2P (right) | Chooses the scratch side and key layout for new single-play BMS 5K/7K games. |
 | BGA dim | 70% | 0%–100% | 0% keeps full brightness; 100% fully darkens the BGA. |
 | Unlock frame rate limit       | Off      | On / off                                  | Removes osu!'s 1000 Hz frame and input polling cap during BMS gameplay. Higher GC and GPU pressure may cause extra stutters; disable this option if that happens. |
 | Use dedicated preview audio   | On       | On / off                                   | Uses `#PREVIEW` or `preview.*` when available. When disabled, song-select previews are synthesized only from BGM and keysound samples.                                                        |
@@ -236,6 +236,10 @@ matching the selected mods.
 | Show PMS 9K DP                | On       | On / off                                   | Shows or hides double-play PMS 9K charts in song select.                                                                                                                                       |
 
 Layout filters take effect immediately in song select.
+
+Choose the scratch side in BMS settings. The position is saved between game sessions, and changes apply to the
+next single-play 5K/7K game. Hide Scratch hides the lane while retaining your chosen position. Replays use the
+layout recorded with the score.
 
 The **Beatmap management** group at the bottom of BMS settings contains chart visibility filters and import, cleanup, and deletion actions. [Difficulty-table management](./difficulty-tables.md) appears above it.
 

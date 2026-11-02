@@ -50,6 +50,7 @@ public partial class BmsSoloSongSelect : BmsSongSelect
     {
         this.startInCourseMode = startInCourseMode;
         this.initialCourseRestoration = initialCourseRestoration;
+        scratchPositionWaitingForRestoration = initialCourseRestoration != null && !startInCourseMode;
     }
 
     public override IReadOnlyList<ScreenFooterButton> CreateFooterButtons()
@@ -94,9 +95,11 @@ public partial class BmsSoloSongSelect : BmsSongSelect
     private Sample? sampleConfirmSelection { get; set; }
 
     [BackgroundDependencyLoader]
-    private void load(AudioManager audio)
+    private void load(AudioManager audio, IRulesetConfigCache configs)
     {
         sampleConfirmSelection = audio.Samples.Get(@"SongSelect/confirm-selection");
+
+        loadScratchPosition(configs);
 
         AddInternal(new SongSelectTouchInputDetector());
     }
@@ -208,14 +211,20 @@ public partial class BmsSoloSongSelect : BmsSongSelect
 
     public override void OnResuming(ScreenTransitionEvent e)
     {
+        scratchPositionActive = false;
         base.OnResuming(e);
         revertMods();
+        resumeScratchPositionPreference();
     }
 
     public override bool OnExiting(ScreenExitEvent e)
     {
+        scratchPositionActive = false;
         if (base.OnExiting(e))
+        {
+            resumeScratchPositionPreference();
             return true;
+        }
 
         revertMods();
         return false;

@@ -10,7 +10,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using osu.Framework.Configuration;
+using osu.Framework.Extensions;
 using osu.Framework.Localisation;
+using osu.Game.Rulesets.BmsRuleset.Gameplay.Configuration;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.Mods;
 using osu.Game.Rulesets.BmsRuleset.Localisation;
 
@@ -165,6 +167,33 @@ public class BmsLocalisationTest
                 Assert.That(chineseFormat.MinimumArgumentCount, Is.EqualTo(englishFormat.MinimumArgumentCount), $"Format arguments differ for '{key}'");
             }
         });
+    }
+
+    [Test]
+    public void TestScratchPositionSettingAndOptionsUpdateWhenLanguageChanges()
+    {
+        var caption = localisation.GetLocalisedBindableString(BmsStrings.DefaultScratchPosition);
+        var hint = localisation.GetLocalisedBindableString(BmsStrings.DefaultScratchPositionHint);
+        var firstPlayer = localisation.GetLocalisedBindableString(BmsScratchPosition.FirstPlayer.GetLocalisableDescription());
+        var secondPlayer = localisation.GetLocalisedBindableString(BmsScratchPosition.SecondPlayer.GetLocalisableDescription());
+
+        Assert.That(caption.Value, Is.EqualTo("Scratch position"));
+        Assert.That(hint.Value, Is.EqualTo("Chooses the scratch side for new single-play 5K/7K games."));
+        Assert.That(firstPlayer.Value, Is.EqualTo("1P (left)"));
+        Assert.That(secondPlayer.Value, Is.EqualTo("2P (right)"));
+
+        config.SetValue(FrameworkSetting.Locale, "zh");
+
+        Assert.That(caption.Value, Is.EqualTo("转盘位置"));
+        Assert.That(hint.Value, Is.EqualTo("选择新开始的单人 5K/7K 游玩的转盘位置。"));
+        Assert.That(firstPlayer.Value, Is.EqualTo("1P（左侧）"));
+        Assert.That(secondPlayer.Value, Is.EqualTo("2P（右侧）"));
+
+        config.SetValue(FrameworkSetting.Locale, "en");
+
+        Assert.That(caption.Value, Is.EqualTo("Scratch position"));
+        Assert.That(firstPlayer.Value, Is.EqualTo("1P (left)"));
+        Assert.That(secondPlayer.Value, Is.EqualTo("2P (right)"));
     }
 
     private static IReadOnlyDictionary<string, string> getResourceValues(string resourceName)

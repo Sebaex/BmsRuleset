@@ -163,6 +163,29 @@ public class BmsScoreSelectorCourseTest
     }
 
     [Test]
+    public void SecondPlayerCourseKeepsHistoricalLampAndRank([Values] bool selectedSecondPlayer, [Values] bool hideScratch)
+    {
+        var historical = result(BmsLamp.ExHardClear, ScoreRank.S, acronyms: hideScratch ? ["2P", "HS"] : ["2P"]);
+        Mod[] selected = hideScratch ? [new BmsModHideScratch()] : [];
+        if (selectedSecondPlayer)
+            selected = [.. selected, new BmsModSecondPlayer()];
+
+        Assert.That(BmsLampScoreSelector.SelectBestCourse([historical], selected), Is.EqualTo((BmsLamp.ExHardClear, (ScoreRank?)ScoreRank.S)));
+        if (hideScratch)
+            Assert.That(BmsLampScoreSelector.SelectBestCourse([historical], []), Is.EqualTo((BmsLamp.NoPlay, (ScoreRank?)null)));
+    }
+
+    [Test]
+    public void SecondPlayerCourseStillExcludesAutoplay()
+    {
+        var autoplay = result(BmsLamp.Perfect, ScoreRank.X, mods: [new BmsModSecondPlayer(), new BmsModAutoplay()]);
+        var playable = result(BmsLamp.Clear, ScoreRank.A, acronyms: ["2P"]);
+
+        Assert.That(BmsLampScoreSelector.SelectBestCourse([autoplay], []), Is.EqualTo((BmsLamp.NoPlay, (ScoreRank?)null)));
+        Assert.That(BmsLampScoreSelector.SelectBestCourse([autoplay, playable], []), Is.EqualTo((BmsLamp.Clear, (ScoreRank?)ScoreRank.A)));
+    }
+
+    [Test]
     public void TestAutoplayResultDoesNotAwardCourseLamp()
     {
         var autoplayResult = result(BmsLamp.ExHardClear, ScoreRank.X, mods: [new BmsModAutoplay()]);
