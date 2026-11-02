@@ -19,6 +19,6 @@ internal sealed class FrameworkBmsBgaVideoProvider : IBmsBgaVideoProvider
         Origin = Anchor.Centre,
         RelativeSizeAxes = Axes.Both,
         FillMode = FillMode.Fit,
-        Loop = true,
+        Loop = false,
     };
 }

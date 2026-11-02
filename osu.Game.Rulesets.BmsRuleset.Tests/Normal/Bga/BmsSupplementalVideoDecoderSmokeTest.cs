@@ -3,6 +3,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using NUnit.Framework;
 using osu.Game.Rulesets.BmsRuleset.Media.FFmpeg;
 using osu.Game.Rulesets.BmsRuleset.Media.Video.Supplemental;
@@ -19,9 +20,9 @@ public class BmsSupplementalVideoDecoderSmokeTest
             Assert.Ignore(error ?? "Supplemental FFmpeg native backend is unavailable.");
     }
 
-    private static string locateTestSongFile(string songFolder, string fileName)
+    private static string locateTestSongFile(string songFolder, string fileName, [CallerFilePath] string sourceFile = "")
     {
-        var dir = new DirectoryInfo(AppContext.BaseDirectory);
+        var dir = new DirectoryInfo(Path.GetDirectoryName(sourceFile)!);
 
         while (dir != null)
         {

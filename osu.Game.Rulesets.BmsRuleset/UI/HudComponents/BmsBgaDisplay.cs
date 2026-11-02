@@ -9,6 +9,7 @@ using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Primitives;
+using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.IO.Stores;
@@ -23,6 +24,7 @@ using osu.Game.Rulesets.BmsRuleset.Gameplay.Scoring;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.Scoring.Events;
 using osu.Game.Rulesets.BmsRuleset.IO.ResourceStore;
 using osu.Game.Rulesets.BmsRuleset.Localisation;
+using osu.Game.Rulesets.BmsRuleset.Media;
 using osu.Game.Rulesets.BmsRuleset.Media.Video;
 using osu.Game.Rulesets.BmsRuleset.Media.Video.Supplemental;
 using osu.Game.Rulesets.BmsRuleset.UI.Gameplay;
@@ -31,6 +33,11 @@ using osu.Game.Rulesets.Scoring;
 using osu.Game.Rulesets.UI;
 using osu.Game.Screens.Play;
 using osuTK;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Png;
+using SixLabors.ImageSharp.PixelFormats;
+using Image = SixLabors.ImageSharp.Image;
+using RectangleF = osu.Framework.Graphics.Primitives.RectangleF;
 
 namespace osu.Game.Rulesets.BmsRuleset.UI.HudComponents;
 
@@ -47,6 +54,10 @@ public sealed partial class BmsBgaDisplay : BmsHudComponent
         ".mpeg",
         ".mpg",
         ".wmv",
+        ".m1v",
+        ".m2v",
+        ".asf",
+        ".m4v",
     ];
 
     private static readonly string[] image_resource_extensions =
@@ -77,6 +88,7 @@ public sealed partial class BmsBgaDisplay : BmsHudComponent
     private BmsBgaTimeline? bga;
     private BmsBgaResourceStore? resources;
     private TextureStore? textures;
+    private TextureStore? layerTextures;
     private BmsBgaVideoPreloader? videoPreloader;
     private BmsBgaEvent[] events = [];
     private BmsBgaOpacityEvent[] opacityEvents = [];
@@ -267,6 +279,7 @@ public sealed partial class BmsBgaDisplay : BmsHudComponent
     protected override void Dispose(bool isDisposing)
     {
         textures?.Dispose();
+        layerTextures?.Dispose();
         resources?.Dispose();
         // Idempotent: the shell and the rehosted display share one preloader, so Dispose fires twice.
         videoPreloader?.Dispose();
@@ -304,6 +317,7 @@ public sealed partial class BmsBgaDisplay : BmsHudComponent
 
         resources ??= new BmsBgaResourceStore(bmsDrawableRuleset.BeatmapSourceDirectory, workingBeatmap);
         textures ??= new TextureStore(host.Renderer, host.CreateTextureLoaderStore(resources), false, scaleAdjust: 1);
+        layerTextures ??= new TextureStore(host.Renderer, new BmsBgaLayerTextureLoaderStore(resources), false, scaleAdjust: 1);
 
         // Reuse a preloader handed over from the HUD shell when this display is the rehosted renderer,
         // so the loading screen only spawns one decoder per video (the shell warms; the rehosted
@@ -325,6 +339,12 @@ public sealed partial class BmsBgaDisplay : BmsHudComponent
 
         resources.Preload(declaredPaths);
 
+        var overlayPaths = events.Where(e => e.Layer is BmsBgaLayer.Layer1 or BmsBgaLayer.Layer2)
+            .Select(e => bga.BgaDefinitions.TryGetValue(e.DefinitionKey, out var crop) ? crop.BitmapKey : e.DefinitionKey)
+            .Where(bga.BitmapDefinitions.ContainsKey)
+            .Select(key => bga.BitmapDefinitions[key])
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
         foreach (var path in declaredPaths)
         {
             var resolvedPath = resources.ResolveLookup(path);
@@ -341,7 +361,12 @@ public sealed partial class BmsBgaDisplay : BmsHudComponent
                     videoPreloader.Preload(resolvedPath, bytes);
             }
             else
-                textures.Get(resolvedPath);
+            {
+                if (textures.Get(resolvedPath) != null)
+                    resources.ImageHasAlpha(resolvedPath);
+                if (overlayPaths.Contains(path))
+                    layerTextures?.Get(resolvedPath);
+            }
         }
     }
 
@@ -445,11 +470,13 @@ public sealed partial class BmsBgaDisplay : BmsHudComponent
         rehostedDisplay.bga = bga;
         rehostedDisplay.resources = resources;
         rehostedDisplay.textures = textures;
+        rehostedDisplay.layerTextures = layerTextures;
         rehostedDisplay.videoPreloader = videoPreloader;
         rehostedDisplay.events = events;
         rehostedDisplay.opacityEvents = opacityEvents;
         resources = null;
         textures = null;
+        layerTextures = null;
         videoPreloader = null;
         if (bgaDim != null)
             rehostedDisplay.applyBgaDim(bgaDim.Value);
@@ -637,7 +664,9 @@ public sealed partial class BmsBgaDisplay : BmsHudComponent
             return createVideo(resolvedPath, evt.Time);
         }
 
-        var texture = textures.Get(resolvedPath);
+        var texture = evt.Layer is BmsBgaLayer.Layer1 or BmsBgaLayer.Layer2
+            ? layerTextures?.Get(resolvedPath)
+            : textures.Get(resolvedPath);
         if (texture == null)
         {
             return null;
@@ -645,7 +674,37 @@ public sealed partial class BmsBgaDisplay : BmsHudComponent
 
         return definition is { } d
             ? createCroppedSprite(texture, d)
-            : createFullCanvasSprite(texture);
+            : createImageCanvas(texture, evt.Layer, resources.ImageHasAlpha(resolvedPath));
+    }
+
+    private static Drawable createImageCanvas(Texture texture, BmsBgaLayer layer, bool hasAlpha)
+    {
+        var sprite = (Sprite)createFullCanvasSprite(texture);
+        var width = texture.DisplayWidth;
+        var height = texture.DisplayHeight;
+        if (Math.Max(width, height) > 256)
+            return sprite;
+
+        // BGImageProcessor places small images at the top centre of a shared 256x256 canvas.
+        // Independent fitting would move differently-sized overlay frames away from their backgrounds.
+        var canvas = new Container
+        {
+            Anchor = Anchor.Centre,
+            Origin = Anchor.Centre,
+            RelativeSizeAxes = Axes.Both,
+            FillMode = FillMode.Fit,
+            FillAspectRatio = 1,
+        };
+        if (!hasAlpha && layer is BmsBgaLayer.Base or BmsBgaLayer.Poor)
+            canvas.Add(new Box { RelativeSizeAxes = Axes.Both, Colour = OsuColour.Gray(0) });
+
+        sprite.Anchor = sprite.Origin = Anchor.TopLeft;
+        sprite.FillMode = FillMode.Stretch;
+        sprite.RelativePositionAxes = Axes.Both;
+        sprite.Position = new Vector2((int)(256 - width) / 2 / 256f, 0);
+        sprite.Size = new Vector2(width / 256, height / 256);
+        canvas.Add(sprite);
+        return canvas;
     }
 
     private static Drawable createFullCanvasSprite(Texture texture) => new Sprite
@@ -742,6 +801,44 @@ public sealed partial class BmsBgaDisplay : BmsHudComponent
         private readonly object cacheLock = new();
         private readonly Dictionary<string, byte[]?> cache = new(StringComparer.OrdinalIgnoreCase);
         private readonly Dictionary<string, string?> resolvedLookups = new(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, bool> imageAlpha = new(StringComparer.OrdinalIgnoreCase);
+
+        public bool ImageHasAlpha(string name)
+        {
+            lock (cacheLock)
+                if (imageAlpha.TryGetValue(name, out var cached))
+                    return cached;
+
+            var bytes = Get(name);
+            var hasAlpha = true;
+            try
+            {
+                if (bytes != null)
+                {
+                    var info = Image.Identify(bytes);
+                    if (info?.Metadata.DecodedImageFormat?.Name == "PNG")
+                    {
+                        var png = info.Metadata.GetPngMetadata();
+                        hasAlpha = png.ColorType is PngColorType.RgbWithAlpha or PngColorType.GrayscaleWithAlpha || png.TransparentColor.HasValue;
+                        if (png.ColorType == PngColorType.Palette && png.ColorTable is { } colours)
+                            foreach (var colour in colours.Span)
+                                hasAlpha |= colour.ToPixel<Rgba32>().A != 255;
+                    }
+                    else if (info != null)
+                        hasAlpha = info.Metadata.DecodedImageFormat?.Name == "GIF"
+                                   || (info.PixelType.AlphaRepresentation is { } alpha
+                                       ? alpha != PixelAlphaRepresentation.None
+                                       : info.PixelType.BitsPerPixel > 24);
+                }
+            }
+            catch (SixLabors.ImageSharp.UnknownImageFormatException)
+            {
+                // The platform decoder can recognise formats that ImageSharp's metadata reader cannot.
+            }
+            lock (cacheLock)
+                imageAlpha[name] = hasAlpha;
+            return hasAlpha;
+        }
 
         public void Preload(IEnumerable<string> names)
         {
@@ -921,6 +1018,7 @@ public sealed partial class BmsBgaDisplay : BmsHudComponent
             {
                 cache.Clear();
                 resolvedLookups.Clear();
+                imageAlpha.Clear();
             }
 
             externalStore?.Dispose();
