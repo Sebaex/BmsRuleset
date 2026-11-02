@@ -2,6 +2,7 @@ using System;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Animations;
+using osu.Game.Rulesets.BmsRuleset.UI.Gameplay.Drawables;
 using osu.Game.Rulesets.BmsRuleset.UI.Skinning.Components;
 using osu.Game.Skinning;
 
@@ -50,7 +51,14 @@ internal partial class BmsCachedSkinnableDrawable : SkinReloadableDrawable
         RelativeSizeAxes = Axes.Both;
     }
 
-    public void ResetAnimation() => (Drawable as IFramedAnimation)?.GotoFrame(0);
+    public void ResetAnimation()
+    {
+        // Pooled legacy lights keep their animation inside a container rather than on the skin drawable itself.
+        if (Drawable is LegacyBmsHitExplosion legacyExplosion)
+            legacyExplosion.RestartAnimation();
+        else
+            (Drawable as IFramedAnimation)?.GotoAndPlay(0);
+    }
 
     protected override void SkinChanged(ISkinSource skin)
     {
