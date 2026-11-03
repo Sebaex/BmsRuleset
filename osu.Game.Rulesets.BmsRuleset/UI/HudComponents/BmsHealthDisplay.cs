@@ -22,27 +22,29 @@ namespace osu.Game.Rulesets.BmsRuleset.UI.HudComponents;
 /// </summary>
 public sealed partial class BmsHealthDisplay : BmsHudComponent
 {
-    [SettingSource(typeof(BmsStrings), nameof(BmsStrings.GrooveLowHealthColour), nameof(BmsStrings.GrooveLowHealthColourDescription))]
-    public BindableColour4 GrooveColourLow { get; } = new(new Color4(255, 45, 40, 255));
+    [SettingSource(typeof(BmsStrings), nameof(BmsStrings.AssistEasyGaugeFillColour), nameof(BmsStrings.AssistEasyGaugeFillColourDescription))]
+    public BindableColour4 AssistEasyFillColour { get; } = new(new Color4(0, 200, 255, 255));
 
-    [SettingSource(typeof(BmsStrings), nameof(BmsStrings.GrooveMidHealthColour), nameof(BmsStrings.GrooveMidHealthColourDescription))]
-    public BindableColour4 GrooveColourMid { get; } = new(new Color4(255, 160, 30, 255));
+    [SettingSource(typeof(BmsStrings), nameof(BmsStrings.EasyGaugeFillColour), nameof(BmsStrings.EasyGaugeFillColourDescription))]
+    public BindableColour4 EasyFillColour { get; } = new(new Color4(80, 180, 255, 255));
 
-    [SettingSource(typeof(BmsStrings), nameof(BmsStrings.GrooveHighHealthColour), nameof(BmsStrings.GrooveHighHealthColourDescription))]
-    public BindableColour4 GrooveColourHigh { get; } = new(new Color4(45, 225, 80, 255));
+    [SettingSource(typeof(BmsStrings), nameof(BmsStrings.NormalGaugeFillColour), nameof(BmsStrings.NormalGaugeFillColourDescription))]
+    public BindableColour4 NormalFillColour { get; } = new(new Color4(45, 225, 80, 255));
 
     [SettingSource(typeof(BmsStrings), nameof(BmsStrings.HardGaugeFillColour), nameof(BmsStrings.HardGaugeFillColourDescription))]
     public BindableColour4 HardFillColour { get; } = new(new Color4(220, 55, 50, 255));
 
     [SettingSource(typeof(BmsStrings), nameof(BmsStrings.ExHardGaugeFillColour), nameof(BmsStrings.ExHardGaugeFillColourDescription))]
-    public BindableColour4 ExHardFillColour { get; } = new(new Color4(195, 55, 210, 255));
+    public BindableColour4 ExHardFillColour { get; } = new(new Color4(255, 215, 0, 255));
 
     [SettingSource(typeof(BmsStrings), nameof(BmsStrings.HazardGaugeFillColour), nameof(BmsStrings.HazardGaugeFillColourDescription))]
-    public BindableColour4 HazardFillColour { get; } = new(new Color4(255, 215, 0, 255));
+    public BindableColour4 HazardFillColour { get; } = new(new Color4(198, 198, 198, 255));
 
     private const float clear_threshold = 0.8f;
+    private static readonly Color4 above_clear_colour = new(255, 45, 40, 255);
 
     private readonly Box normalFill;
+    private readonly Box aboveClearFill;
     private readonly Box clearLine;
     private readonly Box gaugeSegment;
 
@@ -116,6 +118,15 @@ public sealed partial class BmsHealthDisplay : BmsHudComponent
                         RelativeSizeAxes = Axes.Both,
                         Width = 1,
                     },
+                    aboveClearFill = new Box
+                    {
+                        Anchor = Anchor.BottomLeft,
+                        Origin = Anchor.BottomLeft,
+                        RelativeSizeAxes = Axes.Both,
+                        RelativePositionAxes = Axes.Y,
+                        Width = 1,
+                        Colour = above_clear_colour,
+                    },
                     clearLine = new Box
                     {
                         Anchor = Anchor.BottomLeft,
@@ -162,15 +173,18 @@ public sealed partial class BmsHealthDisplay : BmsHudComponent
     {
         var clampedHealth = double.IsFinite(displayedHealth) ? Math.Clamp(displayedHealth, 0, 1) : 0;
         var profile = displayProfile.Value;
-        var fillHeight = (float)clampedHealth;
-        var fillColour = profile.ColourMode == BmsGaugeColourMode.Fixed
-            ? resolveFixedColour(profile)
-            : grooveColour(clampedHealth, profile.ClearThreshold ?? clear_threshold, profile.RedZoneThreshold);
+        var clearThreshold = profile.ClearThreshold;
+        var clearThresholdValue = clearThreshold ?? clear_threshold;
+        var hasAboveClearZone = profile.ColourMode == BmsGaugeColourMode.GrooveDynamic
+                                && clearThreshold.HasValue
+                                && clampedHealth > clearThresholdValue;
+        var baseFillHeight = (float)(hasAboveClearZone ? clearThresholdValue : clampedHealth);
+        var fillColour = resolveFixedColour(profile);
 
-        if (fillHeight != lastFillHeight)
+        if (baseFillHeight != lastFillHeight)
         {
-            lastFillHeight = fillHeight;
-            normalFill.Height = fillHeight;
+            lastFillHeight = baseFillHeight;
+            normalFill.Height = baseFillHeight;
         }
 
         if (!hasFillColour || fillColour != lastFillColour)
@@ -179,6 +193,11 @@ public sealed partial class BmsHealthDisplay : BmsHudComponent
             lastFillColour = fillColour;
             normalFill.Colour = fillColour;
         }
+
+        var aboveClearHeight = hasAboveClearZone ? (float)(clampedHealth - clearThresholdValue) : 0;
+        aboveClearFill.Height = aboveClearHeight;
+        aboveClearFill.Y = hasAboveClearZone ? -(float)clearThresholdValue : 0;
+        aboveClearFill.Alpha = hasAboveClearZone ? 1 : 0;
 
         if (profile.ClearThreshold is double threshold)
         {
@@ -204,7 +223,7 @@ public sealed partial class BmsHealthDisplay : BmsHudComponent
             }
         }
 
-        if (profile.ShowClearLine && profile.ClearThreshold is double clearThreshold)
+        if (profile.ShowClearLine && profile.ClearThreshold is double)
         {
             var clearLineY = -(float)clearThreshold;
             if (clearLineY != lastClearLineY)
@@ -237,19 +256,15 @@ public sealed partial class BmsHealthDisplay : BmsHudComponent
 
         return bmsHealthProcessor.GaugeType switch
         {
+            BmsGaugeType.AssistEasy => AssistEasyFillColour.Value,
+            BmsGaugeType.Easy => EasyFillColour.Value,
+            BmsGaugeType.Normal => NormalFillColour.Value,
             BmsGaugeType.Hard or BmsGaugeType.Class => HardFillColour.Value,
             BmsGaugeType.ExHard or BmsGaugeType.ExClass => ExHardFillColour.Value,
             BmsGaugeType.Hazard or BmsGaugeType.ExHardClass => HazardFillColour.Value,
             _ => profile.FillColour,
         };
     }
-
-    private Color4 grooveColour(double clampedHealth, double clearThreshold, double redZoneThreshold) => clampedHealth switch
-    {
-        var value when value < redZoneThreshold => GrooveColourLow.Value,
-        var value when value < clearThreshold => GrooveColourMid.Value,
-        _ => GrooveColourHigh.Value,
-    };
 
     private sealed partial class GaugeSegment : Box
     {

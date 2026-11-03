@@ -272,17 +272,17 @@ public static class BmsStrings
 
     public static LocalisableString ScaleStageWidthByColumnsDescription => get("scale_stage_width_by_columns_description");
 
-    public static LocalisableString GrooveLowHealthColour => get("groove_low_health_colour");
+    public static LocalisableString AssistEasyGaugeFillColour => get("assist_easy_gauge_fill_colour");
 
-    public static LocalisableString GrooveLowHealthColourDescription => get("groove_low_health_colour_description");
+    public static LocalisableString AssistEasyGaugeFillColourDescription => get("assist_easy_gauge_fill_colour_description");
 
-    public static LocalisableString GrooveMidHealthColour => get("groove_mid_health_colour");
+    public static LocalisableString EasyGaugeFillColour => get("easy_gauge_fill_colour");
 
-    public static LocalisableString GrooveMidHealthColourDescription => get("groove_mid_health_colour_description");
+    public static LocalisableString EasyGaugeFillColourDescription => get("easy_gauge_fill_colour_description");
 
-    public static LocalisableString GrooveHighHealthColour => get("groove_high_health_colour");
+    public static LocalisableString NormalGaugeFillColour => get("normal_gauge_fill_colour");
 
-    public static LocalisableString GrooveHighHealthColourDescription => get("groove_high_health_colour_description");
+    public static LocalisableString NormalGaugeFillColourDescription => get("normal_gauge_fill_colour_description");
 
     public static LocalisableString HardGaugeFillColour => get("hard_gauge_fill_colour");
 

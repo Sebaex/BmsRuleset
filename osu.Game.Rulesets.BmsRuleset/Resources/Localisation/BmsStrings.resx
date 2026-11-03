@@ -279,12 +279,12 @@
   <data name="note_height_scale_description" xml:space="preserve"><value>Scales note heads and tails without changing their positions or other Stage elements.</value></data>
   <data name="scale_stage_width_by_columns" xml:space="preserve"><value>Scale Stage width by columns</value></data>
   <data name="scale_stage_width_by_columns_description" xml:space="preserve"><value>Applies the configured-to-original Stage width ratio to each column, allowing layouts with more columns to use a wider Stage.</value></data>
-  <data name="groove_low_health_colour" xml:space="preserve"><value>Groove low health colour</value></data>
-  <data name="groove_low_health_colour_description" xml:space="preserve"><value>Colour of the groove gauge in the red zone (below red zone threshold).</value></data>
-  <data name="groove_mid_health_colour" xml:space="preserve"><value>Groove mid health colour</value></data>
-  <data name="groove_mid_health_colour_description" xml:space="preserve"><value>Colour of the groove gauge in the yellow zone (between red zone and clear threshold).</value></data>
-  <data name="groove_high_health_colour" xml:space="preserve"><value>Groove high health colour</value></data>
-  <data name="groove_high_health_colour_description" xml:space="preserve"><value>Colour of the groove gauge above the clear threshold.</value></data>
+  <data name="assist_easy_gauge_fill_colour" xml:space="preserve"><value>Assist Easy gauge fill colour</value></data>
+  <data name="assist_easy_gauge_fill_colour_description" xml:space="preserve"><value>Fill colour for the Assist Easy gauge type.</value></data>
+  <data name="easy_gauge_fill_colour" xml:space="preserve"><value>Easy gauge fill colour</value></data>
+  <data name="easy_gauge_fill_colour_description" xml:space="preserve"><value>Fill colour for the Easy gauge type.</value></data>
+  <data name="normal_gauge_fill_colour" xml:space="preserve"><value>Normal gauge fill colour</value></data>
+  <data name="normal_gauge_fill_colour_description" xml:space="preserve"><value>Fill colour for the Normal gauge type.</value></data>
   <data name="hard_gauge_fill_colour" xml:space="preserve"><value>Hard gauge fill colour</value></data>
   <data name="hard_gauge_fill_colour_description" xml:space="preserve"><value>Fill colour for the Hard gauge type.</value></data>
   <data name="exhard_gauge_fill_colour" xml:space="preserve"><value>ExHard gauge fill colour</value></data>

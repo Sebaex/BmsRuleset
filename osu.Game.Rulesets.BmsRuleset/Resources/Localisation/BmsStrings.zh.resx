@@ -279,12 +279,12 @@
   <data name="note_height_scale_description" xml:space="preserve"><value>缩放音符头尾的高度，而不改变其位置或其他游玩区域元素。</value></data>
   <data name="scale_stage_width_by_columns" xml:space="preserve"><value>按列缩放游玩区域宽度</value></data>
   <data name="scale_stage_width_by_columns_description" xml:space="preserve"><value>将配置宽度相对于原始游玩区域宽度的比例应用到每列，使列数更多的布局使用更宽的游玩区域。</value></data>
-  <data name="groove_low_health_colour" xml:space="preserve"><value>Groove 血条低血量颜色</value></data>
-  <data name="groove_low_health_colour_description" xml:space="preserve"><value>Groove 血条红色区域（低于红色区域阈值）的颜色。</value></data>
-  <data name="groove_mid_health_colour" xml:space="preserve"><value>Groove 血条中等血量颜色</value></data>
-  <data name="groove_mid_health_colour_description" xml:space="preserve"><value>Groove 血条黄色区域（介于红色区域阈值与通关阈值之间）的颜色。</value></data>
-  <data name="groove_high_health_colour" xml:space="preserve"><value>Groove 血条高血量颜色</value></data>
-  <data name="groove_high_health_colour_description" xml:space="preserve"><value>Groove 血条高于通关阈值时的颜色。</value></data>
+  <data name="assist_easy_gauge_fill_colour" xml:space="preserve"><value>Assist Easy 血条填充颜色</value></data>
+  <data name="assist_easy_gauge_fill_colour_description" xml:space="preserve"><value>Assist Easy 血条类型的填充颜色。</value></data>
+  <data name="easy_gauge_fill_colour" xml:space="preserve"><value>Easy 血条填充颜色</value></data>
+  <data name="easy_gauge_fill_colour_description" xml:space="preserve"><value>Easy 血条类型的填充颜色。</value></data>
+  <data name="normal_gauge_fill_colour" xml:space="preserve"><value>Normal 血条填充颜色</value></data>
+  <data name="normal_gauge_fill_colour_description" xml:space="preserve"><value>Normal 血条类型的填充颜色。</value></data>
   <data name="hard_gauge_fill_colour" xml:space="preserve"><value>Hard 血条填充颜色</value></data>
   <data name="hard_gauge_fill_colour_description" xml:space="preserve"><value>Hard 血条类型的填充颜色。</value></data>
   <data name="exhard_gauge_fill_colour" xml:space="preserve"><value>ExHard 血条填充颜色</value></data>

@@ -123,11 +123,11 @@ Choose from 6 regular gauges (Groove or Survival) and 3 course gauges through mo
 | Easy        | **E1**      | Difficulty Reduction | Chart's TOTAL   | 20%        | ≥ 80%   | Groove (dynamic) |
 | Normal      | *(default)* | —                    | Chart's TOTAL   | 20%        | ≥ 80%   | Groove (dynamic) |
 | Hard        | **H1**      | Difficulty Increase  | Small, chart-dependent | 100% | Survive | Fixed red       |
-| EX Hard     | **H2**      | Difficulty Increase  | Small, chart-dependent | 100% | Survive | Fixed purple    |
-| Hazard      | **H3**      | Difficulty Increase  | Starting gauge  | 100%       | Survive | Fixed gold       |
+| EX Hard     | **H2**      | Difficulty Increase  | Small, chart-dependent | 100% | Survive | Fixed gold      |
+| Hazard      | **H3**      | Difficulty Increase  | Starting gauge  | 100%       | Survive | Fixed gray       |
 | Class       | **C1**      | Course               | Fixed per hit   | 100%       | Survive | Fixed red        |
-| EX Class    | **C2**      | Course               | Fixed per hit   | 100%       | Survive | Fixed purple     |
-| EX Hard Class | **C3**    | Course               | Fixed per hit   | 100%       | Survive | Fixed gold       |
+| EX Class    | **C2**      | Course               | Fixed per hit   | 100%       | Survive | Fixed gold       |
+| EX Hard Class | **C3**    | Course               | Fixed per hit   | 100%       | Survive | Fixed gray       |
 
 - **Groove gauges** (E2/E1/Normal): start at 20%, have a 2% minimum, and can recover throughout the song.
   Reach the clear threshold by song end. Bar colour
@@ -135,9 +135,8 @@ Choose from 6 regular gauges (Groove or Survival) and 3 course gauges through mo
 - **Survival gauges** (H1/H2/H3): start at 100% and fail at 0%. Hard and EX Hard reward successful hits with recovery;
   Hazard requires preserving the starting gauge. Each uses a fixed bar colour.
 - **Course gauges** (C1/C2/C3): Survival gauges that carry HP between stages; reaching 0% fails the course. Bars are
-  red, purple, or gold. The selected regular gauge maps to the corresponding Class tier.
-- Hard (H1) has **guts protection**: below each HP threshold, damage is reduced (below 50% → ×0.8, below 40% → ×0.7,
-  …, below 10% → ×0.4).
+  red, gold, or gray. The selected regular gauge maps to the corresponding Class tier.
+- Hard (H1) has **guts protection**: below each HP threshold, damage is reduced (below 30% → ×0.6)
 - `#TOTAL` controls gauge recovery. The chart's recovery is shared across its scored notes: an LN counts once,
   while CN and HCN count the head and tail separately. The game chooses a default recovery amount based on the
   chart's layout and note count when `#TOTAL` is omitted.
