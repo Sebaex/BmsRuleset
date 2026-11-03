@@ -38,8 +38,8 @@ internal partial class BmsCourseAggregateStatistics : BmsStatisticsPanel
             .Select(stage => (stage.Score, WorkingBeatmap: Beatmaps.GetWorkingBeatmap(stage.Stage.Beatmap, true)))
             .ToArray();
 
-        var gaugeTypes = session.Mods.Any(mod => mod is BmsModAutoGauge)
-            ? BmsModAutoGauge.COURSE_AUTO_GAUGE_CHAIN
+        var gaugeTypes = session.Mods.Any(mod => mod is BmsModGaugeAutoShift)
+            ? BmsModGaugeAutoShift.COURSE_AUTO_GAUGE_CHAIN
             : [session.GaugeType];
         var gaugeStates = gaugeTypes.Select(type => new BmsGaugeStateSnapshot(type, 1, false)).ToArray();
         var profileFamily = BmsCourseSession.ResolveCourseGaugeProfileFamily(session.Course.Constraints);

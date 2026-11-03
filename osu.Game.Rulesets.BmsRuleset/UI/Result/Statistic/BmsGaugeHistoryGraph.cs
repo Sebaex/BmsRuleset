@@ -566,13 +566,13 @@ public sealed partial class BmsGaugeHistoryGraph : CompositeDrawable, IBmsResult
 
     private static IEnumerable<BmsGaugeType> gaugeTypesFor(IReadOnlyList<Mod> mods)
     {
-        if (mods.OfType<BmsModAutoGauge>().Any())
+        if (mods.OfType<BmsModGaugeAutoShift>().Any())
         {
             var resolvedGaugeType = mods.OfType<BmsModGauge>().FirstOrDefault()?.GaugeType;
             if (resolvedGaugeType is BmsGaugeType.Class or BmsGaugeType.ExClass or BmsGaugeType.ExHardClass)
-                return BmsModAutoGauge.COURSE_AUTO_GAUGE_CHAIN;
+                return BmsModGaugeAutoShift.COURSE_AUTO_GAUGE_CHAIN;
 
-            return BmsModAutoGauge.AUTO_GAUGE_CHAIN;
+            return BmsModGaugeAutoShift.AUTO_GAUGE_CHAIN;
         }
 
         return

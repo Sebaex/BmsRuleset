@@ -78,7 +78,7 @@ public class BmsCourseHealthInheritanceTest
         [Values] bool modsFirst)
     {
         var session = createSession(BmsGaugeType.ExHardClass, family, true);
-        var expected = BmsModAutoGauge.COURSE_AUTO_GAUGE_CHAIN.Select(type => new BmsGaugeStateSnapshot(type, 1, false)).ToArray();
+        var expected = BmsModGaugeAutoShift.COURSE_AUTO_GAUGE_CHAIN.Select(type => new BmsGaugeStateSnapshot(type, 1, false)).ToArray();
         var saved = new List<(Score Score, BmsGaugeStateSnapshot[] Initial)>();
 
         for (var stage = 0; stage < layouts.Length; stage++)
@@ -104,7 +104,7 @@ public class BmsCourseHealthInheritanceTest
                 health.RegisterNonConsumingJudgement(HitResult.Ok, 1000);
 
             Assert.That(health.HasPassedAtEnd(), Is.True);
-            mods.OfType<BmsModAutoGauge>().Single().ApplyToScore(score.ScoreInfo);
+            mods.OfType<BmsModGaugeAutoShift>().Single().ApplyToScore(score.ScoreInfo);
             expected = health.CurrentGaugeStates.Where(state => !state.Failed).ToArray();
             Assert.That(expected, Has.Length.EqualTo(2 - System.Math.Min(stage, 1)));
             session.CompleteCurrentStage(score.ScoreInfo, health.CurrentGaugeStates);
@@ -224,7 +224,7 @@ public class BmsCourseHealthInheritanceTest
         var stages = layouts.Select((_, index) => new BmsResolvedCourseStage(
             new BmsCourseStage($"Stage {index}", "1", BeatmapHash: $"stage-{index}"), new BeatmapInfo())).ToArray();
         var course = new BmsCourseDefinition("inheritance", "Table", "Dan", stages.Select(stage => stage.Definition).ToArray(), constraints);
-        var mods = BmsCourseSession.CreateCourseMods(autoGauge ? [new BmsModAutoGauge()] : [], type, constraints);
+        var mods = BmsCourseSession.CreateCourseMods(autoGauge ? [new BmsModGaugeAutoShift()] : [], type, constraints);
         return new BmsCourseSession(course, stages, mods, type);
     }
 

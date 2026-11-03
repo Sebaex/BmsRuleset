@@ -183,7 +183,7 @@ public partial class BmsRuleset : Ruleset
             new BmsModAutoplay(),
 
             new BmsModAutoScratch(),
-            new BmsModAutoGauge(),
+            new BmsModGaugeAutoShift(),
         ],
         ModType.Conversion =>
         [

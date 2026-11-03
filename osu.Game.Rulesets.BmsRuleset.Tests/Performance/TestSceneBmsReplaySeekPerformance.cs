@@ -79,7 +79,7 @@ public partial class TestSceneBmsReplaySeekPerformance : BmsPlayerTestScene
         {
             count = objects;
             profile = workload;
-            LoadPlayer([new BmsModAutoGauge()]);
+            LoadPlayer([new BmsModGaugeAutoShift()]);
         });
         AddUntilStep("player loaded", () => Player.IsLoaded && Player.LoadedBeatmapSuccessfully && Player.Alpha == 1);
         AddStep("measure " + mode, () =>

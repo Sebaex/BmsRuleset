@@ -56,7 +56,7 @@ public partial class TestSceneBmsAutoGaugeScoreAttribution : BmsPlayerTestScene
     [Test]
     public void TestAutoGaugeFinalScoreAttributionUsesResolvedGauge()
     {
-        this.AddSetupStep("load player with AG mod", () => LoadPlayer([new BmsModAutoGauge()]));
+        this.AddSetupStep("load player with AG mod", () => LoadPlayer([new BmsModGaugeAutoShift()]));
         this.AddSetupUntilStep("player loaded", () => Player.IsLoaded && Player.Alpha == 1);
         this.AddSetupAssert("beatmap loaded", () => Player.LoadedBeatmapSuccessfully);
 
@@ -67,7 +67,7 @@ public partial class TestSceneBmsAutoGaugeScoreAttribution : BmsPlayerTestScene
             && hp.WorstGaugeType == BmsGaugeType.ExHard);
 
         AddAssert("score mods contain resolved gauge only", () =>
-            Player.Score.ScoreInfo.Mods.Any(m => m is BmsModAutoGauge)
+            Player.Score.ScoreInfo.Mods.Any(m => m is BmsModGaugeAutoShift)
             && Player.Score.ScoreInfo.Mods.Any(m => m is BmsModExHardGauge)
             && Player.Score.ScoreInfo.Mods.All(m => m is not BmsModHazardGauge));
     }

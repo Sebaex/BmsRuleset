@@ -39,7 +39,7 @@ public partial class TestSceneBmsCourseSelect
         BeatmapInfo[] charts = null!;
         BmsCoursePlayer player = null!;
         BmsGaugeStateSnapshot[] expected = autoGauge
-            ? BmsModAutoGauge.COURSE_AUTO_GAUGE_CHAIN.Select(type => new BmsGaugeStateSnapshot(type, 1, false)).ToArray()
+            ? BmsModGaugeAutoShift.COURSE_AUTO_GAUGE_CHAIN.Select(type => new BmsGaugeStateSnapshot(type, 1, false)).ToArray()
             : [new(gaugeType, 1, false)];
         var openings = new BmsGaugeStateSnapshot[3][];
 
@@ -84,7 +84,7 @@ public partial class TestSceneBmsCourseSelect
         AddUntilStep("dan ready", () => controller.SelectedCourse?.Id == courseId && !controller.CourseCarousel.IsFiltering);
         AddStep("start dan through song select", () =>
         {
-            songSelect.Mods.Value = autoGauge ? [new BmsModAutoGauge()] : [BmsCourseSession.CreateGaugeMod(gaugeType)];
+            songSelect.Mods.Value = autoGauge ? [new BmsModGaugeAutoShift()] : [BmsCourseSession.CreateGaugeMod(gaugeType)];
             controller.StartCourse(songSelect);
         });
 
@@ -165,9 +165,9 @@ public partial class TestSceneBmsCourseSelect
             var course = new BmsCourseDefinition(Guid.NewGuid().ToString(), "Table", "Dan", [stage, stage, stage], ["gauge_lr2"]);
             session = new BmsCourseSession(course,
                 layouts.Select(_ => new BmsResolvedCourseStage(stage, stageBeatmap)),
-                BmsCourseSession.CreateCourseMods(autoGauge ? [new BmsModAutoGauge()] : [], gaugeType, course.Constraints), gaugeType);
+                BmsCourseSession.CreateCourseMods(autoGauge ? [new BmsModGaugeAutoShift()] : [], gaugeType, course.Constraints), gaugeType);
             expected = autoGauge
-                ? BmsModAutoGauge.COURSE_AUTO_GAUGE_CHAIN.Select(type => new BmsGaugeStateSnapshot(type, 1, false)).ToArray()
+                ? BmsModGaugeAutoShift.COURSE_AUTO_GAUGE_CHAIN.Select(type => new BmsGaugeStateSnapshot(type, 1, false)).ToArray()
                 : [new(gaugeType, 1, false)];
         });
         AddStep("load song select", () => Stack.Push(songSelect = new BmsSoloSongSelect()));

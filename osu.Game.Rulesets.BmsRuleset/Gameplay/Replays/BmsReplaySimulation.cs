@@ -44,13 +44,16 @@ internal static class BmsReplaySimulation
         score.Mods.Value = mods;
         score.ApplyBeatmap(beatmap);
         health.ApplyBeatmap(beatmap);
+        if (mods.Any(mod => mod is BmsModGaugeAutoShift))
+            health.EnableClearThresholdGaugeShift();
+
         if (courseGaugeStates != null)
         {
             health.ConfigureGaugeContext(true, courseGaugeProfileFamily);
             health.SetGaugeTypes(courseGaugeStates.Select(state => state.GaugeType), replaceExisting: true,
                 profileFamilyOverride: courseGaugeProfileFamily, initialStates: courseGaugeStates);
         }
-        else if (mods.OfType<BmsModAutoGauge>().FirstOrDefault() is { } autoGauge)
+        else if (mods.OfType<BmsModGaugeAutoShift>().FirstOrDefault() is { } autoGauge)
             autoGauge.ApplyToHealthProcessor(health);
         else
             foreach (var mod in mods.OfType<IApplicableToHealthProcessor>())

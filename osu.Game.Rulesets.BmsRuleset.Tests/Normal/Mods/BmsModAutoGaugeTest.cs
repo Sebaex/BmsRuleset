@@ -17,19 +17,19 @@ using osu.Game.Scoring;
 namespace osu.Game.Rulesets.BmsRuleset.Tests.Normal.Mods;
 
 [TestFixture]
-public class BmsModAutoGaugeTest
+public class BmsModGaugeAutoShiftTest
 {
 
     /// <summary>
     ///     Builds an Auto Gauge whose resolved worst gauge is ExHard: the six-tier chain is
-    ///     installed via <see cref="BmsModAutoGauge.ApplyToHealthProcessor" />, then a single
+    ///     installed via <see cref="BmsModGaugeAutoShift.ApplyToHealthProcessor" />, then a single
     ///     BAD (Ok) fails Hazard (survival gauge, −1) so the first non-failed survival tier
     ///     (ExHard) becomes the resolved worst once <see cref="BmsHealthProcessor.HasPassedAtEnd" /> runs.
     /// </summary>
-    private static (BmsModAutoGauge autoGauge, BmsHealthProcessor hp) createAutoGaugeResolvedToExHard()
+    private static (BmsModGaugeAutoShift autoGauge, BmsHealthProcessor hp) createAutoGaugeResolvedToExHard()
     {
         var hp = new BmsHealthProcessor();
-        var autoGauge = new BmsModAutoGauge();
+        var autoGauge = new BmsModGaugeAutoShift();
         autoGauge.ApplyToHealthProcessor(hp);
 
         var beatmap = new BmsBeatmap
@@ -50,7 +50,7 @@ public class BmsModAutoGaugeTest
     [Test]
     public void TestAutoGaugeAllowsResolvedGaugeAttribution()
     {
-        var autoGauge = new BmsModAutoGauge();
+        var autoGauge = new BmsModGaugeAutoShift();
 
         Assert.That(autoGauge.IncompatibleMods, Does.Not.Contain(typeof(BmsModGauge)));
         Assert.That(autoGauge.IncompatibleMods, Does.Not.Contain(typeof(BmsModHardGauge)));
@@ -101,7 +101,7 @@ public class BmsModAutoGaugeTest
     public void TestAutoGaugeAttributionReplacesEarlierResolvedGauge()
     {
         var hp = new BmsHealthProcessor();
-        var autoGauge = new BmsModAutoGauge();
+        var autoGauge = new BmsModGaugeAutoShift();
         autoGauge.ApplyToHealthProcessor(hp);
 
         var beatmap = new BmsBeatmap
@@ -131,7 +131,7 @@ public class BmsModAutoGaugeTest
     [Test]
     public void TestAutoGaugeIsAutomationType()
     {
-        var mod = new BmsModAutoGauge();
+        var mod = new BmsModGaugeAutoShift();
 
         Assert.That(mod.Type, Is.EqualTo(ModType.Automation));
     }
@@ -143,7 +143,7 @@ public class BmsModAutoGaugeTest
         hp.ApplyBeatmap(new BmsBeatmap { LayoutVariant = BmsLayoutVariant.Bme7K });
         hp.ConfigureGaugeContext(true, BmsGaugeProfileFamily.FiveKeys);
 
-        new BmsModAutoGauge().ApplyToHealthProcessor(hp);
+        new BmsModGaugeAutoShift().ApplyToHealthProcessor(hp);
 
         Assert.Multiple(() =>
         {
@@ -172,7 +172,7 @@ public class BmsModAutoGaugeTest
     [Test]
     public void TestCourseStartingStatesSurviveCloneAndModSerialisation()
     {
-        var mod = new BmsModAutoGauge
+        var mod = new BmsModGaugeAutoShift
         {
             ClassHealth = { Value = 0.81 },
             ExClassHealth = { Value = 0.42 },
@@ -180,7 +180,7 @@ public class BmsModAutoGaugeTest
         };
         var clone = mod.DeepClone();
         var saved = new APIMod(clone).Serialize().Deserialize<APIMod>();
-        var restored = (BmsModAutoGauge)saved.ToMod(new BmsRuleset());
+        var restored = (BmsModGaugeAutoShift)saved.ToMod(new BmsRuleset());
         using var health = new BmsHealthProcessor();
         health.ApplyBeatmap(new BmsBeatmap { LayoutVariant = BmsLayoutVariant.Bme7K });
         restored.ApplyToHealthProcessor(health);

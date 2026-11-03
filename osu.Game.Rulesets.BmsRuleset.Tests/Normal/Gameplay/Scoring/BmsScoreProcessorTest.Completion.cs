@@ -101,7 +101,7 @@ public partial class BmsScoreProcessorTest
         var framedClock = new FramedClock(manualClock);
         var scoreProcessor = new TestBmsScoreProcessor { Clock = framedClock };
         var healthProcessor = new BmsHealthProcessor();
-        Mod[] mods = autoGauge ? [new BmsModAutoGauge()] : [];
+        Mod[] mods = autoGauge ? [new BmsModGaugeAutoShift()] : [];
         scoreProcessor.Mods.Value = mods;
         scoreProcessor.ApplyBeatmap(beatmap);
         healthProcessor.ApplyBeatmap(beatmap);
@@ -195,7 +195,7 @@ public partial class BmsScoreProcessorTest
         var framedClock = new FramedClock(manualClock);
         var scoreProcessor = new TestBmsScoreProcessor { Clock = framedClock };
         var healthProcessor = new BmsHealthProcessor();
-        Mod[] mods = autoGauge ? [new BmsModAutoGauge()] : [];
+        Mod[] mods = autoGauge ? [new BmsModGaugeAutoShift()] : [];
         scoreProcessor.Mods.Value = mods;
         scoreProcessor.ApplyBeatmap(beatmap);
         healthProcessor.ApplyBeatmap(beatmap);

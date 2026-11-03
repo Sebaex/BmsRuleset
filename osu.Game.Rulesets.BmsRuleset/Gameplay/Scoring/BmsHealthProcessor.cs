@@ -64,7 +64,9 @@ public partial class BmsHealthProcessor : HealthProcessor
     private IReadOnlyList<BmsGaugeStateSnapshot>? initialGaugeStates;
 
     private int activeGaugeIndex;
+    private int displayGaugeIndex = -1;
     private int endResultIndex;
+    private bool useClearThresholdGaugeShift;
 
     private IBeatmap? beatmap;
     private bool initialized;
@@ -172,6 +174,8 @@ public partial class BmsHealthProcessor : HealthProcessor
         ConfiguredProfileFamily = familyOverride;
     }
 
+    internal void EnableClearThresholdGaugeShift() => useClearThresholdGaugeShift = true;
+
     /// <summary>
     /// Sets multiple gauge types to track in parallel, sorted by difficulty descending.
     /// Types already present in the chain are skipped (dedup).
@@ -183,7 +187,10 @@ public partial class BmsHealthProcessor : HealthProcessor
         IReadOnlyList<BmsGaugeStateSnapshot>? initialStates = null)
     {
         if (replaceExisting)
+        {
             gaugeStates.Clear();
+            displayGaugeIndex = -1;
+        }
 
         if (replaceExisting || gaugeStates.Count == 0)
             ConfiguredProfileFamily = profileFamilyOverride;
@@ -221,6 +228,7 @@ public partial class BmsHealthProcessor : HealthProcessor
 
         // Sync to active state (first = hardest).
         activeGaugeIndex = 0;
+        displayGaugeIndex = -1;
         endResultIndex = 0;
         resolveActiveState();
 
@@ -289,7 +297,9 @@ public partial class BmsHealthProcessor : HealthProcessor
         }
 
         activeGaugeIndex = 0;
+        displayGaugeIndex = -1;
         endResultIndex = 0;
+        resolveActiveState();
     }
 
     protected override void ApplyResultInternal(JudgementResult result)
@@ -383,9 +393,13 @@ public partial class BmsHealthProcessor : HealthProcessor
 
     private void syncActiveStateFromHealth()
     {
-        if (activeGaugeIndex < gaugeStates.Count)
+        var healthGaugeIndex = useClearThresholdGaugeShift && displayGaugeIndex >= 0
+            ? displayGaugeIndex
+            : activeGaugeIndex;
+
+        if (healthGaugeIndex < gaugeStates.Count)
         {
-            var active = gaugeStates[activeGaugeIndex];
+            var active = gaugeStates[healthGaugeIndex];
             if (!active.IsHpFailed)
                 active.CurrentHp = Health.Value;
         }
@@ -442,6 +456,7 @@ public partial class BmsHealthProcessor : HealthProcessor
         }
 
         activeGaugeIndex = 0;
+        displayGaugeIndex = -1;
         endResultIndex = 0;
         initialized = false;
         resolveActiveState();
@@ -458,12 +473,41 @@ public partial class BmsHealthProcessor : HealthProcessor
             return;
         }
 
-        var active = gaugeStates[activeGaugeIndex];
-        GaugeType = active.GaugeType;
-        GaugeProfile = active.Profile;
-        DisplayProfile.Value = active.Profile.Display;
-        Health.MaxValue = active.Profile.MaxHealth;
-        Health.Value = active.CurrentHp;
+        var displayIndex = useClearThresholdGaugeShift ? resolveDisplayGaugeIndex() : activeGaugeIndex;
+        var displayedGauge = gaugeStates[displayIndex];
+        GaugeType = displayedGauge.GaugeType;
+        GaugeProfile = displayedGauge.Profile;
+        DisplayProfile.Value = displayedGauge.Profile.Display;
+        Health.MaxValue = displayedGauge.Profile.MaxHealth;
+        Health.Value = displayedGauge.CurrentHp;
+    }
+
+    private int resolveDisplayGaugeIndex()
+    {
+        var firstTotalGaugeIndex = gaugeStates.FindIndex(state => state.Profile.ClearThreshold > 0);
+
+        // Survival gauges remain the visible progression until Hard fails; total gauges then shift by clear progress.
+        if (firstTotalGaugeIndex < 0 || activeGaugeIndex < firstTotalGaugeIndex)
+        {
+            displayGaugeIndex = activeGaugeIndex;
+            return displayGaugeIndex;
+        }
+
+        // The states are ordered Normal, Easy, Assist Easy here, so the first threshold reached wins by difficulty.
+        var index = gaugeStates.FindIndex(state =>
+            state.Profile.ClearThreshold > 0
+            && !state.IsHpFailed
+            && state.CurrentHp >= state.Profile.ClearThreshold);
+
+        // Keep Assist Easy as the base design until any total gauge reaches clear.
+        if (index < 0)
+            index = gaugeStates.FindLastIndex(state => state.Profile.ClearThreshold > 0 && !state.IsHpFailed);
+
+        if (index < activeGaugeIndex)
+            index = activeGaugeIndex;
+
+        displayGaugeIndex = index;
+        return index;
     }
 
     private void recordGaugeHistory(double eventTime)
@@ -471,8 +515,9 @@ public partial class BmsHealthProcessor : HealthProcessor
         if (gaugeStates.Count == 0)
             return;
 
-        var activeGaugeType = activeGaugeIndex < gaugeStates.Count
-            ? gaugeStates[activeGaugeIndex].GaugeType
+        var historyGaugeIndex = useClearThresholdGaugeShift && displayGaugeIndex >= 0 ? displayGaugeIndex : activeGaugeIndex;
+        var activeGaugeType = historyGaugeIndex < gaugeStates.Count
+            ? gaugeStates[historyGaugeIndex].GaugeType
             : gaugeStates[^1].GaugeType;
 
         gaugeHistory.Record(gaugeStates, eventTime, activeGaugeType);

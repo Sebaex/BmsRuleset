@@ -564,7 +564,7 @@ public partial class TestSceneBmsResultScreenStatistics : OsuManualInputManagerT
             MaxCombo = 653,
             Mods =
             [
-                new BmsModAutoGauge(),
+                new BmsModGaugeAutoShift(),
                 new BmsModHardGauge(),
             ],
             HitEvents = createGaugeHitEvents(),

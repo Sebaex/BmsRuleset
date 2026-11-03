@@ -146,7 +146,7 @@ public partial class TestSceneBmsReplayPause : BmsPlayerTestScene
                     Ruleset = new BmsRuleset().RulesetInfo,
                     Mods = autoGauge ?
                     [
-                        new BmsModAutoGauge
+                        new BmsModGaugeAutoShift
                         {
                             ClassHealth = { Value = 0.4 },
                             ExClassHealth = { Value = 0.3 },

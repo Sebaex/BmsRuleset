@@ -151,7 +151,7 @@ public class BmsCourseSessionTest
     [Test]
     public void TestCourseAutoGaugeDoesNotRestoreFailedGaugesWhenModIsAppliedAfterSessionConfiguration()
     {
-        var session = createSession(mods: [new BmsModAutoGauge()], gaugeType: BmsGaugeType.ExHardClass);
+        var session = createSession(mods: [new BmsModGaugeAutoShift()], gaugeType: BmsGaugeType.ExHardClass);
         session.BeginCurrentStage();
         session.CompleteCurrentStage(createScore(true),
         [
@@ -164,7 +164,7 @@ public class BmsCourseSessionTest
 
         var healthProcessor = new BmsHealthProcessor();
         session.ConfigureHealthProcessor(healthProcessor);
-        new BmsModAutoGauge().ApplyToHealthProcessor(healthProcessor);
+        new BmsModGaugeAutoShift().ApplyToHealthProcessor(healthProcessor);
 
         Assert.That(healthProcessor.CurrentGaugeStates.Select(state => state.GaugeType), Is.EqualTo(
         [
@@ -176,7 +176,7 @@ public class BmsCourseSessionTest
     [Test]
     public void TestCourseAutoGaugeOmitsFailedGaugesFromNextStage()
     {
-        var session = createSession(mods: [new BmsModAutoGauge()], gaugeType: BmsGaugeType.ExHardClass);
+        var session = createSession(mods: [new BmsModGaugeAutoShift()], gaugeType: BmsGaugeType.ExHardClass);
         session.BeginCurrentStage();
         session.CompleteCurrentStage(createScore(true),
         [
@@ -201,8 +201,8 @@ public class BmsCourseSessionTest
     public void TestCourseAutoGaugeReplacesRegularGaugeChain()
     {
         var healthProcessor = new BmsHealthProcessor();
-        new BmsModAutoGauge().ApplyToHealthProcessor(healthProcessor);
-        var session = createSession(mods: [new BmsModAutoGauge()], gaugeType: BmsGaugeType.ExHardClass);
+        new BmsModGaugeAutoShift().ApplyToHealthProcessor(healthProcessor);
+        var session = createSession(mods: [new BmsModGaugeAutoShift()], gaugeType: BmsGaugeType.ExHardClass);
 
         session.ConfigureHealthProcessor(healthProcessor);
 
@@ -236,7 +236,7 @@ public class BmsCourseSessionTest
     [Test]
     public void TestCourseCarriesEveryGaugeStateThroughSameList()
     {
-        var session = createSession(mods: [new BmsModAutoGauge()], gaugeType: BmsGaugeType.ExHardClass);
+        var session = createSession(mods: [new BmsModGaugeAutoShift()], gaugeType: BmsGaugeType.ExHardClass);
         BmsGaugeStateSnapshot[] states =
         [
             new(BmsGaugeType.ExHardClass, 0, true),
@@ -287,7 +287,7 @@ public class BmsCourseSessionTest
             Assert.That(BmsCourseSession.ResolveCourseGaugeType([new BmsModEasyGauge()]), Is.EqualTo(BmsGaugeType.Class));
             Assert.That(BmsCourseSession.ResolveCourseGaugeType([new BmsModHardGauge()]), Is.EqualTo(BmsGaugeType.ExClass));
             Assert.That(BmsCourseSession.ResolveCourseGaugeType([new BmsModHazardGauge()]), Is.EqualTo(BmsGaugeType.ExHardClass));
-            Assert.That(BmsCourseSession.ResolveCourseGaugeType([new BmsModAutoGauge()]), Is.EqualTo(BmsGaugeType.ExHardClass));
+            Assert.That(BmsCourseSession.ResolveCourseGaugeType([new BmsModGaugeAutoShift()]), Is.EqualTo(BmsGaugeType.ExHardClass));
         });
     }
 
@@ -427,13 +427,13 @@ public class BmsCourseSessionTest
     public void TestCourseModsKeepAutoGaugeAndReplaceSelectedGauge()
     {
         var mirror = new BmsModMirror();
-        var mods = BmsCourseSession.CreateCourseMods([mirror, new BmsModHardGauge(), new BmsModAutoGauge()], BmsGaugeType.ExHardClass);
+        var mods = BmsCourseSession.CreateCourseMods([mirror, new BmsModHardGauge(), new BmsModGaugeAutoShift()], BmsGaugeType.ExHardClass);
 
         Assert.Multiple(() =>
         {
             Assert.That(mods, Has.Count.EqualTo(2));
             Assert.That(mods.Single(mod => mod is BmsModMirror), Is.Not.SameAs(mirror));
-            Assert.That(mods, Has.One.TypeOf<BmsModAutoGauge>());
+            Assert.That(mods, Has.One.TypeOf<BmsModGaugeAutoShift>());
             Assert.That(mods, Has.None.TypeOf<BmsModGauge>());
         });
     }
@@ -655,7 +655,7 @@ public class BmsCourseSessionTest
     [Test]
     public void TestCourseScoreCloneRetainsSummaryAndFinalGaugeStates()
     {
-        var session = createSession(mods: [new BmsModAutoGauge()], gaugeType: BmsGaugeType.ExHardClass);
+        var session = createSession(mods: [new BmsModGaugeAutoShift()], gaugeType: BmsGaugeType.ExHardClass);
         var score = createScore(true);
         BmsGaugeStateSnapshot[] states =
         [
@@ -729,7 +729,7 @@ public class BmsCourseSessionTest
     public void TestCourseStartsWithoutGaugeStateToRestore()
     {
         var singleGauge = createSession(mods: [new BmsModExClassGauge()], gaugeType: BmsGaugeType.ExClass);
-        var autoGauge = createSession(mods: [new BmsModAutoGauge()], gaugeType: BmsGaugeType.ExHardClass);
+        var autoGauge = createSession(mods: [new BmsModGaugeAutoShift()], gaugeType: BmsGaugeType.ExHardClass);
 
         Assert.Multiple(() =>
         {
@@ -763,8 +763,8 @@ public class BmsCourseSessionTest
     [Test]
     public void TestStageAutoGaugeModKeepsOnlySurvivingStartingHealth()
     {
-        var session = createSession(mods: [new BmsModAutoGauge()], gaugeType: BmsGaugeType.ExHardClass);
-        var firstStage = session.Mods.OfType<BmsModAutoGauge>().Single();
+        var session = createSession(mods: [new BmsModGaugeAutoShift()], gaugeType: BmsGaugeType.ExHardClass);
+        var firstStage = session.Mods.OfType<BmsModGaugeAutoShift>().Single();
         session.BeginCurrentStage();
         session.CompleteCurrentStage(createScore(true),
         [
@@ -775,9 +775,9 @@ public class BmsCourseSessionTest
         session.RequestAdvance();
         session.Advance();
 
-        var secondStage = session.Mods.OfType<BmsModAutoGauge>().Single();
+        var secondStage = session.Mods.OfType<BmsModGaugeAutoShift>().Single();
         using var health = new BmsHealthProcessor();
-        ((BmsModAutoGauge)secondStage.DeepClone()).ApplyToHealthProcessor(health);
+        ((BmsModGaugeAutoShift)secondStage.DeepClone()).ApplyToHealthProcessor(health);
         Assert.Multiple(() =>
         {
             Assert.That(firstStage.ExHardClassHealth.Value, Is.EqualTo(1));

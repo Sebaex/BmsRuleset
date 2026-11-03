@@ -80,7 +80,7 @@ public partial class TestSceneBmsAdvancingJudgementPerformance : BmsPlayerTestSc
                     : workload.StartsWith("overlap-", StringComparison.Ordinal) ? "overlap" : workload;
                 LoadPlayer(workload switch
                 {
-                    "tap-ag" or "overlap-ag" => [new BmsModAutoGauge()],
+                    "tap-ag" or "overlap-ag" => [new BmsModGaugeAutoShift()],
                     "overlap-nb" => [new BmsModNoBad()],
                     "overlap-ng" => [new BmsModNoGood()],
                     "overlap-ne" => [new BmsModNoGreat()],

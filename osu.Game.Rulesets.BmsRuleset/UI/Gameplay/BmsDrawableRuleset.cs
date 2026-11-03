@@ -142,7 +142,7 @@ public partial class BmsDrawableRuleset : DrawableRuleset<BmsHitObject>
         if (ReplayScore != null && healthProcessor is BmsHealthProcessor health)
         {
             var mods = ReplayScore.ScoreInfo.Mods;
-            if (mods.OfType<BmsModAutoGauge>().FirstOrDefault() is { } autoGauge)
+            if (mods.OfType<BmsModGaugeAutoShift>().FirstOrDefault() is { } autoGauge)
                 autoGauge.ApplyToHealthProcessor(health);
             else
                 foreach (var mod in mods.OfType<BmsModGauge>())

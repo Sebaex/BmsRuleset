@@ -38,7 +38,7 @@ public class BmsGaugeHistoryGraphTest
         var series = BmsGaugeHistoryGraph.CreateSeries(
             new ScoreInfo
             {
-                Mods = [new BmsModAutoGauge(), new BmsModHardGauge()],
+                Mods = [new BmsModGaugeAutoShift(), new BmsModHardGauge()],
                 HitEvents = [new HitEvent(0, 1, HitResult.Ok, new BmsNote { StartTime = 1000 }, null, null)],
             },
             createBeatmap());
@@ -66,7 +66,7 @@ public class BmsGaugeHistoryGraphTest
     {
         var score = new ScoreInfo
         {
-            Mods = [new BmsModAutoGauge()],
+            Mods = [new BmsModGaugeAutoShift()],
             HitEvents = [new HitEvent(0, 1, HitResult.Perfect, new BmsNote { StartTime = 3000 }, null, null)],
         };
 
@@ -122,7 +122,7 @@ public class BmsGaugeHistoryGraphTest
         var series = BmsGaugeHistoryGraph.CreateSeries(
             new ScoreInfo
             {
-                Mods = [new BmsModAutoGauge(), new BmsModExClassGauge()],
+                Mods = [new BmsModGaugeAutoShift(), new BmsModExClassGauge()],
                 HitEvents = [new HitEvent(0, 1, HitResult.Perfect, new BmsNote { StartTime = 1000 }, null, null)],
             },
             createBeatmap());
@@ -139,7 +139,7 @@ public class BmsGaugeHistoryGraphTest
     [Test]
     public void TestCourseGaugeDoesNotContinueAfterPreviousStageFailure()
     {
-        var firstScore = new ScoreInfo { Mods = [new BmsModAutoGauge()] };
+        var firstScore = new ScoreInfo { Mods = [new BmsModGaugeAutoShift()] };
         BmsGaugeHistoryEvent[] firstHistory =
         [
             new BmsGaugeHistoryEvent(1000, BmsGaugeType.Normal,
@@ -148,7 +148,7 @@ public class BmsGaugeHistoryGraphTest
                 new BmsGaugeStateSnapshot(BmsGaugeType.Normal, 0.5, false),
             ]),
         ];
-        var secondScore = new ScoreInfo { Mods = [new BmsModAutoGauge()] };
+        var secondScore = new ScoreInfo { Mods = [new BmsModGaugeAutoShift()] };
         BmsGaugeHistoryEvent[] secondHistory =
         [
             new BmsGaugeHistoryEvent(0, BmsGaugeType.Normal,
@@ -407,7 +407,7 @@ public class BmsGaugeHistoryGraphTest
     [Test]
     public void TestPersistedHistoryPreservesCanonicalSnapshotOrder()
     {
-        var score = new ScoreInfo { Mods = [new BmsModAutoGauge()] };
+        var score = new ScoreInfo { Mods = [new BmsModGaugeAutoShift()] };
         BmsGaugeHistoryEvent[] history =
         [
             new BmsGaugeHistoryEvent(2000, BmsGaugeType.Normal,
@@ -436,7 +436,7 @@ public class BmsGaugeHistoryGraphTest
     {
         var score = new ScoreInfo
         {
-            Mods = [new BmsModAutoGauge(), new BmsModEasyGauge()],
+            Mods = [new BmsModGaugeAutoShift(), new BmsModEasyGauge()],
         };
         BmsGaugeHistoryEvent[] history =
         [

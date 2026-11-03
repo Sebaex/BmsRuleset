@@ -34,7 +34,7 @@ public class BmsGaugeHistoryPerformanceTest
         BmsJudgementPerformanceTest.Measure($"Gauge-populate-{count}", count, () =>
         {
             var processor = new BmsHealthProcessor();
-            var mod = new BmsModAutoGauge();
+            var mod = new BmsModGaugeAutoShift();
             mod.ApplyToHealthProcessor(processor);
             var score = new ScoreInfo { Mods = [mod] };
             return new BmsJudgementPerformanceTest.Measurement(() =>
@@ -58,7 +58,7 @@ public class BmsGaugeHistoryPerformanceTest
     private static BmsHealthProcessor createProcessor(int layers)
     {
         var processor = new BmsHealthProcessor();
-        processor.SetGaugeTypes(layers == 6 ? BmsModAutoGauge.AUTO_GAUGE_CHAIN : [BmsGaugeType.Normal]);
+        processor.SetGaugeTypes(layers == 6 ? BmsModGaugeAutoShift.AUTO_GAUGE_CHAIN : [BmsGaugeType.Normal]);
         return processor;
     }
 

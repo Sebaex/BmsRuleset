@@ -117,7 +117,7 @@ public partial class TestSceneBmsMods : BmsPlayerTestScene
         this.AddSetupStep("load player with AG mod + autoplay-then-idle replay", () =>
         {
             replay = b => BmsTestReplays.CreateAutoPlayThenIdleFrames(b, auto_play_until);
-            LoadPlayer([new BmsModAutoGauge()]);
+            LoadPlayer([new BmsModGaugeAutoShift()]);
         });
         this.AddSetupUntilStep("player loaded", () => Player.IsLoaded && Player.Alpha == 1);
         this.AddSetupAssert("beatmap loaded", () => Player.LoadedBeatmapSuccessfully);

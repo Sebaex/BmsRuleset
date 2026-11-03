@@ -15,12 +15,12 @@ using osu.Game.Scoring;
 
 namespace osu.Game.Rulesets.BmsRuleset.Gameplay.Mods.Gauge;
 
-public class BmsModAutoGauge : Mod, IApplicableToHealthProcessor, IApplicableToScorePopulation
+public class BmsModGaugeAutoShift : Mod, IApplicableToHealthProcessor, IApplicableToScorePopulation
 {
 
-    public override string Name => "Auto Gauge";
+    public override string Name => "Gauge Auto Shift";
 
-    public override string Acronym => "AG";
+    public override string Acronym => "GAS";
 
     public override IconUsage? Icon => BmsIcons.AutoGauge;
 
@@ -44,8 +44,15 @@ public class BmsModAutoGauge : Mod, IApplicableToHealthProcessor, IApplicableToS
 
     /// <summary>
     ///     Incompatible with all other gauge mods (same mutual-exclusion set as <see cref="BmsModGauge" />).
+    ///     Can't be incompatible with Class gauge due to automatic selection during gameplay and it would disrupt score saving.
     /// </summary>
-    public override Type[] IncompatibleMods { get; } = [];
+    public override Type[] IncompatibleMods { get; } = [
+        typeof(BmsModAssistEasyGauge),
+        typeof(BmsModEasyGauge),
+        typeof(BmsModHardGauge),
+        typeof(BmsModExHardGauge),
+        typeof(BmsModHazardGauge)
+    ];
 
     /// <summary>
     ///     The regular gameplay chain used by Auto Gauge, hardest first.
@@ -73,6 +80,7 @@ public class BmsModAutoGauge : Mod, IApplicableToHealthProcessor, IApplicableToS
     {
         if (healthProcessor is BmsHealthProcessor bmsHp)
         {
+            bmsHp.EnableClearThresholdGaugeShift();
             resolvedHealthProcessor = bmsHp;
             var initialStates = new[]
             {

@@ -69,7 +69,7 @@ public partial class TestSceneBmsCourseSelect
             var definitions = charts.Select(chart => new BmsCourseStage(chart.DifficultyName, "1", BeatmapHash: chart.Hash)).ToArray();
             var course = new BmsCourseDefinition(courseId, "Table", "Dan", definitions, ["gauge_lr2"]);
             var stages = definitions.Zip(charts, (definition, chart) => new BmsResolvedCourseStage(definition, chart)).ToArray();
-            var session = new BmsCourseSession(course, stages, autoGauge ? [new BmsModAutoGauge()] : [BmsCourseSession.CreateGaugeMod(gaugeType)], gaugeType);
+            var session = new BmsCourseSession(course, stages, autoGauge ? [new BmsModGaugeAutoShift()] : [BmsCourseSession.CreateGaugeMod(gaugeType)], gaugeType);
             var replays = new Dictionary<Guid, Score>();
 
             for (var stage = 0; stage < stages.Length; stage++)
@@ -94,7 +94,7 @@ public partial class TestSceneBmsCourseSelect
                         Ruleset = charts[stage].Ruleset,
                         Passed = true,
                         Mods = autoGauge
-                            ? [new BmsModAutoGauge(), BmsCourseSession.CreateGaugeMod(health.GaugeType)]
+                            ? [new BmsModGaugeAutoShift(), BmsCourseSession.CreateGaugeMod(health.GaugeType)]
                             : [BmsCourseSession.CreateGaugeMod(gaugeType)],
                     },
                     Replay = { Frames = [new BmsReplayFrame(0), new BmsReplayFrame(6000)] },
@@ -108,7 +108,7 @@ public partial class TestSceneBmsCourseSelect
                 }
             }
 
-            restored = BmsCourseSession.Restore(course, stages, autoGauge ? [new BmsModAutoGauge()] : [BmsCourseSession.CreateGaugeMod(gaugeType)],
+            restored = BmsCourseSession.Restore(course, stages, autoGauge ? [new BmsModGaugeAutoShift()] : [BmsCourseSession.CreateGaugeMod(gaugeType)],
                 gaugeType, session.Status, session.Stages.Select(stage => new BmsRestoredCourseStage(stage.Status, stage.Score, stage.EndingHealth)).ToArray());
             Add(panel = new HistoricalCourseStatistics(restored, replays) { RelativeSizeAxes = Axes.Both });
         });

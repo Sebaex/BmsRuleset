@@ -25,7 +25,7 @@ public class BmsHealthProcessorTest
     {
         const int events = 2048;
         var processor = new BmsHealthProcessor();
-        processor.SetGaugeTypes(BmsModAutoGauge.AUTO_GAUGE_CHAIN);
+        processor.SetGaugeTypes(BmsModGaugeAutoShift.AUTO_GAUGE_CHAIN);
         for (var i = 0; i < events; i++)
             processor.ApplyHellChargeTick(true, eventTime: i);
         processor.ResetReplayState();
@@ -195,7 +195,7 @@ public class BmsHealthProcessorTest
     public void TestAutoGaugeClearThresholdBoundary([Values] BmsGaugeProfileFamily family, [Values(-1, 0, 1)] int boundary)
     {
         var processor = new BmsHealthProcessor();
-        processor.SetGaugeTypes(BmsModAutoGauge.AUTO_GAUGE_CHAIN, profileFamilyOverride: family);
+        processor.SetGaugeTypes(BmsModGaugeAutoShift.AUTO_GAUGE_CHAIN, profileFamilyOverride: family);
         var threshold = BmsGaugeProfileFactory.Create(BmsGaugeType.Normal, family).ClearThreshold;
         var normalHealth = boundary switch
         {
@@ -893,7 +893,7 @@ public class BmsHealthProcessorTest
     public void TestCourseAutoGaugeDoesNotFailBeforeDepletedLayerIsReplaced()
     {
         using var processor = new BmsHealthProcessor();
-        processor.SetGaugeTypes(BmsModAutoGauge.COURSE_AUTO_GAUGE_CHAIN, profileFamilyOverride: BmsGaugeProfileFamily.Lr2);
+        processor.SetGaugeTypes(BmsModGaugeAutoShift.COURSE_AUTO_GAUGE_CHAIN, profileFamilyOverride: BmsGaugeProfileFamily.Lr2);
         var note = new BmsNote { StartTime = 1000, Column = 1 };
         for (var miss = 0; miss < 5; miss++)
             processor.ApplyResult(new JudgementResult(note, note.CreateJudgement()) { Type = HitResult.Meh });

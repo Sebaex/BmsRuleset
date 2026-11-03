@@ -317,7 +317,7 @@ public class BmsReplaySimulationTest
         {
             Mods =
             [
-                new BmsModAutoGauge
+                new BmsModGaugeAutoShift
                 {
                     ClassHealth = { Value = 0.8 },
                     ExClassHealth = { Value = 0.4 },

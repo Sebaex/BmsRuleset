@@ -76,7 +76,7 @@ public class BmsScoreSelectorCourseTest
         var autoGaugeResult = result(BmsLamp.ExHardClear, ScoreRank.S, acronyms: ["AG"]);
 
         Assert.That(BmsLampScoreSelector.SelectBestCourse([autoGaugeResult], []), Is.EqualTo((BmsLamp.ExHardClear, (ScoreRank?)ScoreRank.S)));
-        Assert.That(BmsLampScoreSelector.SelectBestCourse([autoGaugeResult], [new BmsModAutoGauge()]), Is.EqualTo((BmsLamp.ExHardClear, (ScoreRank?)ScoreRank.S)));
+        Assert.That(BmsLampScoreSelector.SelectBestCourse([autoGaugeResult], [new BmsModGaugeAutoShift()]), Is.EqualTo((BmsLamp.ExHardClear, (ScoreRank?)ScoreRank.S)));
     }
 
     [Test]

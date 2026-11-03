@@ -111,7 +111,7 @@ public partial class TestSceneBmsReplayRebuild : BmsPlayerTestScene
                 BmsLongNoteMode.HellChargeNote => new BmsModHellChargeNote(),
                 _ => new BmsModLongNote(),
             };
-            LoadPlayer([noteMode, new BmsModAutoGauge()]);
+            LoadPlayer([noteMode, new BmsModGaugeAutoShift()]);
         });
         AddUntilStep("player loaded", () => Player.IsLoaded && Player.LoadedBeatmapSuccessfully && Player.Alpha == 1);
         AddStep("observe notifications", () =>
@@ -196,7 +196,7 @@ public partial class TestSceneBmsReplayRebuild : BmsPlayerTestScene
                 BmsLongNoteMode.HellChargeNote => new BmsModHellChargeNote(),
                 _ => new BmsModLongNote(),
             };
-            LoadPlayer(doubleTime ? [noteMode, new BmsModAutoGauge(), new BmsModDoubleTime()] : [noteMode, new BmsModAutoGauge()]);
+            LoadPlayer(doubleTime ? [noteMode, new BmsModGaugeAutoShift(), new BmsModDoubleTime()] : [noteMode, new BmsModGaugeAutoShift()]);
         });
         AddUntilStep("player loaded", () => Player.IsLoaded && Player.LoadedBeatmapSuccessfully && Player.Alpha == 1);
         double[] times = [-500, 0, 1000, 1400, 1500, 1550, 1600, 1800, 2100, 2999, 3000, 3010, 4000, 4100];
@@ -241,7 +241,7 @@ public partial class TestSceneBmsReplayRebuild : BmsPlayerTestScene
             layout = BmsLayoutVariant.Bme7K;
             scratchReplay = true;
             disableFailure = false;
-            LoadPlayer([new BmsModHellChargeNote(), new BmsModAutoGauge(), new BmsModDoubleTime()]);
+            LoadPlayer([new BmsModHellChargeNote(), new BmsModGaugeAutoShift(), new BmsModDoubleTime()]);
         });
         AddUntilStep("player loaded", () => Player.IsLoaded && Player.LoadedBeatmapSuccessfully && Player.Alpha == 1);
         foreach (var time in new[] { 1000d, 4100 })
@@ -277,7 +277,7 @@ public partial class TestSceneBmsReplayRebuild : BmsPlayerTestScene
             layout = BmsLayoutVariant.Bme7K;
             scratchReplay = disableFailure = false;
             emptyReplay = true;
-            LoadPlayer([new BmsModAutoGauge()]);
+            LoadPlayer([new BmsModGaugeAutoShift()]);
         });
         AddUntilStep("player loaded", () => Player.IsLoaded && Player.LoadedBeatmapSuccessfully && Player.Alpha == 1);
         foreach (var time in new[] { 4100d, 1000 })
@@ -379,7 +379,7 @@ public partial class TestSceneBmsReplayRebuild : BmsPlayerTestScene
                     BmsLongNoteMode.HellChargeNote => new BmsModHellChargeNote(),
                     _ => new BmsModLongNote(),
                 };
-                LoadPlayer([noteMode, new BmsModAutoGauge()]);
+                LoadPlayer([noteMode, new BmsModGaugeAutoShift()]);
             });
             AddUntilStep("player loaded", () => Player.IsLoaded && Player.LoadedBeatmapSuccessfully && Player.Alpha == 1);
         }

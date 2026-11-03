@@ -218,7 +218,7 @@ internal sealed class BmsCourseSession
     internal static BmsGaugeType ResolveCourseGaugeType(IEnumerable<Mod> selectedMods)
     {
         var selected = selectedMods.ToArray();
-        if (selected.Any(mod => mod is BmsModAutoGauge))
+        if (selected.Any(mod => mod is BmsModGaugeAutoShift))
             return BmsGaugeType.ExHardClass;
 
         var selectedGauge = selected.OfType<BmsModGauge>().FirstOrDefault()?.GaugeType ?? BmsGaugeType.Normal;
@@ -257,20 +257,20 @@ internal sealed class BmsCourseSession
     internal static IReadOnlyList<Mod> CreateCourseMods(IReadOnlyList<Mod> selectedMods, BmsGaugeType gaugeType, IEnumerable<string>? constraints = null)
     {
         var selected = selectedMods.ToArray();
-        var usesAutoGauge = selected.Any(mod => mod is BmsModAutoGauge);
+        var usesAutoGauge = selected.Any(mod => mod is BmsModGaugeAutoShift);
         var constraintMods = CreateConstraintMods(constraints ?? []);
         var requiredMods = ResolveRequiredMods(selected, constraintMods);
         var hasLnConstraint = requiredMods.Any(mod => mod is BmsModLongNoteModeBase);
         var forbidden = ResolveForbiddenModTypes(constraints ?? []).ToArray();
 
         var mods = selected
-            .Where(mod => mod is not BmsModGauge and not BmsModAutoGauge)
+            .Where(mod => mod is not BmsModGauge and not BmsModGaugeAutoShift)
             .Where(mod => !hasLnConstraint || mod is not BmsModLongNoteModeBase)
             .Where(mod => !forbidden.Any(type => type.IsInstanceOfType(mod)))
             .Select(mod => mod.DeepClone())
             .ToList();
 
-        mods.Add(usesAutoGauge ? new BmsModAutoGauge() : CreateGaugeMod(gaugeType));
+        mods.Add(usesAutoGauge ? new BmsModGaugeAutoShift() : CreateGaugeMod(gaugeType));
 
         // A required NE replaces a user-selected NG (the course demands the stricter one).
         if (requiredMods.Any(mod => mod is BmsModNoGreat))
@@ -406,12 +406,15 @@ internal sealed class BmsCourseSession
     {
         healthProcessor.ConfigureGaugeContext(isCourseGaugeMode: true, familyOverride: gaugeProfileFamilyOverride);
 
-        var usesAutoGauge = Mods.Any(mod => mod is BmsModAutoGauge);
+        var usesAutoGauge = Mods.Any(mod => mod is BmsModGaugeAutoShift);
+        if (usesAutoGauge)
+            healthProcessor.EnableClearThresholdGaugeShift();
+
         var initialStates = CurrentGaugeStates.Where(state => !state.Failed).ToArray();
         var gaugeTypes = usesAutoGauge && CurrentGaugeStates.Count > 0
             ? initialStates.Select(state => state.GaugeType).ToArray()
             : usesAutoGauge
-                ? BmsModAutoGauge.COURSE_AUTO_GAUGE_CHAIN
+                ? BmsModGaugeAutoShift.COURSE_AUTO_GAUGE_CHAIN
                 : [GaugeType];
 
         // The processor may already contain the regular AG chain if its load completed before
@@ -426,7 +429,7 @@ internal sealed class BmsCourseSession
     private void updateGaugeSettings()
     {
         var initialStates = CurrentGaugeStates.Where(state => !state.Failed).ToArray();
-        if (Mods.OfType<BmsModAutoGauge>().FirstOrDefault() is { } autoGauge)
+        if (Mods.OfType<BmsModGaugeAutoShift>().FirstOrDefault() is { } autoGauge)
         {
             autoGauge.GaugeProfileFamily.Value = gaugeProfileFamilyOverride;
             autoGauge.ClassHealth.Value = startingHealth(BmsGaugeType.Class);
