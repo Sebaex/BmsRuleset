@@ -1,3 +1,4 @@
+using System;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Localisation;
 using osu.Game.Beatmaps;
@@ -19,7 +20,11 @@ public class BmsModSecondPlayer : Mod, IApplicableAfterBeatmapConversion
 
     public override LocalisableString Description => BmsStrings.ModSecondPlayer;
 
-    public override ModType Type => ModType.Conversion;
+    // Keep the stored acronym available for scores/replays while Settings owns new selections.
+    public override ModType Type => ModType.System;
+
+    // Presets retain compatible system mods. Avoid retaining a second 2P instance.
+    public override Type[] IncompatibleMods => [typeof(BmsModSecondPlayer)];
 
     public void ApplyToBeatmap(IBeatmap beatmap)
     {

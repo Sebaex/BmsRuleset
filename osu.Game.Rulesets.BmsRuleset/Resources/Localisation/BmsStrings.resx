@@ -419,4 +419,26 @@
   <data name="course_gauge_profile" xml:space="preserve">
     <value>Course gauge profile</value>
   </data>
+  <data name="default_scratch_position" xml:space="preserve">
+    <value>Scratch position</value>
+  </data>
+  <data name="default_scratch_position_hint" xml:space="preserve">
+    <value>Chooses the scratch side for new single-play 5K/7K games.</value>
+  </data>
+  <data name="scratch_position_first_player" xml:space="preserve">
+    <value>1P (left)</value>
+  </data>
+  <data name="scratch_position_second_player" xml:space="preserve">
+    <value>2P (right)</value>
+  </data>
+  <data name="table_download_timed_out" xml:space="preserve">
+    <value>Difficulty table download timed out. Please try again.</value>
+  </data>
+  <data name="table_metadata_download_failed" xml:space="preserve"><value>Could not download table metadata (HTTP {0}).</value></data>
+  <data name="table_data_download_failed" xml:space="preserve"><value>Could not download table data (HTTP {0}).</value></data>
+  <data name="invalid_table_data_url" xml:space="preserve"><value>The table data URL is invalid: {0}</value></data>
+  <data name="table_metadata_request_failed" xml:space="preserve"><value>Could not download table metadata. Check your connection and try again.</value></data>
+  <data name="table_data_request_failed" xml:space="preserve"><value>Could not download table data. Check your connection and try again.</value></data>
+  <data name="table_replacement_failed" xml:space="preserve"><value>The table being updated is no longer available. Import it again.</value></data>
+  <data name="table_cache_failed" xml:space="preserve"><value>Could not save the difficulty table cache. The import was not applied.</value></data>
 </root>

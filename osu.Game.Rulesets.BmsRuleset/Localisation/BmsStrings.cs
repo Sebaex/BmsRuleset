@@ -33,6 +33,14 @@ public static class BmsStrings
 
     public static LocalisableString Layout => get("layout");
 
+    public static LocalisableString DefaultScratchPosition => get("default_scratch_position");
+
+    public static LocalisableString DefaultScratchPositionHint => get("default_scratch_position_hint");
+
+    public static LocalisableString ScratchPositionFirstPlayer => get("scratch_position_first_player");
+
+    public static LocalisableString ScratchPositionSecondPlayer => get("scratch_position_second_player");
+
     public static LocalisableString ShowInvisibleNotes => get("show_invisible_notes");
 
     public static LocalisableString ShowInvisibleNotesHint => get("show_invisible_notes_hint");
@@ -603,6 +611,22 @@ public static class BmsStrings
     public static LocalisableString NoChartsFound => get("no_charts_found");
 
     public static LocalisableString PreparingImport => get("preparing_import");
+
+    public static LocalisableString TableMetadataDownloadFailed(int status) => get("table_metadata_download_failed", status);
+
+    public static LocalisableString TableDataDownloadFailed(int status) => get("table_data_download_failed", status);
+
+    public static LocalisableString TableDownloadTimedOut => get("table_download_timed_out");
+
+    public static LocalisableString InvalidTableDataUrl(string source) => get("invalid_table_data_url", source);
+
+    public static LocalisableString TableMetadataRequestFailed => get("table_metadata_request_failed");
+
+    public static LocalisableString TableDataRequestFailed => get("table_data_request_failed");
+
+    public static LocalisableString TableReplacementFailed => get("table_replacement_failed");
+
+    public static LocalisableString TableCacheFailed => get("table_cache_failed");
 
     public static LocalisableString ImportWasCancelled => get("import_was_cancelled");
 

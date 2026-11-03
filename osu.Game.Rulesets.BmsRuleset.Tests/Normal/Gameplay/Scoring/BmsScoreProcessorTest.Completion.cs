@@ -4,8 +4,10 @@ using osu.Framework.Timing;
 using osu.Game.Rulesets.BmsRuleset.Beatmaps;
 using osu.Game.Rulesets.BmsRuleset.Beatmaps.Objects;
 using osu.Game.Rulesets.BmsRuleset.BmsParser;
+using osu.Game.Rulesets.BmsRuleset.Gameplay.Configuration;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.Judgement;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.Judgement.Framework;
+using osu.Game.Rulesets.BmsRuleset.Gameplay.Mods;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.Mods.Gauge;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.Scoring;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.Scoring.Gauge;
@@ -20,6 +22,72 @@ namespace osu.Game.Rulesets.BmsRuleset.Tests.Normal.Gameplay.Scoring;
 
 public partial class BmsScoreProcessorTest
 {
+    [TestCase("2P", 50, false, true)]
+    [TestCase("2P", 49, false, false)]
+    [TestCase("2P", 50, true, false)]
+    [TestCase("AT", 50, false, false)]
+    [TestCase("PA", 50, false, false)]
+    [TestCase("BR", 50, false, false)]
+    [NonParallelizable]
+    public void TestSecondPlayerVisualOffset(string additionalMod, int noteCount, bool replay, bool expectedSuggestion)
+    {
+        var history = BmsRulesetRuntime.VisualOffsetSuggestions;
+        var previous = history.History.ToArray();
+        try
+        {
+            history.Clear();
+            using var config = new BmsRulesetConfigManager(null, new BmsRuleset().RulesetInfo);
+            config.SetValue(BmsRulesetSetting.VisualOffset, 10d);
+            config.SetValue(BmsRulesetSetting.AutomaticallyAdjustVisualOffset, true);
+            Mod[] mods = additionalMod switch
+            {
+                "AT" => [new BmsModSecondPlayer(), new BmsModAutoplay()],
+                "PA" => [new BmsModSecondPlayer(), new BmsModPaused()],
+                "BR" => [new BmsModSecondPlayer(), new BmsModBranchReplay()],
+                _ => [new BmsModSecondPlayer()],
+            };
+            var beatmap = new BmsBeatmap { LayoutVariant = BmsLayoutVariant.Bme7K2P, TotalColumns = 8 };
+            for (var i = 0; i < noteCount; i++)
+                beatmap.HitObjects.Add(new BmsHitObject { Beatmap = beatmap, StartTime = 1000 + i * 100, Column = 1 });
+
+            var framedClock = new FramedClock(new ManualClock { CurrentTime = 10000 });
+            using var scoreProcessor = new TestBmsScoreProcessor { Clock = framedClock };
+            using var healthProcessor = new BmsHealthProcessor();
+            scoreProcessor.Mods.Value = mods;
+            scoreProcessor.ApplyBeatmap(beatmap);
+            healthProcessor.ApplyBeatmap(beatmap);
+            healthProcessor.RestoreGaugeStates([new(BmsGaugeType.Normal, 1, false)]);
+            var score = new Score { ScoreInfo = { Mods = mods, Passed = true } };
+            var gameplayState = new GameplayState(beatmap, new BmsRuleset(), mods, score, scoreProcessor, healthProcessor);
+            using var completion = new BmsGameplayCompletionController(scoreProcessor, healthProcessor, gameplayState, replay ? score : null, config);
+
+            foreach (var note in beatmap.HitObjects)
+            {
+                var result = new BmsJudgementResult(note, note.CreateJudgement()) { Type = HitResult.Great };
+                result.SetTiming(note.StartTime + 20, 1);
+                scoreProcessor.ApplyResult(result);
+            }
+
+            framedClock.ProcessFrame();
+            scoreProcessor.UpdateCompletion();
+            Assert.Multiple(() =>
+            {
+                Assert.That(scoreProcessor.HasCompleted.Value, Is.True);
+                Assert.That(score.ScoreInfo.HitEvents.Count(HitEventExtensions.AffectsUnstableRate), Is.EqualTo(noteCount));
+                Assert.That(score.ScoreInfo.HitEvents.CalculateMedianHitError(), Is.EqualTo(20));
+                Assert.That(history.History.Count, Is.EqualTo(expectedSuggestion ? 1 : 0));
+                Assert.That(config.Get<double>(BmsRulesetSetting.VisualOffset), Is.EqualTo(expectedSuggestion ? 30 : 10));
+            });
+        }
+        finally
+        {
+            // Preserve the shared session history for other fixtures in the same test process.
+            history.Clear();
+            foreach (var point in previous)
+                history.Add(0, point.SuggestedVisualOffset);
+        }
+    }
+
     [Test]
     public void TestCompletionWaitsForFinalGaugeDamage([Values] bool autoGauge, [Values(1280, 1281, 2000)] double completionTime)
     {

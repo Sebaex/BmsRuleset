@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using NUnit.Framework;
 using osu.Framework.Timing;
@@ -16,9 +17,9 @@ namespace osu.Game.Rulesets.BmsRuleset.Tests.Normal.Bga;
 public class BmsSupplementalVideoPipelineTest
 {
 
-    private static string locateTestSongFile(string songFolder, string fileName)
+    private static string locateTestSongFile(string songFolder, string fileName, [CallerFilePath] string sourceFile = "")
     {
-        var dir = new DirectoryInfo(AppContext.BaseDirectory);
+        var dir = new DirectoryInfo(Path.GetDirectoryName(sourceFile)!);
 
         while (dir != null)
         {

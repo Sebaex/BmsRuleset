@@ -2,9 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Runtime.ExceptionServices;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using osu.Game.Database;
 using osu.Game.Overlays.Notifications;
@@ -20,7 +26,10 @@ public record ImportResult(DifficultyTable Table);
 
 public partial class DifficultyTableStore
 {
-    public IReadOnlyList<DifficultyTable> Tables => tables;
+    public IReadOnlyList<DifficultyTable> Tables
+    {
+        get { lock (tableLock) return tables.ToArray(); }
+    }
 
     internal event Action? TablesChanged;
 
@@ -31,9 +40,12 @@ public partial class DifficultyTableStore
     /// </summary>
     public DifficultyNameUpdater? DifficultyNameUpdater { get; set; }
 
-    private static readonly HttpClient http_client = new();
+    private static readonly HttpClient http_client = new() { Timeout = Timeout.InfiniteTimeSpan };
+
+    internal TimeSpan DownloadTimeout { get; set; } = BmsTableDownload.Timeout;
 
     private readonly List<DifficultyTable> tables = [];
+    private readonly object tableLock = new();
 
     private readonly BmsRulesetConfigManager? config;
     private readonly string cacheDirectory;
@@ -83,7 +95,7 @@ public partial class DifficultyTableStore
 
             DifficultyTable? table = null;
 
-            if (source.StartsWith("http://", StringComparison.Ordinal) || source.StartsWith("https://", StringComparison.Ordinal))
+            if (source.StartsWith("http://", StringComparison.OrdinalIgnoreCase) || source.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
             {
                 // Restore from cache if present; no HTTP at startup
                 var cachePath = cacheFileForUrl(source);
@@ -105,107 +117,180 @@ public partial class DifficultyTableStore
     /// <summary>
     /// User-initiated import: download/read, parse, index, update markers + collections.
     /// </summary>
-    public async Task<ImportResult?> ImportAsync(string source, ProgressNotification notification, DifficultyTable? tableToReplace = null)
+    public async Task<ImportResult?> ImportAsync(string source, ProgressNotification notification, DifficultyTable? tableToReplace = null, CancellationToken cancellationToken = default, Action<Action>? scheduleNotification = null)
     {
-        if (string.IsNullOrWhiteSpace(source)) return null;
-
-        notification.Progress = 0f;
-
-        // ── Stage 1: Read + Parse ──
-        string json;
-        string effectiveSource;
-
-        var isUrl = source.StartsWith("http://", StringComparison.OrdinalIgnoreCase)
-                    || source.StartsWith("https://", StringComparison.OrdinalIgnoreCase);
-
-        if (isUrl)
+        var outcome = await ImportWithOutcomeAsync(source, notification, tableToReplace, cancellationToken, scheduleNotification).ConfigureAwait(false);
+        void publish()
         {
-            effectiveSource = source;
-            var body = await http_client.GetStringAsync(source).ConfigureAwait(false);
+            var message = outcome.GetMessage(source, tableToReplace != null);
+            notification.CompletionText = message;
+            notification.Text = message;
+            if (outcome.Succeeded) notification.Progress = 1;
+            notification.State = outcome.Succeeded ? ProgressNotificationState.Completed : ProgressNotificationState.Cancelled;
+        }
+        // Legacy callers still receive null for validation errors and the original exceptions.
+        // Settings owns its terminal publication and consumes the explicit outcome instead.
+        if (scheduleNotification != null) scheduleNotification(publish);
+        else publish();
+        if (outcome.Error != null) ExceptionDispatchInfo.Capture(outcome.Error).Throw();
+        return outcome.Succeeded ? new ImportResult(outcome.Table!) : null;
+    }
 
-            var trimmed = body.TrimStart();
-            if (trimmed.Length > 0 && (trimmed[0] == '{' || trimmed[0] == '['))
+    internal async Task<TableImportOutcome> ImportWithOutcomeAsync(string source, ProgressNotification notification, DifficultyTable? tableToReplace = null, CancellationToken cancellationToken = default, Action<Action>? scheduleNotification = null)
+    {
+        void progress(float value)
+        {
+            if (scheduleNotification != null) scheduleNotification(() => notification.Progress = value);
+            else notification.Progress = value;
+        }
+        async Task<(string Content, Uri Uri)> download(string url, bool chartData = false)
+        {
+            try { return await BmsTableDownload.GetAsync(http_client, url, DownloadTimeout, cancellationToken).ConfigureAwait(false); }
+            catch (HttpRequestException e) { throw new BmsTableDownloadException(chartData, e); }
+        }
+        string? temporary = null;
+        var writingCache = false;
+        try
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            lock (tableLock)
             {
-                json = body;
+                var rejected = checkDestination(source, tableToReplace);
+                if (rejected != null) return rejected;
+            }
+            progress(0);
+            string json;
+            string effectiveSource;
+            string? dataJson = null;
+            var isUrl = source.StartsWith("http://", StringComparison.OrdinalIgnoreCase) || source.StartsWith("https://", StringComparison.OrdinalIgnoreCase);
+            if (isUrl)
+            {
+                var response = await download(source).ConfigureAwait(false);
+                effectiveSource = response.Uri.AbsoluteUri;
+                var trimmed = response.Content.TrimStart('\uFEFF', ' ', '\t', '\r', '\n');
+                if (trimmed.Length > 0 && trimmed[0] is '{' or '[')
+                    json = response.Content;
+                else
+                {
+                    var jsonUrl = resolveUrlFromHtml(response.Content, effectiveSource);
+                    if (jsonUrl == null) return new(TableImportStatus.MissingMetadata);
+                    var header = await download(jsonUrl).ConfigureAwait(false);
+                    json = header.Content;
+                    effectiveSource = header.Uri.AbsoluteUri;
+                }
             }
             else
             {
-                // HTML — look for bmstable meta tag
-                var jsonUrl = resolveUrlFromHtml(body, source);
-                if (jsonUrl == null)
-                {
-                    notification.CompletionText = BmsStrings.MissingBmstableMeta(source);
-                    notification.State = ProgressNotificationState.Cancelled;
-                    return null;
-                }
-
-                json = await http_client.GetStringAsync(jsonUrl).ConfigureAwait(false);
+                if (!File.Exists(source)) return new(TableImportStatus.MissingFile);
+                effectiveSource = source;
+                json = await File.ReadAllTextAsync(source, cancellationToken).ConfigureAwait(false);
             }
-
-            // Write to cache
-            var cachePath = cacheFileForUrl(source);
-            await File.WriteAllTextAsync(cachePath, json).ConfigureAwait(false);
-        }
-        else
-        {
-            if (!File.Exists(source))
+            progress(0.5f);
+            cancellationToken.ThrowIfCancellationRequested();
+            var parsed = BmsTableJsonParser.Parse(json);
+            if (parsed == null) return new(TableImportStatus.InvalidJson);
+            var charts = parsed.Charts;
+            var headerDataUrl = parsed.Header?.DataUrl;
+            if (charts == null && headerDataUrl != null && isUrl)
             {
-                notification.CompletionText = BmsStrings.FileDoesNotExist;
-                notification.State = ProgressNotificationState.Cancelled;
-                return null;
+                if (string.IsNullOrWhiteSpace(headerDataUrl)
+                    || !Uri.TryCreate(new Uri(effectiveSource), headerDataUrl, out var dataUri)
+                    || (dataUri.Scheme != Uri.UriSchemeHttp && dataUri.Scheme != Uri.UriSchemeHttps))
+                    return new(TableImportStatus.InvalidDataUrl, Error: new InvalidDataException("Unsupported difficulty table data URL."));
+                dataJson = (await download(dataUri.AbsoluteUri, true).ConfigureAwait(false)).Content;
+                charts = BmsTableJsonParser.Parse(dataJson)?.Charts;
+                if (charts == null) return new(TableImportStatus.InvalidJson);
             }
-
-            effectiveSource = source;
-            json = await File.ReadAllTextAsync(source).ConfigureAwait(false);
+            var table = BmsTableJsonParser.Merge(source, isUrl ? TableSource.RemoteUrl : TableSource.LocalFile, parsed.Header, charts);
+            if (table == null || (table.Entries.Count == 0 && table.Courses.Count == 0)) return new(TableImportStatus.NoEntries);
+            cancellationToken.ThrowIfCancellationRequested();
+            if (isUrl)
+            {
+                var snapshot = json;
+                if (dataJson != null)
+                {
+                    var headerNode = JsonNode.Parse(json.TrimStart('\uFEFF'), documentOptions: new JsonDocumentOptions { CommentHandling = JsonCommentHandling.Skip })!.AsObject();
+                    var dataNode = JsonNode.Parse(dataJson.TrimStart('\uFEFF'), documentOptions: new JsonDocumentOptions { CommentHandling = JsonCommentHandling.Skip })!;
+                    headerNode["data_url"] = new Uri(new Uri(effectiveSource), headerDataUrl!).AbsoluteUri;
+                    headerNode["charts"] = dataNode is JsonArray ? dataNode : dataNode["charts"]!.DeepClone();
+                    snapshot = headerNode.ToJsonString();
+                }
+                writingCache = true;
+                temporary = await prepareCacheAsync(cacheFileForUrl(source), snapshot, cancellationToken).ConfigureAwait(false);
+            }
+            lock (tableLock)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                var rejected = checkDestination(source, tableToReplace);
+                if (rejected != null) return rejected;
+                var nextTables = tables.ToList();
+                if (tableToReplace == null) nextTables.Add(table);
+                else nextTables[nextTables.IndexOf(tableToReplace)] = table;
+                tables.EnsureCapacity(nextTables.Count);
+                cancellationToken.ThrowIfCancellationRequested();
+                // From this point cancellation cannot roll back a published generation.
+                // No observer runs between destination validation and memory confirmation.
+                if (temporary != null) File.Move(temporary, cacheFileForUrl(source), true);
+                lock (indexLock)
+                {
+                    if (tableToReplace != null) removeFromIndex(tableToReplace);
+                    tables.Clear();
+                    tables.AddRange(nextTables);
+                    addToIndex(table);
+                }
+                // Config observers run synchronously and may re-enter CRUD. They must
+                // observe committed state, with no older table snapshot applied afterwards.
+                try { persistTableList(); }
+                catch (Exception e)
+                {
+                    BmsLogger.Error(e, "Difficulty table committed, but source configuration publication failed.");
+                }
+            }
+            // Observers run after confirmation. A refresh failure must not relabel an
+            // already committed import as a failed or cancelled cache generation.
+            notifyCommittedImport();
+            return new(TableImportStatus.Success, table);
         }
-
-        notification.Progress = 0.5f;
-
-        var parsed = BmsTableJsonParser.Parse(json);
-        if (parsed == null)
+        catch (OperationCanceledException e) when (cancellationToken.IsCancellationRequested)
         {
-            notification.CompletionText = BmsStrings.FailedToParseTable(source);
-            notification.State = ProgressNotificationState.Cancelled;
-            return null;
+            return new(TableImportStatus.Cancelled, Error: e);
         }
-
-        // If header has a separate data_url but no embedded charts, fetch data.
-        var charts = parsed.Charts;
-        var headerDataUrl = parsed.Header?.DataUrl;
-        if (charts == null && headerDataUrl != null && isUrl)
+        catch (BmsTableDownloadException e)
         {
-            var dataUrl = headerDataUrl.StartsWith("http", StringComparison.Ordinal)
-                ? headerDataUrl
-                : new Uri(new Uri(effectiveSource), headerDataUrl).ToString();
-
-            BmsLogger.Log($"Fetching chart data from {dataUrl}");
-            var dataJson = await http_client.GetStringAsync(dataUrl).ConfigureAwait(false);
-
-            // Cache data separately so startup can restore without re-downloading.
-            var dataCachePath = cacheFileForUrl(dataUrl);
-            await File.WriteAllTextAsync(dataCachePath, dataJson).ConfigureAwait(false);
-
-            var dataParsed = BmsTableJsonParser.Parse(dataJson);
-            charts = dataParsed?.Charts;
+            BmsLogger.Error(e, "Difficulty table HTTP download failed.");
+            return new(e.ChartData ? TableImportStatus.DataDownloadFailed : TableImportStatus.MetadataDownloadFailed, Error: e, HttpStatus: e.StatusCode is { } status ? (int)status : null);
         }
-
-        // ── Stage 2: Merge + Index ──
-        var tableSource = isUrl ? TableSource.RemoteUrl : TableSource.LocalFile;
-        var table = BmsTableJsonParser.Merge(effectiveSource, tableSource, parsed.Header, charts);
-
-        if (table == null)
+        catch (TimeoutException e)
         {
-            notification.CompletionText = BmsStrings.NoValidTableEntries(source);
-            notification.State = ProgressNotificationState.Cancelled;
-            return null;
+            BmsLogger.Error(e, "Difficulty table download timed out.");
+            return new(TableImportStatus.TimedOut, Error: e);
         }
+        catch (Exception e)
+        {
+            BmsLogger.Error(e, $"Failed to import or update difficulty table from: {source}");
+            return new(writingCache && e is (IOException or UnauthorizedAccessException) ? TableImportStatus.CacheFailed : TableImportStatus.UnexpectedError, Error: e);
+        }
+        finally
+        {
+            deleteTemporaryCache(temporary);
+        }
+    }
 
-        if (tableToReplace == null)
-            AddTable(table, notification);
-        else
-            ReplaceTable(tableToReplace, table, notification);
-        notification.Progress = 1;
-        return new ImportResult(table);
+    private TableImportOutcome? checkDestination(string source, DifficultyTable? tableToReplace)
+    {
+        if (tableToReplace != null && !tables.Contains(tableToReplace)) return new(TableImportStatus.ReplacementMissing);
+        var existing = tables.FirstOrDefault(t => t != tableToReplace && t.SourcePath == source);
+        return existing != null ? new(TableImportStatus.AlreadyImported, existing) : null;
+    }
+
+    private void notifyCommittedImport()
+    {
+        Action[] observers = [() => TablesChanged?.Invoke(), () => NotifyToRebuildTableList(null), () => NotifyToRefreshAllDiffNames(null)];
+        foreach (var action in observers)
+        {
+            try { action(); }
+            catch (Exception e) { BmsLogger.Error(e, "Difficulty table committed, but a table observer failed."); }
+        }
     }
 
     public void NotifyToRebuildTableList(DifficultyTable? tableRemoved)
@@ -245,12 +330,15 @@ public partial class DifficultyTableStore
     /// </summary>
     public void AddTable(DifficultyTable table, ProgressNotification? notification = null)
     {
-        tables.Add(table);
-        addToIndex(table);
+        lock (tableLock)
+        {
+            tables.Add(table);
+            addToIndex(table);
+            persistTableList();
+        }
         TablesChanged?.Invoke();
         NotifyToRebuildTableList(null);
         NotifyToRefreshAllDiffNames(notification);
-        persistTableList();
     }
 
     /// <summary>
@@ -271,8 +359,11 @@ public partial class DifficultyTableStore
         // ];
         // foreach (var dt in dts)
         //     tables.Add(dt);
-        tables.Add(table);
-        addToIndex(table);
+        lock (tableLock)
+        {
+            tables.Add(table);
+            addToIndex(table);
+        }
         TablesChanged?.Invoke();
     }
 
@@ -281,52 +372,46 @@ public partial class DifficultyTableStore
     /// </summary>
     public void RemoveTable(DifficultyTable table, ProgressNotification? notification = null)
     {
-        tables.Remove(table);
-        removeFromIndex(table);
+        lock (tableLock)
+        {
+            if (!tables.Remove(table)) return;
+            removeFromIndex(table);
+            persistTableList();
+        }
         TablesChanged?.Invoke();
         NotifyToRebuildTableList(table);
         NotifyToRefreshAllDiffNames(notification);
-        persistTableList();
     }
 
     /// <summary>
-    /// Replace an existing table with updated data. Removes the old entries from the index,
-    /// inserts the new table at the same position, and fires all events including marker refresh.
-    /// Handles the case where newTable was already added via ImportAsync -> AddTable.
+    /// Replace a table only while its original identity is still present.
     /// </summary>
     public void ReplaceTable(DifficultyTable oldTable, DifficultyTable newTable, ProgressNotification? notification = null)
+        => TryReplaceTable(oldTable, newTable, notification);
+
+    internal bool TryReplaceTable(DifficultyTable oldTable, DifficultyTable newTable, ProgressNotification? notification = null)
     {
-        var oldIndex = tables.IndexOf(oldTable);
-        if (oldIndex < 0) return;
-
-        tables.RemoveAt(oldIndex);
-        removeFromIndex(oldTable);
-
-        // newTable may already be in the list (added by ImportAsync -> AddTable).
-        var newIndex = tables.IndexOf(newTable);
-        if (newIndex >= 0)
+        lock (tableLock)
         {
-            // Move it to the old position.
-            tables.RemoveAt(newIndex);
-            var insertIndex = newIndex < oldIndex ? oldIndex - 1 : oldIndex;
-            if (insertIndex >= tables.Count)
-                tables.Add(newTable);
-            else
-                tables.Insert(insertIndex, newTable);
+            var oldIndex = tables.IndexOf(oldTable);
+            if (oldIndex < 0) return false;
+            if (ReferenceEquals(oldTable, newTable)) return true;
+            tables.RemoveAt(oldIndex);
+            removeFromIndex(oldTable);
+            var newIndex = tables.IndexOf(newTable);
+            if (newIndex >= 0)
+            {
+                tables.RemoveAt(newIndex);
+                if (newIndex < oldIndex) oldIndex--;
+            }
+            else addToIndex(newTable);
+            tables.Insert(oldIndex, newTable);
+            persistTableList();
         }
-        else
-        {
-            if (oldIndex >= tables.Count)
-                tables.Add(newTable);
-            else
-                tables.Insert(oldIndex, newTable);
-            addToIndex(newTable);
-        }
-
         TablesChanged?.Invoke();
         NotifyToRebuildTableList(null);
         NotifyToRefreshAllDiffNames(notification);
-        persistTableList();
+        return true;
     }
 
     public List<(DifficultyTable table, TableEntry entry)> GetMarkers(string md5Hash)
@@ -384,6 +469,30 @@ public partial class DifficultyTableStore
 
     #region Cache
 
+    private static async Task<string> prepareCacheAsync(string path, string json, CancellationToken token)
+    {
+        var temporary = path + "." + Guid.NewGuid().ToString("N") + ".tmp";
+        try
+        {
+            await File.WriteAllTextAsync(temporary, json, token).ConfigureAwait(false);
+            return temporary;
+        }
+        catch
+        {
+            deleteTemporaryCache(temporary);
+            throw;
+        }
+    }
+
+    private static void deleteTemporaryCache(string? temporary)
+    {
+        try { if (temporary != null && File.Exists(temporary)) File.Delete(temporary); }
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+        {
+            BmsLogger.Error(e, "Could not remove a temporary difficulty table cache file.");
+        }
+    }
+
     private string cacheFileForUrl(string url)
     {
         var hash = Convert.ToHexString(SHA256.HashData(
@@ -416,7 +525,7 @@ public partial class DifficultyTableStore
                 }
             }
 
-            var source = sourcePath.StartsWith("http", StringComparison.Ordinal)
+            var source = sourcePath.StartsWith("http", StringComparison.OrdinalIgnoreCase)
                 ? TableSource.RemoteUrl
                 : TableSource.LocalFile;
 
@@ -431,7 +540,7 @@ public partial class DifficultyTableStore
 
     #endregion
 
-    #region HTML parsing (unchanged)
+    #region HTML parsing
 
     private static string? resolveUrlFromHtml(string html, string pageUrl)
     {
@@ -440,24 +549,29 @@ public partial class DifficultyTableStore
 
         if (string.IsNullOrWhiteSpace(content)) return null;
 
-        if (content.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
-            content.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
-            return content;
-
-        return new Uri(new Uri(pageUrl), content).ToString();
+        return Uri.TryCreate(new Uri(pageUrl), content, out var uri)
+               && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps)
+            ? uri.AbsoluteUri
+            : null;
     }
 
     private static string? extractMetaContent(string html, string name)
     {
-        var pattern = $"<meta name=\"{name}\" content=\"";
-        var start = html.IndexOf(pattern, StringComparison.OrdinalIgnoreCase);
-        if (start < 0) return null;
-
-        start += pattern.Length;
-        var end = html.IndexOf('"', start);
-        return end < 0 ? null : html[start..end];
+        // Examples in comments or raw script/style text are not document metadata.
+        html = Regex.Replace(html, @"<!--.*?-->|<script\b[^>]*>.*?</script\s*>|<style\b[^>]*>.*?</style\s*>", "",
+            RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.CultureInvariant, TimeSpan.FromSeconds(1));
+        foreach (Match tag in Regex.Matches(html, @"<meta\b[^>]*>", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant, TimeSpan.FromSeconds(1)))
+        {
+            var attributes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            foreach (Match attribute in Regex.Matches(tag.Value,
+                         """([\w:-]+)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+))""",
+                         RegexOptions.CultureInvariant, TimeSpan.FromSeconds(1)))
+                attributes.TryAdd(attribute.Groups[1].Value, WebUtility.HtmlDecode(attribute.Groups[2].Success ? attribute.Groups[2].Value : attribute.Groups[3].Success ? attribute.Groups[3].Value : attribute.Groups[4].Value));
+            if (attributes.TryGetValue("name", out var tagName) && tagName.Equals(name, StringComparison.OrdinalIgnoreCase)
+                && attributes.TryGetValue("content", out var content)) return content;
+        }
+        return null;
     }
-
     #endregion
 
 }

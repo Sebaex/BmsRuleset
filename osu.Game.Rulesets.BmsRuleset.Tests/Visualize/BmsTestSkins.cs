@@ -36,9 +36,11 @@ public static partial class BmsTestSkins
                     ? BmsTestLegacySkin.CreateSkinSource(resources, keysUnderNotes: true)
                     : kind == SkinKind.LegacyMissingColumnLightTexture
                         ? BmsTestLegacySkin.CreateSkinSource(resources, includeColumnLightTexture: false)
-                        : new SkinProvidingContainer(kind == SkinKind.Classic
-                            ? new DefaultLegacySkin(resources)
-                            : new ArgonSkin(resources));
+                        : kind == SkinKind.LegacyAnimatedHitLights
+                            ? BmsTestLegacySkin.CreateSkinSource(resources, animatedHitLights: true)
+                            : new SkinProvidingContainer(kind == SkinKind.Classic
+                                ? new DefaultLegacySkin(resources)
+                                : new ArgonSkin(resources));
 
     public enum SkinKind
     {
@@ -49,6 +51,7 @@ public static partial class BmsTestSkins
         Legacy,
         LegacyKeysUnderNotes,
         LegacyMissingColumnLightTexture,
+        LegacyAnimatedHitLights,
     }
 
     /// <inheritdoc />

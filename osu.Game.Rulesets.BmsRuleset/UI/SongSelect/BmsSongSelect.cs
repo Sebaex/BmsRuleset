@@ -51,6 +51,7 @@ using osu.Game.Rulesets.BmsRuleset.Gameplay.DifficultyTable;
 using osu.Game.Rulesets.BmsRuleset.UI.Result;
 using osu.Game.Rulesets.BmsRuleset.UI.SongSelect.Components;
 using osu.Game.Rulesets.BmsRuleset.UI.SongSelect.Course;
+using osu.Game.Rulesets.Mods;
 using osu.Game.Scoring;
 using osu.Game.Screens;
 using osu.Game.Screens.Footer;
@@ -1094,8 +1095,10 @@ public abstract partial class BmsSongSelect : ScreenWithBeatmapBackground, IKeyB
 
         pendingInitialRestoration = null;
         Beatmap.Value = restoration.Beatmap;
-        Mods.Value = restoration.Mods;
+        RestoreInitialMods(restoration.Mods);
     }
+
+    protected virtual void RestoreInitialMods(IReadOnlyList<Mod> mods) => Mods.Value = mods;
 
     private void updateNoResultsPlaceholder()
     {

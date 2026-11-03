@@ -143,6 +143,12 @@ public partial class BmsSettingsSubsection(BmsRuleset ruleset) : RulesetSettings
                 HintText = BmsStrings.JudgementAlgorithmHint,
                 Current = manager.GetBindable<BmsJudgementAlgorithm>(BmsRulesetSetting.JudgementAlgorithm),
             }),
+            new SettingsItemV2(new FormEnumDropdown<BmsScratchPosition>
+            {
+                Caption = BmsStrings.DefaultScratchPosition,
+                HintText = BmsStrings.DefaultScratchPositionHint,
+                Current = manager.GetBindable<BmsScratchPosition>(BmsRulesetSetting.DefaultScratchPosition),
+            }),
             new SettingsItemV2(new FormSliderBar<double>
             {
                 Caption = BmsStrings.BgaDim,

@@ -47,6 +47,10 @@ internal partial class DifficultyTableSettings : FillFlowContainer
     private CollectionSyncManager? collectionSyncManager;
     private DifficultyTableAutocomplete? autocomplete;
     private CancellationTokenSource? importCancellation;
+    private readonly object importLock = new();
+    private ProgressNotification? importNotification;
+    // Queued UI callbacks may outlive cancellation and a replacement operation.
+    private int importGeneration;
 
     [Resolved(CanBeNull = true)]
     private RealmAccess? realm { get; set; }
@@ -116,8 +120,9 @@ internal partial class DifficultyTableSettings : FillFlowContainer
 
     protected override void Dispose(bool isDisposing)
     {
-        importCancellation?.Cancel();
-        importCancellation?.Dispose();
+        ++importGeneration;
+        cancelImport();
+
         base.Dispose(isDisposing);
     }
 
@@ -225,79 +230,103 @@ internal partial class DifficultyTableSettings : FillFlowContainer
             .ToList();
     }
 
-    private async void importFromPathOrUrl(string pathOrUrl)
-    {
-        ProgressNotification notification;
+    private async void importFromPathOrUrl(string pathOrUrl) => await ImportTableAsync(pathOrUrl);
 
+    private void scheduleImportUpdate(Action action)
+    {
+        // Notifications outlive the Settings subtree, whose scheduler stops updating when hidden.
+        if (host != null)
+            host.UpdateThread.Scheduler.Add(action);
+        else
+            Schedule(action);
+    }
+
+    private void cancelImport()
+    {
+        lock (importLock)
+        {
+            importCancellation?.Cancel();
+            importCancellation = null;
+        }
+        if (importNotification?.State == ProgressNotificationState.Active)
+        {
+            importNotification.CompletionText = BmsStrings.ImportWasCancelled;
+            importNotification.Text = BmsStrings.ImportWasCancelled;
+            importNotification.State = ProgressNotificationState.Cancelled;
+        }
+        importNotification = null;
+    }
+
+    internal async Task ImportTableAsync(string source, DT? tableToReplace = null)
+    {
+        if (IsDisposed || difficultyTableStore == null || string.IsNullOrWhiteSpace(source)) return;
+        cancelImport();
+        var generation = ++importGeneration;
+        var operation = new CancellationTokenSource();
+        var token = operation.Token;
+        lock (importLock) importCancellation = operation;
+        var notification = importNotification = new ProgressNotification
+        {
+            Text = tableToReplace == null ? BmsStrings.ImportingDifficultyTable : BmsStrings.UpdatingTable(tableToReplace.Name),
+            State = ProgressNotificationState.Active,
+        };
+        var importScheduler = host?.UpdateThread.Scheduler ?? Scheduler;
+        notifications?.Post(notification);
+        using var notificationCancellation = notification.CancellationToken.Register(() =>
+        {
+            lock (importLock)
+            {
+                if (ReferenceEquals(importCancellation, operation)) operation.Cancel();
+            }
+        });
+        var result = new TableImportOutcome(TableImportStatus.UnexpectedError);
         try
         {
-            if (difficultyTableStore == null || string.IsNullOrWhiteSpace(pathOrUrl)) return;
-
-            var isUrl = pathOrUrl.StartsWith("http://", StringComparison.OrdinalIgnoreCase)
-                        || pathOrUrl.StartsWith("https://", StringComparison.OrdinalIgnoreCase);
-            var isFile = File.Exists(pathOrUrl);
-
-            if (!isUrl && !isFile) return;
-
-            notification = new ProgressNotification
+            await Task.Delay(300, token).ConfigureAwait(false);
+            result = await difficultyTableStore.ImportWithOutcomeAsync(source, notification, tableToReplace, token, action => scheduleImportUpdate(() =>
             {
-                Text = BmsStrings.ImportingDifficultyTable,
-                Progress = 0,
-                State = ProgressNotificationState.Active,
-            };
-            notifications?.Post(notification);
-
-            if (difficultyTableStore.Tables.Any(t => t.SourcePath == pathOrUrl))
-            {
-                Schedule(() =>
-                {
-                    notification.CompletionText = BmsStrings.DifficultyTableAlreadyImported(pathOrUrl);
-                    notification.State = ProgressNotificationState.Completed;
-                });
-                return;
-            }
-
-            if (importCancellation != null) await importCancellation.CancelAsync();
-            importCancellation = new CancellationTokenSource();
-            var cancellationToken = importCancellation.Token;
-
-            try
-            {
-                await Task.Delay(300, cancellationToken).ConfigureAwait(false);
-            }
-            catch (OperationCanceledException)
-            {
-                return;
-            }
-
-            var importResult = await difficultyTableStore.ImportAsync(pathOrUrl, notification).ConfigureAwait(false);
-
-            if (importResult != null)
-            {
-                Schedule(() =>
-                {
-                    addToHistory(pathOrUrl, importResult.Table.Name, importResult.Table.Symbol);
-                    autocomplete?.SetItems(buildPresetItems(), buildHistoryItems());
-                    notification.CompletionText = BmsStrings.LoadedTable(importResult.Table.Name, importResult.Table.Entries.Count);
-                    notification.Progress = 1;
-                    notification.State = ProgressNotificationState.Completed;
-                });
-            }
-            else
-            {
-                Schedule(() =>
-                {
-                    notification.CompletionText = BmsStrings.FailedToLoadTable(pathOrUrl);
-                    notification.State = ProgressNotificationState.Cancelled;
-                });
-            }
+                if (!IsDisposed && generation == importGeneration && !token.IsCancellationRequested) action();
+            })).ConfigureAwait(false);
+            // The store decides whether cancellation preceded confirmation. A cancelled
+            // token after confirmation cannot turn a committed table into a failed import.
+        }
+        catch (OperationCanceledException) when (token.IsCancellationRequested)
+        {
+            result = new(TableImportStatus.Cancelled);
         }
         catch (Exception e)
         {
-            BmsLogger.Error(e, $"Failed to import difficulty table from: {pathOrUrl}");
+            BmsLogger.Error(e, $"Failed to import or update difficulty table from: {source}");
+        }
+        finally
+        {
+            lock (importLock)
+            {
+                if (ReferenceEquals(importCancellation, operation)) importCancellation = null;
+                operation.Dispose();
+            }
+            importScheduler.Add(() =>
+            {
+                var isCurrent = generation == importGeneration && ReferenceEquals(importNotification, notification);
+                if (!IsDisposed && !isCurrent) return;
+                // Disposal must not suppress the captured notification's error, while a late
+                // successful callback must preserve cancellation by disposal or replacement.
+                var success = result.Succeeded;
+                var cancelledAfterSuccess = success && notification.State == ProgressNotificationState.Cancelled;
+                var finalText = cancelledAfterSuccess ? BmsStrings.ImportWasCancelled : result.GetMessage(source, tableToReplace != null);
+                notification.CompletionText = finalText;
+                notification.Text = finalText;
+                if (success && !cancelledAfterSuccess) notification.Progress = 1;
+                notification.State = success && !cancelledAfterSuccess ? ProgressNotificationState.Completed : ProgressNotificationState.Cancelled;
+                if (IsDisposed || !isCurrent) return;
+                if (result.Status == TableImportStatus.Success && !cancelledAfterSuccess && result.Table != null && tableToReplace == null)
+                {
+                    addToHistory(source, result.Table.Name, result.Table.Symbol);
+                    autocomplete?.SetItems(buildPresetItems(), buildHistoryItems());
+                }
+            });
         }
     }
-
     private async void deleteTable(DT table)
     {
         try
@@ -334,42 +363,7 @@ internal partial class DifficultyTableSettings : FillFlowContainer
 
     private async void updateTable(DT table)
     {
-        try
-        {
-            if (difficultyTableStore == null || table.SourcePath == null) return;
-            if (table.Source != TableSource.RemoteUrl) return;
-
-            var notification = new ProgressNotification
-            {
-                Text = BmsStrings.UpdatingTable(table.Name),
-                Progress = 0,
-                State = ProgressNotificationState.Active,
-            };
-            Schedule(() => notifications?.Post(notification));
-
-            var importResult = await difficultyTableStore.ImportAsync(table.SourcePath, notification, table).ConfigureAwait(false);
-
-            if (importResult != null)
-            {
-                Schedule(() =>
-                {
-                    notification.CompletionText = BmsStrings.UpdatedTable(importResult.Table.Name, importResult.Table.Entries.Count);
-                    notification.Progress = 1;
-                    notification.State = ProgressNotificationState.Completed;
-                });
-            }
-            else
-            {
-                Schedule(() =>
-                {
-                    notification.CompletionText = BmsStrings.FailedToUpdateTable(table.SourcePath);
-                    notification.State = ProgressNotificationState.Cancelled;
-                });
-            }
-        }
-        catch (Exception e)
-        {
-            BmsLogger.Error(e, $"Failed to update difficulty table: {table.SourcePath}");
-        }
+        if (table.Source == TableSource.RemoteUrl && table.SourcePath != null)
+            await ImportTableAsync(table.SourcePath, table);
     }
 }

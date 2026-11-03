@@ -67,6 +67,44 @@ public class BmsLocalLeaderboardServiceTest
         Assert.That(noMineSelected, Is.EqualTo([noMineScore]));
     }
 
+    [TestCase(false)]
+    [TestCase(true)]
+    public void TestExactModsFilterIgnoresScratchPositionAndPreservesGameplayMods(bool filterSecondPlayer)
+    {
+        var firstPlayerScore = score("target-hash", Constant.SHORT_NAME, 900_000);
+        var secondPlayerScore = score("target-hash", Constant.SHORT_NAME, 800_000, mods: new BmsModSecondPlayer());
+        var firstPlayerMirrorScore = score("target-hash", Constant.SHORT_NAME, 950_000, mods: new BmsModMirror());
+        var secondPlayerMirrorScore = score("target-hash", Constant.SHORT_NAME, 850_000, mods: [new BmsModSecondPlayer(), new BmsModMirror()]);
+        var hideScratchScore = score("target-hash", Constant.SHORT_NAME, 750_000, mods: new BmsModHideScratch());
+        ScoreInfo[] scores = [secondPlayerMirrorScore, hideScratchScore, firstPlayerScore, firstPlayerMirrorScore, secondPlayerScore];
+        Mod[] scratchPosition = filterSecondPlayer ? [new BmsModSecondPlayer()] : [];
+
+        var noGameplayMods = BmsLocalLeaderboardService.SelectScores(
+            scores,
+            "target-hash",
+            Constant.SHORT_NAME,
+            scratchPosition,
+            LeaderboardSortMode.Score);
+
+        var mirror = BmsLocalLeaderboardService.SelectScores(
+            scores,
+            "target-hash",
+            Constant.SHORT_NAME,
+            [.. scratchPosition, new BmsModMirror()],
+            LeaderboardSortMode.Score);
+
+        var hideScratch = BmsLocalLeaderboardService.SelectScores(
+            scores,
+            "target-hash",
+            Constant.SHORT_NAME,
+            [new BmsModHideScratch()],
+            LeaderboardSortMode.Score);
+
+        Assert.That(noGameplayMods, Is.EqualTo([firstPlayerScore, secondPlayerScore]));
+        Assert.That(mirror, Is.EqualTo([firstPlayerMirrorScore, secondPlayerMirrorScore]));
+        Assert.That(hideScratch, Is.EqualTo([hideScratchScore]));
+    }
+
     [Test]
     public void TestExcludesOtherHashesRulesetsAndDeletedScores()
     {
