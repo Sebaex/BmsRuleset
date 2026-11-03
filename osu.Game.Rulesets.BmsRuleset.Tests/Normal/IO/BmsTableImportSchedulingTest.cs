@@ -43,12 +43,12 @@ public partial class BmsTableImportSchedulingTest
                 // A global notification must finish even when its Settings owner is no longer updated.
                 await settings.ImportTableAsync(path);
                 var notification = (ProgressNotification)typeof(DifficultyTableSettings).GetField("importNotification", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(settings)!;
-                // The store can publish Cancelled before Settings queues its final title.
+                // A terminal outcome must be published before the assertions observe its title.
                 // A fence on the same FIFO queue observes that final callback as well.
                 var publication = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
                 host.UpdateThread.Scheduler.Add(() => publication.SetResult());
                 await publication.Task.WaitAsync(TimeSpan.FromSeconds(1));
-                var expectedText = valid ? BmsStrings.LoadedTable("Detached settings", 1) : BmsStrings.FailedToLoadTable(path);
+                var expectedText = valid ? BmsStrings.LoadedTable("Detached settings", 1) : BmsStrings.FailedToParseTable(path);
                 Assert.That(notification.State, Is.EqualTo(valid ? ProgressNotificationState.Completed : ProgressNotificationState.Cancelled));
                 Assert.That(notification.Text, Is.EqualTo(notification.CompletionText));
                 Assert.That(notification.Text, Is.EqualTo(expectedText));
@@ -73,22 +73,18 @@ public partial class BmsTableImportSchedulingTest
         typeof(DifficultyTableSettings).GetField("difficultyTableStore", BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(settings, new DifficultyTableStore(null, Path.Combine(root, "cache")));
         await settings.ImportTableAsync(path);
         var notification = (ProgressNotification)typeof(DifficultyTableSettings).GetField("importNotification", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(settings)!;
-        var sawEarlyTerminal = false;
-        foreach (var callback in takePendingCallbacks(settings))
+        var callbacks = takePendingCallbacks(settings);
+        Assert.That(callbacks.Length, Is.GreaterThanOrEqualTo(1));
+        foreach (var callback in callbacks[..^1])
         {
             callback.RunTask();
-            if (!sawEarlyTerminal && notification.State == ProgressNotificationState.Cancelled)
-            {
-                sawEarlyTerminal = true;
-                Assert.That(notification.CompletionText, Is.EqualTo(BmsStrings.FailedToParseTable(path)));
-                Assert.That(notification.Text, Is.EqualTo(BmsStrings.ImportingDifficultyTable));
-                if (disposeBetweenCallbacks) settings.Dispose();
-            }
+            Assert.That(notification.State, Is.EqualTo(ProgressNotificationState.Active), "Progress callbacks must not terminate an operation as a side effect of an error.");
         }
-        Assert.That(sawEarlyTerminal, Is.True);
+        if (disposeBetweenCallbacks) settings.Dispose();
+        callbacks[^1].RunTask();
         Assert.That(notification.State, Is.EqualTo(ProgressNotificationState.Cancelled));
-        Assert.That(notification.Text, Is.EqualTo(BmsStrings.FailedToLoadTable(path)));
-        Assert.That(notification.CompletionText, Is.EqualTo(BmsStrings.FailedToLoadTable(path)));
+        Assert.That(notification.Text, Is.EqualTo(BmsStrings.FailedToParseTable(path)));
+        Assert.That(notification.CompletionText, Is.EqualTo(BmsStrings.FailedToParseTable(path)));
         Assert.That(config.Get<string>(BmsRulesetSetting.DifficultyTableHistory), Is.Empty);
     }
 
@@ -168,6 +164,8 @@ public partial class BmsTableImportSchedulingTest
         Assert.That(notification.CompletionText, Is.EqualTo(BmsStrings.ImportWasCancelled));
         Assert.That(config.Get<string>(BmsRulesetSetting.DifficultyTableHistory), Is.Empty);
     }
+
+    internal static ScheduledDelegate[] TakePendingCallbacks(DifficultyTableSettings settings) => takePendingCallbacks(settings);
 
     private static ScheduledDelegate[] takePendingCallbacks(DifficultyTableSettings settings)
     {

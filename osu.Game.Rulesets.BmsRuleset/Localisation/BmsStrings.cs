@@ -618,6 +618,16 @@ public static class BmsStrings
 
     public static LocalisableString TableDownloadTimedOut => get("table_download_timed_out");
 
+    public static LocalisableString InvalidTableDataUrl(string source) => get("invalid_table_data_url", source);
+
+    public static LocalisableString TableMetadataRequestFailed => get("table_metadata_request_failed");
+
+    public static LocalisableString TableDataRequestFailed => get("table_data_request_failed");
+
+    public static LocalisableString TableReplacementFailed => get("table_replacement_failed");
+
+    public static LocalisableString TableCacheFailed => get("table_cache_failed");
+
     public static LocalisableString ImportWasCancelled => get("import_was_cancelled");
 
     public static LocalisableString ImportCancelledProgress(int imported, int total) => get("import_cancelled_progress", imported, total);

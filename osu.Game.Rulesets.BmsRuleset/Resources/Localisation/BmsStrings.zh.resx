@@ -436,4 +436,9 @@
   </data>
   <data name="table_metadata_download_failed" xml:space="preserve"><value>无法下载难度表元数据（HTTP {0}）。</value></data>
   <data name="table_data_download_failed" xml:space="preserve"><value>无法下载难度表数据（HTTP {0}）。</value></data>
+  <data name="invalid_table_data_url" xml:space="preserve"><value>难度表数据网址无效：{0}</value></data>
+  <data name="table_metadata_request_failed" xml:space="preserve"><value>无法下载难度表元数据。请检查网络连接后重试。</value></data>
+  <data name="table_data_request_failed" xml:space="preserve"><value>无法下载难度表数据。请检查网络连接后重试。</value></data>
+  <data name="table_replacement_failed" xml:space="preserve"><value>正在更新的难度表已不存在。请重新导入。</value></data>
+  <data name="table_cache_failed" xml:space="preserve"><value>无法保存难度表缓存。此次导入未应用。</value></data>
 </root>

@@ -8,7 +8,6 @@ using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Platform;
-using osu.Framework.Localisation;
 using osu.Game.Database;
 using osu.Game.Graphics;
 using osu.Game.Graphics.Sprites;
@@ -261,8 +260,6 @@ internal partial class DifficultyTableSettings : FillFlowContainer
     internal async Task ImportTableAsync(string source, DT? tableToReplace = null)
     {
         if (IsDisposed || difficultyTableStore == null || string.IsNullOrWhiteSpace(source)) return;
-        var isUrl = source.StartsWith("http://", StringComparison.OrdinalIgnoreCase) || source.StartsWith("https://", StringComparison.OrdinalIgnoreCase);
-        if (!isUrl && !File.Exists(source)) return;
         cancelImport();
         var generation = ++importGeneration;
         var operation = new CancellationTokenSource();
@@ -282,43 +279,20 @@ internal partial class DifficultyTableSettings : FillFlowContainer
                 if (ReferenceEquals(importCancellation, operation)) operation.Cancel();
             }
         });
-        var success = false;
-        ImportResult? result = null;
-        LocalisableString completion = tableToReplace == null ? BmsStrings.FailedToLoadTable(source) : BmsStrings.FailedToUpdateTable(source);
+        var result = new TableImportOutcome(TableImportStatus.UnexpectedError);
         try
         {
-            if (tableToReplace == null && difficultyTableStore.Tables.Any(table => table.SourcePath == source))
-            {
-                success = true;
-                completion = BmsStrings.DifficultyTableAlreadyImported(source);
-                return;
-            }
             await Task.Delay(300, token).ConfigureAwait(false);
-            result = await difficultyTableStore.ImportAsync(source, notification, tableToReplace, token, action => scheduleImportUpdate(() =>
+            result = await difficultyTableStore.ImportWithOutcomeAsync(source, notification, tableToReplace, token, action => scheduleImportUpdate(() =>
             {
                 if (!IsDisposed && generation == importGeneration && !token.IsCancellationRequested) action();
             })).ConfigureAwait(false);
-            token.ThrowIfCancellationRequested();
-            if (result != null)
-            {
-                success = true;
-                completion = tableToReplace == null ? BmsStrings.LoadedTable(result.Table.Name, result.Table.Entries.Count) : BmsStrings.UpdatedTable(result.Table.Name, result.Table.Entries.Count);
-            }
+            // The store decides whether cancellation preceded confirmation. A cancelled
+            // token after confirmation cannot turn a committed table into a failed import.
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException) when (token.IsCancellationRequested)
         {
-            completion = BmsStrings.ImportWasCancelled;
-        }
-        catch (BmsTableDownloadException e)
-        {
-            if (e.StatusCode is { } status)
-                completion = e.ChartData ? BmsStrings.TableDataDownloadFailed((int)status) : BmsStrings.TableMetadataDownloadFailed((int)status);
-            BmsLogger.Error(e, "Difficulty table HTTP download failed.");
-        }
-        catch (TimeoutException e)
-        {
-            completion = BmsStrings.TableDownloadTimedOut;
-            BmsLogger.Error(e, "Difficulty table download timed out.");
+            result = new(TableImportStatus.Cancelled);
         }
         catch (Exception e)
         {
@@ -337,14 +311,15 @@ internal partial class DifficultyTableSettings : FillFlowContainer
                 if (!IsDisposed && !isCurrent) return;
                 // Disposal must not suppress the captured notification's error, while a late
                 // successful callback must preserve cancellation by disposal or replacement.
+                var success = result.Succeeded;
                 var cancelledAfterSuccess = success && notification.State == ProgressNotificationState.Cancelled;
-                var finalText = cancelledAfterSuccess ? BmsStrings.ImportWasCancelled : completion;
+                var finalText = cancelledAfterSuccess ? BmsStrings.ImportWasCancelled : result.GetMessage(source, tableToReplace != null);
                 notification.CompletionText = finalText;
                 notification.Text = finalText;
                 if (success && !cancelledAfterSuccess) notification.Progress = 1;
                 notification.State = success && !cancelledAfterSuccess ? ProgressNotificationState.Completed : ProgressNotificationState.Cancelled;
                 if (IsDisposed || !isCurrent) return;
-                if (success && !cancelledAfterSuccess && result != null && tableToReplace == null)
+                if (result.Status == TableImportStatus.Success && !cancelledAfterSuccess && result.Table != null && tableToReplace == null)
                 {
                     addToHistory(source, result.Table.Name, result.Table.Symbol);
                     autocomplete?.SetItems(buildPresetItems(), buildHistoryItems());
