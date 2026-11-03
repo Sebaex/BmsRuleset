@@ -160,7 +160,7 @@ public static class BmsJudgementProfileProvider
             (-great, great),
             (-good, good),
             (-200, 200),
-            (-1000, 1000),
+            (-200, 1000),
         };
         var table = createTable(1, false, windows, fixedBadAndPoor: true);
         return new BmsJudgementProfile(table, table, table, table);
