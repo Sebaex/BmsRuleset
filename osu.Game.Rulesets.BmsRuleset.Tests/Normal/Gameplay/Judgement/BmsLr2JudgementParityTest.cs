@@ -10,6 +10,27 @@ namespace osu.Game.Rulesets.BmsRuleset.Tests.Normal.Gameplay.Judgement;
 [TestFixture]
 public class BmsLr2JudgementParityTest
 {
+    [TestCase(BmsLayoutVariant.Bms5K)]
+    [TestCase(BmsLayoutVariant.Bme7K)]
+    [TestCase(BmsLayoutVariant.Pms9K)]
+    public void TestEmptyPoorPreservesComboAndFutureMaximum(BmsLayoutVariant layout)
+    {
+        using var score = new osu.Game.Rulesets.BmsRuleset.Gameplay.Scoring.BmsScoreProcessor();
+        var beatmap = new osu.Game.Rulesets.BmsRuleset.Beatmaps.BmsBeatmap { LayoutVariant = layout };
+        for (var i = 0; i < 4; i++)
+            beatmap.HitObjects.Add(new BmsHitObject { Beatmap = beatmap, StartTime = 1000 + 1000 * i, Column = 1 });
+        score.ApplyBeatmap(beatmap);
+        for (var i = 0; i < 3; i++)
+            score.ApplyResult(new osu.Game.Rulesets.Judgements.JudgementResult(beatmap.HitObjects[i], beatmap.HitObjects[i].CreateJudgement()) { Type = HitResult.Perfect });
+        score.RegisterEmptyPoor(3500);
+        Assert.That(score.Combo.Value, Is.EqualTo(3));
+        Assert.That(score.HighestCombo.Value, Is.EqualTo(3));
+        Assert.That(score.ScoringJudgementEventCount, Is.EqualTo(3));
+        score.ApplyResult(new osu.Game.Rulesets.Judgements.JudgementResult(beatmap.HitObjects[3], beatmap.HitObjects[3].CreateJudgement()) { Type = HitResult.Perfect });
+        Assert.That(score.Combo.Value, Is.EqualTo(4));
+        Assert.That(score.HighestCombo.Value, Is.EqualTo(4));
+    }
+
     [TestCase(0, false)]
     [TestCase(0.001, true)]
     [TestCase(250, true)]

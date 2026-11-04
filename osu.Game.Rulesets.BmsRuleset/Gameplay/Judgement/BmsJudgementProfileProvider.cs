@@ -201,7 +201,7 @@ public static class BmsJudgementProfileProvider
         => layout is BmsLayoutVariant.Pms9K or BmsLayoutVariant.Pms9K2P or BmsLayoutVariant.Pms9KDouble;
 
     public static bool EmptyPoorBreaksCombo(BmsLayoutVariant layout)
-        => IsPms(layout) || layout is BmsLayoutVariant.Bms5K or BmsLayoutVariant.Bms5K2P or BmsLayoutVariant.Bms5KDouble;
+        => false;
 
 
     private static BmsJudgementWindowTable pmsHead(
