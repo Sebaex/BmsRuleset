@@ -34,6 +34,9 @@ public class BmsGaugeCalculator
     {
         noteCount = Math.Max(1, noteCount);
 
+        if (profileFamily == BmsGaugeProfileFamily.Lr2)
+            return 160.0 + (noteCount + Math.Min(Math.Max(noteCount - 400, 0), 200)) * 0.16;
+
         return profileFamily == BmsGaugeProfileFamily.Keyboard
             ? Math.Max(300.0, 7.605 * (noteCount + 100) / (0.01 * noteCount + 6.5))
             : Math.Max(260.0, 7.605 * noteCount / (0.01 * noteCount + 6.5));

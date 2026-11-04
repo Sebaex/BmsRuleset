@@ -8,6 +8,25 @@ namespace osu.Game.Rulesets.BmsRuleset.Tests.Normal.Gameplay.Gauge;
 [TestFixture]
 public class BmsLr2GaugeParityTest
 {
+    [TestCase(100, 176)]
+    [TestCase(400, 224)]
+    [TestCase(401, 224.32)]
+    [TestCase(500, 256)]
+    [TestCase(600, 288)]
+    [TestCase(601, 288.16)]
+    [TestCase(1000, 352)]
+    public void TestDefaultTotal(int notes, double expected)
+    {
+        var profile = BmsGaugeProfileFactory.Create(BmsGaugeType.Normal, BmsGaugeProfileFamily.Lr2);
+        foreach (var header in new[] { 0d, -1d })
+        {
+            var calculator = new BmsGaugeCalculator(profile, header, notes, BmsGaugeProfileFamily.Lr2);
+            Assert.That(calculator.Total, Is.EqualTo(expected).Within(1e-10));
+            Assert.That(calculator.GetDeltaFor(HitResult.Perfect, 0.2), Is.EqualTo(expected / 100 / notes).Within(1e-10));
+        }
+        Assert.That(new BmsGaugeCalculator(profile, 123, notes, BmsGaugeProfileFamily.Lr2).Total, Is.EqualTo(123));
+    }
+
     [TestCase(0.2999, 0.6)]
     [TestCase(0.30, 0.6)]
     [TestCase(0.31, 0.6)]
