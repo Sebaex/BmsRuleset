@@ -8,6 +8,26 @@ namespace osu.Game.Rulesets.BmsRuleset.Tests.Normal.Gameplay.Gauge;
 [TestFixture]
 public class BmsLr2GaugeParityTest
 {
+    [TestCase(0.2999, 0.6)]
+    [TestCase(0.30, 0.6)]
+    [TestCase(0.31, 0.6)]
+    [TestCase(0.3199, 0.6)]
+    [TestCase(0.32, 1)]
+    [TestCase(0.3201, 1)]
+    public void TestLr2Guts(double health, double multiplier)
+    {
+        foreach (var type in new[] { BmsGaugeType.Hard, BmsGaugeType.Class, BmsGaugeType.ExClass })
+        {
+            var profile = BmsGaugeProfileFactory.Create(type, BmsGaugeProfileFamily.Lr2);
+            var calculator = new BmsGaugeCalculator(profile, 300, 1000, BmsGaugeProfileFamily.Lr2);
+            var delta = calculator.GetDeltaFor(HitResult.Ok, health);
+            Assert.That(delta, Is.EqualTo(profile.BadDelta * multiplier).Within(1e-7));
+            Assert.That(calculator.ApplyDelta(health, delta), Is.EqualTo(health + delta).Within(1e-7));
+        }
+        var ordinary = BmsGaugeProfileFactory.Create(BmsGaugeType.Hard, BmsGaugeProfileFamily.SevenKeys);
+        Assert.That(new BmsGaugeCalculator(ordinary, 300, 1000).GetDeltaFor(HitResult.Ok, 0.31), Is.EqualTo(-0.035).Within(1e-7));
+    }
+
     [Test]
     public void TestDeathShiftsChainAndCannotRecover()
     {

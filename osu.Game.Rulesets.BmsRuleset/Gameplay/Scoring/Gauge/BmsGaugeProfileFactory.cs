@@ -26,7 +26,7 @@ public static class BmsGaugeProfileFactory
 
     private static readonly IReadOnlyList<BmsGaugeGutsRule> lr2_guts =
     [
-        new(0.30, 0.6),
+        new(0.32, 0.6),
     ];
 
     public static BmsGaugeProfile Create(BmsGaugeType type, BmsGaugeProfileFamily family = BmsGaugeProfileFamily.SevenKeys) => family switch
