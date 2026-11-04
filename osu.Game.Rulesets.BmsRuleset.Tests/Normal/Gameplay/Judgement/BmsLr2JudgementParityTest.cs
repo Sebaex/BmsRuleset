@@ -10,6 +10,25 @@ namespace osu.Game.Rulesets.BmsRuleset.Tests.Normal.Gameplay.Judgement;
 [TestFixture]
 public class BmsLr2JudgementParityTest
 {
+    [TestCase(BmsLayoutVariant.Pms9K)]
+    [TestCase(BmsLayoutVariant.Pms9K2P)]
+    [TestCase(BmsLayoutVariant.Pms9KDouble)]
+    public void TestPmsBadConsumesNote(BmsLayoutVariant layout)
+    {
+        var beatmap = new osu.Game.Rulesets.BmsRuleset.Beatmaps.BmsBeatmap { LayoutVariant = layout, Rank = 2 };
+        var note = new BmsNote { Beatmap = beatmap, Column = 1, StartTime = 1000 };
+        var output = new BmsRecordingJudgementOutput();
+        var column = new BmsJudgementEngine([note], layout, 1, output).GetColumn(1);
+        column.HandleNotePress(new BmsPressContext(850, new BmsFrameContext(850, 1)));
+        Assert.That(output.GetMainResult(note).Type, Is.EqualTo(HitResult.Ok));
+        Assert.That(output.MainResults, Is.EqualTo(1));
+        Assert.That(column.GetNoteCandidates(), Is.Empty);
+        column.HandleNotePress(new BmsPressContext(1000, new BmsFrameContext(1000, 1)));
+        Assert.That(output.MainResults, Is.EqualTo(1));
+        Assert.That(output.NonConsumingResults, Is.Zero);
+        Assert.That(output.GetMainResult(note).Type, Is.EqualTo(HitResult.Ok));
+    }
+
     [TestCase(1100.001)]
     [TestCase(1150)]
     [TestCase(1200)]

@@ -209,14 +209,6 @@ internal sealed class BmsColumnJudgementRuntime
         if (!selection.IsEmptyPoor && selection.Candidate != null && search.Slot >= 0)
         {
             var note = NoteRegistrations[search.Slot].Object;
-            if (selection.Result == HitResult.Ok && BmsJudgementProfileProvider.IsPms(LayoutVariant))
-            {
-                pressState.Record(note, false, true);
-                noteOutput.ApplyNonConsumingBad(note, press.Frame);
-                noteOutput.PlaySample(note);
-                return PressOutcome.Hit;
-            }
-
             if (TryPressRegisteredNote(note, selection.Result, press))
             {
                 pressState.Record(note, true);
