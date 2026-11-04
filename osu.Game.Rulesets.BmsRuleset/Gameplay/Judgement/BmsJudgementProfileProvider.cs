@@ -156,7 +156,10 @@ public static class BmsJudgementProfileProvider
             (-200, 1000),
         };
         var table = createTable(1, false, windows, fixedBadAndPoor: true);
-        return new BmsJudgementProfile(table, table, table, table);
+        var tailRadius = scaleLr2Window(120000, (int)Math.Round(rate * 100));
+        var tail = createTable(1, false,
+            [(-tailRadius, tailRadius), (-tailRadius, tailRadius), (-tailRadius, tailRadius), (-200, 200)], fixedBadAndPoor: true);
+        return new BmsJudgementProfile(table, table, tail, tail);
     }
 
     private readonly record struct ProfileKey(BmsLayoutVariant Layout, double Rate);

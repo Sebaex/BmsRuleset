@@ -1,5 +1,6 @@
 using System;
 using NUnit.Framework;
+using osu.Game.Rulesets.BmsRuleset.Beatmaps.Objects;
 using osu.Game.Rulesets.BmsRuleset.BmsParser;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.Judgement;
 using osu.Game.Rulesets.Scoring;
@@ -9,6 +10,40 @@ namespace osu.Game.Rulesets.BmsRuleset.Tests.Normal.Gameplay.Judgement;
 [TestFixture]
 public class BmsLr2JudgementParityTest
 {
+    [TestCase(-120)]
+    [TestCase(-100)]
+    [TestCase(-70)]
+    [TestCase(-40)]
+    [TestCase(-18)]
+    [TestCase(0)]
+    [TestCase(70)]
+    [TestCase(100)]
+    [TestCase(120)]
+    public void TestLongEndpoints(double offset)
+    {
+        foreach (var mode in new[] { BmsLongNoteMode.LongNote, BmsLongNoteMode.ChargeNote, BmsLongNoteMode.HellChargeNote })
+        {
+            foreach (var layout in new[] { BmsLayoutVariant.Bme7K, BmsLayoutVariant.Pms9K })
+            {
+                foreach (var column in new[] { 0, 1 })
+                {
+                    var context = new BmsLongNoteTestContext(mode, column: column, layout: layout);
+                    context.Press(1000, HitResult.Perfect);
+                    if (mode == BmsLongNoteMode.LongNote && offset > 0)
+                        context.Passive(1500.001);
+                    if (column == 0 && layout == BmsLayoutVariant.Bme7K && mode != BmsLongNoteMode.LongNote)
+                        context.Column.HandleNotePress(new BmsPressContext(1500 + offset, new BmsFrameContext(1500 + offset, 1), true));
+                    else
+                        context.Release(1500 + offset);
+                    var expected = mode == BmsLongNoteMode.LongNote && offset > 0 || Math.Abs(offset) <= 100 ? HitResult.Perfect : HitResult.Ok;
+                    Assert.That(context.State.TailResult, Is.EqualTo(expected), $"{mode}/{layout}/{column}/{offset}");
+                    Assert.That(context.State.TailJudged, Is.True);
+                    Assert.That(context.Output.SyntheticEndpoints.Count, Is.EqualTo(mode == BmsLongNoteMode.LongNote ? 0 : 1));
+                }
+            }
+        }
+    }
+
     [TestCase(1, 0, 0, 0)]
     [TestCase(25, 5.76, 17.28, 28.8)]
     [TestCase(50, 11.36, 26.88, 49.6)]
