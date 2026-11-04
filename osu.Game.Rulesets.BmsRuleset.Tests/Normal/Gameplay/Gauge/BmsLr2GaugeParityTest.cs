@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.Scoring.Gauge;
+using osu.Game.Rulesets.BmsRuleset.Gameplay.Scoring;
 using osu.Game.Rulesets.Scoring;
 
 namespace osu.Game.Rulesets.BmsRuleset.Tests.Normal.Gameplay.Gauge;
@@ -7,6 +8,39 @@ namespace osu.Game.Rulesets.BmsRuleset.Tests.Normal.Gameplay.Gauge;
 [TestFixture]
 public class BmsLr2GaugeParityTest
 {
+    [Test]
+    public void TestDeathShiftsChainAndCannotRecover()
+    {
+        using var processor = new BmsHealthProcessor();
+        processor.SetGaugeTypes([BmsGaugeType.Hard, BmsGaugeType.Normal], profileFamilyOverride: BmsGaugeProfileFamily.Lr2,
+            initialStates: [new(BmsGaugeType.Hard, 0.0199, false), new(BmsGaugeType.Normal, 0.8, false)]);
+        Assert.That(processor.CurrentGaugeStates[0].Failed, Is.True);
+        Assert.That(processor.CurrentGaugeStates[0].Health, Is.Zero);
+        processor.RegisterEmptyPoor();
+        Assert.That(processor.CurrentGaugeStates[0].Health, Is.Zero);
+        Assert.That(processor.HasPassedAtEnd(), Is.False);
+        processor.RestoreGaugeStates([new(BmsGaugeType.Hard, 0.015, false), new(BmsGaugeType.Normal, 0.8, false)]);
+        Assert.That(processor.CurrentGaugeStates[0].Failed, Is.True);
+        Assert.That(processor.HasPassedAtEnd(), Is.True);
+    }
+
+    [TestCase(0.0201, 0.0201)]
+    [TestCase(0.02, 0.02)]
+    [TestCase(0.0199, 0)]
+    [TestCase(0.015, 0)]
+    [TestCase(0, 0)]
+    public void TestSurvivalDeath(double health, double expected)
+    {
+        foreach (var type in new[] { BmsGaugeType.Hard, BmsGaugeType.ExHard, BmsGaugeType.Class, BmsGaugeType.ExClass, BmsGaugeType.ExHardClass })
+        {
+            var profile = BmsGaugeProfileFactory.Create(type, BmsGaugeProfileFamily.Lr2);
+            var calculator = new BmsGaugeCalculator(profile, 300, 1000, BmsGaugeProfileFamily.Lr2);
+            var after = calculator.ApplyDelta(health == 0 ? 0 : health + 0.01, -0.01);
+            Assert.That(after, Is.EqualTo(expected).Within(1e-12));
+            Assert.That(calculator.ApplyDelta(after, 0.001), Is.EqualTo(expected == 0 ? 0 : expected + 0.001).Within(1e-12));
+        }
+    }
+
     [TestCase(100, 10)]
     [TestCase(112, 5)]
     [TestCase(125, 5)]

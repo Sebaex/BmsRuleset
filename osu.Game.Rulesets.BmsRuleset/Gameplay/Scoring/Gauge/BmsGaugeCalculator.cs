@@ -59,7 +59,7 @@ public class BmsGaugeCalculator
     }
 
     public double ApplyDelta(double currentHealth, double delta)
-        => currentHealth <= 0 ? 0 : Math.Clamp(currentHealth + delta, Profile.MinHealth, Profile.MaxHealth);
+        => currentHealth <= 0 ? 0 : Profile.ClampHealth(Math.Clamp(currentHealth + delta, Profile.MinHealth, Profile.MaxHealth));
 
     private double gain(double value)
     {

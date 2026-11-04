@@ -17,5 +17,14 @@ public sealed record BmsGaugeProfile(
     IReadOnlyList<BmsGaugeGutsRule> GutsRules
 )
 {
+    public double DeathThreshold { get; init; }
+
     public double MinHealth => Algorithm == BmsGaugeAlgorithm.Total ? 0.02 : 0;
+
+    internal double ClampHealth(double health)
+    {
+        var value = System.Math.Clamp(health, 0, MaxHealth);
+        // Java compares float percentages; double subtraction must not kill an exact 2% boundary.
+        return (float)(value * 100) < (float)(DeathThreshold * 100) ? 0 : value;
+    }
 }
