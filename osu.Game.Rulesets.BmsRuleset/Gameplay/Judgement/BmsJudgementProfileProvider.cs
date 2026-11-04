@@ -140,11 +140,10 @@ public static class BmsJudgementProfileProvider
                 (perfect, great, good) = (21, 60, 120);
                 break;
             default:
-                // EXRANK scales PG/GR/GD relative to RANK 2 (Normal).
-                rate /= rank_rates[2];
-                perfect *= rate;
-                great *= rate;
-                good *= rate;
+                var judgeRank = (int)Math.Round(rate * 100);
+                perfect = scaleLr2Window(21000, judgeRank);
+                great = scaleLr2Window(60000, judgeRank);
+                good = scaleLr2Window(120000, judgeRank);
                 break;
         }
 
@@ -161,6 +160,27 @@ public static class BmsJudgementProfileProvider
     }
 
     private readonly record struct ProfileKey(BmsLayoutVariant Layout, double Rate);
+
+    private static double scaleLr2Window(long basis, int judgeRank)
+    {
+        long scaled;
+        if (judgeRank >= 100)
+            scaled = basis * judgeRank / 100;
+        else
+        {
+            // Integer microseconds preserve Java's truncation before the BAD clamp.
+            ReadOnlySpan<long> points = basis switch
+            {
+                21000 => [0, 8000, 15000, 18000, 21000],
+                60000 => [0, 24000, 30000, 40000, 60000],
+                120000 => [0, 40000, 60000, 100000, 120000],
+                _ => throw new ArgumentOutOfRangeException(nameof(basis)),
+            };
+            var index = judgeRank / 25;
+            scaled = points[index] + (judgeRank - index * 25) * (points[index + 1] - points[index]) / 25;
+        }
+        return Math.Min(scaled, 200000) / 1000d;
+    }
 
     private readonly record struct WindowTableCache(
         ProfileKey Key,
