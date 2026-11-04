@@ -9,8 +9,7 @@ namespace osu.Game.Rulesets.BmsRuleset.Gameplay.Judgement;
 
 public static class BmsJudgementProfileProvider
 {
-    private static readonly double[] rank_rates = [0.25, 0.50, 0.75, 1.00, 1.25];
-    private static readonly double[] pms_rank_rates = [0.33, 0.50, 0.70, 1.00, 1.33];
+    private static readonly double[] rank_rates = [0.25, 0.50, 0.75, 1.00, 0.75];
     private static readonly ConcurrentDictionary<ProfileKey, BmsJudgementProfile> profiles = new();
 
     // Most chart updates reuse one layout/rate. Keep the shared profile identity while avoiding
@@ -109,12 +108,7 @@ public static class BmsJudgementProfileProvider
         return table;
     }
 
-    private static double rateForLayoutRank(BmsLayoutVariant layout, int rank)
-        => layout switch
-        {
-            BmsLayoutVariant.Pms9K or BmsLayoutVariant.Pms9K2P or BmsLayoutVariant.Pms9KDouble => pms_rank_rates[rank],
-            _ => rank_rates[rank],
-        };
+    private static double rateForLayoutRank(BmsLayoutVariant layout, int rank) => rank_rates[rank];
 
     private static BmsJudgementProfile createProfile(BmsLayoutVariant layout, double rate)
         => layout switch
@@ -128,7 +122,7 @@ public static class BmsJudgementProfileProvider
 
     private static BmsJudgementProfile lr2Profile(double rate)
     {
-        // #RANK 4 (Very Easy) is not listed in the LR2 reference, so it shares Easy windows.
+        // LR2 maps Very Easy to the Normal rank percentage.
         var rank = Array.IndexOf(rank_rates, rate);
         var perfect = 18d;
         var great = 40d;
