@@ -15,7 +15,7 @@ public static class BmsIcons
 
     public static IconUsage AutoScratch => get(0xE002);
 
-    public static IconUsage AutoGauge => get(0xE003);
+    public static IconUsage GaugeAutoShift => get(0xE003);
 
     public static IconUsage NoGood => get(0xE004);
 

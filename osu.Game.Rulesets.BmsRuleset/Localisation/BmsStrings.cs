@@ -790,7 +790,11 @@ public static class BmsStrings
 
     public static LocalisableString ModHellChargeNote => get("mod_hell_charge_note");
 
-    public static LocalisableString ModAutoGauge => get("mod_auto_gauge");
+    public static LocalisableString ModGaugeAutoShift => get("mod_gauge_auto_shift");
+    
+    public static LocalisableString GasLowerLimit => get("gas_lower_limit");
+
+    public static LocalisableString GasLowerLimitDescription => get("gas_lower_limit_description");
 
     public static LocalisableString GaugeDescription(string label) => get("gauge_description", label);
 

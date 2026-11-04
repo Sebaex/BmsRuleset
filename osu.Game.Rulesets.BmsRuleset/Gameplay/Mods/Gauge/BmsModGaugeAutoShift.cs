@@ -15,6 +15,14 @@ using osu.Game.Scoring;
 
 namespace osu.Game.Rulesets.BmsRuleset.Gameplay.Mods.Gauge;
 
+public enum BmsGasLowerLimit
+{
+    
+    Assist,
+    Easy,
+    Normal,
+}
+
 public class BmsModGaugeAutoShift : Mod, IApplicableToHealthProcessor, IApplicableToScorePopulation
 {
 
@@ -22,9 +30,9 @@ public class BmsModGaugeAutoShift : Mod, IApplicableToHealthProcessor, IApplicab
 
     public override string Acronym => "GAS";
 
-    public override IconUsage? Icon => BmsIcons.AutoGauge;
+    public override IconUsage? Icon => BmsIcons.GaugeAutoShift;
 
-    public override LocalisableString Description => BmsStrings.ModAutoGauge;
+    public override LocalisableString Description => BmsStrings.ModGaugeAutoShift;
 
     public override ModType Type => ModType.Automation;
 
@@ -39,6 +47,9 @@ public class BmsModGaugeAutoShift : Mod, IApplicableToHealthProcessor, IApplicab
 
     [SettingSource(typeof(BmsStrings), nameof(BmsStrings.CourseGaugeProfile), SettingControlType = typeof(BmsCourseGaugeSetting<BmsGaugeProfileFamily?>))]
     public Bindable<BmsGaugeProfileFamily?> GaugeProfileFamily { get; } = new();
+
+    [SettingSource(typeof(BmsStrings), nameof(BmsStrings.GasLowerLimit), nameof(BmsStrings.GasLowerLimitDescription))]
+    public Bindable<BmsGasLowerLimit> GasMode { get; } = new() { Value = BmsGasLowerLimit.Easy };
 
     public override IEnumerable<(LocalisableString setting, LocalisableString value)> SettingDescription => [];
 
@@ -62,9 +73,7 @@ public class BmsModGaugeAutoShift : Mod, IApplicableToHealthProcessor, IApplicab
         BmsGaugeType.Hazard,
         BmsGaugeType.ExHard,
         BmsGaugeType.Hard,
-        BmsGaugeType.Normal,
-        BmsGaugeType.Easy,
-        BmsGaugeType.AssistEasy,
+        BmsGaugeType.Normal
     ];
 
     internal static readonly BmsGaugeType[] COURSE_AUTO_GAUGE_CHAIN =
@@ -74,6 +83,8 @@ public class BmsModGaugeAutoShift : Mod, IApplicableToHealthProcessor, IApplicab
         BmsGaugeType.Class,
     ];
 
+    private BmsGaugeType[]? FINAL_AUTO_GAUGE_CHAIN;
+
     private BmsHealthProcessor? resolvedHealthProcessor;
 
     public void ApplyToHealthProcessor(HealthProcessor healthProcessor)
@@ -82,6 +93,22 @@ public class BmsModGaugeAutoShift : Mod, IApplicableToHealthProcessor, IApplicab
         {
             bmsHp.EnableClearThresholdGaugeShift();
             resolvedHealthProcessor = bmsHp;
+            switch (GasMode.Value)
+            {
+                case BmsGasLowerLimit.Assist:
+                    FINAL_AUTO_GAUGE_CHAIN = [..AUTO_GAUGE_CHAIN, BmsGaugeType.Normal, BmsGaugeType.Easy, BmsGaugeType.AssistEasy];
+                    break;
+                case BmsGasLowerLimit.Easy:
+                    FINAL_AUTO_GAUGE_CHAIN = [..AUTO_GAUGE_CHAIN, BmsGaugeType.Normal, BmsGaugeType.Easy];
+                    break;
+                case BmsGasLowerLimit.Normal:
+                    FINAL_AUTO_GAUGE_CHAIN = AUTO_GAUGE_CHAIN;
+                    break;
+                // So gaugeTypes doesn't cry if something magical happens to GasMode.Value.
+                default:
+                    FINAL_AUTO_GAUGE_CHAIN = [..AUTO_GAUGE_CHAIN, BmsGaugeType.Normal, BmsGaugeType.Easy];
+                    break;
+            }
             var initialStates = new[]
             {
                 (Type: BmsGaugeType.Class, Health: ClassHealth.Value),
@@ -102,7 +129,7 @@ public class BmsModGaugeAutoShift : Mod, IApplicableToHealthProcessor, IApplicab
                 ? bmsHp.CurrentGaugeStates.Select(state => state.GaugeType)
                 : bmsHp.IsCourseGaugeMode
                     ? COURSE_AUTO_GAUGE_CHAIN
-                    : AUTO_GAUGE_CHAIN;
+                    : FINAL_AUTO_GAUGE_CHAIN;
 
             bmsHp.SetGaugeTypes(
                 gaugeTypes,
