@@ -82,8 +82,8 @@ public class BmsGaugeCalculatorTest
         });
     }
 
-    [TestCase(130, -0.3333)]
-    [TestCase(149, -0.3333)]
+    [TestCase(130, -0.3333333)]
+    [TestCase(149, -0.25)]
     [TestCase(150, -0.25)]
     public void TestModifyDamageTotalScaleBoundaries(double total, double expectedDamage)
     {

@@ -75,19 +75,7 @@ public class BmsGaugeCalculator
 
     private double calculateDamageScale()
     {
-        var totalScale = Total switch
-        {
-            >= 240 => 1,
-            >= 230 => 1.11,
-            >= 210 => 1.25,
-            >= 200 => 1.5,
-            >= 180 => 1.666,
-            >= 160 => 2,
-            >= 150 => 2.5,
-            >= 130 => 3.333,
-            >= 120 => 5,
-            _ => 10,
-        };
+        var totalScale = (float)(10.0 / Math.Min(10.0, Math.Max(1.0, Math.Floor(Total / 16.0) - 5.0)));
 
         // LR2 uses distinct slopes at these chart-size boundaries.
         var noteScale = NoteCount switch

@@ -7,6 +7,25 @@ namespace osu.Game.Rulesets.BmsRuleset.Tests.Normal.Gameplay.Gauge;
 [TestFixture]
 public class BmsLr2GaugeParityTest
 {
+    [TestCase(100, 10)]
+    [TestCase(112, 5)]
+    [TestCase(125, 5)]
+    [TestCase(190, 1.6666667)]
+    [TestCase(200, 1.4285714)]
+    [TestCase(207.999, 1.4285714)]
+    [TestCase(208, 1.25)]
+    [TestCase(239.999, 1.1111111)]
+    [TestCase(240, 1)]
+    [TestCase(300, 1)]
+    public void TestTotalDamage(double total, double factor)
+    {
+        var profile = BmsGaugeProfileFactory.Create(BmsGaugeType.Hard, BmsGaugeProfileFamily.Lr2);
+        var calculator = new BmsGaugeCalculator(profile, total, 1000, BmsGaugeProfileFamily.Lr2);
+        Assert.That(calculator.GetDeltaFor(HitResult.Ok, 1), Is.EqualTo(-0.06 * factor).Within(0.000001));
+        var shortChart = new BmsGaugeCalculator(profile, total, 500, BmsGaugeProfileFamily.Lr2);
+        Assert.That(shortChart.GetDeltaFor(HitResult.Ok, 1), Is.EqualTo(-0.06 * System.Math.Max(2, factor)).Within(0.000001));
+    }
+
     // GrooveGauge.MODIFY_DAMAGE, Endless Dream d4995153: float-valued piecewise factors.
     [TestCase(1, 10)]
     [TestCase(20, 10)]
