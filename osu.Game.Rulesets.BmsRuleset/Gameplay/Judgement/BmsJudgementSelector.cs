@@ -87,6 +87,9 @@ public static class BmsJudgementSelector
                 return false;
 
             var table = BmsJudgementProfileProvider.GetTable(layout, candidate.Column, candidate.JudgementRate, tail: false);
+            // LR2 excludes late BAD heads without starting the hold or emitting empty POOR.
+            if (candidate.IsLongNote && !candidate.IsJudged && offset > table.SlowWindowFor(HitResult.Good))
+                return true;
             var result = candidate.IsJudged ? HitResult.None : table.ResultForOffset(offset);
             if (BmsJudgementProfileProvider.IsPms(layout)
                 && (candidate.IsJudged || (candidate.HasMistake && result is not (HitResult.Perfect or HitResult.Great or HitResult.Good))))

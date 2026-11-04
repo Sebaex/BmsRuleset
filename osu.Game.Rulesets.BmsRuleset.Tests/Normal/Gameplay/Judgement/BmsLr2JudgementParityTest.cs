@@ -10,6 +10,36 @@ namespace osu.Game.Rulesets.BmsRuleset.Tests.Normal.Gameplay.Judgement;
 [TestFixture]
 public class BmsLr2JudgementParityTest
 {
+    [TestCase(1100.001)]
+    [TestCase(1150)]
+    [TestCase(1200)]
+    public void TestLateLongHeadIsNotStarted(double time)
+    {
+        foreach (var mode in new[] { BmsLongNoteMode.LongNote, BmsLongNoteMode.ChargeNote, BmsLongNoteMode.HellChargeNote })
+        {
+            var context = new BmsLongNoteTestContext(mode);
+            context.Column.HandleNotePress(new BmsPressContext(time, new BmsFrameContext(time, 1)));
+            Assert.That(context.State.HeadJudged, Is.False);
+            Assert.That(context.Output.MainResults, Is.Zero);
+            context.Passive(1201);
+            Assert.That(context.State.HeadResult, Is.EqualTo(HitResult.Meh));
+            if (mode == BmsLongNoteMode.HellChargeNote)
+                Assert.That(context.Output.SyntheticEndpoints[0].Result, Is.EqualTo(HitResult.Meh));
+            else
+                Assert.That(context.Output.GetMainResult(context.Note).Type, Is.EqualTo(HitResult.Meh));
+        }
+    }
+
+    [TestCase(850, HitResult.Ok)]
+    [TestCase(1100, HitResult.Good)]
+    public void TestAdmissibleLongHead(double time, HitResult expected)
+    {
+        var context = new BmsLongNoteTestContext(BmsLongNoteMode.ChargeNote);
+        context.Column.HandleNotePress(new BmsPressContext(time, new BmsFrameContext(time, 1)));
+        Assert.That(context.State.HeadResult, Is.EqualTo(expected));
+        Assert.That(context.State.IsHolding, Is.True);
+    }
+
     [TestCase(-120)]
     [TestCase(-100)]
     [TestCase(-70)]
