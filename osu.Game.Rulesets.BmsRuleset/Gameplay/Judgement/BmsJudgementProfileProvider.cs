@@ -153,7 +153,7 @@ public static class BmsJudgementProfileProvider
             (-great, great),
             (-good, good),
             (-200, 200),
-            (-200, 1000),
+            (0, 1000),
         };
         var table = createTable(1, false, windows, fixedBadAndPoor: true);
         var tailRadius = scaleLr2Window(120000, (int)Math.Round(rate * 100));

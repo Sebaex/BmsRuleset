@@ -91,10 +91,6 @@ public static class BmsJudgementSelector
             if (candidate.IsLongNote && !candidate.IsJudged && offset > table.SlowWindowFor(HitResult.Good))
                 return true;
             var result = candidate.IsJudged ? HitResult.None : table.ResultForOffset(offset);
-            if (BmsJudgementProfileProvider.IsPms(layout)
-                && (candidate.IsJudged || (candidate.HasMistake && result is not (HitResult.Perfect or HitResult.Great or HitResult.Good))))
-                return true;
-
             if (result != HitResult.None)
             {
                 if (selected == null || shouldReplaceSelected(selected.Value, candidate, inputTime, selectedTable!, table, algorithm))
