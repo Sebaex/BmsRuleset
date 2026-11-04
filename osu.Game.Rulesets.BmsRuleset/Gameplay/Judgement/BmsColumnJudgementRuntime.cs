@@ -248,7 +248,7 @@ internal sealed class BmsColumnJudgementRuntime
         // A hit on the first pending head needs no history search when its algorithm has
         // already decided. Earlier consumed heads only affect empty POOR, never a hit.
         var firstHead = Notes.FirstPendingHead;
-        if (firstHead is { } first && first.StartTime >= inputTime - 500 && IsNoteCandidate(first))
+        if (firstHead is { } first && first.StartTime >= inputTime - 1000 && IsNoteCandidate(first))
         {
             var candidate = new BmsJudgementCandidate(first.StartTime, first.GetEndTime(), Index, first.EffectiveJudgementRate,
                 first is BmsLongNote, HasMistake: pressState.Get(first).Mistake);
@@ -256,7 +256,7 @@ internal sealed class BmsColumnJudgementRuntime
                 return search;
         }
 
-        search = searchHeads(Math.Max(inputTime - 500, firstHead?.StartTime ?? inputTime + 500), inputTime, algorithm);
+        search = searchHeads(Math.Max(inputTime - 1000, firstHead?.StartTime ?? inputTime + 1000), inputTime, algorithm);
         if (search.Selection is { Candidate: not null, IsEmptyPoor: false }) return search;
         // Only an empty-POOR lookup needs consumed heads and judged long-note tails.
         return searchNearest(inputTime, algorithm, true);
@@ -272,7 +272,7 @@ internal sealed class BmsColumnJudgementRuntime
         {
             var leftDistance = left >= 0 ? inputTime - columnNotes[left].StartTime : double.PositiveInfinity;
             var rightDistance = right < columnNotes.Length ? columnNotes[right].StartTime - inputTime : double.PositiveInfinity;
-            if (Math.Min(leftDistance, rightDistance) > 500) break;
+            if (Math.Min(leftDistance, rightDistance) > 1000) break;
 
             var from = right;
             var to = right;
@@ -307,7 +307,7 @@ internal sealed class BmsColumnJudgementRuntime
     private BmsJudgementSelector.PressSearch searchHeads(double from, double inputTime, BmsJudgementAlgorithm? algorithm)
     {
         var search = new BmsJudgementSelector.PressSearch(LayoutVariant, Index, inputTime, algorithm);
-        for (var i = Notes.FindPendingHead(findFirstNote(from), true); i < columnNotes.Length && columnNotes[i].StartTime <= inputTime + 500;
+        for (var i = Notes.FindPendingHead(findFirstNote(from), true); i < columnNotes.Length && columnNotes[i].StartTime <= inputTime + 1000;
              i = Notes.FindPendingHead(i + 1, true))
         {
             var note = columnNotes[i];

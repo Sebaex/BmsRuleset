@@ -79,7 +79,7 @@ public static class BmsJudgementSelector
 
             var offset = inputTime - candidate.StartTime;
             // beatoraja stops its candidate search before the inclusive E-POOR table edge.
-            if (offset <= -500)
+            if (offset <= -1000)
                 return false;
 
             if (selected is { } current && algorithm == BmsJudgementAlgorithm.Duration

@@ -10,6 +10,29 @@ namespace osu.Game.Rulesets.BmsRuleset.Tests.Normal.Gameplay.Judgement;
 [TestFixture]
 public class BmsLr2JudgementParityTest
 {
+    [TestCase(0, false)]
+    [TestCase(0.001, true)]
+    [TestCase(250, true)]
+    [TestCase(499.999, true)]
+    [TestCase(500, true)]
+    public void TestEarlyEmptyPoorSearch(double time, bool expected)
+    {
+        foreach (var algorithm in Enum.GetValues<osu.Game.Rulesets.BmsRuleset.Gameplay.Configuration.BmsJudgementAlgorithm>())
+        {
+            foreach (var layout in new[] { BmsLayoutVariant.Bms5K, BmsLayoutVariant.Bme7K, BmsLayoutVariant.Pms9K })
+            {
+                var beatmap = new osu.Game.Rulesets.BmsRuleset.Beatmaps.BmsBeatmap { LayoutVariant = layout, Rank = 2 };
+                var note = new BmsNote { Beatmap = beatmap, Column = 1, StartTime = 1000 };
+                var output = new BmsRecordingJudgementOutput();
+                var column = new BmsJudgementEngine([note], layout, 1, output).GetColumn(1);
+                var outcome = column.HandleNotePress(new BmsPressContext(time, new BmsFrameContext(time, 1)), algorithm);
+                Assert.That(outcome.Kind, Is.EqualTo(expected ? PressOutcomeKind.EmptyPoor : PressOutcomeKind.Empty), $"{layout}/{algorithm}/{time}");
+                Assert.That(output.MainResults, Is.Zero);
+                Assert.That(column.GetNoteCandidates(), Is.Not.Empty);
+            }
+        }
+    }
+
     [TestCase(900, true)]
     [TestCase(1000, true)]
     [TestCase(1000.001, false)]
