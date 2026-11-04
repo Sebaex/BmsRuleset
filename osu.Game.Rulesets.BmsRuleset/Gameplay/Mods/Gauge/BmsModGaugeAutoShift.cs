@@ -53,17 +53,6 @@ public class BmsModGaugeAutoShift : Mod, IApplicableToHealthProcessor, IApplicab
 
     public override IEnumerable<(LocalisableString setting, LocalisableString value)> SettingDescription => [];
 
-    /// <summary>
-    ///     Incompatible with all other gauge mods (same mutual-exclusion set as <see cref="BmsModGauge" />).
-    ///     Can't be incompatible with Class gauge due to automatic selection during gameplay and it would disrupt score saving.
-    /// </summary>
-    public override Type[] IncompatibleMods { get; } = [
-        typeof(BmsModAssistEasyGauge),
-        typeof(BmsModEasyGauge),
-        typeof(BmsModHardGauge),
-        typeof(BmsModExHardGauge),
-        typeof(BmsModHazardGauge)
-    ];
 
     /// <summary>
     ///     The regular gameplay chain used by Auto Gauge, hardest first.
