@@ -89,16 +89,18 @@ public class BmsGaugeCalculator
             _ => 10,
         };
 
-        var noteScale = 1.0;
-        var note = 1000;
-        var modifier = 0.002;
-
-        while (note > NoteCount || note > 1)
+        // LR2 uses distinct slopes at these chart-size boundaries.
+        var noteScale = NoteCount switch
         {
-            noteScale += modifier * (note - Math.Max(NoteCount, note / 2));
-            note /= 2;
-            modifier *= 2;
-        }
+            <= 20 => 10f,
+            < 30 => 8f + 0.2f * (30 - NoteCount),
+            < 60 => 5f + 0.2f * (60 - NoteCount) / 3f,
+            < 125 => 4f + (125 - NoteCount) / 65f,
+            < 250 => 3f + 0.008f * (250 - NoteCount),
+            < 500 => 2f + 0.004f * (500 - NoteCount),
+            < 1000 => 1f + 0.002f * (1000 - NoteCount),
+            _ => 1f,
+        };
 
         return Math.Max(totalScale, noteScale);
     }
