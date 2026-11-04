@@ -80,6 +80,7 @@ public class BmsModGaugeAutoShift : Mod, IApplicableToHealthProcessor, IApplicab
     {
         if (healthProcessor is BmsHealthProcessor bmsHp)
         {
+            bmsHp.IsGaugeAutoShift = true;
             bmsHp.EnableClearThresholdGaugeShift();
             resolvedHealthProcessor = bmsHp;
             switch (GasMode.Value)
@@ -122,6 +123,7 @@ public class BmsModGaugeAutoShift : Mod, IApplicableToHealthProcessor, IApplicab
 
             bmsHp.SetGaugeTypes(
                 gaugeTypes,
+                replaceExisting: !bmsHp.IsCourseGaugeMode,
                 profileFamilyOverride: bmsHp.ConfiguredProfileFamily);
         }
     }

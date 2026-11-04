@@ -41,6 +41,8 @@ public partial class BmsHealthProcessor : HealthProcessor
 
     internal bool IsCourseGaugeMode { get; private set; }
 
+    internal bool IsGaugeAutoShift { get; set; }
+
     internal BmsGaugeProfileFamily? ConfiguredProfileFamily { get; private set; }
 
     private IReadOnlyList<BmsGaugeStateSnapshot>? replayInitialStates;
