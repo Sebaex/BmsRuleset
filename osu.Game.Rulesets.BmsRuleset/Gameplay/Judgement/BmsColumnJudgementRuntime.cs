@@ -237,89 +237,20 @@ internal sealed class BmsColumnJudgementRuntime
 
     private BmsJudgementSelector.PressSearch selectPress(double inputTime, BmsJudgementAlgorithm? algorithm)
     {
-        if (algorithm == BmsJudgementAlgorithm.Duration)
-        {
-            var nearest = searchNearest(inputTime, algorithm, false);
-            if (nearest.Selection is { Candidate: not null, IsEmptyPoor: false }) return nearest;
-            return searchNearest(inputTime, algorithm, true);
-        }
-
         var search = new BmsJudgementSelector.PressSearch(LayoutVariant, Index, inputTime, algorithm);
-        // A hit on the first pending head needs no history search when its algorithm has
-        // already decided. Earlier consumed heads only affect empty POOR, never a hit.
-        var firstHead = Notes.FirstPendingHead;
-        if (firstHead is { } first && first.StartTime >= inputTime - 1000 && IsNoteCandidate(first))
-        {
-            var candidate = new BmsJudgementCandidate(first.StartTime, first.GetEndTime(), Index, first.EffectiveJudgementRate,
-                first is BmsLongNote, HasMistake: pressState.Get(first).Mistake);
-            if (!search.Consider(candidate, noteSlots[first]) && search.Selection.Result != HitResult.None)
-                return search;
-        }
-
-        search = searchHeads(Math.Max(inputTime - 1000, firstHead?.StartTime ?? inputTime + 1000), inputTime, algorithm);
-        if (search.Selection is { Candidate: not null, IsEmptyPoor: false }) return search;
-        // Only an empty-POOR lookup needs consumed heads and judged long-note tails.
-        return searchNearest(inputTime, algorithm, true);
-    }
-
-    private BmsJudgementSelector.PressSearch searchNearest(double inputTime, BmsJudgementAlgorithm? algorithm, bool includeHistory)
-    {
-        var search = new BmsJudgementSelector.PressSearch(LayoutVariant, Index, inputTime, algorithm);
-        var split = findFirstNote(inputTime);
-        var right = includeHistory ? split : Notes.FindPendingHead(split, true);
-        var left = includeHistory ? split - 1 : Notes.FindPendingHead(split - 1, false);
-        while (left >= 0 || right < columnNotes.Length)
-        {
-            var leftDistance = left >= 0 ? inputTime - columnNotes[left].StartTime : double.PositiveInfinity;
-            var rightDistance = right < columnNotes.Length ? columnNotes[right].StartTime - inputTime : double.PositiveInfinity;
-            if (Math.Min(leftDistance, rightDistance) > 1000) break;
-
-            var from = right;
-            var to = right;
-            if (leftDistance <= rightDistance)
-            {
-                to = left;
-                // Equal-distance ties prefer the earlier timestamp and then stable chart order.
-                var firstAtTime = findFirstNote(columnNotes[left].StartTime);
-                from = includeHistory ? firstAtTime : Notes.FindPendingHead(firstAtTime, true);
-                left = includeHistory ? from - 1 : Notes.FindPendingHead(from - 1, false);
-            }
-            else right = includeHistory ? right + 1 : Notes.FindPendingHead(right + 1, true);
-
-            for (var i = from; i <= to; i = includeHistory ? i + 1 : Notes.FindPendingHead(i + 1, true))
-            {
-                var note = columnNotes[i];
-                var slot = noteSlots[note];
-                var history = pressState.Get(note);
-                var completed = includeHistory && noteOutput.GetMainResult(note).HasResult;
-                if (completed && !history.Judged) continue;
-                var candidate = new BmsJudgementCandidate(note.StartTime, note.GetEndTime(), Index, note.EffectiveJudgementRate,
-                    note is BmsLongNote, completed || (includeHistory && note is BmsLongNote hold && GetLongNoteState(hold).HeadJudged), history.Mistake);
-                search.Consider(candidate, completed ? -1 : slot);
-                // Distance ordering settles Duration hits and, after the hit search fails,
-                // empty POOR without visiting every consumed head in a dense burst.
-                if (search.Selection.Candidate != null && (includeHistory || !search.Selection.IsEmptyPoor)) return search;
-            }
-        }
-        return search;
-    }
-
-    private BmsJudgementSelector.PressSearch searchHeads(double from, double inputTime, BmsJudgementAlgorithm? algorithm)
-    {
-        var search = new BmsJudgementSelector.PressSearch(LayoutVariant, Index, inputTime, algorithm);
-        for (var i = Notes.FindPendingHead(findFirstNote(from), true); i < columnNotes.Length && columnNotes[i].StartTime <= inputTime + 1000;
-             i = Notes.FindPendingHead(i + 1, true))
+        // Chronological traversal preserves invalidation by later LN heads for every algorithm.
+        for (var i = findFirstNote(inputTime - 1000); i < columnNotes.Length && columnNotes[i].StartTime < inputTime + 1000; i++)
         {
             var note = columnNotes[i];
-            var slot = noteSlots[note];
+            var history = pressState.Get(note);
+            var completed = noteOutput.GetMainResult(note).HasResult;
+            if (completed && !history.Judged) continue;
             var candidate = new BmsJudgementCandidate(note.StartTime, note.GetEndTime(), Index, note.EffectiveJudgementRate,
-                note is BmsLongNote, HasMistake: pressState.Get(note).Mistake);
-            if (!search.Consider(candidate, slot)) break;
+                note is BmsLongNote, completed || (note is BmsLongNote hold && GetLongNoteState(hold).HeadJudged), history.Mistake);
+            if (!search.Consider(candidate, completed ? -1 : noteSlots[note])) break;
         }
-
         return search;
     }
-
     private int findFirstNote(double time)
     {
         var low = 0;

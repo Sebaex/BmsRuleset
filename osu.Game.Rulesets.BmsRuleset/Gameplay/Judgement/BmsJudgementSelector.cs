@@ -89,7 +89,15 @@ public static class BmsJudgementSelector
             var table = BmsJudgementProfileProvider.GetTable(layout, candidate.Column, candidate.JudgementRate, tail: false);
             // LR2 excludes late BAD heads without starting the hold or emitting empty POOR.
             if (candidate.IsLongNote && !candidate.IsJudged && offset > table.SlowWindowFor(HitResult.Good))
+            {
+                // Java invalidates tnote only after this candidate wins the algorithm comparison.
+                if (selected == null || shouldReplaceSelected(selected.Value, candidate, inputTime, selectedTable!, table, algorithm))
+                {
+                    selected = null;
+                    emptyPoorCandidate = null;
+                }
                 return true;
+            }
             var result = candidate.IsJudged ? HitResult.None : table.ResultForOffset(offset);
             if (result != HitResult.None)
             {
