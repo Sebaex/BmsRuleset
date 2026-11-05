@@ -45,7 +45,8 @@ internal sealed class BmsColumnJudgementRuntime
 
     internal void ApplyEmptyPoor(double expectedTime, in BmsFrameContext frame) => noteOutput.ApplyEmptyPoor(expectedTime, Index, frame);
 
-    internal bool HasPmsMistake(BmsHitObject note) => BmsJudgementProfileProvider.IsPms(LayoutVariant) && pressState.Get(note).Mistake;
+    // LR2 uses MissCondition.ALWAYS: an earlier empty POOR never suppresses a later POOR.
+    internal bool HasPmsMistake(BmsHitObject note) => false;
 
     internal bool IsKeySoundFinished(BmsHitObject note, double time)
         => noteSlots.ContainsKey(note) ? GetNoteResult(note).HasResult : time > note.StartTime;
