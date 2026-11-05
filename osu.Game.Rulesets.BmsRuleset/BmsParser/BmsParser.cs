@@ -439,8 +439,7 @@ internal static partial class BmsChartParser
                 return;
 
             case HeaderCommand.LnMode:
-                if (int.TryParse(valueSpan, NumberStyles.Integer, CultureInfo.InvariantCulture, out var lnMode) && lnMode >= 1 && lnMode <= 3)
-                    state.LnMode = (BmsLongNoteMode)lnMode;
+                // Endless Dream's parser leaves mode selection to the player, regardless of this header.
                 return;
 
             case HeaderCommand.Rank:
