@@ -67,10 +67,11 @@ public class BmsLr2GaugeParityTest
     [TestCase(0.02, 0.02)]
     [TestCase(0.0199, 0)]
     [TestCase(0.015, 0)]
+    [TestCase(0.003, 0)]
     [TestCase(0, 0)]
     public void TestSurvivalDeath(double health, double expected)
     {
-        foreach (var type in new[] { BmsGaugeType.Hard, BmsGaugeType.ExHard, BmsGaugeType.Class, BmsGaugeType.ExClass, BmsGaugeType.ExHardClass })
+        foreach (var type in new[] { BmsGaugeType.Hard, BmsGaugeType.ExHard, BmsGaugeType.Hazard, BmsGaugeType.Class, BmsGaugeType.ExClass, BmsGaugeType.ExHardClass })
         {
             var profile = BmsGaugeProfileFactory.Create(type, BmsGaugeProfileFamily.Lr2);
             var calculator = new BmsGaugeCalculator(profile, 300, 1000, BmsGaugeProfileFamily.Lr2);
@@ -78,6 +79,21 @@ public class BmsLr2GaugeParityTest
             Assert.That(after, Is.EqualTo(expected).Within(1e-12));
             Assert.That(calculator.ApplyDelta(after, 0.001), Is.EqualTo(expected == 0 ? 0 : expected + 0.001).Within(1e-12));
         }
+    }
+
+    [TestCase(BmsGaugeProfileFamily.Lr2, 0)]
+    [TestCase(BmsGaugeProfileFamily.SevenKeys, 0.003)]
+    public void TestHazardDiesAfterPositiveSubThresholdDamage(BmsGaugeProfileFamily family, double expected)
+    {
+        using var health = new BmsHealthProcessor();
+        health.SetGaugeTypes([BmsGaugeType.Hazard], profileFamilyOverride: family,
+            initialStates: [new(BmsGaugeType.Hazard, 0.103, false)]);
+        health.RegisterEmptyPoor();
+        Assert.That(health.CurrentGaugeStates[0].Health, Is.EqualTo(expected).Within(1e-12));
+        Assert.That(health.CurrentGaugeStates[0].Failed, Is.EqualTo(expected == 0));
+        Assert.That(health.HasPassedAtEnd(), Is.EqualTo(expected > 0));
+        health.ApplyHellChargeTick(true);
+        Assert.That(health.CurrentGaugeStates[0].Health, Is.EqualTo(expected == 0 ? 0 : expected + 0.0003).Within(1e-12));
     }
 
     [TestCase(100, 10)]

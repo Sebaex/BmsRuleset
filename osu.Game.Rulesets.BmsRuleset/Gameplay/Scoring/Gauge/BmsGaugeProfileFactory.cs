@@ -107,7 +107,7 @@ public static class BmsGaugeProfileFactory
         BmsGaugeType.ExClass => survival(BmsGaugeAlgorithm.Fixed, gold, 0.001, 0.001, 0.0005, -0.06, -0.10, -0.02, lr2_guts),
         BmsGaugeType.ExHardClass => survival(BmsGaugeAlgorithm.Fixed, gray, 0.001, 0.001, 0.0005, -0.12, -0.20, -0.02, []),
         _ => throw new ArgumentOutOfRangeException(nameof(type), type, null),
-    }) with { DeathThreshold = type is BmsGaugeType.Hard or BmsGaugeType.ExHard or BmsGaugeType.Class or BmsGaugeType.ExClass or BmsGaugeType.ExHardClass ? 0.02 : 0 };
+    }) with { DeathThreshold = type is BmsGaugeType.Hard or BmsGaugeType.ExHard or BmsGaugeType.Hazard or BmsGaugeType.Class or BmsGaugeType.ExClass or BmsGaugeType.ExHardClass ? 0.02 : 0 };
 
     private static BmsGaugeProfile total(
         double initialHealth,
