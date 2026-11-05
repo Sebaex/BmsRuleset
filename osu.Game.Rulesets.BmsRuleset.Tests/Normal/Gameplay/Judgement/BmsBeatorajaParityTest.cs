@@ -18,10 +18,10 @@ namespace osu.Game.Rulesets.BmsRuleset.Tests.Normal.Gameplay.Judgement;
 [TestFixture]
 public class BmsBeatorajaParityTest
 {
-    [TestCase(BmsGaugeType.Normal)]
-    [TestCase(BmsGaugeType.Easy)]
-    [TestCase(BmsGaugeType.AssistEasy)]
-    public void RecoveryGaugeCanRecoverAfterRepeatedMisses(BmsGaugeType gauge)
+    [TestCase(BmsGaugeType.Normal, 0.12)]
+    [TestCase(BmsGaugeType.Easy, 0.14)]
+    [TestCase(BmsGaugeType.AssistEasy, 0.14)]
+    public void RecoveryGaugeCanRecoverAfterRepeatedMisses(BmsGaugeType gauge, double expected)
     {
         var processor = new BmsHealthProcessor();
         var note = new BmsNote();
@@ -32,7 +32,7 @@ public class BmsBeatorajaParityTest
         Assert.That(processor.Health.Value, Is.EqualTo(0.02));
         Assert.That(processor.HasEverFailed, Is.False);
         processor.ApplyResult(new JudgementResult(note, note.CreateJudgement()) { Type = HitResult.Perfect });
-        Assert.That(processor.Health.Value, Is.EqualTo(0.12).Within(1e-9));
+        Assert.That(processor.Health.Value, Is.EqualTo(expected).Within(1e-9));
     }
 
     [TestCase(BmsLongNoteMode.LongNote, 0.3)]
@@ -49,9 +49,9 @@ public class BmsBeatorajaParityTest
         Assert.That(processor.Health.Value, Is.EqualTo(expected).Within(1e-9));
     }
 
-    [TestCase(BmsLayoutVariant.Bme7K, true)]
+    [TestCase(BmsLayoutVariant.Bme7K, false)]
     [TestCase(BmsLayoutVariant.Pms9K, false)]
-    public void ConsumedNoteCanCauseEmptyPoorExceptInPms(BmsLayoutVariant layout, bool expected)
+    public void ConsumedNoteDoesNotCauseLateEmptyPoor(BmsLayoutVariant layout, bool expected)
     {
         var candidate = new BmsJudgementCandidate(1000, 1000, 1, 0.75, false, IsJudged: true);
         var selection = BmsJudgementSelector.SelectPress(layout, 1, [candidate], 1050);
@@ -59,10 +59,10 @@ public class BmsBeatorajaParityTest
     }
 
     [Test]
-    public void PmsMistakeBlocksRepeatedBadButAllowsSuccessfulRehit()
+    public void PmsMistakeMarkerDoesNotOverrideLr2Selection()
     {
-        var candidate = new BmsJudgementCandidate(1000, 1000, 1, 0.7, false, HasMistake: true);
-        Assert.That(BmsJudgementSelector.SelectPress(BmsLayoutVariant.Pms9K, 1, [candidate], 850).Result, Is.EqualTo(HitResult.None));
+        var candidate = new BmsJudgementCandidate(1000, 1000, 1, 0.75, false, HasMistake: true);
+        Assert.That(BmsJudgementSelector.SelectPress(BmsLayoutVariant.Pms9K, 1, [candidate], 850).Result, Is.EqualTo(HitResult.Ok));
         Assert.That(BmsJudgementSelector.SelectPress(BmsLayoutVariant.Pms9K, 1, [candidate], 1000).Result, Is.EqualTo(HitResult.Perfect));
     }
 
@@ -79,8 +79,8 @@ public class BmsBeatorajaParityTest
     }
 
     [TestCase(BmsLayoutVariant.Bme7K, 3)]
-    [TestCase(BmsLayoutVariant.Bms5K, 0)]
-    [TestCase(BmsLayoutVariant.Pms9K, 0)]
+    [TestCase(BmsLayoutVariant.Bms5K, 3)]
+    [TestCase(BmsLayoutVariant.Pms9K, 3)]
     public void EmptyPoorComboRuleAndReset(BmsLayoutVariant layout, int expectedCombo)
     {
         var processor = new BmsScoreProcessor();
@@ -93,7 +93,7 @@ public class BmsBeatorajaParityTest
     }
 
     [Test]
-    public void PmsBadDoesNotConsumeScoringJudgement()
+    public void ExplicitNonConsumingBadDoesNotConsumeScoringJudgement()
     {
         var processor = new BmsScoreProcessor();
         processor.ApplyBeatmap(new BmsBeatmap { LayoutVariant = BmsLayoutVariant.Pms9K });

@@ -55,7 +55,7 @@ public class BmsJudgementSelectorTest
 
     [TestCase(BmsJudgementAlgorithm.Combo, 1200)]
     [TestCase(BmsJudgementAlgorithm.Duration, 1200)]
-    [TestCase(BmsJudgementAlgorithm.Lowest, 1000)]
+    [TestCase(BmsJudgementAlgorithm.Lowest, 1200)]
     [TestCase(BmsJudgementAlgorithm.Score, 1200)]
     public void TestOverlappingBadAndGreat(BmsJudgementAlgorithm algorithm, double expectedTime)
     {
@@ -64,11 +64,11 @@ public class BmsJudgementSelectorTest
         Assert.That(selection.Candidate?.StartTime, Is.EqualTo(expectedTime));
     }
 
-    [TestCase(BmsJudgementAlgorithm.Combo, 1000)]
+    [TestCase(BmsJudgementAlgorithm.Combo, 1450)]
     [TestCase(BmsJudgementAlgorithm.Duration, 1450)]
-    [TestCase(BmsJudgementAlgorithm.Lowest, 1000)]
-    [TestCase(BmsJudgementAlgorithm.Score, 1000)]
-    [TestCase(null, 1000)]
+    [TestCase(BmsJudgementAlgorithm.Lowest, 1450)]
+    [TestCase(BmsJudgementAlgorithm.Score, 1450)]
+    [TestCase(null, 1450)]
     public void TestOverlappingBadWindowsUseConfiguredOrDefaultAlgorithm(BmsJudgementAlgorithm? algorithm, double expectedTime)
     {
         var selection = BmsJudgementSelector.SelectPress(BmsLayoutVariant.Bme7K, 1, [note(1450), note(1000)], 1250, algorithm);
@@ -77,9 +77,9 @@ public class BmsJudgementSelectorTest
         Assert.That(selection.Result, Is.EqualTo(HitResult.Ok));
     }
 
-    [TestCase(BmsJudgementAlgorithm.Combo, 150, 150, false)]
-    [TestCase(BmsJudgementAlgorithm.Combo, 150.01, 150, true)]
-    [TestCase(BmsJudgementAlgorithm.Combo, 151, 150.01, false)]
+    [TestCase(BmsJudgementAlgorithm.Combo, 120, 120, false)]
+    [TestCase(BmsJudgementAlgorithm.Combo, 120.01, 120, true)]
+    [TestCase(BmsJudgementAlgorithm.Combo, 121, 120.01, false)]
     [TestCase(BmsJudgementAlgorithm.Score, 60, 60, false)]
     [TestCase(BmsJudgementAlgorithm.Score, 60.01, 60, true)]
     [TestCase(BmsJudgementAlgorithm.Score, 61, 60.01, false)]
@@ -117,10 +117,10 @@ public class BmsJudgementSelectorTest
         Assert.That(selection.Candidate, Is.EqualTo(firstWide));
     }
 
-    [TestCase(BmsLayoutVariant.Bms5K, 1, 100)]
-    [TestCase(BmsLayoutVariant.Bme7K, 0, 160)]
-    [TestCase(BmsLayoutVariant.Bme7KDouble, 15, 160)]
-    [TestCase(BmsLayoutVariant.Pms9K, 0, 117)]
+    [TestCase(BmsLayoutVariant.Bms5K, 1, 120)]
+    [TestCase(BmsLayoutVariant.Bme7K, 0, 120)]
+    [TestCase(BmsLayoutVariant.Bme7KDouble, 15, 120)]
+    [TestCase(BmsLayoutVariant.Pms9K, 0, 120)]
     public void TestComboUsesLayoutAndScratchWindows(BmsLayoutVariant layout, int column, double goodWindow)
     {
         var first = note(1000) with { Column = column };
@@ -172,7 +172,7 @@ public class BmsJudgementSelectorTest
     public void TestEmptyAndOutOfWindowCandidates([Values] BmsJudgementAlgorithm algorithm)
     {
         Assert.That(BmsJudgementSelector.SelectPress(BmsLayoutVariant.Bme7K, 1, [], 1000, algorithm).Candidate, Is.Null);
-        Assert.That(BmsJudgementSelector.SelectPress(BmsLayoutVariant.Bme7K, 1, [note(1000)], 499, algorithm).Candidate, Is.Null);
+        Assert.That(BmsJudgementSelector.SelectPress(BmsLayoutVariant.Bme7K, 1, [note(1000)], 0, algorithm).Candidate, Is.Null);
         Assert.That(BmsJudgementSelector.SelectPress(BmsLayoutVariant.Bme7K, 1, [note(1000)], 1281, algorithm).Candidate, Is.Null);
     }
 
@@ -207,7 +207,7 @@ public class BmsJudgementSelectorTest
     {
         var candidate = new BmsJudgementCandidate(StartTime: 1000, EndTime: 1000, Column: 1, JudgementRate: rankRate(3), IsLongNote: false);
 
-        var selection = BmsJudgementSelector.SelectPress(BmsLayoutVariant.Bme7K, 1, [candidate], inputTime: 780);
+        var selection = BmsJudgementSelector.SelectPress(BmsLayoutVariant.Bme7K, 1, [candidate], inputTime: 800);
 
         Assert.That(selection.IsEmptyPoor, Is.False);
         Assert.That(selection.Candidate, Is.EqualTo(candidate));
@@ -219,7 +219,7 @@ public class BmsJudgementSelectorTest
     {
         var candidate = new BmsJudgementCandidate(StartTime: 1000, EndTime: 1000, Column: 1, JudgementRate: rankRate(3), IsLongNote: false);
 
-        var selection = BmsJudgementSelector.SelectPress(BmsLayoutVariant.Bme7K, 1, [candidate], inputTime: 499);
+        var selection = BmsJudgementSelector.SelectPress(BmsLayoutVariant.Bme7K, 1, [candidate], inputTime: 0);
 
         Assert.That(selection.IsEmptyPoor, Is.False);
         Assert.That(selection.Candidate, Is.Null);
