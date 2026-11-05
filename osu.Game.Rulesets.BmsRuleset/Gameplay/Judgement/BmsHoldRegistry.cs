@@ -56,6 +56,12 @@ internal sealed class BmsHoldRegistry
 
     internal BmsLongNote GetNote(int slot) => bindings[bindingIndices[slot]].Note;
 
+    internal void ApplyMultiBad(int slot, in BmsPressContext press)
+    {
+        var binding = bindings[bindingIndices[slot]];
+        binding.Operations.ApplyMultiBad(binding.StateIndex, press);
+    }
+
     internal BmsLongNoteState GetState(int slot)
     {
         var binding = bindings[bindingIndices[slot]];
@@ -136,6 +142,27 @@ internal sealed class BmsHoldRegistry
 
         internal abstract bool Press(int index, HitResult result, in BmsPressContext press);
 
+        internal abstract void ApplyMultiBad(int index, in BmsPressContext press);
+
+        protected void ApplyMultiBad(ref BmsHoldRuntime hold, in BmsPressContext press)
+        {
+            hold.HeadJudged = true;
+            hold.MultiBadHead = true;
+            // Multi-BAD consumes the head without starting a hold; HCN still has an independent body.
+            hold.Started = Mode == BmsLongNoteMode.HellChargeNote;
+            hold.HeadResult = HitResult.Ok;
+            hold.HeadOffset = press.InputTime - hold.Note.StartTime;
+            hold.TailJudged = Mode == BmsLongNoteMode.LongNote;
+            if (hold.TailJudged)
+            {
+                hold.TailResult = HitResult.Ok;
+                hold.TailTime = press.Frame.SimulationTime;
+            }
+            var endpoint = hold.Endpoint(BmsLongNoteEndpointKind.Head, press.InputTime, press.Frame.GameplayRate, HitResult.Ok);
+            Execution.ApplyMainResult(hold.Note, HitResult.Ok, [endpoint], press.Frame);
+            Execution.PublishState(hold.Note, hold.Snapshot(Mode == BmsLongNoteMode.HellChargeNote), press.Frame);
+        }
+
         internal abstract void CheckPassive(int index, in BmsFrameContext frame);
 
         internal abstract bool Repress(int index, in BmsPressContext press);
@@ -167,6 +194,8 @@ internal sealed class BmsHoldRegistry
         internal override double NextEventTime(int index) => states[index].Hold.NextEventTime(Mode);
 
         internal override bool Press(int index, HitResult result, in BmsPressContext press) => rule.TryPress(states[index], Execution, result, press);
+
+        internal override void ApplyMultiBad(int index, in BmsPressContext press) => ApplyMultiBad(ref states[index].Hold, press);
 
         internal override void CheckPassive(int index, in BmsFrameContext frame) => rule.CheckPassive(states[index], Execution, frame);
 
@@ -200,6 +229,8 @@ internal sealed class BmsHoldRegistry
 
         internal override bool Press(int index, HitResult result, in BmsPressContext press) => rule.TryPress(states[index], Execution, result, press);
 
+        internal override void ApplyMultiBad(int index, in BmsPressContext press) => ApplyMultiBad(ref states[index].Hold, press);
+
         internal override void CheckPassive(int index, in BmsFrameContext frame) => rule.CheckPassive(states[index], Execution, frame);
 
         internal override bool Repress(int index, in BmsPressContext press) => rule.TryRepress(states[index], Execution, press);
@@ -231,6 +262,12 @@ internal sealed class BmsHoldRegistry
         internal override double NextEventTime(int index) => states[index].Hold.NextEventTime(Mode);
 
         internal override bool Press(int index, HitResult result, in BmsPressContext press) => rule.TryPress(states[index], Execution, result, press);
+
+        internal override void ApplyMultiBad(int index, in BmsPressContext press)
+        {
+            states[index].Body.Reset(Math.Max(states[index].Hold.Note.StartTime, press.Frame.SimulationTime));
+            ApplyMultiBad(ref states[index].Hold, press);
+        }
 
         internal override void CheckPassive(int index, in BmsFrameContext frame) => rule.CheckPassive(states[index], Execution, frame);
 

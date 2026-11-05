@@ -12,6 +12,7 @@ internal struct BmsHoldRuntime
     internal BmsJudgementWindowTable HeadWindow = null!;
     internal BmsJudgementWindowTable TailWindow = null!;
     internal bool HeadJudged;
+    internal bool MultiBadHead;
     internal bool Started;
     internal bool TailJudged;
     internal bool EarlyReleaseOutsideWindow;
@@ -32,7 +33,7 @@ internal struct BmsHoldRuntime
 
     internal readonly double ReleaseMargin => 0;
 
-    internal readonly bool Holding => Started && !TailJudged;
+    internal readonly bool Holding => Started && !TailJudged && !MultiBadHead;
 
     internal readonly double NextEventTime(BmsLongNoteMode mode)
     {
@@ -53,7 +54,7 @@ internal struct BmsHoldRuntime
     }
 
     internal readonly BmsLongNoteState Snapshot(bool activeBody = false)
-        => new(HeadJudged, Started, TailJudged, HeadResult, HeadJudged ? Note.StartTime + HeadOffset : null,
+        => new(HeadJudged, Started && !MultiBadHead, TailJudged, HeadResult, HeadJudged ? Note.StartTime + HeadOffset : null,
             TailResult, TailTime, PendingRelease, activeBody, EarlyReleaseOutsideWindow);
 
     internal void RefreshWindows()

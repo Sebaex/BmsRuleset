@@ -39,11 +39,13 @@ public class BmsLr2ComplementaryJudgementTest
         var column = new BmsJudgementEngine([first, second], beatmap.LayoutVariant, 1, output).GetColumn(1);
         column.HandleNotePress(new BmsPressContext(1155, new BmsFrameContext(1155, 1)), algorithm);
         Assert.That(output.GetMainResult(first).HasResult, Is.EqualTo(keepEarlier));
-        Assert.That(column.GetLongNoteState(second).HeadJudged, Is.False);
-        Assert.That(column.GetNoteCandidates().Count(), Is.EqualTo(keepEarlier ? 1 : 2));
+        // Lowest keeps A as primary; MultiBadCollector then consumes B as an additional BAD.
+        Assert.That(column.GetLongNoteState(second).HeadJudged, Is.EqualTo(keepEarlier));
+        Assert.That(column.GetLongNoteState(second).IsHolding, Is.False);
+        Assert.That(column.GetNoteCandidates().Count(), Is.EqualTo(keepEarlier ? 0 : 2));
         column.HandleNotePress(new BmsPressContext(1160, new BmsFrameContext(1160, 1)), algorithm);
-        Assert.That(output.MainResults, Is.EqualTo(keepEarlier ? 1 : 0));
-        Assert.That(column.GetLongNoteState(second).HeadJudged, Is.False);
+        Assert.That(output.MainResults, Is.EqualTo(keepEarlier ? 2 : 0));
+        Assert.That(column.GetLongNoteState(second).HeadJudged, Is.EqualTo(keepEarlier));
     }
 
     [TestCase(1150, HitResult.Good)]

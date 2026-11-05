@@ -17,6 +17,7 @@ namespace osu.Game.Rulesets.BmsRuleset.Gameplay.Judgement;
 internal sealed class BmsColumnJudgementRuntime
 {
     private readonly BmsNotePressState pressState = new();
+    private readonly List<BmsHitObject> multiBadNotes = [];
     private readonly BmsHitObject[] columnNotes;
     private readonly Dictionary<BmsHitObject, int> noteSlots = new(ReferenceEqualityComparer.Instance);
     private readonly IBmsJudgementOutput noteOutput;
@@ -206,6 +207,8 @@ internal sealed class BmsColumnJudgementRuntime
 
         var search = selectPress(press.InputTime, algorithm);
         var selection = search.Selection;
+        if (selection.Candidate != null)
+            applyMultiBad(selection.Candidate.Value, search.Slot, press);
         if (!selection.IsEmptyPoor && selection.Candidate != null && search.Slot >= 0)
         {
             var note = NoteRegistrations[search.Slot].Object;
@@ -251,6 +254,40 @@ internal sealed class BmsColumnJudgementRuntime
         }
         return search;
     }
+    private void applyMultiBad(BmsJudgementCandidate primary, int primarySlot, in BmsPressContext press)
+    {
+        multiBadNotes.Clear();
+        var table = BmsJudgementProfileProvider.GetTable(LayoutVariant, Index, primary.JudgementRate, false);
+        // Java's collector only contains unjudged heads; a judged primary retains its -1us sentinel.
+        var primaryTime = primary.IsJudged ? press.InputTime - 0.001 : primary.StartTime;
+        var primaryBad = table.ResultForOffset(press.InputTime - primaryTime) == HitResult.Ok;
+        for (var i = findFirstNote(press.InputTime - table.SlowWindowFor(HitResult.Ok));
+             i < columnNotes.Length && columnNotes[i].StartTime <= press.InputTime + table.FastWindowFor(HitResult.Ok); i++)
+        {
+            var note = columnNotes[i];
+            if (noteSlots[note] == primarySlot || noteOutput.GetMainResult(note).HasResult
+                || (note is BmsLongNote hold && GetLongNoteState(hold).HeadJudged)) continue;
+            var offset = press.InputTime - note.StartTime;
+            if (table.ResultForOffset(offset) != HitResult.Ok) continue;
+            if ((!primaryBad || primary.IsLongNote) && note.StartTime >= primaryTime) continue;
+            multiBadNotes.Add(note);
+        }
+
+        // Match MultiBadCollector's prefix exclusion, rather than excluding every earlier LN.
+        var first = 0;
+        while (first < multiBadNotes.Count && multiBadNotes[first] is BmsLongNote && multiBadNotes[first].StartTime < primaryTime)
+            first++;
+        for (var i = first; i < multiBadNotes.Count; i++)
+        {
+            var note = multiBadNotes[i];
+            if (note is BmsLongNote)
+                holds.ApplyMultiBad(noteSlots[note], press);
+            else
+                TryPressRegisteredNote(note, HitResult.Ok, press);
+            pressState.Record(note, true);
+        }
+    }
+
     private int findFirstNote(double time)
     {
         var low = 0;
