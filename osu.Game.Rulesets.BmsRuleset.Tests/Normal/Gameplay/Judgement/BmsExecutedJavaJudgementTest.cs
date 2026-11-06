@@ -49,7 +49,7 @@ public class BmsExecutedJavaJudgementTest
     public void OriginalComparisonsAndInlineLatePredicateMatchN3Selection()
     {
         var rows = ReadOracle("algorithms");
-        Assert.That(rows, Has.Length.EqualTo(8));
+        Assert.That(rows, Has.Length.EqualTo(12));
         foreach (var row in rows)
         {
             var algorithm = Enum.Parse<BmsJudgementAlgorithm>(row[0]);

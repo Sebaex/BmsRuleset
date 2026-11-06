@@ -1,0 +1,129 @@
+{
+  "evaluated_parent": "d3e6cd707baa7588906c9c669b5dc7d012ec266f",
+  "production_tree": "0b4408e5602835a13ed10e18788055343989892d",
+  "production_unchanged_since": "bae80bc95a2abde15cc1519d0cf784e43cbd9ced",
+  "c06_candidate_change": "Add 1155ms to original N3 comparator fixture and assert 12 rows; no production change",
+  "oracle_provenance": "C06_PROVENANCE.json",
+  "runs": [
+    {
+      "run": "C01-02/instrumentation",
+      "trx": "instrumentation.trx",
+      "sha256": "8FA8C03414AA255D3ABA39C1840326AE11302F75757906B5938E1E17AD461226",
+      "total": 288,
+      "passed": 285,
+      "failed": 3,
+      "skipped": 0
+    },
+    {
+      "run": "C01-02/regression",
+      "trx": "regression.trx",
+      "sha256": "2351E0BE7009A29875BBD4EB1A8234385FA38F307D0A15FCA9782043BF3EEBCE",
+      "total": 3914,
+      "passed": 3695,
+      "failed": 216,
+      "skipped": 0
+    },
+    {
+      "run": "CERT-C02",
+      "trx": "tests.trx",
+      "sha256": "4DDA02CCBC90FC6CCD3F87B9A12AA797F92FC8243B36386B17211FCA7643800E",
+      "total": 113,
+      "passed": 110,
+      "failed": 3,
+      "skipped": 0
+    },
+    {
+      "run": "CERT-C02-02",
+      "trx": "tests.trx",
+      "sha256": "58E530DC73B4E6FF40D0CE59E76A79136F074FC103B920D8DF74139E28A12487",
+      "total": 113,
+      "passed": 113,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "run": "CERT-C03",
+      "trx": "tests.trx",
+      "sha256": "64FC804A88A94F434A33F597400379E50573BFDEF8F765A6BF450509F2FEAF6F",
+      "total": 146,
+      "passed": 146,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "run": "CERT-C03-02",
+      "trx": "tests.trx",
+      "sha256": "81E44FE9642309E706B0DF1CAADB4ABD96D4DBDD3D5E4DB17F953B8009CEDBA9",
+      "total": 147,
+      "passed": 147,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "run": "CERT-C04",
+      "trx": "tests.trx",
+      "sha256": "BA1267506E05A855EE8B6F3F0C6BE7EEFAB42D98B0A0A3BC4970CD7D2786E31D",
+      "total": 50,
+      "passed": 50,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "run": "CERT-C04-02",
+      "trx": "tests.trx",
+      "sha256": "EB37DBB0FAB3B5932377BE9A1A31D9B27BF5D879A374F180A96B2630B0C1D9DC",
+      "total": 124,
+      "passed": 124,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "run": "CERT-C05",
+      "trx": "tests.trx",
+      "sha256": "19C1A46316C9711CB5B126E68F81AD783FEF494A000BF2A96779B1835713B5B4",
+      "total": 38,
+      "passed": 38,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "run": "CERT-C05-02",
+      "trx": "tests.trx",
+      "sha256": "47C581D0F96E2EECA4332CF72EADAFD158DE03841E4E18F7723DCF7ED64354FA",
+      "total": 40,
+      "passed": 40,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "run": "CERT-C06",
+      "trx": "tests.trx",
+      "sha256": "BD87BB2D7D0C4931AC51B3A49FDF8756BAD1C5A124630919F4C8C788A3D6EFC1",
+      "total": 420,
+      "passed": 420,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "run": "CERT-C06-02",
+      "trx": "tests.trx",
+      "sha256": "725F63DB7288634265E1DC15D5D039547AE0CB6F8D5DC0843E097871C4D6E61A",
+      "total": 420,
+      "passed": 420,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "final_test_binaries": [
+    {
+      "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+      "sha256": "75251AE1C2FE87F092447BDC53D24961279866A0C017189CD5CE2AC2AE988672"
+    },
+    {
+      "file": "osu.Game.Rulesets.BmsRuleset.dll",
+      "sha256": "27A90B34553C075F123373F3178F242179795CF8A4F2E18407971989F95BF437"
+    }
+  ],
+  "final_filter": "FullyQualifiedName~BmsChargeNoteExecutionTest|FullyQualifiedName~BmsExecutedJavaGaugeTest|FullyQualifiedName~BmsExecutedJavaJudgementTest|FullyQualifiedName~BmsExecutedJavaParserTest|FullyQualifiedName~BmsExScoreTest|FullyQualifiedName~BmsGasCourseParityTest|FullyQualifiedName~BmsGasMixedReplayCertificationTest|FullyQualifiedName~BmsGasOrderParityTest|FullyQualifiedName~BmsGasPolicyReferenceTest|FullyQualifiedName~BmsGaugeCalculatorTest|FullyQualifiedName~BmsHcnFrameReferenceTest|FullyQualifiedName~BmsHellChargeBodyTrackerTest|FullyQualifiedName~BmsHellChargeNoteExecutionTest|FullyQualifiedName~BmsJudgementEngineTest|FullyQualifiedName~BmsJudgementSelectorTest|FullyQualifiedName~BmsLongNoteExecutionTest|FullyQualifiedName~BmsLongNoteModeModsTest|FullyQualifiedName~BmsLr2ComplementaryJudgementTest|FullyQualifiedName~BmsLr2GaugeParityTest|FullyQualifiedName~BmsLr2JudgementParityTest|FullyQualifiedName~BmsLr2PoorPenaltyTest|FullyQualifiedName~BmsMultiBadParityTest|FullyQualifiedName~BmsScoreProcessorTest|FullyQualifiedName~TestCourseAutoGaugeOmitsFailedGaugesFromNextStage|FullyQualifiedName~TestCourseAutoGaugeReplacesRegularGaugeChain|FullyQualifiedName~TestCourseCarriesEveryGaugeStateThroughSameList|FullyQualifiedName~TestCourseGaugeConfigurationInitializesWithCarriedHealth|FullyQualifiedName~TestCourseRecordUsesFinalGaugeTierOverStartingTier|FullyQualifiedName~TestLr2LnModeHeaderPreservesPlayerSelectionAndEndpointCount",
+  "final_solution_build_sha256": "12F20D0E0D57277FF9A51BDF1586F77E93593CBE50C3B1F14ADDB65F3E8FE0E8"
+}

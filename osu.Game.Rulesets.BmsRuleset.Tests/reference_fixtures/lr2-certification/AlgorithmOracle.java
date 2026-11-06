@@ -9,7 +9,7 @@ public final class AlgorithmOracle {
         first.setMicroTime(1000000); second.setMicroTime(1050000);
         long[][] table = JudgeProperty.LR2.getJudge(JudgeProperty.NoteType.NOTE,75,new int[]{100,100,100});
         for (JudgeAlgorithm algorithm : JudgeAlgorithm.values())
-            for (long press : new long[]{1150000,1150001})
+            for (long press : new long[]{1150000,1150001,1155000})
                 System.out.printf("%s,%d,%s,%s%n", algorithm, press,
                     algorithm.compare(first,second,press,table), second.getMicroTime()-press < table[2][0]);
     }
