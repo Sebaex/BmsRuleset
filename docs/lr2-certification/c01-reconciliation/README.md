@@ -1,0 +1,11 @@
+# C01 reconciliation
+
+Investigate the 216 ordinary and three instrumentation failures observed at `bae80bc95a2abde15cc1519d0cf784e43cbd9ced`; do not change historical expectations merely to obtain a green suite. Initial local and remote HEAD: `795f54403a5db3b1db8ffa6aa985ace38182df92`, branch `fix/lr2-endlessdream-parity-incremental`, clean tree and index. Historical baseline: `59e186c527bb8e2ab3e8ea82c6668e21b4bf147a`.
+
+Reference Java remains Endless Dream `d4995153b0a759859ebc8f859dd868abae39db5a` and parser `52c5ddcb6bf96a2688c36fee30586c89bfe49f99`. C02–C06 evidence is reused within its declared limits.
+
+| Stage | Report | Published evidence commit |
+|---|---|---|
+| R1 | [Inventory](R1_FAILURE_INVENTORY.md), [219-case mapping](R1_FAILURE_TRIAGE.csv) | Recorded after publication in the next index update |
+
+R1 is a provisional inventory, not a declaration that its 42 fixture families are 42 independent bugs. Later reports retain the original rows/IDs and provide a separate final classification. Historical C01/C06 results, manifests and failed TRXs are preserved.
