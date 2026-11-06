@@ -1,0 +1,98 @@
+{
+  "endless_dream": "d4995153b0a759859ebc8f859dd868abae39db5a",
+  "parser": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+  "jdk": "Temurin 21.0.13+9",
+  "support_jar_sha256": "38101C00CB6918FEBB9E0671558AD9F11D1DB842A699AF1EE80CA5BA217BB249",
+  "sources": [
+    {
+      "path": "core/src/bms/player/beatoraja/play/JudgeProperty.java",
+      "sha256": "96023A422504C273687D7A5C2A10F0FCD8AAAD3573B41E02E50E45E622074131",
+      "git_blob": "d359e6db9fafc83ad1c96ac663c64868eb84f831"
+    },
+    {
+      "path": "core/src/bms/player/beatoraja/play/JudgeAlgorithm.java",
+      "sha256": "EC49AC6F01E1D3E526E1DFF60EB7920060160C06AEA6C9BB70FE28FDFCBBF7C7",
+      "git_blob": "14e2bffbcc47708878432a5964b9ae3f3aaf804e"
+    },
+    {
+      "path": "core/src/bms/player/beatoraja/play/JudgeManager.java",
+      "sha256": "809F42FE164A61EED4B8E996FA824685D3ABF0D612BC24F53778879A7F85E3FC",
+      "git_blob": "d619d52fa1f7c4a024e1d2de2bab504a4a86536a"
+    },
+    {
+      "path": "core/src/bms/player/beatoraja/play/GaugeProperty.java",
+      "sha256": "BBD2A6AE7BB6D8DB58D967AC521323ED2355556EC1BA4F26C509BC8D9F42BDF7",
+      "git_blob": "e574853151335bb1fca3d484e02560163125297d"
+    },
+    {
+      "path": "core/src/bms/player/beatoraja/play/GrooveGauge.java",
+      "sha256": "5BD269DB8776F18B6FD80CB4C5492E451217C49499864D4BD66D98165E057DDF",
+      "git_blob": "581432c53ccb1d8201ebad89a50180179e170ffa"
+    },
+    {
+      "path": "core/src/bms/player/beatoraja/play/BMSPlayerRule.java",
+      "sha256": "DF128DDE293BFD09FC79EA489E5884BB95C1FB204F6C7558128ECD06230205E6",
+      "git_blob": "86a228ee731af8126b556c228c149377e74b25a1"
+    },
+    {
+      "path": "src/bms/model/BMSModel.java",
+      "sha256": "F6ADFC103B581E673AA6A2F3D9001C3191D3253C2976E271F5A5B874B8D31266",
+      "git_blob": "4386d2f89e2197286f07d958dff036e4a43aca1b"
+    },
+    {
+      "path": "src/bms/model/Note.java",
+      "sha256": "C347E5E31E28CF12CDF6ECF7065F60AC3C4A02D6605889AF6F0112BF375326AE",
+      "git_blob": "750a1fa8a7dafd69e55ee9a91d94447d0288c60b"
+    },
+    {
+      "path": "src/bms/model/NormalNote.java",
+      "sha256": "6A93A6E4634CF7F1E8A2E437DCAAC8745346393EAEC53B04AAD8AB20C3D601F5",
+      "git_blob": "6e0cc412c51763a8f749e26506b6cba585928798"
+    },
+    {
+      "path": "src/bms/model/LongNote.java",
+      "sha256": "57C49546700A2580D379F67039E8EFCB18BBD90621F2321BEACECFA5C593C62D",
+      "git_blob": "b1aca70137c016d77ff6891217bf426252323dbb"
+    },
+    {
+      "path": "src/bms/model/TimeLine.java",
+      "sha256": "F6D5DE0EDE97873ECA20D3B1FB925FA7DB5FC08D84F35755A51DF061A143985F",
+      "git_blob": "b6375176ec15eccd27a60a67acc4830b69685264"
+    },
+    {
+      "path": "src/bms/model/Mode.java",
+      "sha256": "12B102F4B23EC6A74460A4E21FC2CB9504DF507F073FFFD2319248353EB1E07D",
+      "git_blob": "c43486bf5a5aefe0e97befc75e6eb336bb482e1f"
+    }
+  ],
+  "fixtures": [
+    {
+      "file": "AlgorithmOracle.java",
+      "sha256": "405FFC25BFA451F73CCDF4FF51451169E874C15108AEE73D910EF80D3BB8948D"
+    },
+    {
+      "file": "algorithms.csv",
+      "sha256": "2D4ADBB035F7DFFFADFE6EEB0DF391ADC157944251D06E749B887D6B7135F32B"
+    },
+    {
+      "file": "collector.csv",
+      "sha256": "66D2A7B6C5DB608FC7B24BD4EA88A72B04D7DE7C9842577758A7419B1414803B"
+    },
+    {
+      "file": "CollectorOracle.java",
+      "sha256": "9BFDA41B54F289369C708773BFB7469FEE6E851096F307164525C98A36B3CF96"
+    },
+    {
+      "file": "Generate.ps1",
+      "sha256": "D5D8471F0C7F142A0A0DBDBA5E4D4EF43BE92966851E5FDA7C0421B3794A4756"
+    },
+    {
+      "file": "WindowOracle.java",
+      "sha256": "AEEBA586D051F346D42930B2CD755E2A1B862FD33030329168FC0C353623FEEA"
+    },
+    {
+      "file": "windows.csv",
+      "sha256": "2C8AD388365396EF3590799E9E5C497EEE48D3DE688BCD52B2919143EFC69B97"
+    }
+  ]
+}

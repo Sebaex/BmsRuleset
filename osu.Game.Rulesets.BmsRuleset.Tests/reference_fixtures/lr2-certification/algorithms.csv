@@ -1,0 +1,9 @@
+algorithm,press_us,replace,late_head
+Combo,1150000,true,false
+Combo,1150001,true,true
+Duration,1150000,true,false
+Duration,1150001,true,true
+Lowest,1150000,false,false
+Lowest,1150001,false,true
+Score,1150000,true,false
+Score,1150001,true,true

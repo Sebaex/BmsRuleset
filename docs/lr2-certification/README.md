@@ -6,6 +6,6 @@ Reference sources: Endless Dream `d4995153b0a759859ebc8f859dd868abae39db5a`, par
 
 | Stage | Report | Evidence commit |
 |---|---|---|
-| C01 | [Build and tests](C01_BUILD_AND_TESTS.md) | Publication pending |
+| C01 | [Build and tests](C01_BUILD_AND_TESTS.md) | [`8efac785b671adafcefb53e77f8666fc9f75fba1`](https://github.com/hinobara-ctrl/BmsRuleset/commit/8efac785b671adafcefb53e77f8666fc9f75fba1) |
 
 The evidence commit is recorded after publication in the next index update. The final index records the verdict commit without attempting a self-referential commit hash.
