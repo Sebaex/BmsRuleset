@@ -1,0 +1,26 @@
+{
+  "parent_provenance": "PROVENANCE.json at C02 commit",
+  "algorithm_source_commits": "d4995153b0a759859ebc8f859dd868abae39db5a / 52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+  "files": [
+    {
+      "file": "GaugeOracle.java",
+      "sha256_lf_utf8": "A82422C3C828A9E4CE3BD8BA546EFCBB41B937BC9AC9A322DA7A9E9FB05BF84F"
+    },
+    {
+      "file": "ScoreOracle.java",
+      "sha256_lf_utf8": "C6220B2F65C3C9C277D250ED0B17C7547B95EE511740CCADBA21D87D41E0167A"
+    },
+    {
+      "file": "gauges.csv",
+      "sha256_lf_utf8": "612CE6ECC182142C43D366F9908E7720649DD203A4A4CC3BF6F8253DF0DADDD2"
+    },
+    {
+      "file": "scores.csv",
+      "sha256_lf_utf8": "62D728EF3434B185B936304FCB49E9FED9A2DA5F8A98162BE89E6B281EE8B155"
+    },
+    {
+      "file": "ScoreData.java",
+      "sha256_lf_utf8": "195784878EFCAC2E6316E6499D6E87D234AE4BEDEC01150FB341B5E7F1413E07"
+    }
+  ]
+}
