@@ -12,6 +12,9 @@ Reference Java remains Endless Dream `d4995153b0a759859ebc8f859dd868abae39db5a` 
 | R4-C | [Explicit course overrides](R4_CORRECTIONS.md#r4-c--explicit-course-gauge-constraints) | [`f6f7af30cc3e87f6aaf339ea7cd3993f2ceb16de`](https://github.com/hinobara-ctrl/BmsRuleset/commit/f6f7af30cc3e87f6aaf339ea7cd3993f2ceb16de) |
 | R4-P | [Preview source fallback](R4_CORRECTIONS.md#r4-p--missing-and-empty-preview-source) | [`b98c9db857d24f52d25786a25900b4f6e1f7809b`](https://github.com/hinobara-ctrl/BmsRuleset/commit/b98c9db857d24f52d25786a25900b4f6e1f7809b) |
 | R4-G | [Configured GAS graph tiers](R4_CORRECTIONS.md#r4-g--configured-lower-tiers-in-legacy-gas-graphs) | [`aacdda05114ecf4ff46c67d4f21e04b912283ab3`](https://github.com/hinobara-ctrl/BmsRuleset/commit/aacdda05114ecf4ff46c67d4f21e04b912283ab3) |
-| R4-T | [Valid boundary fixture setup](R4_CORRECTIONS.md#r4-t--configure-the-fallback-tiers-the-boundary-test-observes) | Recorded after publication in the next index update |
+| R4-T | [Valid boundary fixture setup](R4_CORRECTIONS.md#r4-t--configure-the-fallback-tiers-the-boundary-test-observes) | [`97effb69fb57a21fdc2dd2f8318ca35b4d5009d3`](https://github.com/hinobara-ctrl/BmsRuleset/commit/97effb69fb57a21fdc2dd2f8318ca35b4d5009d3) |
+| R5 | [Final reconciliation](R5_FINAL_TRIAGE.md), [case classifications](R5_FAILURE_CLASSIFICATION.csv), [evidence hashes](R5_EVIDENCE.json) | Recorded after publication in the final index update |
+
+Final local observation: **167 ordinary + three instrumentation failures**, 49 original failures now passing, no newly failing identity, **427/427 focused cases passing** (the original 420 plus seven new regressions). Unique original-case categories: H1 148, H2 46, E1 7, P1 8, U1 10. Read R5's limits before drawing a merge conclusion; the suite and CI are not claimed green.
 
 R1 is a provisional inventory, not a declaration that its 42 fixture families are 42 independent bugs. Later reports retain the original rows/IDs and provide a separate final classification. Historical C01/C06 results, manifests and failed TRXs are preserved.

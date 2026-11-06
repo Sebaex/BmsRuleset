@@ -1,0 +1,467 @@
+{
+  "evaluated_source_head": "97effb69fb57a21fdc2dd2f8318ca35b4d5009d3",
+  "historical_base": "59e186c527bb8e2ab3e8ea82c6668e21b4bf147a",
+  "initial_certification_head": "bae80bc95a2abde15cc1519d0cf784e43cbd9ced",
+  "initial_reconciliation_head": "795f54403a5db3b1db8ffa6aa985ace38182df92",
+  "java": "d4995153b0a759859ebc8f859dd868abae39db5a",
+  "parser": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+  "omitted_count_method": "Count UnitTestResult outcome=NotExecuted; do not copy inconsistent TRX summary notExecuted=0",
+  "runs": [
+    {
+      "run": "baseline-graph",
+      "file": "tests.trx",
+      "sha256": "A92EEF1207BACB2B84AD7E5AAA2B861F5D179BBCE4B21BDAE44B7D18019F2192",
+      "actual_result_outcomes": {
+        "Failed": 1
+      },
+      "trx_summary": {
+        "total": "1",
+        "executed": "1",
+        "passed": "0",
+        "failed": "1",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    },
+    {
+      "run": "baseline-instrumentation",
+      "file": "tests.trx",
+      "sha256": "F291DAEED3DBD99F34AA3666F1CF77C0E2AC20BB0AA4E8F3309037B3C04E75A3",
+      "actual_result_outcomes": {
+        "Failed": 5
+      },
+      "trx_summary": {
+        "total": "5",
+        "executed": "5",
+        "passed": "0",
+        "failed": "5",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    },
+    {
+      "run": "baseline-instrumentation-02",
+      "file": "tests.trx",
+      "sha256": "3695115E6F4EB92F360EBCAE65CFDF2E48C2B44D8CA4ACA075A4971304BA1D20",
+      "actual_result_outcomes": {
+        "Passed": 1
+      },
+      "trx_summary": {
+        "total": "1",
+        "executed": "1",
+        "passed": "1",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    },
+    {
+      "run": "baseline-preview",
+      "file": "tests.trx",
+      "sha256": "1A772F34B94B97A3558D7ED17760AA5CD40C078C11FC2FDC6D4E83CF7BF7B614",
+      "actual_result_outcomes": {
+        "Failed": 8,
+        "Passed": 1
+      },
+      "trx_summary": {
+        "total": "9",
+        "executed": "9",
+        "passed": "1",
+        "failed": "8",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    },
+    {
+      "run": "baseline-run",
+      "file": "tests.trx",
+      "sha256": "6E09871D7C5F0F9A85CA0BECD706EB023DD29389E1779DD4D89B47DFFB279AB4",
+      "actual_result_outcomes": {
+        "Failed": 49,
+        "Passed": 37
+      },
+      "trx_summary": {
+        "total": "86",
+        "executed": "86",
+        "passed": "37",
+        "failed": "49",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    },
+    {
+      "run": "C01R-R3-probes-before",
+      "file": "tests.trx",
+      "sha256": "C94C3C331DFD6CDED6DCBA0492F9AE9BA8BDC9A9F144CABA467DC56056B716EE",
+      "actual_result_outcomes": {
+        "Failed": 5,
+        "Passed": 2
+      },
+      "trx_summary": {
+        "total": "7",
+        "executed": "7",
+        "passed": "2",
+        "failed": "5",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    },
+    {
+      "run": "C01R-R4-boundary-after",
+      "file": "tests.trx",
+      "sha256": "5FC8C680DCBB8AE5063AB286626A70E5A8A7569435ABECD25F3487F1FA13D516",
+      "actual_result_outcomes": {
+        "Passed": 23
+      },
+      "trx_summary": {
+        "total": "23",
+        "executed": "23",
+        "passed": "23",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    },
+    {
+      "run": "C01R-R4-course-after",
+      "file": "tests.trx",
+      "sha256": "AA5AC74DA06C82A4A7A1D572E848F706495B8A8B6EE223E44D225F416A20CB31",
+      "actual_result_outcomes": {
+        "Passed": 88
+      },
+      "trx_summary": {
+        "total": "88",
+        "executed": "88",
+        "passed": "88",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    },
+    {
+      "run": "C01R-R4-graph-after",
+      "file": "tests.trx",
+      "sha256": "9894B438E1230519C8811F768016087147E89CD67995287135DDC22834EB5F02",
+      "actual_result_outcomes": {
+        "Failed": 2,
+        "Passed": 26
+      },
+      "trx_summary": {
+        "total": "28",
+        "executed": "28",
+        "passed": "26",
+        "failed": "2",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    },
+    {
+      "run": "C01R-R4-preview-after",
+      "file": "tests.trx",
+      "sha256": "B7D996714A1C83C583BA03AD758D3C19BCBFFB71FE008910BB5439CB181716E0",
+      "actual_result_outcomes": {
+        "Passed": 72
+      },
+      "trx_summary": {
+        "total": "72",
+        "executed": "72",
+        "passed": "72",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    },
+    {
+      "run": "C01R-R5/regression",
+      "file": "regression.trx",
+      "sha256": "9C63ACD548917A4889155CF5847387842583C946B3F7C0E245E2E1EF31C2A019",
+      "actual_result_outcomes": {
+        "Passed": 3758,
+        "Failed": 167,
+        "NotExecuted": 3
+      },
+      "trx_summary": {
+        "total": "3928",
+        "executed": "3925",
+        "passed": "3758",
+        "failed": "167",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    },
+    {
+      "run": "C01R-R5/instrumentation",
+      "file": "instrumentation.trx",
+      "sha256": "97DB0FE3C638070C1000EB5D16CC811EC939EFA7311A946D9C460A3F7F9A8B6B",
+      "actual_result_outcomes": {
+        "Passed": 285,
+        "Failed": 3
+      },
+      "trx_summary": {
+        "total": "288",
+        "executed": "288",
+        "passed": "285",
+        "failed": "3",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    },
+    {
+      "run": "final-focus",
+      "file": "tests.trx",
+      "sha256": "418639D252147D1E067FCEB815139C039B3FCDA65C470CF99C7F7126D6184812",
+      "actual_result_outcomes": {
+        "Passed": 427
+      },
+      "trx_summary": {
+        "total": "427",
+        "executed": "427",
+        "passed": "427",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    },
+    {
+      "run": "C01-02/regression",
+      "file": "regression.trx",
+      "sha256": "2351E0BE7009A29875BBD4EB1A8234385FA38F307D0A15FCA9782043BF3EEBCE",
+      "actual_result_outcomes": {
+        "Passed": 3695,
+        "Failed": 216,
+        "NotExecuted": 3
+      },
+      "trx_summary": {
+        "total": "3914",
+        "executed": "3911",
+        "passed": "3695",
+        "failed": "216",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    },
+    {
+      "run": "C01-02/instrumentation",
+      "file": "instrumentation.trx",
+      "sha256": "8FA8C03414AA255D3ABA39C1840326AE11302F75757906B5938E1E17AD461226",
+      "actual_result_outcomes": {
+        "Passed": 285,
+        "Failed": 3
+      },
+      "trx_summary": {
+        "total": "288",
+        "executed": "288",
+        "passed": "285",
+        "failed": "3",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    }
+  ],
+  "category_counts": {
+    "U1": 10,
+    "H1": 148,
+    "H2": 46,
+    "P1": 8,
+    "E1": 7
+  },
+  "original_case_outcomes": {
+    "Failed": 170,
+    "Passed": 49
+  },
+  "newly_failing_case_count": 0,
+  "binaries": [
+    {
+      "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+      "sha256": "232CF8159B71806866F42AE4D64C4E42EB6899B8F8FD30B3618C028A6E064FB1"
+    },
+    {
+      "file": "osu.Game.Rulesets.BmsRuleset.dll",
+      "sha256": "782DB0B36EA4F38EF610421E2B37797245D97B469DD0EBA31EB7702730EDE4D4"
+    }
+  ],
+  "protected_subset_verification": {
+    "original_protected_executions": 420,
+    "final_protected_executions_matched": 420,
+    "new_regression_executions": 7,
+    "final_total_passed": 427,
+    "missing_or_changed_outcomes": 0,
+    "original_trx_sha256": "725F63DB7288634265E1DC15D5D039547AE0CB6F8D5DC0843E097871C4D6E61A",
+    "final_trx_sha256": "418639D252147D1E067FCEB815139C039B3FCDA65C470CF99C7F7126D6184812"
+  },
+  "ci_at_report_review": {
+    "run": 42142156136,
+    "head": "97effb69fb57a21fdc2dd2f8318ca35b4d5009d3",
+    "status": "in_progress",
+    "conclusion": null,
+    "checked_utc": "2026-11-06T01:25:47.3782583Z",
+    "url": "https://github.com/hinobara-ctrl/BmsRuleset/actions/runs/42142156136",
+    "jobs": [
+      {
+        "name": "Build and test (windows-latest)",
+        "status": "in_progress",
+        "conclusion": null,
+        "failed_steps": "Run regression tests"
+      },
+      {
+        "name": "Build and test (ubuntu-latest)",
+        "status": "completed",
+        "conclusion": "failure",
+        "failed_steps": [
+          "Run regression tests",
+          "Run judgement instrumentation tests"
+        ]
+      }
+    ]
+  }
+}
