@@ -195,7 +195,8 @@ public class BmsHealthProcessorTest
     public void TestAutoGaugeClearThresholdBoundary([Values] BmsGaugeProfileFamily family, [Values(-1, 0, 1)] int boundary)
     {
         var processor = new BmsHealthProcessor();
-        processor.SetGaugeTypes(BmsModGaugeAutoShift.AUTO_GAUGE_CHAIN, profileFamilyOverride: family);
+        processor.SetGaugeTypes([.. BmsModGaugeAutoShift.AUTO_GAUGE_CHAIN, BmsGaugeType.Easy, BmsGaugeType.AssistEasy],
+            profileFamilyOverride: family);
         var threshold = BmsGaugeProfileFactory.Create(BmsGaugeType.Normal, family).ClearThreshold;
         var normalHealth = boundary switch
         {

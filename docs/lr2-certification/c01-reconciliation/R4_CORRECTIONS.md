@@ -25,3 +25,9 @@ Tested parent: `b98c9db857d24f52d25786a25900b4f6e1f7809b`. The regular-GAS branc
 `C01R-R4-graph-after`: Release build succeeded; **28 executed, 26 passed, two failed**, zero omissions. All three new configured-chain cases pass (Easy/Assist failed before). Existing policy/mixed-replay and other graph checks pass. The two preserved historical failures are the unconditional six-series assertion (now correctly five for default Easy, formerly four) and the old short-chart ExHard failure-time expectation (0.875 versus independently supported 0.125). Neither expected value was changed. The default-Easy omission is fixed even though the old graph assertion remains red for its unrelated demand that Assist also be present.
 
 This is a correction to which configured tiers are shown, not a certification of every health value reconstructed from old hit events or of all course/profile policies. Candidate DLL, original failed probe and successor results are retained externally.
+
+## R4-T — Configure the fallback tiers the boundary test observes
+
+Tested parent: `aacdda05114ecf4ff46c67d4f21e04b912283ab3`. Only the setup call in `BmsHealthProcessorTest.TestAutoGaugeClearThresholdBoundary` changes: the six snapshots it subsequently restores now correspond to six configured tiers, including Easy/Assist. Every expected threshold, `BitIncrement`/`BitDecrement`, pass/fail assertion and gauge-attribution assertion is unchanged. No H1 method or production source changes in this commit.
+
+`C01R-R4-boundary-after`: Release build succeeded; **23 passed**, zero failures/omissions. This includes all 15 family/boundary combinations, the two original Java gauge tests, five policy and one mixed-replay case. The five original E1 setup failures pass while the intended strict boundary regression remains enforced. The two separate unseeded-course-context fixture issues are not changed by this correction.
