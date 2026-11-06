@@ -10,6 +10,11 @@ internal static class BmsPreviewAudioResolver
 {
     internal static IReadOnlyList<string> GetExistingDedicatedPreviewCandidates(string basePath, string? previewFile)
     {
+        basePath = Path.GetFullPath(string.IsNullOrEmpty(basePath) ? "." : basePath);
+        // Optional discovery must leave the event-based preview fallback available.
+        if (!Directory.Exists(basePath))
+            return [];
+
         using var fileStore = new BmsFileResourceStore(basePath);
         var candidates = new List<string>();
         var seenPaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
