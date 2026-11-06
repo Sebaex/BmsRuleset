@@ -7,6 +7,7 @@ Reference Java remains Endless Dream `d4995153b0a759859ebc8f859dd868abae39db5a` 
 | Stage | Report | Published evidence commit |
 |---|---|---|
 | R1 | [Inventory](R1_FAILURE_INVENTORY.md), [219-case mapping](R1_FAILURE_TRIAGE.csv) | [`35000f9e8d5d9953fc7093acd78b63c53cd9c60a`](https://github.com/hinobara-ctrl/BmsRuleset/commit/35000f9e8d5d9953fc7093acd78b63c53cd9c60a) |
-| R2 | [Historical expectations](R2_HISTORICAL_EXPECTATIONS.md) | Recorded after publication in the next index update |
+| R2 | [Historical expectations](R2_HISTORICAL_EXPECTATIONS.md) | [`eefd14fff41a58c1623f61d41e8b6580d4c21eac`](https://github.com/hinobara-ctrl/BmsRuleset/commit/eefd14fff41a58c1623f61d41e8b6580d4c21eac) |
+| R3 | [Current failures and correction decisions](R3_CURRENT_FAILURES.md) | Recorded after publication in the next index update |
 
 R1 is a provisional inventory, not a declaration that its 42 fixture families are 42 independent bugs. Later reports retain the original rows/IDs and provide a separate final classification. Historical C01/C06 results, manifests and failed TRXs are preserved.
