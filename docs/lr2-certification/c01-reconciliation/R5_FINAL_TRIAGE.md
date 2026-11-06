@@ -68,6 +68,8 @@ The ten U1 observations are F001/F002/F008/F009 (two chart goldens in ordinary/i
 
 The existing workflow was manually dispatched on corrected-source `97effb69fb57a21fdc2dd2f8318ca35b4d5009d3`: [run 42142156136](https://github.com/hinobara-ctrl/BmsRuleset/actions/runs/42142156136). At review (2026-11-06 01:25:47 UTC), Ubuntu completed **failure**, with both regression and instrumentation steps failing; Windows is still running after its regression step failed. Both Release builds succeeded. **Final-source CI is not green.** The previous completed initial-head run `42131431022` also failed on both operating systems. The final publication receipt records any later status available at delivery; the workflow and its filters are unchanged.
 
+Closing update (2026-11-06 01:28:21 UTC): this final-source run completed **failure on both Windows and Ubuntu**. `R5_EVIDENCE.json` preserves the earlier timestamped review snapshot; the delivery receipt includes the terminal status. No green result is inferred from successful builds or focused tests.
+
 | Stage | Published commit | Evidence |
 |---|---|---|
 | R1 | [`35000f9e8d5d9953fc7093acd78b63c53cd9c60a`](https://github.com/hinobara-ctrl/BmsRuleset/commit/35000f9e8d5d9953fc7093acd78b63c53cd9c60a) | 219 identities, original TRX integrity, omission erratum |
@@ -77,8 +79,9 @@ The existing workflow was manually dispatched on corrected-source `97effb69fb57a
 | R4-P | [`b98c9db857d24f52d25786a25900b4f6e1f7809b`](https://github.com/hinobara-ctrl/BmsRuleset/commit/b98c9db857d24f52d25786a25900b4f6e1f7809b) | Preview fallback |
 | R4-G | [`aacdda05114ecf4ff46c67d4f21e04b912283ab3`](https://github.com/hinobara-ctrl/BmsRuleset/commit/aacdda05114ecf4ff46c67d4f21e04b912283ab3) | Configured graph tiers |
 | R4-T | [`97effb69fb57a21fdc2dd2f8318ca35b4d5009d3`](https://github.com/hinobara-ctrl/BmsRuleset/commit/97effb69fb57a21fdc2dd2f8318ca35b4d5009d3) | Boundary fixture setup, same assertions |
+| R5 | [`a7779e6a863b23452bae66a65a2254c9d90838e5`](https://github.com/hinobara-ctrl/BmsRuleset/commit/a7779e6a863b23452bae66a65a2254c9d90838e5) | Final broad runs, exact 420+7 subset and unique 219-case classification |
 
-R5's report SHA is added to this table/index after publication. Final local/remote HEAD and clean tree/index are verified and recorded in the external delivery receipt; its metadata-only closing commit cannot contain its own SHA. Every stage was pushed separately to the fork. No dev change, merge, PR, squash, rebase or force push. Reference checkouts, earlier reports/inventories/patches and excluded MOD-01/02/03 production files remain intact.
+R5's published report SHA is now recorded in this table/index. Final local/remote HEAD and clean tree/index are verified and recorded in the external delivery receipt; its metadata-only closing commit cannot contain its own SHA. Every stage was pushed separately to the fork. No dev change, merge, PR, squash, rebase or force push. Reference checkouts, earlier reports/inventories/patches and excluded MOD-01/02/03 production files remain intact; the parent certification index only gains a link to this subsequent phase.
 
 ## Explicit decisions for independent review
 
