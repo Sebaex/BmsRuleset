@@ -10,6 +10,7 @@ Reference Java remains Endless Dream `d4995153b0a759859ebc8f859dd868abae39db5a` 
 | R2 | [Historical expectations](R2_HISTORICAL_EXPECTATIONS.md) | [`eefd14fff41a58c1623f61d41e8b6580d4c21eac`](https://github.com/hinobara-ctrl/BmsRuleset/commit/eefd14fff41a58c1623f61d41e8b6580d4c21eac) |
 | R3 | [Current failures and correction decisions](R3_CURRENT_FAILURES.md) | [`e8ca443dfa3d6876d6a64fd855bb19565a8d276b`](https://github.com/hinobara-ctrl/BmsRuleset/commit/e8ca443dfa3d6876d6a64fd855bb19565a8d276b) |
 | R4-C | [Explicit course overrides](R4_CORRECTIONS.md#r4-c--explicit-course-gauge-constraints) | [`f6f7af30cc3e87f6aaf339ea7cd3993f2ceb16de`](https://github.com/hinobara-ctrl/BmsRuleset/commit/f6f7af30cc3e87f6aaf339ea7cd3993f2ceb16de) |
-| R4-P | [Preview source fallback](R4_CORRECTIONS.md#r4-p--missing-and-empty-preview-source) | Recorded after publication in the next index update |
+| R4-P | [Preview source fallback](R4_CORRECTIONS.md#r4-p--missing-and-empty-preview-source) | [`b98c9db857d24f52d25786a25900b4f6e1f7809b`](https://github.com/hinobara-ctrl/BmsRuleset/commit/b98c9db857d24f52d25786a25900b4f6e1f7809b) |
+| R4-G | [Configured GAS graph tiers](R4_CORRECTIONS.md#r4-g--configured-lower-tiers-in-legacy-gas-graphs) | Recorded after publication in the next index update |
 
 R1 is a provisional inventory, not a declaration that its 42 fixture families are 42 independent bugs. Later reports retain the original rows/IDs and provide a separate final classification. Historical C01/C06 results, manifests and failed TRXs are preserved.
