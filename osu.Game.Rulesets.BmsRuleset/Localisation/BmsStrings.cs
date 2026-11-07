@@ -111,6 +111,8 @@ public static class BmsStrings
 
     public static LocalisableString ResultPercentage(double value) => get("result_percentage", value);
 
+    public static LocalisableString HealthPercentage(double value) => get("health_percentage", value);
+
     public static LocalisableString ResultJudgement(osu.Game.Rulesets.Scoring.HitResult result) => get($"result_judgement_{result.ToString().ToLowerInvariant()}");
 
     public static LocalisableString LeaderboardPosition(int position) => get("leaderboard_position", position);

@@ -308,6 +308,9 @@ Class, ExClass, and ExHard Class use the Hard, ExHard, and Hazard fill colours r
   <img src="images/skin-component-health-bar.jpg" width="480" alt="Normal gauge at low, medium, and high health, followed by Hard, ExHard, and Hazard gauges">
 </p>
 
+Add **BmsHealthValueDisplay** from the BMS component toolbox to show the current health as a percentage. It can be
+positioned and resized independently of the Health Bar.
+
 ### Song Progress
 
 Shows playback progress with a glowing marker: it stays at the top during the intro, then moves downward during play.

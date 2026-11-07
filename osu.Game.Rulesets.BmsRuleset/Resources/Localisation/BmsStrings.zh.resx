@@ -20,6 +20,7 @@
   <data name="result_number" xml:space="preserve"><value>{0:0}</value></data>
   <data name="result_maximum" xml:space="preserve"><value>/{0:0}</value></data>
   <data name="result_percentage" xml:space="preserve"><value>{0:0.00%}</value></data>
+  <data name="health_percentage" xml:space="preserve"><value>{0:0.0%}</value></data>
   <data name="result_judgement_perfect" xml:space="preserve"><value>PGREAT</value></data>
   <data name="result_judgement_great" xml:space="preserve"><value>GREAT</value></data>
   <data name="result_judgement_good" xml:space="preserve"><value>GOOD</value></data>
