@@ -609,8 +609,8 @@ public sealed partial class BmsGaugeHistoryGraph : CompositeDrawable, IBmsResult
 
     private static Color4 colourFor(BmsGaugeType type) => type switch
     {
-        BmsGaugeType.AssistEasy => new Color4(75, 210, 235, 255),
-        BmsGaugeType.Easy => new Color4(75, 150, 255, 255),
+        BmsGaugeType.AssistEasy => new Color4(206, 1, 214, 255),
+        BmsGaugeType.Easy => new Color4(86, 202, 67, 255),
         _ => BmsGaugeProfileFactory.Create(type).Display.FillColour,
     };
 

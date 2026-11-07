@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Resources;
 using osu.Framework.Localisation;
+using osu.Game.Rulesets.BmsRuleset.UI.SongSelect.Lamp;
+using osu.Game.Scoring;
 
 
 namespace osu.Game.Rulesets.BmsRuleset.Localisation;
@@ -60,6 +62,22 @@ public static class BmsStrings
     public static LocalisableString ResultPerformance => get("result_performance");
 
     public static LocalisableString ResultAccuracy => get("result_accuracy");
+
+    public static LocalisableString ResultClearType (ScoreInfo? score) =>
+        BmsLampCalculator.Calculate(score) switch
+        {
+            BmsLamp.NoPlay => "No Play",
+            BmsLamp.Failed => "Failed",
+            BmsLamp.AssistClear => "Assist Clear",
+            BmsLamp.EasyClear => "Easy Clear",
+            BmsLamp.Clear => "Clear",
+            BmsLamp.HardClear => "Hard Clear",
+            BmsLamp.ExHardClear => "Ex Hard Clear",
+            BmsLamp.FullCombo => "Full Combo",
+            BmsLamp.Perfect => "Perfect Clear",
+            BmsLamp.Max => "Max",
+            _ => throw new ArgumentOutOfRangeException(),
+        };
 
     public static LocalisableString ResultCombo => get("result_combo");
 

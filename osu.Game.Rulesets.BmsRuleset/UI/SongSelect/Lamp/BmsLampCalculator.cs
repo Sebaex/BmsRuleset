@@ -25,18 +25,19 @@ public static class BmsLampCalculator
         if (score.Rank == ScoreRank.F)
             return BmsLamp.Failed;
 
-        if (hasOnly(score, HitResult.Perfect))
+        if (hasOnly(score, HitResult.Perfect, HitResult.Miss))
             return BmsLamp.Max;
 
-        if (hasOnly(score, HitResult.Perfect, HitResult.Great))
+        if (hasOnly(score, HitResult.Perfect, HitResult.Great, HitResult.Miss))
             return BmsLamp.Perfect;
 
-        if (hasOnly(score, HitResult.Perfect, HitResult.Great, HitResult.Good))
+        if (hasOnly(score, HitResult.Perfect, HitResult.Great, HitResult.Good, HitResult.Miss))
             return BmsLamp.FullCombo;
 
         return score.Mods.OfType<BmsModGauge>().FirstOrDefault()?.GaugeType switch
         {
-            BmsGaugeType.AssistEasy => BmsLamp.LightAssistClear,
+            BmsGaugeType.Class or BmsGaugeType.ExClass or BmsGaugeType.ExHardClass => BmsLamp.NoPlay, 
+            BmsGaugeType.AssistEasy => BmsLamp.AssistClear,
             BmsGaugeType.Easy => BmsLamp.EasyClear,
             BmsGaugeType.Hard => BmsLamp.HardClear,
             BmsGaugeType.ExHard => BmsLamp.ExHardClear,

@@ -118,9 +118,8 @@ public sealed partial class BmsLampDisplay : CompositeDrawable
         BmsLamp.NoPlay => new Color4(40, 44, 48, 255),
         BmsLamp.Failed => new Color4(233, 47, 10, 255),
         BmsLamp.AssistClear => new Color4(206, 1, 214, 255),
-        BmsLamp.LightAssistClear => new Color4(221, 162, 223, 255),
         BmsLamp.EasyClear => new Color4(86, 202, 67, 255),
-        BmsLamp.Clear => new Color4(245, 199, 88, 255),
+        BmsLamp.Clear => new Color4(90, 175, 255, 255),
         BmsLamp.HardClear => new Color4(248, 247, 245, 255),
         BmsLamp.ExHardClear => new Color4(239, 253, 9, 255),
         BmsLamp.Max or BmsLamp.Perfect or BmsLamp.FullCombo

@@ -23,13 +23,13 @@ namespace osu.Game.Rulesets.BmsRuleset.UI.HudComponents;
 public sealed partial class BmsHealthDisplay : BmsHudComponent
 {
     [SettingSource(typeof(BmsStrings), nameof(BmsStrings.AssistEasyGaugeFillColour), nameof(BmsStrings.AssistEasyGaugeFillColourDescription))]
-    public BindableColour4 AssistEasyFillColour { get; } = new(new Color4(0, 200, 255, 255));
+    public BindableColour4 AssistEasyFillColour { get; } = new(new Color4(200, 0, 255, 255));
 
     [SettingSource(typeof(BmsStrings), nameof(BmsStrings.EasyGaugeFillColour), nameof(BmsStrings.EasyGaugeFillColourDescription))]
-    public BindableColour4 EasyFillColour { get; } = new(new Color4(80, 180, 255, 255));
+    public BindableColour4 EasyFillColour { get; } = new(new Color4(45, 225, 80, 255));
 
     [SettingSource(typeof(BmsStrings), nameof(BmsStrings.NormalGaugeFillColour), nameof(BmsStrings.NormalGaugeFillColourDescription))]
-    public BindableColour4 NormalFillColour { get; } = new(new Color4(45, 225, 80, 255));
+    public BindableColour4 NormalFillColour { get; } = new(new Color4(80, 180, 255, 255));
 
     [SettingSource(typeof(BmsStrings), nameof(BmsStrings.HardGaugeFillColour), nameof(BmsStrings.HardGaugeFillColourDescription))]
     public BindableColour4 HardFillColour { get; } = new(new Color4(220, 55, 50, 255));

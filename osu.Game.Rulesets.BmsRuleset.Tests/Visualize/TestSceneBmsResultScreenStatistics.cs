@@ -13,6 +13,7 @@ using osu.Framework.Graphics.Rendering.Dummy;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.UserInterface;
+using osu.Framework.Platform;
 using osu.Framework.Screens;
 using osu.Framework.Testing;
 using osu.Game.Beatmaps;
@@ -27,6 +28,7 @@ using osu.Game.Rulesets.BmsRuleset.Beatmaps;
 using osu.Game.Rulesets.BmsRuleset.Beatmaps.Objects;
 using osu.Game.Rulesets.BmsRuleset.BmsParser;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.Mods.Gauge;
+using osu.Game.Rulesets.BmsRuleset.Localisation;
 using osu.Game.Rulesets.BmsRuleset.UI.Icons;
 using osu.Game.Rulesets.BmsRuleset.UI.Ranking;
 using osu.Game.Rulesets.BmsRuleset.UI.Result;
@@ -525,6 +527,88 @@ public partial class TestSceneBmsResultScreenStatistics : OsuManualInputManagerT
                                                                                                            && bar.Proportion >= 0 && bar.Proportion <= 1));
         AddAssert("empty score bars stay empty", () => !empty || screen.ChildrenOfType<BmsResultBar>().All(bar => bar.Proportion == 0));
     }
+
+    [Test]
+    public void TestClearDisplay()
+    {
+        BmsResultFittedText clearText = null;
+        var testScore = createScore();
+        Random rnd = new Random();
+
+        void refresh()
+        {
+            var text = clearText.ChildrenOfType<OsuSpriteText>().Single();
+            text.Text = BmsStrings.ResultClearType(testScore);
+            text.Colour = BmsResultColours.ClearTypeColor(testScore);
+        }
+
+        AddStep("show clear display", () =>
+        {
+            testScore.Statistics[HitResult.Ok] = rnd.Next(5,30);
+            testScore.Statistics[HitResult.Meh] = rnd.Next(5,30);
+            testScore.Statistics[HitResult.Good] = rnd.Next(5,30);
+            testScore.Statistics[HitResult.Great] = rnd.Next(5,30);
+
+            clearText = new BmsResultClearDisplay(testScore);
+            Child = new Container
+            {
+                RelativeSizeAxes = Axes.Both,
+                Child = clearText,
+                
+            };
+        });
+        AddStep("'Assist Clear' shown", () =>
+        {
+            testScore.Mods = [
+                new BmsModAssistEasyGauge()
+            ];
+            refresh();
+        });
+        AddStep("'Easy Clear' shown", () =>
+        {
+            testScore.Mods = [
+                new BmsModEasyGauge()
+            ];
+            refresh();
+        });
+        AddStep("'Clear' shown", () =>
+        {
+            testScore.Mods = [];
+            refresh();
+        });
+        AddStep("'Hard Clear' shown", () =>
+        {
+            testScore.Mods = [
+                new BmsModHardGauge()
+            ];
+            refresh();
+        });
+        AddStep("'Ex Hard Clear' shown", () =>
+        {
+            testScore.Mods = [
+                new BmsModExHardGauge()
+            ];
+            refresh();
+        });
+        AddStep("'Full Combo' shown", () =>
+        {
+            testScore.Mods = [];
+            testScore.Statistics[HitResult.Ok] = 0;
+            testScore.Statistics[HitResult.Meh] = 0;
+            refresh();
+        });
+        AddStep("'Perfect Clear' shown", () =>
+        {
+            testScore.Statistics[HitResult.Good] = 0;
+            refresh();
+        });
+        AddStep("'Max' shown", () =>
+        {
+            testScore.Statistics[HitResult.Great] = 0;
+            refresh();
+        });
+    }
+
 
     private ScoreInfo createScore()
     {
