@@ -254,7 +254,9 @@
   <data name="mod_long_note" xml:space="preserve"><value>从头部保持至尾部，结算一次判定。保持到尾部时采用头部判定，提前松开时综合头部和松键判定。</value></data>
   <data name="mod_charge_note" xml:space="preserve"><value>头尾分别判定；在尾部松开按键，或将皿切换至相反方向。</value></data>
   <data name="mod_hell_charge_note" xml:space="preserve"><value>头尾分别判定，主体期间按住积累血量回复，松开积累扣血。</value></data>
-  <data name="mod_auto_gauge" xml:space="preserve"><value>从最难的血条开始；失败后自动降至下一档。</value></data>
+  <data name="mod_gauge_auto_shift" xml:space="preserve"><value>从最难的血条开始；失败后自动降至下一档。</value></data>
+  <data name="gas_lower_limit" xml:space="preserve"><value>最低血条档位</value></data>
+  <data name="gas_lower_limit_description" xml:space="preserve"><value>选择 GAS 可使用的最低血条档位。</value></data>
   <data name="gauge_description" xml:space="preserve"><value>使用 BMS {0} 血条。</value></data>
   <data name="song_progress_colour" xml:space="preserve"><value>指示块颜色</value></data>
   <data name="song_progress_colour_description" xml:space="preserve"><value>发光歌曲进度指示块的颜色。</value></data>

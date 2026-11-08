@@ -33,3 +33,11 @@ Release/net10.0, SDK 10.0.401, source parent c5c578caed6a9185ace208a91c546bd24bc
 User explicitly approves current palette; translation synchronization lacks an exception and remains a visible production-resource limitation
 
 Sensitivity: Wrong exact color or actual HUD binding fails; missing/wrong fallback text fails; original resource completeness still fails rather than being weakened
+
+## TM-H-TR01 [TM-H]
+
+Release/net10.0, SDK 10.0.401, source parent 15d77ea4b6fd39989b115c3b520713dce81a40e4. Filter: `FullyQualifiedName~BmsLocalisationTest|FullyQualifiedName~BmsGaugeHistoryConfiguredChainTest`. 23/23 pass, 0 fail, 0 other. TRX SHA-256 `D65EC4008CD47BF09698A6BB1538368E459A006A557BC612152C2534764C9F7D`; logs/filter/binary hashes retained under `evidencias-paridad/TM-H-TR01`. IDs: F133.
+
+2026-11-08 user explicitly authorized contextual GAS translations; resource completeness fixed rather than exempted
+
+Sensitivity: Removing any translation or retaining orphan key still fails original F133; exact bilingual cases catch unresolved/wrong text and language restoration

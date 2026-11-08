@@ -148,10 +148,10 @@ public class BmsLocalisationTest
         Assert.That(text.Value, Is.EqualTo(chinese));
     }
 
-    [TestCase("gas_lower_limit", "Lowest Gauge")]
-    [TestCase("gas_lower_limit_description", "Select the lowest gauge which GAS will work with.")]
-    [TestCase("mod_gauge_auto_shift", "Start with the hardest gauge. When you fail, drop to the next tier.")]
-    public void TestMissingChineseGasResourceFallsBackToExactEnglishText(string key, string expected)
+    [TestCase("gas_lower_limit", "Lowest Gauge", "最低血条档位")]
+    [TestCase("gas_lower_limit_description", "Select the lowest gauge which GAS will work with.", "选择 GAS 可使用的最低血条档位。")]
+    [TestCase("mod_gauge_auto_shift", "Start with the hardest gauge. When you fail, drop to the next tier.", "从最难的血条开始；失败后自动降至下一档。")]
+    public void TestGasResourceUsesExactTranslationAndRestoresEnglish(string key, string english, string chinese)
     {
         var text = key switch
         {
@@ -161,10 +161,10 @@ public class BmsLocalisationTest
             _ => throw new ArgumentOutOfRangeException(nameof(key)),
         };
         config.SetValue(FrameworkSetting.Locale, "zh");
-        Assert.That(localisation.GetLocalisedString(text), Is.EqualTo(expected));
+        Assert.That(localisation.GetLocalisedString(text), Is.EqualTo(chinese));
         Assert.That(localisation.GetLocalisedString(text), Is.Not.EqualTo(key));
         config.SetValue(FrameworkSetting.Locale, "en");
-        Assert.That(localisation.GetLocalisedString(text), Is.EqualTo(expected));
+        Assert.That(localisation.GetLocalisedString(text), Is.EqualTo(english));
     }
 
     [Test]

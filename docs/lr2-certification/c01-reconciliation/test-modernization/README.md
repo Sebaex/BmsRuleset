@@ -1,6 +1,6 @@
 # C01-TM — Source-backed test modernization
 
-Authorized starting local/remote HEAD `2ec37021bb1cacf809476ce5b37a562b1839ce5e`, branch `fix/lr2-endlessdream-parity-incremental`, origin `hinobara-ctrl/BmsRuleset`; clean tree/index verified 2026-11-07. Only tests and this successor documentation may change. Historical reports and production remain protected.
+Authorized starting local/remote HEAD `2ec37021bb1cacf809476ce5b37a562b1839ce5e`, branch `fix/lr2-endlessdream-parity-incremental`, origin `hinobara-ctrl/BmsRuleset`; clean tree/index verified 2026-11-07. Tests and this successor documentation may change. **2026-11-08 explicit user exception:** translate the missing GAS resources correctly using local context; only `Resources/Localisation/BmsStrings.zh.resx` is additionally authorized. All functional production code and historical reports remain protected.
 
 Before editing, all **219** original identities were joined from R1/R5 and the ten U1 successor decisions. The [migration matrix](TEST_MIGRATION_MATRIX.csv) records original cases, assertion summaries/full-method region hashes, protected functionality, intended batch, truth source and before/after results. All 42 original source files, full method regions and the initial CSV are archived outside Git in `nuevo-trabajo/modernizacion-tests-20261107`; its `INITIAL_HASHES.json` authenticates the initial snapshots. Previous outcomes are explicitly R5 evidence, not a fresh broad execution. The 49 previously corrected identities are preserved.
 

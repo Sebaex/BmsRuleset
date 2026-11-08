@@ -15,3 +15,7 @@ Two constants and an additional bound-check helper; no chart data, selection, co
 ## H — palette/localization
 
 Six original color observations are adapted using the explicitly approved palette, with exact values and unchanged modes/clear-line assertions. Three parameterized localization fallback cases are added; original F133 remains byte-for-byte unchanged. Its **one genuine resource synchronization failure** remains visible in the same focused execution (40/41 pass), and cannot be repaired by test changes alone. No production .resx or localization method changes. Matrix routing of F134–F139 is corrected from provisional filename-based A to semantic batch D: their class is BmsModGaugeAutoShiftTest in historical filename BmsModAutoGaugeTest.cs; no case or scope is added.
+
+### H-TR successor
+
+After explicit user authorization, the single Chinese production resource gains the two missing GAS setting translations and the active mod-description key replaces its orphan predecessor. F133 itself is unchanged. The three new H tests now assert actual Chinese translations and exact restoration to English. `TM-H-TR01` passes 23/23 including all localisation cases, strict key/placeholder equality and configured GAS-chain controls. No blanket fallback exception was introduced. Resume the original lot plan after this separately published correction.
