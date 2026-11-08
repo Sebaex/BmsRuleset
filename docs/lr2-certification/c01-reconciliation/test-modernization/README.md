@@ -10,4 +10,6 @@ Sources have mandatory priority: pinned executable Endless Dream/parser; capture
 
 New functional findings which cannot be corrected within test-only scope remain visible in [pending defects](PENDING_DEFECTS.md); they are counted separately from the original 219 identities.
 
+**Additional explicit exception:** the user authorized the minimal GAS Default/Value alignment after its isolated reproduction. See [correction and validation](GAS_SERIALISATION_FIX.md); all other functional production remains protected. This authorization supersedes the production prohibition only for that specific setting.
+
 **[F099 remains completely excluded](F099_DEFERRED.md).** Broad validation and the exact protected 427-case comparison are pending after the lots. A persistent execution anticipated at least five minutes will be launched only after independent work is complete, then the current intervention ends immediately. No false green result, suppressed case, workflow/dependency change, production correction or PR is authorized.

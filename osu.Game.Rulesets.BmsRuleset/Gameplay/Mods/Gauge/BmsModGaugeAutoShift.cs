@@ -49,7 +49,7 @@ public class BmsModGaugeAutoShift : Mod, IApplicableToHealthProcessor, IApplicab
     public Bindable<BmsGaugeProfileFamily?> GaugeProfileFamily { get; } = new();
 
     [SettingSource(typeof(BmsStrings), nameof(BmsStrings.GasLowerLimit), nameof(BmsStrings.GasLowerLimitDescription))]
-    public Bindable<BmsGasLowerLimit> GasMode { get; } = new() { Value = BmsGasLowerLimit.Easy };
+    public Bindable<BmsGasLowerLimit> GasMode { get; } = new(BmsGasLowerLimit.Easy);
 
     public override IEnumerable<(LocalisableString setting, LocalisableString value)> SettingDescription => [];
 

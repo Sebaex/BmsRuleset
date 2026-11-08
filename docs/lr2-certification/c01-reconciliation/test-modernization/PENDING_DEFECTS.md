@@ -1,5 +1,7 @@
 # New findings kept visible
 
+Successor status: TM-NEW-01 was subsequently authorized for a minimal production correction. See [the correction report](GAS_SERIALISATION_FIX.md). The diagnosis and failed executions below remain historical evidence; they are not overwritten by the passing successor run.
+
 ## TM-NEW-01 — GAS Assist lower limit lost during API serialization
 
 Confirmed by `BmsModGaugeAutoShiftTest.TestGasLowerLimitSurvivesCloneAndSerialisation(Assist)` in TM-D03. This is a **new test identity, not another original C01 observation**. No production correction or skip is applied. Original F139's health serialization/control checks are independently repaired and pass.

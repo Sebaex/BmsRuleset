@@ -73,3 +73,7 @@ Release/net10.0, SDK 10.0.401, source parent 97f729226b8d1439ff11bd09882cda23320
 Accepted real Course/GAS configuration and executed Java short-chart arithmetic replace obsolete assumptions; newly exposed setting loss is left failing
 
 Sensitivity: Lost/refilled seeds, wrong hidden/public control, omitted tier, stale attribution or wrong failure event fail exact checks; Assist serialization remains a separate visible production limitation
+
+## TM-GAS-FIX01 [TM-GAS-FIX]
+
+Release/net10.0 SDK 10.0.401. D1 filter repeated against the authorized production correction: 139/139 pass, zero failed/omitted; includes one new reset test. TRX SHA-256: 13B1972E9D605942F88C7F0F490AE5B150C0352C691DE30ACC4B394876A7E024. TM-D01/D02/D03 remain preserved. See GAS_SERIALISATION_FIX.md for scope and limits.

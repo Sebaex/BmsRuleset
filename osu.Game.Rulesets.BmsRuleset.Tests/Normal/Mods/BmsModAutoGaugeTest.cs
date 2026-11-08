@@ -261,9 +261,25 @@ public class BmsModGaugeAutoShiftTest
         TestContext.WriteLine($"GAS_SERIALISATION requested={limit} default={mod.GasMode.Default} clone={clone.GasMode.Value} settings=[{string.Join(",", api.Settings.Keys)}] restored={restored.GasMode.Value}");
         Assert.Multiple(() =>
         {
+            Assert.That(mod.GasMode.Default, Is.EqualTo(BmsGasLowerLimit.Easy), "The serialized default matches a freshly constructed mod.");
+            Assert.That(api.Settings.ContainsKey("gas_mode"), Is.EqualTo(limit != BmsGasLowerLimit.Easy), "Only the actual default may be omitted.");
             Assert.That(clone.GasMode.Value, Is.EqualTo(limit), "Clone preserves the selected lower limit.");
             Assert.That(restored.GasMode.Value, Is.EqualTo(limit), "Serialisation preserves the selected lower limit.");
+            Assert.That(restored.ClassHealth.Value, Is.EqualTo(.81), "The carried Course seed remains independent of the lower limit.");
         });
+    }
+
+    [Test]
+    public void TestGasLowerLimitResetUsesConstructionDefault()
+    {
+        var mod = new BmsModGaugeAutoShift();
+        Assert.That(mod.GasMode.Value, Is.EqualTo(BmsGasLowerLimit.Easy));
+        Assert.That(mod.GasMode.IsDefault, Is.True);
+        mod.GasMode.Value = BmsGasLowerLimit.Assist;
+        Assert.That(mod.GasMode.IsDefault, Is.False);
+        mod.GasMode.SetDefault();
+        Assert.That(mod.GasMode.Value, Is.EqualTo(BmsGasLowerLimit.Easy));
+        Assert.That(mod.GasMode.IsDefault, Is.True);
     }
 
     [TestCase(BmsGaugeType.Class)]
