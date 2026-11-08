@@ -17,3 +17,11 @@ Release/net10.0, SDK 10.0.401, source parent 6d5b6da05e2b2dcc8cd0c5303803f5001cf
 Framework LocalisableString.ToString uses invariant formatting, unlike the old current-culture interpolation; full fixture now reaches all later assertions
 
 Sensitivity: Wrong stage aggregate/text still violates independent expected score; explicit comma update-host case would fail old helper and executes full integration
+
+## TM-E02 [TM-E]
+
+Release/net10.0, SDK 10.0.401, source parent e2b2a6248948d65dc53a6b7e0f82db0f669cdd0b. Filter: `FullyQualifiedName~BmsTimingMapQueryTest|FullyQualifiedName~BmsExecutedJavaJudgementTest.OriginalJavaWindowsMatchSupportedLayouts`. 11/11 pass, 0 fail, 0 other. TRX SHA-256 `A1F78629B56600DD75846EF309F511BFD7743F6371123A87CBA8B24EF91E7D21`; logs/filter/binary hashes retained under `evidencias-paridad/TM-E02`. IDs: F001, F002, F008, F009.
+
+U1-A exactly recovered old hashes with old bounds; LR2 BAD 200/fast empty POOR 1000 independently reconstruct current coverage
+
+Sensitivity: Truncated head coverage/end margin fails independent arithmetic; wrong visibility fails separate immutable-point interpolation; original exact hashes retain bit-level sensitivity
