@@ -20,8 +20,8 @@ public class BmsHitErrorMeterTest
 
         Assert.Multiple(() =>
         {
-            Assert.That(domain.FastOffset, Is.EqualTo(-500));
-            Assert.That(domain.SlowOffset, Is.EqualTo(500));
+            Assert.That(domain.FastOffset, Is.EqualTo(-1000));
+            Assert.That(domain.SlowOffset, Is.EqualTo(1000));
             Assert.That(domain.RelativePosition(domain.FastOffset), Is.Zero);
             Assert.That(domain.RelativePosition(domain.SlowOffset), Is.EqualTo(1));
             Assert.That(domain.RelativePosition(0), Is.EqualTo(0.5f));
@@ -62,18 +62,18 @@ public class BmsHitErrorMeterTest
         });
     }
 
-    [TestCase(false, false, 0, -165, 210)]
-    [TestCase(false, false, 1, -165, 210)]
-    [TestCase(false, false, 2, -165, 210)]
-    [TestCase(false, true, 0, -500, 210)]
-    [TestCase(false, true, 1, -500, 210)]
-    [TestCase(false, true, 2, -500, 210)]
-    [TestCase(true, false, 0, -112.5, 112.5)]
-    [TestCase(true, false, 1, -45, 45)]
-    [TestCase(true, false, 2, -15, 15)]
-    [TestCase(true, true, 0, -500, 150)]
-    [TestCase(true, true, 1, -500, 150)]
-    [TestCase(true, true, 2, -500, 150)]
+    [TestCase(false, false, 0, -200, 200)]
+    [TestCase(false, false, 1, -200, 200)]
+    [TestCase(false, false, 2, -200, 200)]
+    [TestCase(false, true, 0, -1000, 200)]
+    [TestCase(false, true, 1, -1000, 200)]
+    [TestCase(false, true, 2, -1000, 200)]
+    [TestCase(true, false, 0, -100, 100)]
+    [TestCase(true, false, 1, -40, 40)]
+    [TestCase(true, false, 2, -18, 18)]
+    [TestCase(true, true, 0, -1000, 100)]
+    [TestCase(true, true, 1, -1000, 40)]
+    [TestCase(true, true, 2, -1000, 18)]
     public void TestPoorUsesVisibleWindowEdges(bool noBad, bool showEmptyPoor, int constraint, double expectedFast, double expectedSlow)
     {
         var windows = BmsJudgementProfileProvider.GetTable(BmsLayoutVariant.Bme7K, 1, 0.75, tail: false);
@@ -105,9 +105,9 @@ public class BmsHitErrorMeterTest
         });
     }
 
-    [TestCase(0, 187.5)]
-    [TestCase(1, 150)]
-    [TestCase(2, 150)]
+    [TestCase(0, 150)]
+    [TestCase(1, 75)]
+    [TestCase(2, 26.25)]
     public void TestNoBadUsesOutermostSlowWindowAtEasyRank(int constraint, double expectedSlow)
     {
         var windows = BmsJudgementProfileProvider.GetTable(BmsLayoutVariant.Bme7K, 1, 1.25, tail: false);
@@ -121,7 +121,7 @@ public class BmsHitErrorMeterTest
 
         var (fastEdge, slowEdge) = BmsHitErrorMeter.GetPoorDisplayOffsets(windows, showEmptyPoor: true);
 
-        Assert.That(fastEdge, Is.EqualTo(-500));
+        Assert.That(fastEdge, Is.EqualTo(-1000));
         Assert.That(slowEdge, Is.EqualTo(expectedSlow));
     }
 

@@ -25,7 +25,8 @@ public class BmsColumnNoteIndexTest
 
         moved.StartTime = 500;
         column.RefreshNoteTiming(moved);
-        var outcome = column.HandleNotePress(new BmsPressContext(600, new BmsFrameContext(3001, 1)));
+        // LR2 empty POOR is early-only: keep the press before the moved, already judged head.
+        var outcome = column.HandleNotePress(new BmsPressContext(400, new BmsFrameContext(3001, 1)));
         Assert.That(outcome, Is.EqualTo(PressOutcome.ForEmptyPoor(500, 1)));
         Assert.That(column.GetNoteCandidates(), Is.EqualTo(notes.Take(2)));
     }
@@ -62,9 +63,17 @@ public class BmsColumnNoteIndexTest
     {
         var beatmap = new BmsBeatmap { LayoutVariant = BmsLayoutVariant.Pms9K, Rank = 3 };
         var notes = Enumerable.Range(0, 2).Select(_ => new BmsNote { Beatmap = beatmap, Column = 1, StartTime = 1000 }).ToArray();
-        var column = new BmsJudgementEngine(notes, beatmap.LayoutVariant, 1, new BmsRecordingJudgementOutput()).GetColumn(1);
+        var output = new BmsRecordingJudgementOutput();
+        var column = new BmsJudgementEngine(notes, beatmap.LayoutVariant, 1, output).GetColumn(1);
         Assert.That(column.HandleNotePress(new BmsPressContext(600, new BmsFrameContext(600, 1))).Kind, Is.EqualTo(PressOutcomeKind.EmptyPoor));
-        Assert.That(notes.All(column.HasPmsMistake), Is.True);
+        // LR2 ALWAYS replaces the old PMS ONE marker: neither stacked head is exempt from its later POOR.
+        Assert.That(notes.All(n => !column.HasPmsMistake(n)), Is.True);
+        Assert.That(output.MainResults, Is.Zero);
+        foreach (var note in notes)
+            column.CheckRegisteredNotePassive(note, new BmsFrameContext(1200.001, 1));
+        Assert.That(output.MainResults, Is.EqualTo(2));
+        Assert.That(notes.Select(n => output.GetMainResult(n).Type), Is.All.EqualTo(HitResult.Meh));
+        Assert.That(notes.Select(n => output.GetMainResult(n).SuppressPenalty), Is.All.False);
     }
 
     [TestCase(63)]

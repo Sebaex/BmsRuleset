@@ -41,3 +41,11 @@ Release/net10.0, SDK 10.0.401, source parent 15d77ea4b6fd39989b115c3b520713dce81
 2026-11-08 user explicitly authorized contextual GAS translations; resource completeness fixed rather than exempted
 
 Sensitivity: Removing any translation or retaining orphan key still fails original F133; exact bilingual cases catch unresolved/wrong text and language restoration
+
+## TM-A03 [TM-A]
+
+Release/net10.0, SDK 10.0.401, source parent 482ba56430c2f12ccd659d6796818cd550648179. Filter: `(FullyQualifiedName~BmsRulesetTest|FullyQualifiedName~BmsHitWindowsTest|FullyQualifiedName~BmsModNoGoodNoGreatTest|FullyQualifiedName~BmsHitErrorMeterTest|FullyQualifiedName~BmsColumnNoteIndexTest|FullyQualifiedName~BmsExecutedJavaJudgementTest)&FullyQualifiedName!~DurationSearchSkipsCloserHeadsWithNoHitWindow`. 91/91 pass, 0 fail, 0 other. TRX SHA-256 `90BD3A1B9C9F760F49BCA54FD8CF5B00B36D0F30AFC921F348083B2A807D6FF4`; logs/filter/binary hashes retained under `evidencias-paridad/TM-A03`. IDs: F010, F011, F063, F064, F065, F066, F067, F068, F069, F070, F071, F072, F073, F074, F075, F076, F077, F078, F100, F101, F102, F103, F104, F105, F106, F107, F108, F109, F127, F128, F129.
+
+Original Java LR2 windows and ALWAYS/early-only policies replace incompatible historical bounds; C# UI/mod contracts preserve original consumer checks
+
+Sensitivity: CSV-derived inside/on/outside controls catch wrong bounds/signs/inclusivity; exact counts and non-suppressed stacked misses catch policy/index regressions

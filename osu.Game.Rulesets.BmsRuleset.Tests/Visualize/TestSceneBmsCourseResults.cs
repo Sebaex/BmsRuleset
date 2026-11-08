@@ -47,7 +47,7 @@ public partial class TestSceneBmsCourseResults : ScreenTestScene
     [Resolved]
     private FrameworkConfigManager frameworkConfig { get; set; } = null!;
 
-    private string? previousHostLocale;
+    private string previousHostLocale = null!;
 
     [TearDownSteps]
     public void RestoreHostLocale() => AddStep("restore test host locale", () =>
