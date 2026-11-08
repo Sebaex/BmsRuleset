@@ -49,3 +49,11 @@ Release/net10.0, SDK 10.0.401, source parent 482ba56430c2f12ccd659d6796818cd5506
 Original Java LR2 windows and ALWAYS/early-only policies replace incompatible historical bounds; C# UI/mod contracts preserve original consumer checks
 
 Sensitivity: CSV-derived inside/on/outside controls catch wrong bounds/signs/inclusivity; exact counts and non-suppressed stacked misses catch policy/index regressions
+
+## TM-A-UI01 [TM-A]
+
+Release/net10.0, SDK 10.0.401, source parent 11cb743a23a7654dd43dc9623756e728aabf44f8. Filter: `FullyQualifiedName~TestSceneBmsColumnJudgement|FullyQualifiedName~TestSceneBmsJudgementAlgorithm|FullyQualifiedName~TestColourBarMatchesJudgements|FullyQualifiedName~TestPoorLinesFollowVisibleWindowEnds`. 32/32 pass, 0 fail, 0 other. TRX SHA-256 `26C7348E1FC494BB62202E822B0F734E630AEB9E5ADC3A78DC480EBD427EBD3A`; logs/filter/binary hashes retained under `evidencias-paridad/TM-A-UI01`. IDs: F174, F175, F176, F177, F181, F182, F183, F184, F204, F205, F206, F207, F208, F209, F210, F211, F212.
+
+Java fixed BAD 200 and early empty POOR 1000 alter logical/spatial bounds; test inputs preserve genuine overlapping candidate selection
+
+Sensitivity: Wrong primary now fails event order even if both notes are BAD; old deadlines, missing endpoints and wrong meter width/edge still fail exact integration checks

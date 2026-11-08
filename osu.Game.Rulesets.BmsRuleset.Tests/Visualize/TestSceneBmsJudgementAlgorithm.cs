@@ -38,7 +38,7 @@ public partial class TestSceneBmsJudgementAlgorithm : BmsPlayerTestScene
                 new BmsNote { StartTime = 3000, Column = 1 },
                 new BmsNote { StartTime = 3100, Column = 1 },
                 new BmsNote { StartTime = 6000, Column = 1 },
-                new BmsNote { StartTime = 6450, Column = 1 },
+                new BmsNote { StartTime = 6350, Column = 1 },
                 new BmsNote { StartTime = 10000, Column = 1 },
             ],
         };
@@ -51,8 +51,8 @@ public partial class TestSceneBmsJudgementAlgorithm : BmsPlayerTestScene
         new BmsReplayFrame(0),
         new BmsReplayFrame(3100, BmsAction.Key1),
         new BmsReplayFrame(3101),
-        new BmsReplayFrame(6250, BmsAction.Key1),
-        new BmsReplayFrame(6251),
+        new BmsReplayFrame(6200, BmsAction.Key1),
+        new BmsReplayFrame(6201),
         new BmsReplayFrame(11000),
     ];
 
@@ -76,7 +76,7 @@ public partial class TestSceneBmsJudgementAlgorithm : BmsPlayerTestScene
     }
 
     [TestCase(BmsJudgementAlgorithm.Combo, 3000, HitResult.Good, 6000)]
-    [TestCase(BmsJudgementAlgorithm.Duration, 3100, HitResult.Perfect, 6450)]
+    [TestCase(BmsJudgementAlgorithm.Duration, 3100, HitResult.Perfect, 6350)]
     [TestCase(BmsJudgementAlgorithm.Lowest, 3000, HitResult.Good, 6000)]
     [TestCase(BmsJudgementAlgorithm.Score, 3100, HitResult.Perfect, 6000)]
     [TestCase(null, 3000, HitResult.Good, 6000)]
@@ -98,6 +98,14 @@ public partial class TestSceneBmsJudgementAlgorithm : BmsPlayerTestScene
         AddUntilStep("second press judged", () => Player.GameplayClockContainer.CurrentTime > 6300);
         AddAssert("second press selects expected note", () => ((BmsScoreProcessor)Player.ScoreProcessor).JudgementEvents
             .Any(e => e.Source.StartTime == badTarget && e.Result == HitResult.Ok));
+        // Keep two genuine BAD candidates under LR2's fixed 200ms bound. The primary is
+        // applied after collective extras, so event order still distinguishes Duration.
+        AddAssert("collective BAD order retains the recorded primary", () => ((BmsScoreProcessor)Player.ScoreProcessor).JudgementEvents
+            .Where(e => e.Source.StartTime is 6000 or 6350).Select(e => e.Source.StartTime),
+            () => Is.EqualTo(new[] { badTarget == 6000 ? 6350d : 6000, badTarget }));
+        AddAssert("collective BAD offsets follow each original note time", () => ((BmsScoreProcessor)Player.ScoreProcessor).JudgementEvents
+            .Where(e => e.Source.StartTime is 6000 or 6350).SelectMany(e => e.TimingObservations).Select(o => o.TimeOffset),
+            () => Is.EqualTo(new[] { 6200 - (badTarget == 6000 ? 6350d : 6000), 6200 - badTarget }));
         AddStep("restore default", () => config.SetValue(BmsRulesetSetting.JudgementAlgorithm, BmsJudgementAlgorithm.Combo));
     }
 

@@ -156,7 +156,7 @@ public partial class TestSceneBmsColumnJudgement : BmsPlayerTestScene
                 health = ((BmsHealthProcessor)Player.HealthProcessor).GaugeHistory,
             });
             TestContext.WriteLine("P2_TRACE " + trace);
-            var expected = baseline.RootElement.GetProperty("traces").GetProperty(scenario).GetProperty(checkpoint);
+            var expected = expectedForLr2(scenario, checkpoint);
             var expectedState = JsonNode.Parse(expected.GetRawText())!.AsObject();
             // The old trace included synthetic endpoint callbacks; seeks now publish the final state.
             expectedState.Remove("results");
@@ -175,5 +175,31 @@ public partial class TestSceneBmsColumnJudgement : BmsPlayerTestScene
             "osu.Game.Rulesets.BmsRuleset.Tests.reference_fixtures.column_judgement_p1_trace.json")
                            ?? throw new InvalidDataException("Missing P1 column judgement trace.");
         return JsonDocument.Parse(stream);
+    }
+
+    private static JsonElement expectedForLr2(string scenario, string checkpoint)
+    {
+        var original = baseline.RootElement.GetProperty("traces").GetProperty(scenario).GetProperty(checkpoint);
+        if (scenario != nameof(PassiveTraversalSurvivesPoolingAndRewind)) return original;
+        var expected = JsonNode.Parse(original.GetRawText())!.AsObject();
+        // Preserve the historical fixture. Derive only the changed logical timestamps
+        // from Java LR2 BAD=200 and the first representable time strictly after it.
+        var deadline = Math.BitIncrement(5000d + 200);
+        foreach (var entry in expected["events"]!.AsArray())
+        {
+            Assert.That(entry!["Result"]!.GetValue<int>(), Is.EqualTo((int)HitResult.Meh));
+            foreach (var observation in entry["TimingObservations"]!.AsArray())
+            {
+                observation!["ActualTime"] = deadline;
+                observation["TimeOffset"] = deadline - observation["ExpectedTime"]!.GetValue<double>();
+            }
+        }
+        foreach (var health in expected["health"]!.AsArray()) health!["Time"] = deadline;
+        foreach (var result in expected["results"]!.AsArray())
+        {
+            var id = result!["id"]!.GetValue<int>();
+            if (id >= 0) result["TimeAbsolute"] = id == 2 ? deadline : 5200d;
+        }
+        return JsonSerializer.SerializeToElement(expected);
     }
 }

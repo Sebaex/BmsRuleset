@@ -431,13 +431,13 @@ public partial class TestSceneBmsSongProgress : BmsPlayerTestScene
 
             // Quarter-millisecond samples avoid shared inclusive boundaries while covering both sides
             // and the unused space beyond E-POOR's finite slow boundary.
-            for (var offset = -499.75; offset < 500; offset++)
+            for (var offset = -999.75; offset < 1000; offset++)
             {
                 var result = windows.ResultForOffset(offset);
                 if (result == HitResult.None && windows.IsEmptyPoorOffset(offset))
                     result = HitResult.Miss;
 
-                var position = (float)((offset + 500) / 1000);
+                var position = (float)((offset + 1000) / 2000);
                 var visible = bars.LastOrDefault(bar => bar.Width > 0 && position > bar.X && position < bar.X + bar.Width);
                 if (result == HitResult.None)
                     Assert.That(visible, Is.Null, $"no judgement region at {offset} ms");
@@ -445,7 +445,7 @@ public partial class TestSceneBmsSongProgress : BmsPlayerTestScene
                     Assert.That(visible != null && visible.Colour == BmsHitResultColours.ForHitResult(result), Is.True, $"{result} at {offset} ms");
             }
 
-            Assert.That(meter().Width, Is.EqualTo(500 * LegacySkin.STABLE_MAGIC_SCALE_FACTOR).Within(0.001));
+            Assert.That(meter().Width, Is.EqualTo(1000 * LegacySkin.STABLE_MAGIC_SCALE_FACTOR).Within(0.001));
         });
         AddStep("hide E-POOR regions", () => meter().ShowEmptyPoor.Value = false);
         AddAssert("E-POOR background is hidden", () =>
@@ -527,7 +527,8 @@ public partial class TestSceneBmsSongProgress : BmsPlayerTestScene
                 _ => HitResult.Good,
             };
             var left = window(showEmptyPoor ? HitResult.Miss : hitResult).ScreenSpaceDrawQuad.AABBFloat.Left;
-            var right = window(showEmptyPoor && noBad ? HitResult.Miss : hitResult).ScreenSpaceDrawQuad.AABBFloat.Right;
+            // LR2 empty POOR ends at zero; the positive playable window is the slow outer edge.
+            var right = window(hitResult).ScreenSpaceDrawQuad.AABBFloat.Right;
             var lines = meter().Judgements.Lines.OrderBy(line => line.X).ToArray();
 
             Assert.That(lines, Has.Length.EqualTo(2));
