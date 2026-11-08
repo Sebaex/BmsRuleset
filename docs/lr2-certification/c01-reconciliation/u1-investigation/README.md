@@ -5,5 +5,6 @@ Started 2026-11-07. Authorized branch: `fix/lr2-endlessdream-parity-incremental`
 This is investigation of the ten original U1 observations, not a production repair or an attempt to make CI green. Previous R1–R5 classifications/evidence and all original assertions remain intact. Short filtered executions use .NET SDK 10.0.401, Release, the pinned osu source `9a10d935b05a3b896f4bd811d620f2023331db93`. No broad suite/CI is required merely to publish these findings.
 
 * [U1-C: Duration and heterogeneous judgement rates](U1_C_DURATION.md)
+* [U1-B: difficulty golden](U1_B_DIFFICULTY.md)
 
 Evidence references use paths relative to the external `nuevo-trabajo` evidence root, avoiding personal paths in Git. Temporary diagnostic sources, logs, TRX and binary hashes are preserved there; none are distributed as gameplay binaries. A diagnostic source overlay is explicitly distinguished from the unmodified source SHA. No permanent probes or production hooks are added.
