@@ -65,3 +65,11 @@ Release/net10.0, SDK 10.0.401, source parent 72272058e907acc4d9844293d0ebba46f3c
 Original Java LR2 death and arithmetic replace impossible living sub-2% states; added valid boundary inputs preserve original lifecycle purpose
 
 Sensitivity: Refill/rounding, wrong death/failed flags, revived tiers or lost reset state fail exact inheritance; wrong scale/family/guts fails independent constants and protected vectors
+
+## TM-D03 [TM-D]
+
+Release/net10.0, SDK 10.0.401, source parent 97f729226b8d1439ff11bd09882cda233201ec7a. Filter: `FullyQualifiedName~BmsModGaugeAutoShiftTest|FullyQualifiedName~BmsCourseSessionTest|FullyQualifiedName~BmsGaugeHistoryGraphTest|FullyQualifiedName~BmsGaugeHistoryConfiguredChainTest|FullyQualifiedName~BmsGasCourseParityTest|FullyQualifiedName~BmsGasOrderParityTest|FullyQualifiedName~BmsGasPolicyReferenceTest`. 137/138 pass, 1 fail, 0 other. TRX SHA-256 `1D32DB70FFEE7BB501BC11D8D4AA7A7095EC7117756A68836F6C35E970ED4A0B`; logs/filter/binary hashes retained under `evidencias-paridad/TM-D03`. IDs: F054, F134, F135, F136, F137, F138, F139, F141, F142.
+
+Accepted real Course/GAS configuration and executed Java short-chart arithmetic replace obsolete assumptions; newly exposed setting loss is left failing
+
+Sensitivity: Lost/refilled seeds, wrong hidden/public control, omitted tier, stale attribution or wrong failure event fail exact checks; Assist serialization remains a separate visible production limitation

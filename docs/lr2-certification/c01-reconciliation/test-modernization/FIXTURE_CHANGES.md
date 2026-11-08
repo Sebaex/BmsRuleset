@@ -31,3 +31,7 @@ Seventeen original failing observations across the same three integration fixtur
 ## C — gauge/state contracts
 
 Twenty original failing observations adapted in three files. Nearly-empty inheritance expands from12 to18 parameter cases (six new valid-boundary cases), retaining all old values and exact high-health/state comparisons. Two other reset/final-tier scenarios use valid .02 seeds; no mechanics or helpers change. Default-family changes are limited to default-context expectations; the four explicit Course override families, previously repaired inheritance cases, configured fallback boundary cases and original Java gauge tests all run unchanged. `TM-C01`: 221/221 pass. No copied health snapshot or widened original tolerance.
+
+## D1 — GAS/Course/graph
+
+Nine original observations updated in three files. Actual Course-generated/cloned/serialized seeds replace invalid empty-mod setup; no productive context behavior changes. F139 checks each internal/public setting by type and binding provenance with complete disposal. Graph case expands from one default-Easy case to three configured limits. Three new serialization parameter cases expose TM-NEW-01; **TM-D03 is 137/138, not green**. All nine original targeted observations and original Course/C05/graph controls pass; only the new Assist case fails. TM-D01/D02 failed attempts remain preserved and their differences are documented in PENDING_DEFECTS. Do not resolve this new real setting-loss defect by changing its expectation to Easy.

@@ -8,4 +8,6 @@ Batch plan: A judgement/windows; B long-note lifecycle/instrumentation; C gauge 
 
 Sources have mandatory priority: pinned executable Endless Dream/parser; captured C01–C06 differential vectors; explicit accepted C# contracts for its extensions/UI. Current C# output is diagnostic, never sufficient authority for an expectation. See [policy ledger](POLICY_EXPECTATIONS.md), [fixture changes](FIXTURE_CHANGES.md), [coverage](REGRESSION_COVERAGE.md) and [executions](TEST_EXECUTION_RESULTS.md).
 
+New functional findings which cannot be corrected within test-only scope remain visible in [pending defects](PENDING_DEFECTS.md); they are counted separately from the original 219 identities.
+
 **[F099 remains completely excluded](F099_DEFERRED.md).** Broad validation and the exact protected 427-case comparison are pending after the lots. A persistent execution anticipated at least five minutes will be launched only after independent work is complete, then the current intervention ends immediately. No false green result, suppressed case, workflow/dependency change, production correction or PR is authorized.
