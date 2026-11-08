@@ -11,3 +11,9 @@ Pinned primary sources: Endless Dream `d4995153b0a759859ebc8f859dd868abae39db5a`
 | Same mixed test, additional input invariant | no separate leniency assertion | `.3*sqrt(40/500)` with documented min-transform | Accepted C# leniency formula, U1-B causal isolation; literal 40 is independently executed Java GREAT, not read back from production |
 
 All layout parameters, 20,000 timings, eight columns, long notes, ordering and numerical tolerances are retained. Later batches append their own per-assertion source ledger before publication.
+
+## G — Course results (F178–F180)
+
+`Visualize/TestSceneBmsCourseResults.overviewMatches`: only the expected percentage's formatting path changes, from update-thread current-culture interpolation to `BmsStrings.ResultPercentage(expectedAccuracy).ToString()`. Authority: pinned framework `LocalisableFormattableString.ToString` uses invariant culture; U1-D independently identified this exact false conjunct. The expected accuracy still comes from the fixture's weighted scores, not the actual overview. Accuracy, combo, PGREAT, FAST/SLOW, stage state, layout, selection, restoration, back navigation, charts and disposal assertions remain unchanged.
+
+New `TestCourseSummaryWithCommaDecimalHostLocale` repeats the full original 1280×720 integration scenario after setting the **test host's** locale and waiting for the update thread's decimal separator to be comma. It separately requires the invariant representation `77.00%`; teardown restores the previous host setting. This follows the framework ThreadCultureTest's event-driven host contract, using public `Value`/`TriggerChange`, not its internal `SetValue` API or NUnit test-thread culture. No production culture or rendered-string policy changes.

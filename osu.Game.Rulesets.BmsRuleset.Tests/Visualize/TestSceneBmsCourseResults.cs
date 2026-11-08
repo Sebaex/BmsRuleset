@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using osu.Framework.Allocation;
 using osu.Framework.Audio;
+using osu.Framework.Configuration;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Cursor;
@@ -22,6 +24,7 @@ using osu.Game.Rulesets.BmsRuleset.Gameplay.Course;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.Mods;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.Mods.Gauge;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.Scoring.Gauge;
+using osu.Game.Rulesets.BmsRuleset.Localisation;
 using osu.Game.Rulesets.BmsRuleset.UI.Icons;
 using osu.Game.Rulesets.BmsRuleset.UI.Result.Course;
 using osu.Game.Rulesets.BmsRuleset.UI.Result.Statistic;
@@ -40,6 +43,21 @@ namespace osu.Game.Rulesets.BmsRuleset.Tests.Visualize;
 public partial class TestSceneBmsCourseResults : ScreenTestScene
 {
     private RealmDetachedBeatmapStore beatmapStore = null!;
+
+    [Resolved]
+    private FrameworkConfigManager frameworkConfig { get; set; } = null!;
+
+    private string? previousHostLocale;
+
+    [TearDownSteps]
+    public void RestoreHostLocale() => AddStep("restore test host locale", () =>
+    {
+        if (previousHostLocale == null) return;
+        var locale = frameworkConfig.GetBindable<string>(FrameworkSetting.Locale);
+        locale.Value = previousHostLocale;
+        locale.TriggerChange();
+        previousHostLocale = null;
+    });
 
     protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent)
     {
@@ -196,7 +214,8 @@ public partial class TestSceneBmsCourseResults : ScreenTestScene
         return overview != null && Math.Abs(overview.Score.Accuracy - accuracy) < 0.00001
                                 && overview.Score.MaxCombo == combo
                                 && overview.ChildrenOfType<BmsResultJudgementRow>().SingleOrDefault(row => row.Result == HitResult.Perfect)?.Count == perfect
-                                && overview.ChildrenOfType<OsuSpriteText>().Any(text => text.Text.ToString() == $"{accuracy * 100:F2}%")
+                                // LocalisableString.ToString() is invariant, independently of the host's rendered locale.
+                                && overview.ChildrenOfType<OsuSpriteText>().Any(text => text.Text.ToString() == BmsStrings.ResultPercentage(accuracy).ToString())
                                 && overview.ChildrenOfType<GridContainer>().SingleOrDefault(grid => grid.Name == "Result combo")?
                                     .ChildrenOfType<OsuSpriteText>().Any(text => text.Text.ToString() == combo.ToString()) == true
                                 && timing?.FastCount == fast && timing.SlowCount == slow;
@@ -273,6 +292,22 @@ public partial class TestSceneBmsCourseResults : ScreenTestScene
                                                                  .State.Value == Visibility.Visible);
         AddUntilStep("aborted stage timeline loaded", () => screen.ChildrenOfType<BmsTimelineStatistic>().Count(), () => Is.EqualTo(2));
         AddAssert("aborted stage timeline has no failure shade", () => hasFailureShade(screen), () => Is.False);
+    }
+
+    [Test]
+    public void TestCourseSummaryWithCommaDecimalHostLocale()
+    {
+        AddStep("set comma-decimal test host locale", () =>
+        {
+            var locale = frameworkConfig.GetBindable<string>(FrameworkSetting.Locale);
+            previousHostLocale = locale.Value;
+            // Force the event even if NUnit reset the thread culture while locale stayed the same.
+            locale.Value = "es-CL";
+            locale.TriggerChange();
+        });
+        AddUntilStep("update thread uses decimal comma", () => CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator == ",");
+        AddAssert("localisable percentage representation stays invariant", () => BmsStrings.ResultPercentage(.77).ToString(), () => Is.EqualTo("77.00%"));
+        TestCourseSummaryShowsPlayedAndEmptyStages(1280, 720);
     }
 
     [TestCase(1280, 720)]
