@@ -27,3 +27,7 @@ Thirty-one original failing identities across five files receive source-backed L
 ## A2 — visual consumers
 
 Seventeen original failing observations across the same three integration fixtures. Historical `column_judgement_p1_trace.json` stays immutable (SHA-256 `452E8E2736B0BF82A9E91D7584B4705584FEF02BA7B9E5FD65C79F48741FDC0A`); expected timestamp derivation is explicit in the test helper. Replay input spacing changes only to keep the original competition under tighter BAD limits, with stronger event-order/offset assertions. The related previously passing Duration replay parameter follows the moved future head so its nearest-candidate property remains identical. No case count is reduced. `TM-A-UI01` executes all32 filtered cases successfully, including both post-rewind trace checkpoints and every original selected visual combination.
+
+## C — gauge/state contracts
+
+Twenty original failing observations adapted in three files. Nearly-empty inheritance expands from12 to18 parameter cases (six new valid-boundary cases), retaining all old values and exact high-health/state comparisons. Two other reset/final-tier scenarios use valid .02 seeds; no mechanics or helpers change. Default-family changes are limited to default-context expectations; the four explicit Course override families, previously repaired inheritance cases, configured fallback boundary cases and original Java gauge tests all run unchanged. `TM-C01`: 221/221 pass. No copied health snapshot or widened original tolerance.

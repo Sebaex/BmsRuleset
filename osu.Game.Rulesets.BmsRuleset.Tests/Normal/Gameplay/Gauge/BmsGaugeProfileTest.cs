@@ -92,13 +92,13 @@ public class BmsGaugeProfileTest
             Assert.That(fiveKeyClass.BadDelta, Is.EqualTo(-0.005).Within(0.000001));
             Assert.That(lr2ExClass.PerfectGain, Is.EqualTo(0.001).Within(0.000001));
             Assert.That(lr2ExClass.PoorDelta, Is.EqualTo(-0.10).Within(0.000001));
-            Assert.That(lr2ExClass.GutsRules.Single().HealthThreshold, Is.EqualTo(0.30).Within(0.000001));
+            Assert.That(lr2ExClass.GutsRules.Single().HealthThreshold, Is.EqualTo(0.32).Within(0.000001));
         });
     }
 
-    [TestCase(BmsLayoutVariant.Bms5K, BmsGaugeProfileFamily.FiveKeys)]
-    [TestCase(BmsLayoutVariant.Bme7K, BmsGaugeProfileFamily.SevenKeys)]
-    [TestCase(BmsLayoutVariant.Pms9K, BmsGaugeProfileFamily.Pms)]
+    [TestCase(BmsLayoutVariant.Bms5K, BmsGaugeProfileFamily.Lr2)]
+    [TestCase(BmsLayoutVariant.Bme7K, BmsGaugeProfileFamily.Lr2)]
+    [TestCase(BmsLayoutVariant.Pms9K, BmsGaugeProfileFamily.Lr2)]
     public void TestLayoutSelectsGaugeProfileFamily(BmsLayoutVariant layout, BmsGaugeProfileFamily expected)
     {
         Assert.That(BmsGaugeProfileFamilyProvider.FromLayout(layout), Is.EqualTo(expected));

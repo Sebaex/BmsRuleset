@@ -57,3 +57,11 @@ Release/net10.0, SDK 10.0.401, source parent 11cb743a23a7654dd43dc9623756e728aab
 Java fixed BAD 200 and early empty POOR 1000 alter logical/spatial bounds; test inputs preserve genuine overlapping candidate selection
 
 Sensitivity: Wrong primary now fails event order even if both notes are BAD; old deadlines, missing endpoints and wrong meter width/edge still fail exact integration checks
+
+## TM-C01 [TM-C]
+
+Release/net10.0, SDK 10.0.401, source parent 72272058e907acc4d9844293d0ebba46f3cb52c7. Filter: `FullyQualifiedName~BmsCourseHealthInheritanceTest|FullyQualifiedName~BmsHealthProcessorTest|FullyQualifiedName~BmsGaugeProfileTest|FullyQualifiedName~TestCourseGaugeProfileFamilySelection|FullyQualifiedName~BmsExecutedJavaGaugeTest|FullyQualifiedName~BmsGasCourseParityTest`. 221/221 pass, 0 fail, 0 other. TRX SHA-256 `5AD19FAD1AAB48EFFC82CA22D4DA06AD4546F61D07C8EF0F7259AB2CEE01E6B1`; logs/filter/binary hashes retained under `evidencias-paridad/TM-C01`. IDs: F020, F021, F022, F023, F024, F025, F026, F027, F028, F029, F079, F082, F083, F084, F085, F091, F093, F094, F095, F096.
+
+Original Java LR2 death and arithmetic replace impossible living sub-2% states; added valid boundary inputs preserve original lifecycle purpose
+
+Sensitivity: Refill/rounding, wrong death/failed flags, revived tiers or lost reset state fail exact inheritance; wrong scale/family/guts fails independent constants and protected vectors
