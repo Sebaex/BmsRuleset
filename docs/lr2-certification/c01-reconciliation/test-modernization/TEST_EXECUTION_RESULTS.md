@@ -101,3 +101,11 @@ Release/net10.0, SDK 10.0.401, source parent 957639ddff9c6b370902df2d934939562c3
 Zero release margin changes precondition without removing lifecycle verification
 
 Sensitivity: Runtime replacement, accumulator reset, premature body retirement or changed trace fails original later assertions
+
+## TM-B-UI01 [TM-B]
+
+Release/net10.0, SDK 10.0.401, source parent a291813d5eee6f3bed6c76ee8323590927413b88. Filter: `FullyQualifiedName~TestSceneBmsBeatorajaHcnFrameOrder|FullyQualifiedName~TestSceneBmsBeatorajaHcnKeyboardInput|FullyQualifiedName~TestSceneBmsBeatorajaLongNotes|FullyQualifiedName~TestSceneBmsBeatorajaScratchInput|FullyQualifiedName~TestSceneBmsLongNoteLifecycle`. 92/92 pass, 0 fail, 0 other. TRX SHA-256 `9FD273F13D766BEB5B0B0D81F7B3E2037B08862335E282F010BEC58225F6D0B0`; logs/filter/binary hashes retained under `evidencias-paridad/TM-B-UI01`. IDs: F144, F145, F146, F147, F148, F149, F152, F153, F154, F155, F156, F157, F158, F159, F160, F161, F162, F163, F164, F165, F166, F167, F168, F169, F172, F173, F188, F189, F190, F191, F192, F193, F194, F195.
+
+Pinned LR2 endpoint policy changes grades and damage; C# lifecycle/history contracts stay enforced
+
+Sensitivity: Wrong event order, missing tick/endpoint, duplicate release, broken rewind/defaults/pooling or score denominator fails exact original integration and independent counters

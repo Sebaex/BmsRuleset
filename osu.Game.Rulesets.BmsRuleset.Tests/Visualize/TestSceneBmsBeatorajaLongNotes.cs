@@ -65,15 +65,15 @@ public partial class TestSceneBmsBeatorajaLongNotes : BmsPlayerTestScene
         return frames;
     }
 
-    // Fixed expectations from beatoraja 9cddf911 JudgeManager/GaugeProperty.
+    // Pinned Endless Dream LR2 windows/damage; C04's accepted deterministic HCN body contract.
     // TOTAL 12 / (one LN + one ordinary note) = 6%; CN counts both endpoints = 4%.
     [TestCase(BmsLongNoteMode.LongNote, 40, 5000, HitResult.Great, 0.26, 1)]
     [TestCase(BmsLongNoteMode.LongNote, 80, 5000, HitResult.Good, 0.23, 1)]
-    [TestCase(BmsLongNoteMode.LongNote, 180, 5000, HitResult.Ok, 0.17, 0)]
-    [TestCase(BmsLongNoteMode.LongNote, 0, 4890, HitResult.Great, 0.26, 1)]
-    [TestCase(BmsLongNoteMode.LongNote, 0, 4860, HitResult.Good, 0.23, 1)]
-    [TestCase(BmsLongNoteMode.LongNote, 0, 3500, HitResult.Ok, 0.17, 0)]
-    [TestCase(BmsLongNoteMode.HellChargeNote, 0, 4890, HitResult.Great, 0.46, 2)]
+    [TestCase(BmsLongNoteMode.LongNote, 180, 5000, HitResult.Meh, 0.14, 0)]
+    [TestCase(BmsLongNoteMode.LongNote, 0, 4890, HitResult.Ok, 0.16, 0)]
+    [TestCase(BmsLongNoteMode.LongNote, 0, 4860, HitResult.Ok, 0.16, 0)]
+    [TestCase(BmsLongNoteMode.LongNote, 0, 3500, HitResult.Ok, 0.16, 0)]
+    [TestCase(BmsLongNoteMode.HellChargeNote, 0, 4890, HitResult.Ok, 0.38, 0)]
     [TestCase(BmsLongNoteMode.ChargeNote, 0, 5000, HitResult.Perfect, 0.28, 2)]
     [TestCase(BmsLongNoteMode.ChargeNote, double.NaN, 5000, HitResult.Meh, 0.08, 0)]
     public void TestIndependentLongNoteOutcomes(BmsLongNoteMode noteMode, double offset, double release,
@@ -84,7 +84,7 @@ public partial class TestSceneBmsBeatorajaLongNotes : BmsPlayerTestScene
         {
             checkpoint(3250, "first HCN recovery tick", () => assertOutcome(new[] { HitResult.Perfect }, 0.26, 1));
             checkpoint(3450, "second HCN recovery tick", () => assertOutcome(new[] { HitResult.Perfect }, 0.28, 1));
-            checkpoint(4950, "released successful tail still recovers", () => assertOutcome(new[] { HitResult.Perfect, HitResult.Great }, 0.46, 2));
+            checkpoint(4950, "released BAD tail preserves elapsed recovery", () => assertOutcome(new[] { HitResult.Perfect, HitResult.Ok }, 0.38, 0));
         }
         if (double.IsNaN(offset))
             checkpoint(3300, "missed head immediately judges both endpoints", () => assertOutcome(
@@ -98,23 +98,19 @@ public partial class TestSceneBmsBeatorajaLongNotes : BmsPlayerTestScene
         });
     }
 
-    [TestCase(BmsLongNoteMode.LongNote, 3699, HitResult.Perfect, 0.36, 1)]
-    [TestCase(BmsLongNoteMode.LongNote, 3701, HitResult.Ok, 0.28, 0)]
-    [TestCase(BmsLongNoteMode.ChargeNote, 3699, HitResult.Perfect, 0.38, 2)]
-    [TestCase(BmsLongNoteMode.ChargeNote, 3701, HitResult.Meh, 0.28, 0)]
+    [TestCase(BmsLongNoteMode.LongNote, 3699, HitResult.Ok, 0.16, 0)]
+    [TestCase(BmsLongNoteMode.LongNote, 3701, HitResult.Ok, 0.16, 0)]
+    [TestCase(BmsLongNoteMode.ChargeNote, 3699, HitResult.Meh, 0.18, 0)]
+    [TestCase(BmsLongNoteMode.ChargeNote, 3701, HitResult.Meh, 0.18, 0)]
     public void TestPmsReleaseRescueThroughRealInput(BmsLongNoteMode noteMode, double repress,
                                                    HitResult tail, double health, int combo)
     {
         load(BmsLayoutVariant.Pms9K, noteMode, 0, 3500, repress);
-        checkpoint(3550, "pending release", () => assertOutcome(
-            noteMode == BmsLongNoteMode.LongNote ? Array.Empty<HitResult>() : new[] { HitResult.Perfect },
-            noteMode == BmsLongNoteMode.LongNote ? 0.30 : 0.34, noteMode == BmsLongNoteMode.LongNote ? 0 : 1));
+        checkpoint(3550, "release already settled", finalOutcome);
         if (repress > 3700)
             checkpoint(3700, "release expires before input", finalOutcome);
         checkpoint(5400, "tail completed", finalOutcome);
-        checkpoint(3550, "rewind into pending release", () => assertOutcome(
-            noteMode == BmsLongNoteMode.LongNote ? Array.Empty<HitResult>() : new[] { HitResult.Perfect },
-            noteMode == BmsLongNoteMode.LongNote ? 0.30 : 0.34, noteMode == BmsLongNoteMode.LongNote ? 0 : 1));
+        checkpoint(3550, "rewind after settled release", finalOutcome);
         if (repress > 3700)
             checkpoint(3700, "release expires again before input", finalOutcome);
         checkpoint(5400, "tail replayed", finalOutcome);
@@ -128,34 +124,36 @@ public partial class TestSceneBmsBeatorajaLongNotes : BmsPlayerTestScene
     public void TestPmsDeferredTimingGaugeAndScoreRewind(BmsLongNoteMode noteMode)
     {
         load(BmsLayoutVariant.Pms9K, noteMode, 0, 1500, null, 1000);
-        checkpoint(1650, "pending release", pending);
+        checkpoint(1650, "settled release", expired);
         checkpoint(1700, "expiry", expired);
-        checkpoint(1550, "rewind before application", pending);
+        checkpoint(1550, "rewind after application", expired);
         checkpoint(1700, "expiry after rewind", expired);
-        checkpoint(1650, "rewind nearer application", pending);
+        checkpoint(1650, "rewind nearer application", expired);
         checkpoint(1700, "expiry again", expired);
-
-        void pending() => assertOutcome(noteMode == BmsLongNoteMode.LongNote ? Array.Empty<HitResult>() : new[] { HitResult.Perfect },
-            noteMode == BmsLongNoteMode.LongNote ? 0.30 : 0.34, noteMode == BmsLongNoteMode.LongNote ? 0 : 1);
+        checkpoint(1499, "rewind before original release", () => assertOutcome(
+            noteMode == BmsLongNoteMode.LongNote ? Array.Empty<HitResult>() : new[] { HitResult.Perfect },
+            noteMode == BmsLongNoteMode.LongNote ? .2 : .24, noteMode == BmsLongNoteMode.LongNote ? 0 : 1));
+        checkpoint(1700, "release replayed from before application", expired);
         void expired()
         {
-            assertOutcome(noteMode == BmsLongNoteMode.LongNote ? new[] { HitResult.Ok } : new[] { HitResult.Perfect, HitResult.Meh }, 0.28, 0);
+            assertOutcome(noteMode == BmsLongNoteMode.LongNote ? new[] { HitResult.Ok } : new[] { HitResult.Perfect, HitResult.Meh },
+                noteMode == BmsLongNoteMode.LongNote ? .16 : .18, 0);
             var tail = ((BmsScoreProcessor)Player.ScoreProcessor).JudgementEvents.Last().TimingObservations.Last();
             Assert.That(tail.ActualTime, Is.EqualTo(1500));
             Assert.That(tail.TimeOffset, Is.EqualTo(-1500));
-            Assert.That(((BmsHealthProcessor)Player.HealthProcessor).GaugeHistory.Last().Time, Is.EqualTo(1700));
+            Assert.That(((BmsHealthProcessor)Player.HealthProcessor).GaugeHistory.Last().Time, Is.EqualTo(1500));
         }
     }
 
-    [TestCase(BmsLongNoteMode.LongNote, 1699, HitResult.Perfect, 0.36, 1)]
-    [TestCase(BmsLongNoteMode.LongNote, 1700, HitResult.Perfect, 0.36, 1)]
-    [TestCase(BmsLongNoteMode.LongNote, 1701, HitResult.Ok, 0.28, 0)]
-    [TestCase(BmsLongNoteMode.ChargeNote, 1699, HitResult.Perfect, 0.38, 2)]
-    [TestCase(BmsLongNoteMode.ChargeNote, 1700, HitResult.Perfect, 0.38, 2)]
-    [TestCase(BmsLongNoteMode.ChargeNote, 1701, HitResult.Meh, 0.28, 0)]
+    [TestCase(BmsLongNoteMode.LongNote, 1699, HitResult.Ok, 0.16, 0)]
+    [TestCase(BmsLongNoteMode.LongNote, 1700, HitResult.Ok, 0.16, 0)]
+    [TestCase(BmsLongNoteMode.LongNote, 1701, HitResult.Ok, 0.16, 0)]
+    [TestCase(BmsLongNoteMode.ChargeNote, 1699, HitResult.Meh, 0.18, 0)]
+    [TestCase(BmsLongNoteMode.ChargeNote, 1700, HitResult.Meh, 0.18, 0)]
+    [TestCase(BmsLongNoteMode.ChargeNote, 1701, HitResult.Meh, 0.18, 0)]
     public void TestPmsRepressBeforeExpiryScan(BmsLongNoteMode noteMode, double repress, HitResult result, double health, int combo)
     {
-        // JudgeManager 347-585 handles changed keys before the <= release margin scan.
+        // Under LR2 zero margin the release is already terminal before each later repress.
         load(BmsLayoutVariant.Pms9K, noteMode, 0, 1500, repress, 1000);
         checkpoint(1698, "before boundary", () => { });
         if (repress > 1700)
@@ -180,9 +178,9 @@ public partial class TestSceneBmsBeatorajaLongNotes : BmsPlayerTestScene
         // The strict boundary is crossed while held, before the successful release.
         load(BmsLayoutVariant.Bme7K, BmsLongNoteMode.HellChargeNote, 0, 4801, null, 3000, 1901);
         checkpoint(4800, "before release", () => assertOutcome(new[] { HitResult.Perfect }, 0.40, 1));
-        checkpoint(4801, "successful release frame", () => assertOutcome(new[] { HitResult.Perfect, HitResult.Great }, 0.46, 2));
-        checkpoint(4802, "held-by-success continues", () => assertOutcome(new[] { HitResult.Perfect, HitResult.Great }, 0.46, 2));
-        checkpoint(4803, "recovery already applied", () => assertOutcome(new[] { HitResult.Perfect, HitResult.Great }, 0.46, 2));
+        checkpoint(4801, "successful release frame", () => assertOutcome(new[] { HitResult.Perfect, HitResult.Perfect }, 0.46, 2));
+        checkpoint(4802, "held-by-success continues", () => assertOutcome(new[] { HitResult.Perfect, HitResult.Perfect }, 0.46, 2));
+        checkpoint(4803, "recovery already applied", () => assertOutcome(new[] { HitResult.Perfect, HitResult.Perfect }, 0.46, 2));
     }
 
     private void load(BmsLayoutVariant variant, BmsLongNoteMode noteMode, double offset, double release, double? repress, double start = 3000, double length = 2000)

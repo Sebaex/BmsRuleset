@@ -131,12 +131,14 @@ public partial class TestSceneBmsLongNoteLifecycle : BmsPlayerTestScene
     }
 
     [TestCase(BmsLongNoteMode.LongNote, 5500, true)]
-    [TestCase(BmsLongNoteMode.LongNote, 6834.999, true)]
+    [TestCase(BmsLongNoteMode.LongNote, 6799.999, true)]
+    [TestCase(BmsLongNoteMode.LongNote, 6800, false)]
     [TestCase(BmsLongNoteMode.LongNote, 6835, false)]
     [TestCase(BmsLongNoteMode.LongNote, 6840, false)]
     [TestCase(BmsLongNoteMode.LongNote, 6950, false)]
     [TestCase(BmsLongNoteMode.ChargeNote, 5500, true)]
-    [TestCase(BmsLongNoteMode.ChargeNote, 6834.999, true)]
+    [TestCase(BmsLongNoteMode.ChargeNote, 6799.999, true)]
+    [TestCase(BmsLongNoteMode.ChargeNote, 6800, false)]
     [TestCase(BmsLongNoteMode.ChargeNote, 6835, false)]
     [TestCase(BmsLongNoteMode.ChargeNote, 6840, false)]
     [TestCase(BmsLongNoteMode.ChargeNote, 6950, false)]
@@ -333,9 +335,18 @@ public partial class TestSceneBmsLongNoteLifecycle : BmsPlayerTestScene
 
             // Keep the pre-refactor score expectations while allowing intentional logical timestamp changes.
             var previous = baseline.RootElement.GetProperty("traces").GetProperty(scenario).GetProperty(checkpoint);
-            Assert.That(JsonSerializer.Serialize(BmsExScore.CreateProgression(score.JudgementEvents)), Is.EqualTo(JsonSerializer.Serialize(previous.GetProperty("progression"))));
+            // The same release at6900 is now on Rank2's inclusive PG tail edge (7000-100).
+            // Reconstruct EX progression from the original note/input times, leaving the old trace intact.
+            var tailCompleted = time >= 6900;
+            var resultCount = mode == BmsLongNoteMode.LongNote ? (tailCompleted ? 1 : 0)
+                : 1 + (tailCompleted ? 1 : 0) + (time >= 9000 ? 1 : 0);
+            var expectedProgression = Enumerable.Range(0, resultCount + 1).Select(i => i * 2).ToArray();
+            Assert.That(BmsExScore.CreateProgression(score.JudgementEvents), Is.EqualTo(expectedProgression));
             Assert.That(score.Combo.Value, Is.EqualTo(previous.GetProperty("combo").GetInt32()));
-            Assert.That(score.TotalScore.Value, Is.EqualTo(previous.GetProperty("total").GetInt64()));
+            var expectedTotal = tailCompleted
+                ? (long)Math.Round(1_000_000d * (resultCount + (includeMine ? 1 : 0)) / ((mode == BmsLongNoteMode.LongNote ? 3 : 5) + (includeMine ? 1 : 0)))
+                : previous.GetProperty("total").GetInt64();
+            Assert.That(score.TotalScore.Value, Is.EqualTo(expectedTotal));
         });
     }
 

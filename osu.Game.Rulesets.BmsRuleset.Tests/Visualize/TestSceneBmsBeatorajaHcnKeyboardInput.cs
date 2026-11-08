@@ -90,9 +90,9 @@ public partial class TestSceneBmsBeatorajaHcnKeyboardInput : BmsPlayerTestScene
         checkpoint(3201, .26, [HitResult.Perfect], [3000], [0], [.26]);
         checkpoint(4000, .32, [HitResult.Perfect], [3000], [0], []);
         // Both release and reversal occur after the elapsed held interval crosses its threshold.
-        checkpoint(4001, .38, [HitResult.Perfect, HitResult.Great], [3000, 4001], [0, -100], [.34, .38]);
-        checkpoint(4002, .38, [HitResult.Perfect, HitResult.Great], [3000, 4001], [0, -100], []);
-        checkpoint(4003, .38, [HitResult.Perfect, HitResult.Great], [3000, 4001], [0, -100], []);
+        checkpoint(4001, .38, [HitResult.Perfect, HitResult.Perfect], [3000, 4001], [0, -100], [.34, .38]);
+        checkpoint(4002, .38, [HitResult.Perfect, HitResult.Perfect], [3000, 4001], [0, -100], []);
+        checkpoint(4003, .38, [HitResult.Perfect, HitResult.Perfect], [3000, 4001], [0, -100], []);
         AddStep("assert keyboard transition phase and complete timeline", () => Assert.Multiple(() =>
         {
             assertNoReplay();
