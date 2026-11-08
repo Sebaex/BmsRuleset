@@ -85,3 +85,11 @@ Release/net10.0, SDK 10.0.401, source parent 029a4addd4b950765bd90c5f16858ab93f7
 Executed LR2 damage and accepted configured GAS clear/display policy replace historical assumptions
 
 Sensitivity: Wrong attribution, omitted/extra series, wrong threshold inclusivity or stale HUD/history fails independent integration assertions
+
+## TM-B-NORMAL02 [TM-B]
+
+Release/net10.0, SDK 10.0.401, source parent 9e1dbcfed31bfc5f4b7245b5e04efabf0437d526. Filter: `FullyQualifiedName~BmsLongNoteJudgementTest|FullyQualifiedName~BmsLongNotePresentationTest|FullyQualifiedName~BmsLongNoteRuleTest|FullyQualifiedName~BmsOperationSequenceTest|FullyQualifiedName~BmsBeatorajaFrameHistoryTest|FullyQualifiedName~BmsExecutedJavaJudgementTest|FullyQualifiedName~BmsHcnFrameReferenceTest`. 260/260 pass, 0 fail, 0 other. TRX SHA-256 `D76FD9EAE9A8CF699C1A84C95BAA6ABD7DDC6E7E5202F47581C8234DC851F8DD`; logs/filter/binary hashes retained under `evidencias-paridad/TM-B-NORMAL02`. IDs: F097, F098, F110, F111, F112, F113, F114, F115, F116, F117, F118, F119, F120, F121, F122, F123, F124, F125, F126, F130, F131, F132.
+
+Pinned LR2 margins/windows and gauge damage replace conventional beatoraja/PMS constants
+
+Sensitivity: Old margin, wrong sign/inclusivity, duplicated result, lost rewind state, wrong body count or release styling fails independently

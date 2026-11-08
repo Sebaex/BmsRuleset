@@ -79,11 +79,11 @@ public class BmsLongNotePresentationTest
 
     [TestCase(BmsLongNoteMode.LongNote, 1335, HitResult.Ok)]
     [TestCase(BmsLongNoteMode.LongNote, 1340, HitResult.Ok)]
-    [TestCase(BmsLongNoteMode.LongNote, 1390, HitResult.Great)]
+    [TestCase(BmsLongNoteMode.LongNote, 1390, HitResult.Ok)]
     [TestCase(BmsLongNoteMode.LongNote, 1490, HitResult.Perfect)]
     [TestCase(BmsLongNoteMode.ChargeNote, 1335, HitResult.Ok)]
     [TestCase(BmsLongNoteMode.ChargeNote, 1340, HitResult.Ok)]
-    [TestCase(BmsLongNoteMode.ChargeNote, 1390, HitResult.Great)]
+    [TestCase(BmsLongNoteMode.ChargeNote, 1390, HitResult.Ok)]
     [TestCase(BmsLongNoteMode.ChargeNote, 1490, HitResult.Perfect)]
     public void InWindowTailHidesImmediately(BmsLongNoteMode mode, double releaseTime, HitResult expected)
     {
@@ -117,20 +117,24 @@ public class BmsLongNotePresentationTest
     }
 
     [TestCase(BmsLongNoteMode.LongNote, 1100, true)]
-    [TestCase(BmsLongNoteMode.LongNote, 1250, false)]
+    [TestCase(BmsLongNoteMode.LongNote, 1350, false)]
     [TestCase(BmsLongNoteMode.ChargeNote, 1100, true)]
-    [TestCase(BmsLongNoteMode.ChargeNote, 1250, false)]
+    [TestCase(BmsLongNoteMode.ChargeNote, 1350, false)]
     public void ReleaseMarginExpiryPreservesReleaseWindow(BmsLongNoteMode mode, double releaseTime, bool keepBody)
     {
         var run = new BmsLongNoteTestContext(mode, layout: BmsLayoutVariant.Pms9K);
         run.Press(1000, HitResult.Perfect);
         run.Release(releaseTime);
+        Assert.That(run.State.TailJudged, Is.True, "LR2 settles release immediately, including PMS layouts.");
+        Assert.That(run.State.PendingReleaseTime, Is.Null);
+        var settled = run.State;
         run.Frame(releaseTime + 199, 199, false);
-        Assert.That(run.State.TailJudged, Is.False);
-        Assert.That(run.Presentation(false, releaseTime + 199).ReleasedStyle, Is.True);
+        Assert.That(run.State.TailJudged, Is.True);
+        Assert.That(run.Presentation(false, releaseTime + 199).ReleasedStyle, Is.EqualTo(keepBody));
 
         run.Frame(releaseTime + 200, 1, false);
         Assert.That(run.State.TailJudged, Is.True);
+        Assert.That(run.State.TailTime, Is.EqualTo(settled.TailTime), "Later frames must not reapply the release.");
         Assert.That(run.State.EarlyReleaseOutsideWindow, Is.EqualTo(keepBody));
         var current = run.Presentation(false, releaseTime + 200);
         Assert.That(current.Retired, Is.EqualTo(!keepBody));

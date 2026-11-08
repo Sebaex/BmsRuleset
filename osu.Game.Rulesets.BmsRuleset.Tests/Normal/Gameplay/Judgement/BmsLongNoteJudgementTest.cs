@@ -567,9 +567,9 @@ public class BmsLongNoteJudgementTest
         var after = processor.Health.Value;
         var delta = after - before;
 
-        // BAD delta = -0.03, half = -0.015
+        // LR2 Normal BAD is -4%; a released HCN tick applies half that damage.
         Assert.That(delta, Is.LessThan(0));
-        Assert.That(Math.Abs(delta + 0.015), Is.LessThan(0.001));
+        Assert.That(Math.Abs(delta + 0.04 / 2), Is.LessThan(0.001));
     }
 
     [Test]
@@ -656,11 +656,7 @@ public class BmsLongNoteJudgementTest
     {
         var tail = BmsJudgementProfileProvider.GetTable(BmsLayoutVariant.Bme7K, column: 0, rank: 3, tail: true);
 
-        Assert.That(tail.ResultForOffset(230), Is.EqualTo(HitResult.Ok));
-        Assert.That(tail.ResultForOffset(231), Is.EqualTo(HitResult.Ok));
-        Assert.That(tail.ResultForOffset(290), Is.EqualTo(HitResult.Ok));
-        Assert.That(tail.ResultForOffset(291), Is.EqualTo(HitResult.None));
-        Assert.That(tail.IsPastPassivePoorOffset(291), Is.True);
+        assertLr2TailEdges(tail);
     }
 
     [Test]
@@ -668,11 +664,22 @@ public class BmsLongNoteJudgementTest
     {
         var tail = BmsJudgementProfileProvider.GetTable(BmsLayoutVariant.Bme7K, column: 1, rank: 3, tail: true);
 
-        Assert.That(tail.ResultForOffset(220), Is.EqualTo(HitResult.Ok));
-        Assert.That(tail.ResultForOffset(221), Is.EqualTo(HitResult.Ok));
-        Assert.That(tail.ResultForOffset(280), Is.EqualTo(HitResult.Ok));
-        Assert.That(tail.ResultForOffset(281), Is.EqualTo(HitResult.None));
-        Assert.That(tail.IsPastPassivePoorOffset(281), Is.True);
+        assertLr2TailEdges(tail);
+    }
+
+    private static void assertLr2TailEdges(BmsJudgementWindowTable tail)
+    {
+        foreach (var sign in new[] { -1, 1 })
+        {
+            Assert.That(tail.ResultForOffset(sign * 119.999), Is.EqualTo(HitResult.Perfect));
+            Assert.That(tail.ResultForOffset(sign * 120), Is.EqualTo(HitResult.Perfect));
+            Assert.That(tail.ResultForOffset(sign * 120.001), Is.EqualTo(HitResult.Ok));
+            Assert.That(tail.ResultForOffset(sign * 199.999), Is.EqualTo(HitResult.Ok));
+            Assert.That(tail.ResultForOffset(sign * 200), Is.EqualTo(HitResult.Ok));
+            Assert.That(tail.ResultForOffset(sign * 200.001), Is.EqualTo(HitResult.None));
+        }
+        Assert.That(tail.IsPastPassivePoorOffset(200), Is.False);
+        Assert.That(tail.IsPastPassivePoorOffset(200.001), Is.True);
     }
 
     private static (BmsScoreProcessor processor, BmsLongNote source) createLongNoteProcessor(BmsLongNoteMode mode)

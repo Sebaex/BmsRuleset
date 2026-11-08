@@ -116,11 +116,19 @@ public class BmsOperationSequenceTest
         engine.QueueInput(1500, 1, false, false);
         engine.QueueInput(1700, 1, true, false);
         engine.ProcessFrame(new BmsFrameContext(1700, 1), 1700);
-        Assert.That(engine.GetColumn(1).GetLongNoteState(hold).TailJudged, Is.False);
+        Assert.That(engine.GetColumn(1).GetLongNoteState(hold).TailJudged, Is.True);
         Assert.That(engine.GetColumn(1).GetLongNoteState(hold).PendingReleaseTime, Is.Null);
+        var settled = engine.GetColumn(1).GetLongNoteState(hold);
+        Assert.That(settled.TailTime, Is.EqualTo(1500), "The later repress cannot defer the original release.");
+        var mainCount = output.MainResults;
+        var endpointCount = output.SyntheticEndpoints.Count;
         engine.QueueInput(3000, 1, false, false);
         engine.ProcessFrame(new BmsFrameContext(5000, 1), 3300);
-        Assert.That(engine.GetColumn(1).GetLongNoteState(hold).TailResult, Is.EqualTo(HitResult.Perfect));
+        Assert.That(engine.GetColumn(1).GetLongNoteState(hold).TailResult,
+            Is.EqualTo(mode == BmsLongNoteMode.LongNote ? HitResult.Ok : HitResult.Meh));
+        Assert.That(engine.GetColumn(1).GetLongNoteState(hold).TailTime, Is.EqualTo(settled.TailTime));
+        Assert.That(output.MainResults, Is.EqualTo(mainCount));
+        Assert.That(output.SyntheticEndpoints, Has.Count.EqualTo(endpointCount));
     }
 
     [Test]
