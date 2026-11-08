@@ -62,13 +62,14 @@ public partial class TestSceneBmsAutoGaugeScoreAttribution : BmsPlayerTestScene
 
         AddUntilStep("score completed", () => Player.ScoreProcessor.HasCompleted.Value);
 
-        AddAssert("active gauge resolved to ExHard", () =>
+        AddAssert("active gauge resolved to Hard after short-chart BAD", () =>
             Player.GameplayState.HealthProcessor is BmsHealthProcessor hp
-            && hp.WorstGaugeType == BmsGaugeType.ExHard);
+            && hp.WorstGaugeType == BmsGaugeType.Hard
+            && System.Math.Abs(hp.CurrentGaugeStates.Single(state => state.GaugeType == BmsGaugeType.Hard).Health - (1 - .06 * 10)) < 1e-9);
 
         AddAssert("score mods contain resolved gauge only", () =>
             Player.Score.ScoreInfo.Mods.Any(m => m is BmsModGaugeAutoShift)
-            && Player.Score.ScoreInfo.Mods.Any(m => m is BmsModExHardGauge)
+            && Player.Score.ScoreInfo.Mods.OfType<BmsModGauge>().Single() is BmsModHardGauge
             && Player.Score.ScoreInfo.Mods.All(m => m is not BmsModHazardGauge));
     }
 }

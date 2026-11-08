@@ -77,3 +77,11 @@ Sensitivity: Lost/refilled seeds, wrong hidden/public control, omitted tier, sta
 ## TM-GAS-FIX01 [TM-GAS-FIX]
 
 Release/net10.0 SDK 10.0.401. D1 filter repeated against the authorized production correction: 139/139 pass, zero failed/omitted; includes one new reset test. TRX SHA-256: 13B1972E9D605942F88C7F0F490AE5B150C0352C691DE30ACC4B394876A7E024. TM-D01/D02/D03 remain preserved. See GAS_SERIALISATION_FIX.md for scope and limits.
+
+## TM-D-UI01 [TM-D]
+
+Release/net10.0, SDK 10.0.401, source parent 029a4addd4b950765bd90c5f16858ab93f7cf179. Filter: `FullyQualifiedName~TestAutoGaugeFinalScoreAttributionUsesResolvedGauge|FullyQualifiedName~TestSceneBmsMods.TestAutoGauge|FullyQualifiedName~TestSceneBmsResultScreenStatistics.TestAutoGaugeHistory`. 3/3 pass, 0 fail, 0 other. TRX SHA-256 `25BC010AFD86617C7CEBE621D92E5196C3FA0ED318FBE8912EF6B908761A6E99`; logs/filter/binary hashes retained under `evidencias-paridad/TM-D-UI01`. IDs: F143, F196, F203.
+
+Executed LR2 damage and accepted configured GAS clear/display policy replace historical assumptions
+
+Sensitivity: Wrong attribution, omitted/extra series, wrong threshold inclusivity or stale HUD/history fails independent integration assertions
