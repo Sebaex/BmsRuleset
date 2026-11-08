@@ -322,7 +322,10 @@ public partial class TestSceneBmsJudgementLifecycleExecution : BmsPlayerTestScen
             ReleaseColumn(session.Column, 3300);
             session.Recorded.HandleExecutionRelease(3300, session.Frame);
             session.Traverse(3400);
-            Assert.That(runtime.State.PendingReleaseTime, Is.EqualTo(3300));
+            Assert.That(runtime.State.PendingReleaseTime, Is.Null, "LR2 has no PMS release grace period.");
+            Assert.That(runtime.State.TailJudged, Is.True);
+            Assert.That(runtime.State.TailTime, Is.EqualTo(3300));
+            Assert.That(runtime.State.LongNoteStarted, Is.True, "The HCN body remains active after its failed tail.");
             var before = readField<double>(tracker, "accumulator");
             var state = runtime.State;
             session.Mark("active-body-before-reapply");

@@ -93,3 +93,11 @@ Release/net10.0, SDK 10.0.401, source parent 9e1dbcfed31bfc5f4b7245b5e04efabf043
 Pinned LR2 margins/windows and gauge damage replace conventional beatoraja/PMS constants
 
 Sensitivity: Old margin, wrong sign/inclusivity, duplicated result, lost rewind state, wrong body count or release styling fails independently
+
+## TM-B-INSTRUMENT01 [TM-B]
+
+Release/net10.0, SDK 10.0.401, source parent 957639ddff9c6b370902df2d934939562c30398b. Filter: `FullyQualifiedName~HcnReapplyRetainsBodyAccumulatorAndPendingRelease|FullyQualifiedName~BmsLongNoteExecutionTest|FullyQualifiedName~BmsChargeNoteExecutionTest|FullyQualifiedName~BmsHellChargeNoteExecutionTest|FullyQualifiedName~BmsHellChargeBodyTrackerTest`. 24/24 pass, 0 fail, 0 other. TRX SHA-256 `D8B5E039B9B56D60E983862DD69D8F7C6B7F4C36ED791DCCBAD13F2D94A9B871`; logs/filter/binary hashes retained under `evidencias-paridad/TM-B-INSTRUMENT01`. IDs: F003.
+
+Zero release margin changes precondition without removing lifecycle verification
+
+Sensitivity: Runtime replacement, accumulator reset, premature body retirement or changed trace fails original later assertions
