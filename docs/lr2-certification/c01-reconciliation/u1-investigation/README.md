@@ -6,5 +6,6 @@ This is investigation of the ten original U1 observations, not a production repa
 
 * [U1-C: Duration and heterogeneous judgement rates](U1_C_DURATION.md)
 * [U1-B: difficulty golden](U1_B_DIFFICULTY.md)
+* [U1-A: lifetime fingerprints](U1_A_LIFETIME.md)
 
 Evidence references use paths relative to the external `nuevo-trabajo` evidence root, avoiding personal paths in Git. Temporary diagnostic sources, logs, TRX and binary hashes are preserved there; none are distributed as gameplay binaries. A diagnostic source overlay is explicitly distinguished from the unmodified source SHA. No permanent probes or production hooks are added.
