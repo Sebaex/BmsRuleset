@@ -8,5 +8,6 @@ This is investigation of the ten original U1 observations, not a production repa
 * [U1-B: difficulty golden](U1_B_DIFFICULTY.md)
 * [U1-A: lifetime fingerprints](U1_A_LIFETIME.md)
 * [U1-D: Course overview timeout](U1_D_COURSE_RESULTS.md)
+* [U1-E: GAS transition](U1_E_GAS_VISUAL.md)
 
 Evidence references use paths relative to the external `nuevo-trabajo` evidence root, avoiding personal paths in Git. Temporary diagnostic sources, logs, TRX and binary hashes are preserved there; none are distributed as gameplay binaries. A diagnostic source overlay is explicitly distinguished from the unmodified source SHA. No permanent probes or production hooks are added.
