@@ -56,37 +56,42 @@ public partial class TestSceneBmsBeatorajaPmsConsumers : BmsPlayerTestScene
         load(true);
         checkpoint(875, () =>
         {
-            assertState(0.28, 0, [0]);
-            Assert.That(markers.Lines, Has.Count.EqualTo(1));
-            Assert.That(markers.Lines.Single().X, Is.EqualTo(0.35).Within(1e-6));
-            Assert.That(markers.Lines.Single().AlphaAt(markers.DisplayTime), Is.GreaterThan(0));
+            assertState(.14, 0, [0, 0]);
+            Assert.That(markers.Lines, Has.Count.EqualTo(2), "Consuming BAD is followed by one early empty POOR.");
+            Assert.That(markers.Lines.Select(line => (double)line.X).Order(),
+                Is.EqualTo(new[] { (-150d + 1000) / 2000, (-140d + 1000) / 2000 }).Within(1e-6));
+            Assert.That(markers.Lines.All(line => line.AlphaAt(markers.DisplayTime) > 0), Is.True);
             var saved = new ScoreInfo(); score.PopulateScore(saved);
-            var hit = saved.HitEvents.Single();
+            var hit = saved.HitEvents.Single(e => e.Result == HitResult.Ok);
             Assert.That(((BmsHitObject)hit.HitObject).Column, Is.EqualTo(1));
             Assert.That(hit.HitObject.StartTime, Is.EqualTo(1000));
             Assert.That(hit.TimeOffset, Is.EqualTo(-150));
             var scatter = BmsHitScatterStatistic.CreateStatistics((BmsBeatmap)Player.GameplayState.Beatmap, saved.HitEvents);
-            Assert.That(scatter.Keys[1].Data.Points.Single().Offset, Is.EqualTo(-150));
+            Assert.That(scatter.Keys[1].Data.Points.Single(point => point.Result == HitResult.Ok).Offset, Is.EqualTo(-150));
+            Assert.That(scatter.Keys[1].Data.Points.Select(point => point.Result), Is.EqualTo(new[] { HitResult.Ok }));
+            Assert.That(scatter.Overall.Points.Count(point => point.Result == HitResult.Miss), Is.EqualTo(1),
+                "Empty POOR has no consumed key; it remains in the overall scatter.");
             Assert.That(saved.Statistics.GetValueOrDefault(HitResult.Ok), Is.EqualTo(1));
         }, advanceNormally: true);
         checkpoint(950, () =>
         {
-            assertState(0.28, 0, [0]);
+            assertState(.14, 0, [0, 0]);
             Assert.That(markers.Lines, Is.Empty, "the second BAD cannot add a marker after seek clears the old marker");
         });
         checkpoint(1050, afterRehit);
-        checkpoint(875, () => assertState(0.28, 0, [0]));
+        checkpoint(875, () => assertState(.14, 0, [0, 0]));
         checkpoint(1050, afterRehit);
-        checkpoint(800, () => assertState(0.30, 0, [0]));
+        checkpoint(800, () => assertState(.20, 0, [0]));
         checkpoint(1050, afterRehit);
 
         void afterRehit()
         {
-            assertState(0.38, 1, [0, 2]);
+            assertState(.12, 0, [0, 0]);
             var saved = new ScoreInfo(); score.PopulateScore(saved);
             Assert.That(saved.Statistics.GetValueOrDefault(HitResult.Ok), Is.EqualTo(1));
-            Assert.That(saved.Statistics.GetValueOrDefault(HitResult.Perfect), Is.EqualTo(1));
-            Assert.That(saved.HitEvents.Select(e => e.TimeOffset), Is.EqualTo(new[] { -150d, 0 }));
+            Assert.That(saved.Statistics.GetValueOrDefault(HitResult.Perfect), Is.Zero);
+            Assert.That(saved.Statistics.GetValueOrDefault(HitResult.Miss), Is.EqualTo(2));
+            Assert.That(saved.HitEvents.Select(e => e.TimeOffset), Is.EqualTo(new[] { -150d, -140, 0 }));
         }
     }
 
@@ -94,38 +99,39 @@ public partial class TestSceneBmsBeatorajaPmsConsumers : BmsPlayerTestScene
     public void SuppressedPoorKeepsProgressAndArchiveWithoutFeedbackOrSecondPenalty()
     {
         load(false);
-        checkpoint(1700, () => assertState(0.34, 0, [0, 2]));
+        checkpoint(1700, () => assertState(.28, 1, [0, 2]));
         checkpoint(2250, () =>
         {
-            assertState(0.34, 0, [0, 2, 2]);
-            Assert.That(markers.Lines, Is.Empty, "suppressed passive POOR adds no marker");
-            Assert.That(score.JudgementEvents.Last().SuppressPenalty, Is.True);
+            assertState(.22, 0, [0, 2, 2]);
+            Assert.That(markers.Lines, Is.Empty, "Seeking clears feedback; the archived passive POOR remains penalized.");
+            Assert.That(score.JudgementEvents.Last().SuppressPenalty, Is.False);
         });
         checkpoint(3050, finalState);
-        checkpoint(1700, () => assertState(0.34, 0, [0, 2]));
+        checkpoint(1700, () => assertState(.28, 1, [0, 2]));
         checkpoint(3050, finalState);
-        checkpoint(1500, () => assertState(0.40, 1, [0, 2]));
+        checkpoint(1500, () => assertState(.30, 1, [0, 2]));
         checkpoint(3050, finalState);
         checkpoint(3400, () => { finalState(); Assert.That(score.HasCompleted.Value, Is.True); });
 
         void finalState()
         {
-            assertState(0.44, 1, [0, 2, 2, 4]);
+            assertState(.32, 1, [0, 2, 2, 4]);
             var saved = new Score(); score.PopulateScore(saved.ScoreInfo);
             saved.Replay = new osu.Game.Replays.Replay();
             var restored = BmsTestReplayArchive.RoundTrip(saved, legacy: true);
             var events = score.JudgementEvents;
             Assert.That(BmsExScore.CreateProgression(events), Is.EqualTo(new[] { 0, 2, 2, 4 }));
-            Assert.That(events.Single(e => e.SuppressPenalty).Source.IsScoring, Is.True);
+            Assert.That(events.Where(e => e.SuppressPenalty), Is.Empty);
+            Assert.That(events.Single(e => e.Result == HitResult.Meh).Source.IsScoring, Is.True);
             Assert.That(restored.ScoreInfo.Statistics.GetValueOrDefault(HitResult.Miss), Is.EqualTo(1));
-            Assert.That(restored.ScoreInfo.Statistics.GetValueOrDefault(HitResult.Meh), Is.Zero);
-            Assert.That(BmsJudgementEventProjection.CreateTimingHitEvents(events).Select(e => e.Result), Is.EqualTo(new[] { HitResult.Perfect, HitResult.Miss, HitResult.Perfect }));
+            Assert.That(restored.ScoreInfo.Statistics.GetValueOrDefault(HitResult.Meh), Is.EqualTo(1));
+            Assert.That(BmsJudgementEventProjection.CreateTimingHitEvents(events).Select(e => e.Result), Is.EqualTo(new[] { HitResult.Perfect, HitResult.Miss, HitResult.Meh, HitResult.Perfect }));
             Assert.That(BmsScoreGraph.ScoreAtProgress(4, BmsExScore.CreateProgression(events), 2, 3), Is.EqualTo(2));
             Assert.That(score.Accuracy.Value, Is.EqualTo(2d / 3).Within(1e-10));
-            // GaugeProperty.NORMAL_PMS has a 120% ceiling; graph positions are normalised to it.
+            // LR2 Normal has a100% ceiling; the single passive POOR must be charged once in archive fallback.
             Assert.That(BmsGaugeHistoryGraph.CreateSeries(restored.ScoreInfo, Player.GameplayState.Beatmap,
                     BmsJudgementEventProjection.CreateScoringHitEvents(events), []).Single().Points.Last().Health,
-                Is.EqualTo(44d / 120).Within(1e-8), "archive fallback gauge must not charge suppressed POOR again");
+                Is.EqualTo(.2 + .1 - .02 - .06 + .1).Within(1e-8), "archive fallback gauge must charge the actual POOR exactly once");
         }
     }
 

@@ -109,3 +109,11 @@ Release/net10.0, SDK 10.0.401, source parent a291813d5eee6f3bed6c76ee83235909274
 Pinned LR2 endpoint policy changes grades and damage; C# lifecycle/history contracts stay enforced
 
 Sensitivity: Wrong event order, missing tick/endpoint, duplicate release, broken rewind/defaults/pooling or score denominator fails exact original integration and independent counters
+
+## TM-B-CONSUMERS03 [TM-B]
+
+Release/net10.0, SDK 10.0.401, source parent 7d507491e2b26750f95c82634e05b1bdfca61a8f. Filter: `FullyQualifiedName~TestSceneBmsBeatorajaJudgements|FullyQualifiedName~TestSceneBmsBeatorajaPmsConsumers|FullyQualifiedName~BmsLr2PoorPenaltyTest|FullyQualifiedName~BmsMultiBadParityTest|FullyQualifiedName~TestSceneBmsLongNoteJudgement`. 27/27 pass, 0 fail, 0 other. TRX SHA-256 `B61E93CB52FB9CD92B3E517A5BB83B59A57F8EA356F20DFAC95F846CF9DC67F2`; logs/filter/binary hashes retained under `evidencias-paridad/TM-B-CONSUMERS03`. IDs: F150, F151, F170, F171, F185, F186, F187.
+
+Historical PMS suppression/default windows and conventional health assumptions conflict with pinned LR2
+
+Sensitivity: Wrong consumption/suppression, lost offsets/source, wrong marker placement, late-head acceptance, health grade or post-tail/repress result fails independent exact assertions
