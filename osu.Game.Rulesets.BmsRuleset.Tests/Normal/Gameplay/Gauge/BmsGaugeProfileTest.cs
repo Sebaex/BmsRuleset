@@ -36,8 +36,8 @@ public class BmsGaugeProfileTest
         Assert.That(hazard.Display.ColourMode, Is.EqualTo(BmsGaugeColourMode.Fixed));
 
         Assert.That(hard.Display.FillColour, Is.EqualTo(new Color4(220, 55, 50, 255)));
-        Assert.That(exHard.Display.FillColour, Is.EqualTo(new Color4(195, 55, 210, 255)));
-        Assert.That(hazard.Display.FillColour, Is.EqualTo(new Color4(255, 215, 0, 255)));
+        Assert.That(exHard.Display.FillColour, Is.EqualTo(new Color4(255, 215, 0, 255)));
+        Assert.That(hazard.Display.FillColour, Is.EqualTo(new Color4(198, 198, 198, 255)));
 
         Assert.That(hard.Display.ShowClearLine, Is.False);
         Assert.That(exHard.Display.ShowClearLine, Is.False);
@@ -75,7 +75,7 @@ public class BmsGaugeProfileTest
         var display = BmsGaugeProfileFactory.Create(BmsGaugeType.Hazard).Display;
 
         Assert.That(display.ColourMode, Is.EqualTo(BmsGaugeColourMode.Fixed));
-        Assert.That(display.FillColour, Is.EqualTo(new Color4(255, 215, 0, 255)));
+        Assert.That(display.FillColour, Is.EqualTo(new Color4(198, 198, 198, 255)));
         Assert.That(display.ClearThreshold, Is.Null);
         Assert.That(display.ShowClearLine, Is.False);
     }

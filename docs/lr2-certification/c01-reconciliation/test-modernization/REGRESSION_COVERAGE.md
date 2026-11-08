@@ -11,3 +11,7 @@ The new update-thread comma check is a controlled negative environment for the o
 ## E — lifetime
 
 Truncating a lifetime to its head fails explicit fast-coverage and independent start checks; changing BAD or omitting the passive margin fails exact end arithmetic. Incorrect scroll/speed/head-tail visibility fails the independently interpolated start comparison, while sub-millisecond or binary representation changes still fail exact fingerprints. Original 192 pairs, 64 selected notes, speeds 8/12/6, deterministic branch and stateless point comparison remain. The independent spatial helper shares immutable timing-point inputs and documented display rules, not production lifetime output; it does not claim independent chart-parser certification. No extra cases replace the original integration scenarios.
+
+## H — presentation/localization
+
+Old purple/gold palette values fail the exact approved-color assertions; switching Fixed to dynamic, losing the clear-line contract or selecting the wrong class tier remains detectable. New actual-fill checks additionally reject a HUD binding/color divergence even if the processor profile is right. Hazard retains exact color checks at changing health. The three missing-key controls fail if fallback becomes blank, an unresolved key, wrong text or wrong language-state behavior. Crucially, original key-set/format equality still fails on the documented translation gap, protecting completeness instead of converting fallback into a blanket exemption. No original case is removed or disabled.

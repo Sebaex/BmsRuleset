@@ -886,7 +886,7 @@ public class BmsHealthProcessorTest
         Assert.Multiple(() =>
         {
             Assert.That(processor.GaugeType, Is.EqualTo(BmsGaugeType.ExHardClass));
-            Assert.That(processor.DisplayProfile.Value.FillColour, Is.EqualTo(new Color4(255, 215, 0, 255)));
+            Assert.That(processor.DisplayProfile.Value.FillColour, Is.EqualTo(new Color4(198, 198, 198, 255)));
         });
     }
 

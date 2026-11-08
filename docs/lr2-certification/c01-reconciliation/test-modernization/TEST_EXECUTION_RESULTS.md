@@ -25,3 +25,11 @@ Release/net10.0, SDK 10.0.401, source parent e2b2a6248948d65dc53a6b7e0f82db0f669
 U1-A exactly recovered old hashes with old bounds; LR2 BAD 200/fast empty POOR 1000 independently reconstruct current coverage
 
 Sensitivity: Truncated head coverage/end margin fails independent arithmetic; wrong visibility fails separate immutable-point interpolation; original exact hashes retain bit-level sensitivity
+
+## TM-H01 [TM-H]
+
+Release/net10.0, SDK 10.0.401, source parent c5c578caed6a9185ace208a91c546bd24bcb6504. Filter: `FullyQualifiedName~TestSceneBmsHealthBar|FullyQualifiedName~TestHardProfilesUseDistinctFixedColours|FullyQualifiedName~TestHazardDisplayIsGoldAndHasNoClearLine|FullyQualifiedName~TestCourseProfilesUseTieredGaugeDisplay|FullyQualifiedName~TestCourseAutoGaugeStartsAtExHardClass|FullyQualifiedName~BmsLocalisationTest`. 40/41 pass, 1 fail, 0 other. TRX SHA-256 `FA53C0766995FEB9D44FF286BC5D7619E6DD1E0FBCD37C391A7D4720051B795F`; logs/filter/binary hashes retained under `evidencias-paridad/TM-H01`. IDs: F005, F006, F007, F080, F081, F092.
+
+User explicitly approves current palette; translation synchronization lacks an exception and remains a visible production-resource limitation
+
+Sensitivity: Wrong exact color or actual HUD binding fails; missing/wrong fallback text fails; original resource completeness still fails rather than being weakened

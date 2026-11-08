@@ -148,6 +148,25 @@ public class BmsLocalisationTest
         Assert.That(text.Value, Is.EqualTo(chinese));
     }
 
+    [TestCase("gas_lower_limit", "Lowest Gauge")]
+    [TestCase("gas_lower_limit_description", "Select the lowest gauge which GAS will work with.")]
+    [TestCase("mod_gauge_auto_shift", "Start with the hardest gauge. When you fail, drop to the next tier.")]
+    public void TestMissingChineseGasResourceFallsBackToExactEnglishText(string key, string expected)
+    {
+        var text = key switch
+        {
+            "gas_lower_limit" => BmsStrings.GasLowerLimit,
+            "gas_lower_limit_description" => BmsStrings.GasLowerLimitDescription,
+            "mod_gauge_auto_shift" => BmsStrings.ModGaugeAutoShift,
+            _ => throw new ArgumentOutOfRangeException(nameof(key)),
+        };
+        config.SetValue(FrameworkSetting.Locale, "zh");
+        Assert.That(localisation.GetLocalisedString(text), Is.EqualTo(expected));
+        Assert.That(localisation.GetLocalisedString(text), Is.Not.EqualTo(key));
+        config.SetValue(FrameworkSetting.Locale, "en");
+        Assert.That(localisation.GetLocalisedString(text), Is.EqualTo(expected));
+    }
+
     [Test]
     public void TestResourceKeysAndFormatArgumentsMatch()
     {
