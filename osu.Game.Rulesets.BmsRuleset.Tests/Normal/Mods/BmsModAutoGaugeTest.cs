@@ -282,6 +282,32 @@ public class BmsModGaugeAutoShiftTest
         Assert.That(mod.GasMode.IsDefault, Is.True);
     }
 
+    [TestCase(BmsGasLowerLimit.Normal)]
+    [TestCase(BmsGasLowerLimit.Easy)]
+    [TestCase(BmsGasLowerLimit.Assist)]
+    public void TestRegularGasLowerLimitSurvivesScorePersistence(BmsGasLowerLimit limit)
+    {
+        var mod = new BmsModGaugeAutoShift { GasMode = { Value = limit } };
+        var saved = new ScoreInfo { Ruleset = new BmsRuleset().RulesetInfo, Mods = [mod] };
+        // ScoreInfo persists ModsJson using JsonConvert's settings, not the global
+        // IgnoreAndPopulate helper that replaces an omitted APIMod.Settings with null.
+        var reloaded = new ScoreInfo { Ruleset = saved.Ruleset, ModsJson = saved.ModsJson };
+        var restored = (BmsModGaugeAutoShift)reloaded.Mods.Single();
+        Assert.That(restored.GasMode.Value, Is.EqualTo(limit));
+        Assert.That(((BmsModGaugeAutoShift)new APIMod(mod).ToMod(new BmsRuleset())).GasMode.Value, Is.EqualTo(limit));
+        using var health = new BmsHealthProcessor();
+        health.ApplyBeatmap(new BmsBeatmap { LayoutVariant = BmsLayoutVariant.Bme7K });
+        restored.ApplyToHealthProcessor(health);
+        BmsGaugeType[] expected = limit switch
+        {
+            BmsGasLowerLimit.Normal => [BmsGaugeType.Hazard, BmsGaugeType.ExHard, BmsGaugeType.Hard, BmsGaugeType.Normal],
+            BmsGasLowerLimit.Easy => [BmsGaugeType.Hazard, BmsGaugeType.ExHard, BmsGaugeType.Hard, BmsGaugeType.Normal, BmsGaugeType.Easy],
+            _ => [BmsGaugeType.Hazard, BmsGaugeType.ExHard, BmsGaugeType.Hard, BmsGaugeType.Normal, BmsGaugeType.Easy, BmsGaugeType.AssistEasy],
+        };
+        Assert.That(health.CurrentGaugeStates.Select(state => state.GaugeType), Is.EqualTo(expected));
+        Assert.That(health.IsCourseGaugeMode, Is.False);
+    }
+
     [TestCase(BmsGaugeType.Class)]
     [TestCase(BmsGaugeType.ExClass)]
     [TestCase(BmsGaugeType.ExHardClass)]

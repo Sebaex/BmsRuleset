@@ -19,3 +19,9 @@ TM-D03 conserva el fallo previo: 137/138; TRX SHA-256 `1D32DB70FFEE7BB501BC11D8D
 Los registros anteriores con `gas_mode` explícito conservan su significado; los nuevos representan correctamente las tres elecciones. Cuando un registro antiguo omitió Assist por el defecto, ya no existe información suficiente para distinguirlo de la elección inicial: no se inventa una migración ni se reinterpreta toda ausencia como Assist. El intento anterior con JSON sin ajustes (TM-D02) se mantiene documentado; esta corrección no modifica APIMod ni declara resuelta esa ruta independiente.
 
 No se modifica F099, Duration/Multi-BAD, los 49 casos previamente reparados, las expectativas Java ni documentación histórica. La modernización incremental continúa después de este commit independiente.
+
+## Verificación sucesora de persistencia ordinaria
+
+`TestRegularGasLowerLimitSurvivesScorePersistence` añade tres controles sin semillas Course: Normal, Easy y Assist pasan por el almacenamiento real `ScoreInfo.ModsJson`, se restauran desde un ScoreInfo nuevo y generan exactamente sus cadenas4/5/6. También se comprueba la conversión directa APIMod.ToMod y que no se cree contexto Course. TM-GAS-PERSISTENCE01 pasa92/92, incluidas herencia Course y cadenas configuradas; no añade cambios de producción.
+
+La ruta de TM-D02 queda delimitada por el código: `JsonSerializableExtensions.CreateGlobalSettings` usa IgnoreAndPopulate/Replace y puede sustituir Settings omitido por null. `ScoreInfo.cs:332–360` utiliza JsonConvert con su configuración ordinaria para ModsJson y conserva el diccionario vacío inicial. La nueva prueba cubre esa ruta productiva, incluido Easy sin ningún ajuste adicional. No se afirma que el helper global de osu! haya sido corregido ni que todas las rutas externas de JSON estén certificadas.

@@ -125,3 +125,7 @@ Release/net10.0, SDK 10.0.401, source parent 589b11dc560dabb90228a10dae73703be93
 Old sub-2% survival, uniform BAD offsets and ONE-style unjudged input assumptions contradict pinned LR2 and explicit C# presentation contracts
 
 Sensitivity: Reversed tick order kills the control; missing/extra BAD, wrong signed offset/source or replay duplication fails exact arrays; wrong input count/colour/source fails real HUD checks
+
+## TM-GAS-PERSISTENCE01 [TM-GAS-PERSISTENCE]
+
+Release/net10.0 SDK10.0.401. 92/92 passed, zero failed/omitted; three new ordinary GAS score-persistence cases plus existing Course/inheritance/configured-chain controls. TRX SHA-256 694F50D9980B60D460CCFFD92A32C9AD6D7CD8F3BB2D3A7E71AE7432B9EC2500. No production change; see GAS_SERIALISATION_FIX.md.
