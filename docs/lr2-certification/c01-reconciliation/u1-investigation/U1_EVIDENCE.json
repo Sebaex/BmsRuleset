@@ -1,0 +1,348 @@
+{
+  "date": "2026-11-07",
+  "sdk": "10.0.401",
+  "configuration": "Release",
+  "base_source": "2ab2ad3d6e5d77232ae5c6617a1a6480c8354dff",
+  "baseline_source": "59e186c527bb8e2ab3e8ea82c6668e21b4bf147a",
+  "note": "Separate repeated executions, not unique defect counts. Temporary source overlays are documented in group reports; production source unchanged. C01 compile-only failure retained separately.",
+  "runs": [
+    {
+      "id": "C02",
+      "directory": "evidencias-paridad/U1-C-02",
+      "total": 12,
+      "passed": 11,
+      "failed": 1,
+      "other": 0,
+      "files": [
+        {
+          "sha256": "9DAD07E0DB6A35A54E111E682AD903C776D7539919EFDB63CA4229672681C76F",
+          "file": "build.log"
+        },
+        {
+          "sha256": "8E259A75AFD79B3BBD50326B6BF1FBF170458143050455D14BB3D56548F23376",
+          "file": "filter.txt"
+        },
+        {
+          "sha256": "484E378D912AECEDBB3C2C9AD83FD04CEF49C7B03032162C39394CE2EE23604C",
+          "file": "hashes.json"
+        },
+        {
+          "sha256": "89A76439AA057FF2EA6DBFE4D3BE5F19B67E7835DFE98C9950FBFA4B4C675FEC",
+          "file": "tests.log"
+        },
+        {
+          "sha256": "503FC65950EE1878D1670C7BEE8C0434B488E4D22E954E42EBC44A643A3D04CA",
+          "file": "tests.trx"
+        }
+      ]
+    },
+    {
+      "id": "C-baseline",
+      "directory": "reconciliacion-c01-20261105/u1-baseline-duration-20261107",
+      "total": 1,
+      "passed": 0,
+      "failed": 1,
+      "other": 0,
+      "files": [
+        {
+          "sha256": "7080E22F106E6DEDCA3459BBFA83B538270F8FAA05BC203F5A0EEA9B6B5A3724",
+          "file": "hashes.json"
+        },
+        {
+          "sha256": "33EF562D87264CFABE8C69875D40340CBA86D409922DBD7650E573D840B1E86D",
+          "file": "tests.log"
+        },
+        {
+          "sha256": "B3E69E928B052DD68DB088E4A18442D22831E0DBD681CAB2BBE5F793D250980F",
+          "file": "tests.trx"
+        }
+      ]
+    },
+    {
+      "id": "AB01",
+      "directory": "evidencias-paridad/U1-AB-01",
+      "total": 6,
+      "passed": 3,
+      "failed": 3,
+      "other": 0,
+      "files": [
+        {
+          "sha256": "B4722585660D53421D153BA6050910C427C3AE8EC4D9962700331BBDE4843405",
+          "file": "build.log"
+        },
+        {
+          "sha256": "9C29D5CF5EB8661318143FDCEC66A1FF1156A9CD1DC8BBA8E1EAC8F23E24151E",
+          "file": "filter.txt"
+        },
+        {
+          "sha256": "1847E18992325670D57C0EB1AA5935057989E7E54B9595EB90564625A901D434",
+          "file": "hashes.json"
+        },
+        {
+          "sha256": "005CED6BF39AF72A6981327AEB36A4947A697492C8043D6FA05668D33BB735E4",
+          "file": "tests.log"
+        },
+        {
+          "sha256": "04F8202BB272A1132C7EC483F4EAA7C23EFCABCF38FE69E7BBB0171B7263EE2F",
+          "file": "tests.trx"
+        }
+      ]
+    },
+    {
+      "id": "A02",
+      "directory": "evidencias-paridad/U1-A-02",
+      "total": 4,
+      "passed": 1,
+      "failed": 3,
+      "other": 0,
+      "files": [
+        {
+          "sha256": "8B98A75FCE0863D03CB7CCDA35D36DB7C354192E5867E678B66D55C4106A5883",
+          "file": "build.log"
+        },
+        {
+          "sha256": "601EA51D20CA077F5A81FF41AE949885C9CB341DEF73B63710F220D61E30D3DF",
+          "file": "filter.txt"
+        },
+        {
+          "sha256": "C79518384B8D5A3D6DD33D8EB234E68461E86869307667B28060B173D351DD0E",
+          "file": "hashes.json"
+        },
+        {
+          "sha256": "363783424F995E8DDA9F42EA6F8B79BB89E2D3C257742BB0D2666B81CBC2164C",
+          "file": "tests.log"
+        },
+        {
+          "sha256": "1C4B0EDA2C333C0779A68EB152EAA29C0EA4A94A37789442BD3629424421C4FE",
+          "file": "tests.trx"
+        }
+      ]
+    },
+    {
+      "id": "A03",
+      "directory": "evidencias-paridad/U1-A-03",
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "other": 0,
+      "files": [
+        {
+          "sha256": "7218178F2F612AF81FF01A7F6678A76F7AB789780E490743D6B344E0127C2593",
+          "file": "build.log"
+        },
+        {
+          "sha256": "7C98B0E4B26A46FF9D29D83C8E3EDB7D939D4E130ACC62AD93259B0F9317B412",
+          "file": "filter.txt"
+        },
+        {
+          "sha256": "28B9A4FC711AFABC263070965E975C33DDE98DDB4C36736756294361BBE73302",
+          "file": "hashes.json"
+        },
+        {
+          "sha256": "2A6C63F04129910FBE8FF590E465DE32E3F08EFDE3935F2EA7AA648796CF47D8",
+          "file": "tests.log"
+        },
+        {
+          "sha256": "28C86A48AA89DC241C5D38370765E3B88538C3A43954C759D9B748AB8A761093",
+          "file": "tests.trx"
+        }
+      ]
+    },
+    {
+      "id": "A-instrumentation",
+      "directory": "investigacion-u1-20261107/A-instrumentation",
+      "total": 2,
+      "passed": 0,
+      "failed": 2,
+      "other": 0,
+      "files": [
+        {
+          "sha256": "FAD9180778916651931762FCE56AE574571305D011B3D263B9A5B3DA03066258",
+          "file": "hashes.json"
+        },
+        {
+          "sha256": "D653A11FF55D9523D71B3C0556B357AD3AED4A0CD3C169E592F4E9458EF937EF",
+          "file": "tests.log"
+        },
+        {
+          "sha256": "A279DF78B394A0EBEE692208D29298C3F43425426539F513E6000DBFD62D4D1C",
+          "file": "tests.trx"
+        }
+      ]
+    },
+    {
+      "id": "B-baseline",
+      "directory": "investigacion-u1-20261107/B-baseline",
+      "total": 1,
+      "passed": 0,
+      "failed": 1,
+      "other": 0,
+      "files": [
+        {
+          "sha256": "4344B651B77A65D380FF1CD9EB3DB8D2A08F406F4D35CFE64050C7CDB866502B",
+          "file": "tests.log"
+        },
+        {
+          "sha256": "5D4F45E76D69A3389044F3C68C642FB66D5B36A13825D1E0E465CEC336372172",
+          "file": "tests.trx"
+        }
+      ]
+    },
+    {
+      "id": "D01-setup-denied",
+      "directory": "evidencias-paridad/U1-D-01",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "other": 0,
+      "files": [
+        {
+          "sha256": "2A26FC3D573D34F0D0EC99F749B3C74918CA1941A2A01D06EF220B648998990E",
+          "file": "build.log"
+        },
+        {
+          "sha256": "E2A3D8F1D86B127A52BF5DFFCDF7F9D6F18477C82675B814A24E0477D595E3A4",
+          "file": "filter.txt"
+        },
+        {
+          "sha256": "FD3A7997AC7B14FA7D2914462C8F76B2ABD436A45A4574E3551D948A45E3563E",
+          "file": "hashes.json"
+        },
+        {
+          "sha256": "74E20DCA7C975BD20795EEF93128F5451EE871FE65BA11277D0C91460BD08265",
+          "file": "tests.log"
+        },
+        {
+          "sha256": "A22AB633EA49279361AD623E82DF5B1104C05F1A0E3180799F7727869AB82AF9",
+          "file": "tests.trx"
+        }
+      ]
+    },
+    {
+      "id": "D02",
+      "directory": "investigacion-u1-20261107/D-02",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "other": 0,
+      "files": [
+        {
+          "sha256": "F130A49137B13E5597B1CBF51582458B5DF374FAE5D0384C6206005266BC9D77",
+          "file": "hashes.json"
+        },
+        {
+          "sha256": "DCF452191B4B17DD3353851CE7D2C5497F80C56562BF09C308869C005C5020C9",
+          "file": "tests.log"
+        },
+        {
+          "sha256": "78F1548527FFBA825F443C3958E576D102A4EA787D7E550637A5AC5882FE16D1",
+          "file": "tests.trx"
+        }
+      ]
+    },
+    {
+      "id": "D03-culture-attempt",
+      "directory": "investigacion-u1-20261107/D-03-en-US",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "other": 0,
+      "files": [
+        {
+          "sha256": "F130A49137B13E5597B1CBF51582458B5DF374FAE5D0384C6206005266BC9D77",
+          "file": "hashes.json"
+        },
+        {
+          "sha256": "DD66D6EAC541CD6E2E8467DB3B39A04B7620A8278B3BEA5B587A1C1E3F119D91",
+          "file": "tests.log"
+        },
+        {
+          "sha256": "5E344DC04371CD16C867A40DBF1AC872DB394B170EACF8D5AD97A2D2B6249647",
+          "file": "tests.trx"
+        }
+      ]
+    },
+    {
+      "id": "E01",
+      "directory": "evidencias-paridad/U1-E-01",
+      "total": 1,
+      "passed": 0,
+      "failed": 1,
+      "other": 0,
+      "files": [
+        {
+          "sha256": "0A939807DD3138D32D784F35536C1C26392D4A7BAEEC9A5AE4C4EDEB0890727F",
+          "file": "build.log"
+        },
+        {
+          "sha256": "2BBA9560965FE48C81881529A8240B4EB52102978418DA036B27235C432AFAC7",
+          "file": "filter.txt"
+        },
+        {
+          "sha256": "EBACB3DF8D189A6DB2A44BB33AF617D743F29D5B0FE003A42E70B7DC6A7A0913",
+          "file": "hashes.json"
+        },
+        {
+          "sha256": "2177A681E5EB9602AE3F8E59F2AD101E5E07263A909E6E14974BD465E5C7E2BD",
+          "file": "tests.log"
+        },
+        {
+          "sha256": "B4134EC9913406BF2586DE49C7CFA7C96F24B27692F58CDF973B7E4F44828ED3",
+          "file": "tests.trx"
+        }
+      ]
+    },
+    {
+      "id": "E-baseline",
+      "directory": "investigacion-u1-20261107/E-baseline",
+      "total": 1,
+      "passed": 0,
+      "failed": 1,
+      "other": 0,
+      "files": [
+        {
+          "sha256": "7080E22F106E6DEDCA3459BBFA83B538270F8FAA05BC203F5A0EEA9B6B5A3724",
+          "file": "hashes.json"
+        },
+        {
+          "sha256": "FB8FAE34B3BD3CE737ED5FB3027E0209692D156818AE77ADBF3B3A2EA416DD09",
+          "file": "tests.log"
+        },
+        {
+          "sha256": "E0EB5D2FA5405245F44DA5334E463669B06522284E9A0078D14DE5994D1FD9F6",
+          "file": "tests.trx"
+        }
+      ]
+    },
+    {
+      "id": "E02",
+      "directory": "evidencias-paridad/U1-E-02",
+      "total": 4,
+      "passed": 3,
+      "failed": 1,
+      "other": 0,
+      "files": [
+        {
+          "sha256": "DC34F0C5481E824927113E867CBC818C8AA335C1F7EE014635C845A855AF88FC",
+          "file": "build.log"
+        },
+        {
+          "sha256": "B5FEB832329A209424904D7BCC7808EC91B3CC20E34470B8473D21B518D8C009",
+          "file": "filter.txt"
+        },
+        {
+          "sha256": "880FE3B0C0C9D67DD2B5FD6CCCA0A312038A9DB388F31CBB1C52D6D853874285",
+          "file": "hashes.json"
+        },
+        {
+          "sha256": "479DB88A323F755065607A653F4E42ACBE81551B6A727FD7629F9E20D043650B",
+          "file": "tests.log"
+        },
+        {
+          "sha256": "A90CAE0280FB1DF580662B29AF5F63ADE89FC7E1BD44CA81663D882D819C9C89",
+          "file": "tests.trx"
+        }
+      ]
+    }
+  ]
+}

@@ -16,7 +16,7 @@ Key history snapshots (normalized health):
 
 Normal was above .8 while survival Hard was still active. The next miss subtracts .06 from Normal and .048 from Easy (LR2 profile factory `:98–109`), producing the last row. At Hard's failure Normal is **below** its .8 clear threshold, while Easy is above .8. Remaining misses only lower these total gauges; the replay does not refill Normal. No later Normal record is required or expected. The trace does not record ExHard as a separate displayed step; do not invent an intermediate frame from the chain order.
 
-`BmsHealthProcessor.resolveActiveState/resolveDisplayGaugeIndex` (`Gameplay/Scoring/BmsHealthProcessor.cs:464–520`) deliberately keeps surviving survival gauges visible, then chooses the hardest nonfailed total gauge meeting its clear threshold; if none meets it, it falls back to the last surviving total gauge. A nonfailed Normal below threshold need not be displayed before Easy. `recordGaugeHistory:522–535` records that same display index. This is distinct from failure/result qualification; a displayed lower tier is not evidence that Normal's HP state was destroyed.
+`BmsHealthProcessor.resolveActiveState/resolveDisplayGaugeIndex` (`Gameplay/Scoring/BmsHealthProcessor.cs:467–513`) deliberately keeps surviving survival gauges visible, then chooses the hardest nonfailed total gauge meeting its clear threshold; if none meets it, it falls back to the last surviving total gauge. A nonfailed Normal below threshold need not be displayed before Easy. `recordGaugeHistory:515–527` records that same display index. This is distinct from failure/result qualification; a displayed lower tier is not evidence that Normal's HP state was destroyed.
 
 ## Independent boundary check and HUD observation
 
