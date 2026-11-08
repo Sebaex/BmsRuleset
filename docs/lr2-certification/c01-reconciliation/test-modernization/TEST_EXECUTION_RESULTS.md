@@ -117,3 +117,11 @@ Release/net10.0, SDK 10.0.401, source parent 7d507491e2b26750f95c82634e05b1bdfca
 Historical PMS suppression/default windows and conventional health assumptions conflict with pinned LR2
 
 Sensitivity: Wrong consumption/suppression, lost offsets/source, wrong marker placement, late-head acceptance, health grade or post-tail/repress result fails independent exact assertions
+
+## TM-I01 [TM-I]
+
+Release/net10.0, SDK 10.0.401, source parent 589b11dc560dabb90228a10dae73703be935bf18. Filter: `FullyQualifiedName~BmsReplaySimulationTest|FullyQualifiedName~TestSceneBmsReplayRewindTiming|FullyQualifiedName~TestSceneBmsReplayVisualizer|FullyQualifiedName~BmsMultiBadParityTest|FullyQualifiedName~BmsExecutedJavaJudgementTest`. 71/71 pass, 0 fail, 0 other. TRX SHA-256 `D4A1C11761E3D2071E5549194BF4B9545AD5D3CC44EBDAF0D6AA58ED06E3D3E7`; logs/filter/binary hashes retained under `evidencias-paridad/TM-I01`. IDs: F140, F197, F198, F199, F200, F201, F202.
+
+Old sub-2% survival, uniform BAD offsets and ONE-style unjudged input assumptions contradict pinned LR2 and explicit C# presentation contracts
+
+Sensitivity: Reversed tick order kills the control; missing/extra BAD, wrong signed offset/source or replay duplication fails exact arrays; wrong input count/colour/source fails real HUD checks

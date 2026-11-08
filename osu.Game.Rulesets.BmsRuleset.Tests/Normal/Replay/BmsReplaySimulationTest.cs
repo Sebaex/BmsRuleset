@@ -370,13 +370,21 @@ public class BmsReplaySimulationTest
         beatmap.Total = 1000;
         beatmap.HitObjects.Add(new BmsLongNote { Beatmap = beatmap, Column = 0, StartTime = 1000, Duration = 3000 });
         beatmap.HitObjects.Add(new BmsLongNote { Beatmap = beatmap, Column = 1, StartTime = 1000, Duration = 3000 });
-        var source = new ScoreInfo { Mods = [new BmsModHardGauge { InitialHealth = { Value = .0459 } }] };
+        // Keep Hard damage at scale 1 so the ordering can be tested above LR2's 2% death floor.
+        // The untouched four-endpoint short chart would scale POOR tenfold and die at release.
+        for (var i = 0; i < 996; i++)
+            beatmap.HitObjects.Add(new BmsNote { Beatmap = beatmap, Column = 2, StartTime = 10000 + i * 100 });
+        var source = new ScoreInfo { Mods = [new BmsModHardGauge { InitialHealth = { Value = .0951 } }] };
         var result = simulate(beatmap, createReplay(new BmsReplayFrame(1000, BmsAction.Scratch, BmsAction.Key1),
             new BmsReplayFrame(1100, BmsAction.Key1), new BmsReplayFrame(1401, BmsAction.Key1)), source);
         var beforeStop = result.Gauges.Where(entry => entry.Time < 1401).Last().States.Single();
 
         Assert.That(beforeStop.Failed, Is.False);
-        Assert.That(beforeStop.Health, Is.EqualTo(.0001).Within(1e-12));
+        // .0951+two heads*.001-POOR(.1*.6)+two held ticks*.0005-half BAD(.06*.6/2).
+        Assert.That(beforeStop.Health, Is.EqualTo(.0201).Within(1e-12));
+        Assert.That(result.Gauges.Where(entry => entry.Time > 1400 && entry.Time < 1401).Select(entry => entry.States.Single().Health),
+            Is.EqualTo(new[] { .0381, .0201 }).Within(1e-12));
+        Assert.That(.0376 - .06 * .6 / 2, Is.LessThan(.02), "Scratch first would kill Hard before the ordinary tick can recover it.");
     }
 
     [Test]
