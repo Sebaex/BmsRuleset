@@ -1,0 +1,582 @@
+{
+  "source_head": "55e2305b670fecbb9a5e1c3f0a71e496406c0171",
+  "original_identities": 219,
+  "current_passed": 218,
+  "current_failed": 1,
+  "previously_repaired_unchanged": 49,
+  "repaired_original_failures": 169,
+  "test_expectation_adaptations": 168,
+  "translation_repair_without_weakening_test": 1,
+  "changed_test_source_files": 40,
+  "new_test_methods": 6,
+  "added_parameter_cases": 30,
+  "original_snapshot_hashes": [
+    {
+      "file": "ORIGINAL_METHODS.json",
+      "sha256": "1B322083FF910BAEA1482D7CF5DFBE030704EF9701E5177E2626524BE8529E26"
+    },
+    {
+      "file": "TEST_MIGRATION_MATRIX.before.csv",
+      "sha256": "65D2E2F7D4B55B3AD0CE7891F273EE435C058A4BD74EC5020C703600B2F3AA02"
+    }
+  ],
+  "source_trees": {
+    "source_head": "55e2305b670fecbb9a5e1c3f0a71e496406c0171",
+    "osu.Game.Rulesets.BmsRuleset": "380209942ffb62c51ae1b21cd8cdedeecc66002e",
+    "osu.Game.Rulesets.BmsRuleset.Tests": "2c172391bd41ff36ac920b8b2fab44139f3cb6c6"
+  },
+  "changed_files": [
+    "docs/lr2-certification/c01-reconciliation/test-modernization/CASE_IDENTITY_MAPPING.csv",
+    "docs/lr2-certification/c01-reconciliation/test-modernization/F099_DEFERRED.md",
+    "docs/lr2-certification/c01-reconciliation/test-modernization/FINAL_VERDICT.md",
+    "docs/lr2-certification/c01-reconciliation/test-modernization/FIXTURE_CHANGES.md",
+    "docs/lr2-certification/c01-reconciliation/test-modernization/GAS_SERIALISATION_FIX.md",
+    "docs/lr2-certification/c01-reconciliation/test-modernization/PENDING_DEFECTS.md",
+    "docs/lr2-certification/c01-reconciliation/test-modernization/POLICY_EXPECTATIONS.md",
+    "docs/lr2-certification/c01-reconciliation/test-modernization/README.md",
+    "docs/lr2-certification/c01-reconciliation/test-modernization/REGRESSION_COVERAGE.md",
+    "docs/lr2-certification/c01-reconciliation/test-modernization/TEST_EXECUTION_RESULTS.md",
+    "docs/lr2-certification/c01-reconciliation/test-modernization/TEST_MIGRATION_MATRIX.csv",
+    "docs/lr2-certification/c01-reconciliation/test-modernization/VALIDATION_MANIFEST.json",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Components/TestSceneBmsHealthBar.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Normal/BeatmapTest/Decoding/BmsTimingMapQueryTest.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Normal/BmsRulesetTest.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Normal/Course/BmsCourseHealthInheritanceTest.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Normal/Course/BmsCourseSessionTest.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Normal/Difficulty/BmsDifficultyPerformanceRegressionTest.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Normal/Difficulty/BmsStarRatingProcessorTest.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Normal/Gameplay/BmsHitErrorMeterTest.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Normal/Gameplay/Gauge/BmsGaugeProfileTest.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Normal/Gameplay/Health/BmsHealthProcessorTest.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Normal/Gameplay/Judgement/BmsBeatorajaFrameHistoryTest.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Normal/Gameplay/Judgement/BmsColumnNoteIndexTest.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Normal/Gameplay/Judgement/BmsHitWindowsTest.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Normal/Gameplay/Judgement/BmsLongNoteJudgementTest.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Normal/Gameplay/Judgement/BmsLongNotePresentationTest.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Normal/Gameplay/Judgement/BmsLongNoteRuleTest.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Normal/Gameplay/Judgement/BmsModNoGoodNoGreatTest.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Normal/Gameplay/Judgement/BmsOperationSequenceTest.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Normal/Localisation/BmsLocalisationTest.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Normal/Mods/BmsModAutoGaugeTest.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Normal/Replay/BmsReplaySimulationTest.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Normal/Result/Statistic/BmsGaugeHistoryGraphTest.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Visualize/TestSceneBmsAutoGaugeScoreAttribution.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Visualize/TestSceneBmsBeatorajaHcnFrameOrder.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Visualize/TestSceneBmsBeatorajaHcnKeyboardInput.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Visualize/TestSceneBmsBeatorajaJudgements.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Visualize/TestSceneBmsBeatorajaLongNotes.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Visualize/TestSceneBmsBeatorajaPmsConsumers.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Visualize/TestSceneBmsBeatorajaScratchInput.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Visualize/TestSceneBmsColumnJudgement.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Visualize/TestSceneBmsCourseResults.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Visualize/TestSceneBmsJudgementAlgorithm.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Visualize/TestSceneBmsJudgementLifecycleExecution.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Visualize/TestSceneBmsLongNoteJudgement.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Visualize/TestSceneBmsLongNoteLifecycle.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Visualize/TestSceneBmsMods.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Visualize/TestSceneBmsReplayRewindTiming.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Visualize/TestSceneBmsReplayVisualizer.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Visualize/TestSceneBmsResultScreenStatistics.cs",
+    "osu.Game.Rulesets.BmsRuleset.Tests/Visualize/TestSceneBmsSongProgress.cs",
+    "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/Gauge/BmsModGaugeAutoShift.cs",
+    "osu.Game.Rulesets.BmsRuleset/Resources/Localisation/BmsStrings.zh.resx"
+  ],
+  "protected_comparison": {
+    "old_count": 427,
+    "new_count": 427,
+    "exact_identity_outcome_multiset_equal": true,
+    "original_trx_sha256": "418639D252147D1E067FCEB815139C039B3FCDA65C470CF99C7F7126D6184812",
+    "successor_trx_sha256": "368DAD2713B3127B14E788C092971F1BFD734D47AC72962B174764574C5FEE74",
+    "source_head": "8a387e73ab20bf6a3ea65ae01e514f167290fa18"
+  },
+  "explicit_production_exceptions": [
+    "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/Gauge/BmsModGaugeAutoShift.cs",
+    "osu.Game.Rulesets.BmsRuleset/Resources/Localisation/BmsStrings.zh.resx"
+  ],
+  "runs": [
+    {
+      "id": "TM-A-UI01",
+      "total": 32,
+      "passed": 32,
+      "failed": 0,
+      "trx_sha256": "26C7348E1FC494BB62202E822B0F734E630AEB9E5ADC3A78DC480EBD427EBD3A",
+      "binary_hashes": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "398F98534E7C7B5D09FC1F30E4B8612437E962933964D975E7D77630F6999FEF"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "4F9FD1B24399D6BB1896392260AC44123E181EEC12CC4665C0C2DC5DBB731F33"
+        }
+      ],
+      "filter": "FullyQualifiedName~TestSceneBmsColumnJudgement|FullyQualifiedName~TestSceneBmsJudgementAlgorithm|FullyQualifiedName~TestColourBarMatchesJudgements|FullyQualifiedName~TestPoorLinesFollowVisibleWindowEnds"
+    },
+    {
+      "id": "TM-A01",
+      "status": "No TRX; build attempt did not reach tests",
+      "build_log_sha256": "01C7651E2FC11F045E08A94964B7C588AAC82F89EB0B16011BF4AAAAEAF4D8AA"
+    },
+    {
+      "id": "TM-A02",
+      "total": 91,
+      "passed": 90,
+      "failed": 1,
+      "trx_sha256": "70864D1968456DD20710FB01E52F90C7A47E13F38309CFCE151DAD67C33F7811",
+      "binary_hashes": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "8D794835D222D259016170127E2248C556F42D5D4BD3BD7339A91E51C3BD9B86"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "4AAE2F554CE8C265C84EC142BD58FB535F42CF0BF88D296404AE2BA562D05A0F"
+        }
+      ],
+      "filter": "(FullyQualifiedName~BmsRulesetTest|FullyQualifiedName~BmsHitWindowsTest|FullyQualifiedName~BmsModNoGoodNoGreatTest|FullyQualifiedName~BmsHitErrorMeterTest|FullyQualifiedName~BmsColumnNoteIndexTest|FullyQualifiedName~BmsExecutedJavaJudgementTest)&FullyQualifiedName!~DurationSearchSkipsCloserHeadsWithNoHitWindow"
+    },
+    {
+      "id": "TM-A03",
+      "total": 91,
+      "passed": 91,
+      "failed": 0,
+      "trx_sha256": "90BD3A1B9C9F760F49BCA54FD8CF5B00B36D0F30AFC921F348083B2A807D6FF4",
+      "binary_hashes": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "23E4C7C8AECE4B6DB1E5D818F3ACBCA16E85670A1A6B569D4EB8C482892DAE73"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "4AAE2F554CE8C265C84EC142BD58FB535F42CF0BF88D296404AE2BA562D05A0F"
+        }
+      ],
+      "filter": "(FullyQualifiedName~BmsRulesetTest|FullyQualifiedName~BmsHitWindowsTest|FullyQualifiedName~BmsModNoGoodNoGreatTest|FullyQualifiedName~BmsHitErrorMeterTest|FullyQualifiedName~BmsColumnNoteIndexTest|FullyQualifiedName~BmsExecutedJavaJudgementTest)&FullyQualifiedName!~DurationSearchSkipsCloserHeadsWithNoHitWindow"
+    },
+    {
+      "id": "TM-B-CONSUMERS01",
+      "total": 18,
+      "passed": 17,
+      "failed": 1,
+      "trx_sha256": "93441E212485B612FCB131537171A4EC29AB8D3F5A90E15AE0D652C71267D9A0",
+      "binary_hashes": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "085AC795FC17432238BAEA011BAE8EDD2B56645B9342FE1473F72555A819F3EA"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "0A2498EAE9E7E60D8B27432DFEAE8B6D40941324722063A365B61B4D5B41EE72"
+        }
+      ],
+      "filter": "FullyQualifiedName~TestSceneBmsBeatorajaJudgements|FullyQualifiedName~TestSceneBmsBeatorajaPmsConsumers|FullyQualifiedName~BmsLr2PoorPenaltyTest|FullyQualifiedName~BmsMultiBadParityTest"
+    },
+    {
+      "id": "TM-B-CONSUMERS02",
+      "total": 27,
+      "passed": 26,
+      "failed": 1,
+      "trx_sha256": "E47E8138F7C955E4BD4A26F7D88D5E3AA525ADC100C1F386616E5DEB2C245B94",
+      "binary_hashes": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "B14CDD52013EC0EDE22FFCA8B4E184A69E6BA6D7BBCC3EC51961CF2B26FED252"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "0A2498EAE9E7E60D8B27432DFEAE8B6D40941324722063A365B61B4D5B41EE72"
+        }
+      ],
+      "filter": "FullyQualifiedName~TestSceneBmsBeatorajaJudgements|FullyQualifiedName~TestSceneBmsBeatorajaPmsConsumers|FullyQualifiedName~BmsLr2PoorPenaltyTest|FullyQualifiedName~BmsMultiBadParityTest|FullyQualifiedName~TestSceneBmsLongNoteJudgement"
+    },
+    {
+      "id": "TM-B-CONSUMERS03",
+      "total": 27,
+      "passed": 27,
+      "failed": 0,
+      "trx_sha256": "B61E93CB52FB9CD92B3E517A5BB83B59A57F8EA356F20DFAC95F846CF9DC67F2",
+      "binary_hashes": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "2B6BFECD727FD90CC8B1542565991BFDB338DEDC8D6D7223EE2FA66A3AAC9FC8"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "0A2498EAE9E7E60D8B27432DFEAE8B6D40941324722063A365B61B4D5B41EE72"
+        }
+      ],
+      "filter": "FullyQualifiedName~TestSceneBmsBeatorajaJudgements|FullyQualifiedName~TestSceneBmsBeatorajaPmsConsumers|FullyQualifiedName~BmsLr2PoorPenaltyTest|FullyQualifiedName~BmsMultiBadParityTest|FullyQualifiedName~TestSceneBmsLongNoteJudgement"
+    },
+    {
+      "id": "TM-B-INSTRUMENT01",
+      "total": 24,
+      "passed": 24,
+      "failed": 0,
+      "trx_sha256": "D8B5E039B9B56D60E983862DD69D8F7C6B7F4C36ED791DCCBAD13F2D94A9B871",
+      "binary_hashes": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "F163DD591093A628FDEB330D41ADAA2CD7D8BEFE2AF063CEB7165940364A2EBA"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "2529063933477DFE4E5306676517977A6A26EA9D1E6E276D56B97152A6942A1A"
+        }
+      ],
+      "filter": "FullyQualifiedName~HcnReapplyRetainsBodyAccumulatorAndPendingRelease|FullyQualifiedName~BmsLongNoteExecutionTest|FullyQualifiedName~BmsChargeNoteExecutionTest|FullyQualifiedName~BmsHellChargeNoteExecutionTest|FullyQualifiedName~BmsHellChargeBodyTrackerTest"
+    },
+    {
+      "id": "TM-B-NORMAL01",
+      "status": "No TRX; build attempt did not reach tests",
+      "build_log_sha256": "772F462E26C2FBB1C5E87563EB7A56583106E785587FC422E2BB075D841DE513"
+    },
+    {
+      "id": "TM-B-NORMAL02",
+      "total": 260,
+      "passed": 260,
+      "failed": 0,
+      "trx_sha256": "D76FD9EAE9A8CF699C1A84C95BAA6ABD7DDC6E7E5202F47581C8234DC851F8DD",
+      "binary_hashes": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "D00664B16A87564C9B367125F4197897FCFBFAB65C7066288C5EA3E35DCEEA0F"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "BD8F735AEB8E87DB642D0E7266C60FEC2C3C7B67B1C7EE22E2E88155BB17D4DA"
+        }
+      ],
+      "filter": "FullyQualifiedName~BmsLongNoteJudgementTest|FullyQualifiedName~BmsLongNotePresentationTest|FullyQualifiedName~BmsLongNoteRuleTest|FullyQualifiedName~BmsOperationSequenceTest|FullyQualifiedName~BmsBeatorajaFrameHistoryTest|FullyQualifiedName~BmsExecutedJavaJudgementTest|FullyQualifiedName~BmsHcnFrameReferenceTest"
+    },
+    {
+      "id": "TM-B-UI01",
+      "total": 92,
+      "passed": 92,
+      "failed": 0,
+      "trx_sha256": "9FD273F13D766BEB5B0B0D81F7B3E2037B08862335E282F010BEC58225F6D0B0",
+      "binary_hashes": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "BD6B41D1E9D08C4609500B59733EF1AF922F1F08C4AE3E11B2A6A6E954996C62"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "7A7B3420DCD20E4D165BE09C46C6A18962FFD53850887EDB8F357A127D92162C"
+        }
+      ],
+      "filter": "FullyQualifiedName~TestSceneBmsBeatorajaHcnFrameOrder|FullyQualifiedName~TestSceneBmsBeatorajaHcnKeyboardInput|FullyQualifiedName~TestSceneBmsBeatorajaLongNotes|FullyQualifiedName~TestSceneBmsBeatorajaScratchInput|FullyQualifiedName~TestSceneBmsLongNoteLifecycle"
+    },
+    {
+      "id": "TM-C01",
+      "total": 221,
+      "passed": 221,
+      "failed": 0,
+      "trx_sha256": "5AD19FAD1AAB48EFFC82CA22D4DA06AD4546F61D07C8EF0F7259AB2CEE01E6B1",
+      "binary_hashes": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "5B421A55EDCE9142B4B69FD09C8110358E0A9EE048AC7272F253DA7EF7A8CB9F"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "6D8BED8712310A40CD7CE8BE69F7707FC0FF5F78E34B958044E73EC2584180C4"
+        }
+      ],
+      "filter": "FullyQualifiedName~BmsCourseHealthInheritanceTest|FullyQualifiedName~BmsHealthProcessorTest|FullyQualifiedName~BmsGaugeProfileTest|FullyQualifiedName~TestCourseGaugeProfileFamilySelection|FullyQualifiedName~BmsExecutedJavaGaugeTest|FullyQualifiedName~BmsGasCourseParityTest"
+    },
+    {
+      "id": "TM-D-UI01",
+      "total": 3,
+      "passed": 3,
+      "failed": 0,
+      "trx_sha256": "25BC010AFD86617C7CEBE621D92E5196C3FA0ED318FBE8912EF6B908761A6E99",
+      "binary_hashes": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "DDE95EAABFA5EAE09E015E958A2C826D243FCD1849D09A991BF517CE172F3047"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "015D58D9A26A93A3B2A3E06807489C63C20C7BDC046E33EEB7D6C201AB6A6226"
+        }
+      ],
+      "filter": "FullyQualifiedName~TestAutoGaugeFinalScoreAttributionUsesResolvedGauge|FullyQualifiedName~TestSceneBmsMods.TestAutoGauge|FullyQualifiedName~TestSceneBmsResultScreenStatistics.TestAutoGaugeHistory"
+    },
+    {
+      "id": "TM-D01",
+      "total": 135,
+      "passed": 134,
+      "failed": 1,
+      "trx_sha256": "6F14ACA744DFDD460729C86FA744E58DDC0A72102E7C9A0FCFF309F8650FFB01",
+      "binary_hashes": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "B7B7192F36B9335379FA0480353E70C13466AC151E3DAF79F418896150EC31F3"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "ECB7FCC805FCAC6A1BB3F6AFA9BC0211B3C42E6595B0E65D71032987A7238BF9"
+        }
+      ],
+      "filter": "FullyQualifiedName~BmsModGaugeAutoShiftTest|FullyQualifiedName~BmsCourseSessionTest|FullyQualifiedName~BmsGaugeHistoryGraphTest|FullyQualifiedName~BmsGaugeHistoryConfiguredChainTest|FullyQualifiedName~BmsGasCourseParityTest|FullyQualifiedName~BmsGasOrderParityTest|FullyQualifiedName~BmsGasPolicyReferenceTest"
+    },
+    {
+      "id": "TM-D02",
+      "total": 138,
+      "passed": 137,
+      "failed": 1,
+      "trx_sha256": "E3ADA47785922D8767B42426874BCA5BEA1DFDD32B1D45E403DA6EC31882F0DA",
+      "binary_hashes": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "75BAA93377B780C10CC75C37F5E48DC09C80FFE3AC3F8585C2F787B7662A1642"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "ECB7FCC805FCAC6A1BB3F6AFA9BC0211B3C42E6595B0E65D71032987A7238BF9"
+        }
+      ],
+      "filter": "FullyQualifiedName~BmsModGaugeAutoShiftTest|FullyQualifiedName~BmsCourseSessionTest|FullyQualifiedName~BmsGaugeHistoryGraphTest|FullyQualifiedName~BmsGaugeHistoryConfiguredChainTest|FullyQualifiedName~BmsGasCourseParityTest|FullyQualifiedName~BmsGasOrderParityTest|FullyQualifiedName~BmsGasPolicyReferenceTest"
+    },
+    {
+      "id": "TM-D03",
+      "total": 138,
+      "passed": 137,
+      "failed": 1,
+      "trx_sha256": "1D32DB70FFEE7BB501BC11D8D4AA7A7095EC7117756A68836F6C35E970ED4A0B",
+      "binary_hashes": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "3F6CCBA760B4F25889BE27D9D9E0F252AFC409B6CBBB900191EB112594EBF620"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "ECB7FCC805FCAC6A1BB3F6AFA9BC0211B3C42E6595B0E65D71032987A7238BF9"
+        }
+      ],
+      "filter": "FullyQualifiedName~BmsModGaugeAutoShiftTest|FullyQualifiedName~BmsCourseSessionTest|FullyQualifiedName~BmsGaugeHistoryGraphTest|FullyQualifiedName~BmsGaugeHistoryConfiguredChainTest|FullyQualifiedName~BmsGasCourseParityTest|FullyQualifiedName~BmsGasOrderParityTest|FullyQualifiedName~BmsGasPolicyReferenceTest"
+    },
+    {
+      "id": "TM-E01",
+      "total": 7,
+      "passed": 7,
+      "failed": 0,
+      "trx_sha256": "C9540D5A33FEF8913E52248A303309262BA12864DC124DEBD3BF28F47B90D004",
+      "binary_hashes": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "9E1CBD3B4FEB1E9AE02AE8F2185996F96D731622522876E5A25A50EFB6CF24D1"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "0CD857EADCEA41FD1763F57E0F6BA6F8A160769FB418CFD3A6F70BDD0089784F"
+        }
+      ],
+      "filter": "FullyQualifiedName~BmsTimingMapQueryTest&TestCategory!=JudgementInstrumentation"
+    },
+    {
+      "id": "TM-E02",
+      "total": 11,
+      "passed": 11,
+      "failed": 0,
+      "trx_sha256": "A1F78629B56600DD75846EF309F511BFD7743F6371123A87CBA8B24EF91E7D21",
+      "binary_hashes": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "6CFAAA1ADEF87A74D84273117144021460541C7985E8AF8BBD1A480B0EDBA390"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "0CD857EADCEA41FD1763F57E0F6BA6F8A160769FB418CFD3A6F70BDD0089784F"
+        }
+      ],
+      "filter": "FullyQualifiedName~BmsTimingMapQueryTest|FullyQualifiedName~BmsExecutedJavaJudgementTest.OriginalJavaWindowsMatchSupportedLayouts"
+    },
+    {
+      "id": "TM-F01",
+      "total": 23,
+      "passed": 23,
+      "failed": 0,
+      "trx_sha256": "6D28EA882177781A7EB2135510F06126845DB671FB3416900708F59AE9E3EAAF",
+      "binary_hashes": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "193E14E8844AB6110B642B872CAC955318AF0E845D189E22E9D486B6F7D9FE2B"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "15C929D64F7015D528D72B8F18D72EFE1337C78871B2E74303DF5495D3749C12"
+        }
+      ],
+      "filter": "FullyQualifiedName~BmsDifficultyPerformanceRegressionTest|FullyQualifiedName~BmsStarRatingProcessorTest|FullyQualifiedName~BmsExecutedJavaJudgementTest.OriginalJavaWindowsMatchSupportedLayouts"
+    },
+    {
+      "id": "TM-F09901",
+      "total": 1,
+      "passed": 0,
+      "failed": 1,
+      "trx_sha256": "ADC947F11E9F04AFBFF09E7E0EE984883E0AE768A540BCFEA013C9908DEFD415",
+      "binary_hashes": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "657B6713BB9075CD9801BD6F0F04D523559BE22952ED077A1B160286F94D3486"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "D0D51489633E388BEDF3B2E265D25A1E3BB938E2A2E27CE0BBEC14BB00A15306"
+        }
+      ],
+      "filter": "FullyQualifiedName~DurationSearchSkipsCloserHeadsWithNoHitWindow"
+    },
+    {
+      "id": "TM-G01",
+      "status": "No TRX; build attempt did not reach tests",
+      "build_log_sha256": "7863AF16677D1616C06C0BADC9A7EF5B39432FD851EA399F5D7F4F95821B0199"
+    },
+    {
+      "id": "TM-G02",
+      "total": 11,
+      "passed": 11,
+      "failed": 0,
+      "trx_sha256": "ACB4E5051FC3D0B062EA12B56A8704E118D0C2F56D78A3C45360CDC8812CEA67",
+      "binary_hashes": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "E65A942FA39B8E1A16F1EACF0DEBFFF1DDE4A0B0FE82C2668AA11E49DEE82DDC"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "7D665A37AADCAEC0DD6AE4320C91D0EF1150643016A61BC187ED63F6F0F335C7"
+        }
+      ],
+      "filter": "FullyQualifiedName~TestSceneBmsCourseResults"
+    },
+    {
+      "id": "TM-GAS-FIX01",
+      "total": 139,
+      "passed": 139,
+      "failed": 0,
+      "trx_sha256": "13B1972E9D605942F88C7F0F490AE5B150C0352C691DE30ACC4B394876A7E024",
+      "binary_hashes": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "D4474D48473D4EE7B78EE4848C9E994227277CDE4563F4B07FBDA07B7B73B408"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "AAC7832F498537980C9A8118DD3CC39A836E5214CC90556F5D9707199306A7D8"
+        }
+      ],
+      "filter": "FullyQualifiedName~BmsModGaugeAutoShiftTest|FullyQualifiedName~BmsCourseSessionTest|FullyQualifiedName~BmsGaugeHistoryGraphTest|FullyQualifiedName~BmsGaugeHistoryConfiguredChainTest|FullyQualifiedName~BmsGasCourseParityTest|FullyQualifiedName~BmsGasOrderParityTest|FullyQualifiedName~BmsGasPolicyReferenceTest"
+    },
+    {
+      "id": "TM-GAS-PERSISTENCE01",
+      "total": 92,
+      "passed": 92,
+      "failed": 0,
+      "trx_sha256": "694F50D9980B60D460CCFFD92A32C9AD6D7CD8F3BB2D3A7E71AE7432B9EC2500",
+      "binary_hashes": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "657B6713BB9075CD9801BD6F0F04D523559BE22952ED077A1B160286F94D3486"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "D0D51489633E388BEDF3B2E265D25A1E3BB938E2A2E27CE0BBEC14BB00A15306"
+        }
+      ],
+      "filter": "FullyQualifiedName~BmsModGaugeAutoShiftTest|FullyQualifiedName~BmsGaugeHistoryConfiguredChainTest|FullyQualifiedName~BmsCourseHealthInheritanceTest"
+    },
+    {
+      "id": "TM-H-TR01",
+      "total": 23,
+      "passed": 23,
+      "failed": 0,
+      "trx_sha256": "D65EC4008CD47BF09698A6BB1538368E459A006A557BC612152C2534764C9F7D",
+      "binary_hashes": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "5C2C5CDD3A945D5AA5C64A787AF7FDD89B06261AE9C7D0D2FB2969CA14C847B1"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "A4ADFCAD4F19EFA1D698B4F9092FA70CB193CAC452A1404482B992EA581C5FF4"
+        }
+      ],
+      "filter": "FullyQualifiedName~BmsLocalisationTest|FullyQualifiedName~BmsGaugeHistoryConfiguredChainTest"
+    },
+    {
+      "id": "TM-H01",
+      "total": 41,
+      "passed": 40,
+      "failed": 1,
+      "trx_sha256": "FA53C0766995FEB9D44FF286BC5D7619E6DD1E0FBCD37C391A7D4720051B795F",
+      "binary_hashes": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "B968570BB50716831A2F8F47FB770F2081A75AD1575F2A201421E2A28F9F03EF"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "0D1449ACD5267AC7D6356ABF35B55B0873BF0E621C24C75CE81E7312417028E7"
+        }
+      ],
+      "filter": "FullyQualifiedName~TestSceneBmsHealthBar|FullyQualifiedName~TestHardProfilesUseDistinctFixedColours|FullyQualifiedName~TestHazardDisplayIsGoldAndHasNoClearLine|FullyQualifiedName~TestCourseProfilesUseTieredGaugeDisplay|FullyQualifiedName~TestCourseAutoGaugeStartsAtExHardClass|FullyQualifiedName~BmsLocalisationTest"
+    },
+    {
+      "id": "TM-I01",
+      "total": 71,
+      "passed": 71,
+      "failed": 0,
+      "trx_sha256": "D4A1C11761E3D2071E5549194BF4B9545AD5D3CC44EBDAF0D6AA58ED06E3D3E7",
+      "binary_hashes": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "0380223F3C4AFCEE87265216C69DC229254BF3BD723DF3B6047A60B5891E9E1B"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "509E4D13DEDFE14D28B27D6AE7ACC2C29E729940E489F665583612AE061162BE"
+        }
+      ],
+      "filter": "FullyQualifiedName~BmsReplaySimulationTest|FullyQualifiedName~TestSceneBmsReplayRewindTiming|FullyQualifiedName~TestSceneBmsReplayVisualizer|FullyQualifiedName~BmsMultiBadParityTest|FullyQualifiedName~BmsExecutedJavaJudgementTest"
+    },
+    {
+      "id": "TM-PREVIOUS49-01",
+      "total": 76,
+      "passed": 76,
+      "failed": 0,
+      "trx_sha256": "FCC44E615CAFBF5F8BBF3FE0592117418813DC955294C917B1B9ECD043A8AE14",
+      "binary_hashes": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "EC749AF328EFB267470D7BD6AA3AC1FF9A287816B60917E7B4FD2094BB7C3407"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "D0D51489633E388BEDF3B2E265D25A1E3BB938E2A2E27CE0BBEC14BB00A15306"
+        }
+      ],
+      "filter": "FullyQualifiedName~osu.Game.Rulesets.BmsRuleset.Tests.BmsWorkingBeatmapCacheTest.TestBmsWorkingBeatmapTransfersTrackForSameBeatmapRefetch|FullyQualifiedName~osu.Game.Rulesets.BmsRuleset.Tests.Normal.Course.BmsCourseHealthInheritanceTest.AutoGaugeCarriesEachSurvivingTierAcrossThreeStages|FullyQualifiedName~osu.Game.Rulesets.BmsRuleset.Tests.Normal.Course.BmsCourseHealthInheritanceTest.SingleGaugeCarriesHealthAcrossThreeStages|FullyQualifiedName~osu.Game.Rulesets.BmsRuleset.Tests.Normal.Course.BmsCourseSessionTest.TestCourseGaugeProfileFamilySelection|FullyQualifiedName~osu.Game.Rulesets.BmsRuleset.Tests.Normal.Gameplay.Health.BmsHealthProcessorTest.TestAutoGaugeClearThresholdBoundary|FullyQualifiedName~osu.Game.Rulesets.BmsRuleset.Tests.Visualize.TestSceneBmsZeroTimeNotes.TestLegacyReplayAtZeroSurvivesRewind|FullyQualifiedName~osu.Game.Rulesets.BmsRuleset.Tests.Visualize.TestSceneBmsZeroTimeNotes.TestZeroTimeNotesEnterFromTop"
+    },
+    {
+      "id": "TM-PROTECTED01",
+      "total": 427,
+      "passed": 427,
+      "failed": 0,
+      "trx_sha256": "368DAD2713B3127B14E788C092971F1BFD734D47AC72962B174764574C5FEE74",
+      "binary_hashes": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "EC749AF328EFB267470D7BD6AA3AC1FF9A287816B60917E7B4FD2094BB7C3407"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "D0D51489633E388BEDF3B2E265D25A1E3BB938E2A2E27CE0BBEC14BB00A15306"
+        }
+      ],
+      "filter": "FullyQualifiedName~BmsChargeNoteExecutionTest|FullyQualifiedName~BmsExecutedJavaGaugeTest|FullyQualifiedName~BmsExecutedJavaJudgementTest|FullyQualifiedName~BmsExecutedJavaParserTest|FullyQualifiedName~BmsExScoreTest|FullyQualifiedName~BmsGasCourseParityTest|FullyQualifiedName~BmsGasMixedReplayCertificationTest|FullyQualifiedName~BmsGasOrderParityTest|FullyQualifiedName~BmsGasPolicyReferenceTest|FullyQualifiedName~BmsGaugeCalculatorTest|FullyQualifiedName~BmsHcnFrameReferenceTest|FullyQualifiedName~BmsHellChargeBodyTrackerTest|FullyQualifiedName~BmsHellChargeNoteExecutionTest|FullyQualifiedName~BmsJudgementEngineTest|FullyQualifiedName~BmsJudgementSelectorTest|FullyQualifiedName~BmsLongNoteExecutionTest|FullyQualifiedName~BmsLongNoteModeModsTest|FullyQualifiedName~BmsLr2ComplementaryJudgementTest|FullyQualifiedName~BmsLr2GaugeParityTest|FullyQualifiedName~BmsLr2JudgementParityTest|FullyQualifiedName~BmsLr2PoorPenaltyTest|FullyQualifiedName~BmsMultiBadParityTest|FullyQualifiedName~BmsScoreProcessorTest|FullyQualifiedName~TestCourseAutoGaugeOmitsFailedGaugesFromNextStage|FullyQualifiedName~TestCourseAutoGaugeReplacesRegularGaugeChain|FullyQualifiedName~TestCourseCarriesEveryGaugeStateThroughSameList|FullyQualifiedName~TestCourseGaugeConfigurationInitializesWithCarriedHealth|FullyQualifiedName~TestCourseRecordUsesFinalGaugeTierOverStartingTier|FullyQualifiedName~TestLr2LnModeHeaderPreservesPlayerSelectionAndEndpointCount|FullyQualifiedName~BmsPreviewAudioResolverTest|FullyQualifiedName~BmsGaugeHistoryConfiguredChainTest"
+    }
+  ],
+  "broad_validation": "Pending exact final-SHA Windows/Ubuntu CI; these are cumulative focal results, not a new broad result"
+}

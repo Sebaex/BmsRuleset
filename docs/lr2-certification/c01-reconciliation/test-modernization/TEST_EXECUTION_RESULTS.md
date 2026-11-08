@@ -129,3 +129,7 @@ Sensitivity: Reversed tick order kills the control; missing/extra BAD, wrong sig
 ## TM-GAS-PERSISTENCE01 [TM-GAS-PERSISTENCE]
 
 Release/net10.0 SDK10.0.401. 92/92 passed, zero failed/omitted; three new ordinary GAS score-persistence cases plus existing Course/inheritance/configured-chain controls. TRX SHA-256 694F50D9980B60D460CCFFD92A32C9AD6D7CD8F3BB2D3A7E71AE7432B9EC2500. No production change; see GAS_SERIALISATION_FIX.md.
+
+## Cierre focal de identidades
+
+TM-PROTECTED01:427/427, identidad/resultado exacto contra el conjunto protegido anterior. TM-PREVIOUS49-01:76/76, incluidas exactamente las49 identidades originales reparadas; sus cuerpos están intactos. TM-F09901:0/1, fallo original Good versus Ok conservado sin supresión; TRX SHA-256 ADC947F11E9F04AFBFF09E7E0EE984883E0AE768A540BCFEA013C9908DEFD415. La matriz y CASE_IDENTITY_MAPPING registran219 sucesoras únicas:218Pass/1Fail. La validación amplia aún no se ejecutó para el SHA documental final; véase FINAL_VERDICT.md.
