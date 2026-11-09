@@ -54,42 +54,6 @@ public partial class TestSceneBmsCourseResults : ScreenTestScene
     [Resolved]
     private GameHost host { get; set; } = null!;
 
-    private string previousHostLocale = null!;
-    private CultureInfo previousCulture = null!;
-    private CultureInfo previousUiCulture = null!;
-    private CultureInfo previousDefaultCulture = null!;
-    private CultureInfo previousDefaultUiCulture = null!;
-    private CultureInfo previousUpdateCulture = null!;
-    private ILocalisationStore previousStore = null!;
-
-    [TearDownSteps]
-    public void RestoreHostLocale()
-    {
-        AddStep("restore test host locale", () =>
-        {
-            if (previousHostLocale == null) return;
-            var locale = frameworkConfig.GetBindable<string>(FrameworkSetting.Locale);
-            locale.Value = previousHostLocale;
-            locale.TriggerChange();
-        });
-        AddUntilStep("restored locale reaches update thread", () => previousHostLocale == null
-            || host.UpdateThread.CurrentCulture?.Name == CultureInfo.GetCultureInfo(previousHostLocale).Name);
-        AddStep("restore captured culture state", () =>
-        {
-            if (previousHostLocale == null) return;
-            Assert.That(frameworkConfig.GetBindable<string>(FrameworkSetting.Locale).Value, Is.EqualTo(previousHostLocale));
-            Assert.That(localisation.CurrentParameters.Value.Store, Is.SameAs(previousStore));
-            host.UpdateThread.CurrentCulture = previousUpdateCulture;
-            CultureInfo.CurrentCulture = previousCulture;
-            CultureInfo.CurrentUICulture = previousUiCulture;
-            CultureInfo.DefaultThreadCurrentCulture = previousDefaultCulture;
-            CultureInfo.DefaultThreadCurrentUICulture = previousDefaultUiCulture;
-            Assert.That(CultureInfo.CurrentCulture, Is.EqualTo(previousCulture));
-            Assert.That(CultureInfo.CurrentUICulture, Is.EqualTo(previousUiCulture));
-            previousHostLocale = null;
-        });
-    }
-
     protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent)
     {
         var dependencies = new DependencyContainer(base.CreateChildDependencies(parent));
@@ -330,14 +294,8 @@ public partial class TestSceneBmsCourseResults : ScreenTestScene
     {
         AddStep("capture locale and establish registered English control", () =>
         {
+            captureHostLocale();
             var locale = frameworkConfig.GetBindable<string>(FrameworkSetting.Locale);
-            previousHostLocale = locale.Value;
-            previousCulture = CultureInfo.CurrentCulture;
-            previousUiCulture = CultureInfo.CurrentUICulture;
-            previousDefaultCulture = CultureInfo.DefaultThreadCurrentCulture;
-            previousDefaultUiCulture = CultureInfo.DefaultThreadCurrentUICulture;
-            previousUpdateCulture = host.UpdateThread.CurrentCulture;
-            previousStore = localisation.CurrentParameters.Value.Store;
             // A registered language is required; es-CL is rejected by osu!'s locale mapping.
             locale.Value = "en";
             locale.TriggerChange();
