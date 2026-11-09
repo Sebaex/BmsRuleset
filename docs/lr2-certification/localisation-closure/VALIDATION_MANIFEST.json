@@ -1,0 +1,714 @@
+{
+  "baseline": "eb54f7ebde2c31cbe0b66b0093f2f22f9ba0775a",
+  "baseline_ci": "https://github.com/hinobara-ctrl/BmsRuleset/actions/runs/42656398221",
+  "phase": "LR2-CL",
+  "baseline_ci_results": [
+    {
+      "platform": "ubuntu",
+      "file": "judgement-instrumentation.trx",
+      "sha256": "E322F95F13B0894599A515C603BDDCF9A3A533A95E50F2174DE6B3A124EE68AE",
+      "total": 288,
+      "passed": 288,
+      "failed": 0,
+      "not_executed": 0,
+      "trx_counter_not_executed": 0,
+      "failures": [],
+      "omissions": []
+    },
+    {
+      "platform": "ubuntu",
+      "file": "tests.trx",
+      "sha256": "F0DD04C4F1BDCF26C06A3B608585339D73968F2C323E3776F227D4918C6954A1",
+      "total": 4515,
+      "passed": 4503,
+      "failed": 1,
+      "not_executed": 11,
+      "trx_counter_not_executed": 0,
+      "failures": [
+        {
+          "class": "osu.Game.Rulesets.BmsRuleset.Tests.Visualize.TestSceneBmsCourseResults",
+          "case": "TestCourseSummaryWithCommaDecimalHostLocale",
+          "outcome": "Failed"
+        }
+      ],
+      "omissions": [
+        {
+          "case": "TestDeclinesCleanlyWhenNativeBackendNotEmbedded",
+          "reason": "Supplemental FFmpeg native backend is embedded in this build.Supplemental FFmpeg native backend is embedded in this build."
+        },
+        {
+          "case": "SamplesFromDifferentThreadsCannotFormAnInterval",
+          "reason": "OneTimeSetUp: Only supported on WinOneTimeSetUp: Only supported on Win"
+        },
+        {
+          "case": "CapturedThreadCanBeMeasuredAfterExitFromAnotherThread",
+          "reason": "OneTimeSetUp: Only supported on WinOneTimeSetUp: Only supported on Win"
+        },
+        {
+          "case": "CycleTimeMeasuresExecutionOnTheCallingThread",
+          "reason": "OneTimeSetUp: Only supported on WinOneTimeSetUp: Only supported on Win"
+        },
+        {
+          "case": "DisposedCapturedThreadHasNoSamples",
+          "reason": "OneTimeSetUp: Only supported on WinOneTimeSetUp: Only supported on Win"
+        },
+        {
+          "case": "TestMpegFallsToMissingWhenSupplementalUnavailable",
+          "reason": "Supplemental FFmpeg backend is embedded in this build.Supplemental FFmpeg backend is embedded in this build."
+        },
+        {
+          "case": "TestCachePublicationFailureHasSpecificMessageAndKeepsPreviousGeneration",
+          "reason": "Windows file-sharing semantics.Windows file-sharing semantics."
+        },
+        {
+          "case": "CurrentThreadCpuTimeIsMonotonic",
+          "reason": "OneTimeSetUp: Only supported on WinOneTimeSetUp: Only supported on Win"
+        },
+        {
+          "case": "TestCacheReplacementFailureKeepsOldSnapshotAndMemory",
+          "reason": "Windows file-sharing semantics.Windows file-sharing semantics."
+        },
+        {
+          "case": "TestRenameFailurePublishesNoUnconfirmedSources",
+          "reason": "Windows file-sharing semantics.Windows file-sharing semantics."
+        },
+        {
+          "case": "CompareLocalReplays",
+          "reason": "Set BMS_REPLAY_CORPUS to compare existing local replays.Set BMS_REPLAY_CORPUS to compare existing local replays."
+        }
+      ]
+    },
+    {
+      "platform": "windows",
+      "file": "judgement-instrumentation.trx",
+      "sha256": "EF80FAED73E6438236FD248ED7C87575B1FC76E7C81A17E006A145D01EBE716E",
+      "total": 288,
+      "passed": 288,
+      "failed": 0,
+      "not_executed": 0,
+      "trx_counter_not_executed": 0,
+      "failures": [],
+      "omissions": []
+    },
+    {
+      "platform": "windows",
+      "file": "tests.trx",
+      "sha256": "82F6490F7C08157825015B1E58F43F6261A2E0AB70538088FB3170AE49DE7AA7",
+      "total": 4515,
+      "passed": 4508,
+      "failed": 4,
+      "not_executed": 3,
+      "trx_counter_not_executed": 0,
+      "failures": [
+        {
+          "class": "osu.Game.Rulesets.BmsRuleset.Tests.Visualize.TestSceneBmsCourseResults",
+          "case": "TestIntermediateStageEnterAdvancesInsteadOfTogglingStatistics",
+          "outcome": "Failed"
+        },
+        {
+          "class": "osu.Game.Rulesets.BmsRuleset.Tests.Visualize.TestSceneBmsCourseResults",
+          "case": "TestIntermediateStageResultIsRestricted",
+          "outcome": "Failed"
+        },
+        {
+          "class": "osu.Game.Rulesets.BmsRuleset.Tests.Visualize.TestSceneBmsCourseResults",
+          "case": "TestFailedStageDoesNotShadeCourseTimeline",
+          "outcome": "Failed"
+        },
+        {
+          "class": "osu.Game.Rulesets.BmsRuleset.Tests.Visualize.TestSceneBmsCourseResults",
+          "case": "TestCourseSummaryWithCommaDecimalHostLocale",
+          "outcome": "Failed"
+        }
+      ],
+      "omissions": [
+        {
+          "case": "TestDeclinesCleanlyWhenNativeBackendNotEmbedded",
+          "reason": "Supplemental FFmpeg native backend is embedded in this build.Supplemental FFmpeg native backend is embedded in this build."
+        },
+        {
+          "case": "TestMpegFallsToMissingWhenSupplementalUnavailable",
+          "reason": "Supplemental FFmpeg backend is embedded in this build.Supplemental FFmpeg backend is embedded in this build."
+        },
+        {
+          "case": "CompareLocalReplays",
+          "reason": "Set BMS_REPLAY_CORPUS to compare existing local replays.Set BMS_REPLAY_CORPUS to compare existing local replays."
+        }
+      ]
+    }
+  ],
+  "runs": [
+    {
+      "id": "CL-BASELINE-CASCADE01",
+      "build": "CL-BASELINE-CASCADE01",
+      "filter": "FullyQualifiedName~TestSceneBmsCourseResults",
+      "total": 11,
+      "passed": 7,
+      "failed": 4,
+      "not_executed": 0,
+      "duration_seconds": 53.7785988,
+      "binaries": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "19515B61509F2551D056EE655AAE0B116F9202ACA1AEA50B8CF1E1286BDAABBE"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "2E0C60C61264AADBA069232A916FFA8735F0D49866E88C5BFC97A736B88B6EC2"
+        }
+      ],
+      "files": [
+        {
+          "file": "build.log",
+          "sha256": "3CAF0DF8737EB900D2E00B2AAD96A6A2F5DE59AA7D30FE535B8E92CFA9D1A2F4"
+        },
+        {
+          "file": "filter.txt",
+          "sha256": "7C6BA12FEBA4B69479C8CA1F62B0C7548440CDEDEFFC71ABCC5B162425580C24"
+        },
+        {
+          "file": "hashes.json",
+          "sha256": "E171835EF38E1361E57508ADC6DFF6F29C0FC542B87BCB17CF816EE11922AB60"
+        },
+        {
+          "file": "tests.log",
+          "sha256": "E0B316D1DB43689E5CBB6B8FA98F0714483AFAB4233A9C125D373268BA4D9CA9"
+        },
+        {
+          "file": "tests.trx",
+          "sha256": "CFC5661F5A1A118AAE3CE6AAFE6ECAB5791D34CF858BF389E161147245007587"
+        }
+      ],
+      "failures": [
+        {
+          "case": "TestFailedStageDoesNotShadeCourseTimeline",
+          "message": "\"restored locale reaches update thread\" timed out",
+          "stdout": null
+        },
+        {
+          "case": "TestIntermediateStageEnterAdvancesInsteadOfTogglingStatistics",
+          "message": "\"restored locale reaches update thread\" timed out",
+          "stdout": null
+        },
+        {
+          "case": "TestIntermediateStageResultIsRestricted",
+          "message": "\"restored locale reaches update thread\" timed out",
+          "stdout": null
+        },
+        {
+          "case": "TestCourseSummaryWithCommaDecimalHostLocale",
+          "message": "\"restored locale reaches update thread\" timed out",
+          "stdout": "LR2-CL initial locale='', ambient=es-CL, ui=es-CL, host=es-CL, system=es-CL, literal-empty=, store=es"
+        }
+      ]
+    },
+    {
+      "id": "CL-BASELINE-EMPTY01",
+      "build": "CL-BASELINE-EMPTY01",
+      "filter": "FullyQualifiedName~TestCourseSummaryWithCommaDecimalHostLocale",
+      "total": 1,
+      "passed": 0,
+      "failed": 1,
+      "not_executed": 0,
+      "duration_seconds": 16.5651123,
+      "binaries": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "19515B61509F2551D056EE655AAE0B116F9202ACA1AEA50B8CF1E1286BDAABBE"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "2E0C60C61264AADBA069232A916FFA8735F0D49866E88C5BFC97A736B88B6EC2"
+        }
+      ],
+      "files": [
+        {
+          "file": "build.log",
+          "sha256": "CE8B05FAC6EC36B58BCD17789A4577C68154F91BF271CEF37F4D995B8BEA2EAF"
+        },
+        {
+          "file": "filter.txt",
+          "sha256": "69E827F3FE4588AF70784A26188338DAA929BC244E18D8CA0365B83E3C09E8F6"
+        },
+        {
+          "file": "hashes.json",
+          "sha256": "E171835EF38E1361E57508ADC6DFF6F29C0FC542B87BCB17CF816EE11922AB60"
+        },
+        {
+          "file": "tests.log",
+          "sha256": "962906DB19984D5D56624149B78D201EB525DAB56682CE5F92209D039E513C8B"
+        },
+        {
+          "file": "tests.trx",
+          "sha256": "920676213222256A03A4D0154BA91E681D7109776F6D587CD8E6A156CA2B2C21"
+        }
+      ],
+      "failures": [
+        {
+          "case": "TestCourseSummaryWithCommaDecimalHostLocale",
+          "message": "\"restored locale reaches update thread\" timed out",
+          "stdout": "LR2-CL initial locale='', ambient=es-CL, ui=es-CL, host=es-CL, system=es-CL, literal-empty=, store=es"
+        }
+      ]
+    },
+    {
+      "id": "CL-COURSE01",
+      "build": "CL-COURSE01",
+      "filter": "FullyQualifiedName~TestSceneBmsCourseResults",
+      "total": 13,
+      "passed": 13,
+      "failed": 0,
+      "not_executed": 0,
+      "duration_seconds": 13.7625675,
+      "binaries": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "5601D0327A5F221E2C49F40B1D61863D8E3E1B5A2067F1CC192F2759E07AF5AC"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "2E0C60C61264AADBA069232A916FFA8735F0D49866E88C5BFC97A736B88B6EC2"
+        }
+      ],
+      "files": [
+        {
+          "file": "build.log",
+          "sha256": "5E94F3A4C95D9F76FEC3A21D3B9292D412BF531DD727E7B4EEE0D16FBB33C8AF"
+        },
+        {
+          "file": "filter.txt",
+          "sha256": "7C6BA12FEBA4B69479C8CA1F62B0C7548440CDEDEFFC71ABCC5B162425580C24"
+        },
+        {
+          "file": "hashes.json",
+          "sha256": "8F362FEE68D246D0220C990892B661A3A14F07367A2B4384D04CFB8858AC38D3"
+        },
+        {
+          "file": "tests.log",
+          "sha256": "DA544652442BAECDA27B3F66EAA7FAFFC67D2E37EC7EEC0D3239CF076030DDFF"
+        },
+        {
+          "file": "tests.trx",
+          "sha256": "EE46BBDEBCAA698F39D8273A77EB8E27A0A85787DBE9B73086EF6E48EE4A1DA2"
+        }
+      ],
+      "failures": []
+    },
+    {
+      "id": "CL-COURSE02",
+      "build": "CL-COURSE02",
+      "filter": "FullyQualifiedName~TestSceneBmsCourseResults",
+      "total": 13,
+      "passed": 13,
+      "failed": 0,
+      "not_executed": 0,
+      "duration_seconds": 13.9762529,
+      "binaries": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "7BB456529B8EC12FC0F4C4115745E1360C3E03ECDFF83FE7370014D25B97EF82"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "2E0C60C61264AADBA069232A916FFA8735F0D49866E88C5BFC97A736B88B6EC2"
+        }
+      ],
+      "files": [
+        {
+          "file": "build.log",
+          "sha256": "5A8A9BA526F8AEA5112E295B63BBC315CBB902881AB6B4216E49EA76A882FB65"
+        },
+        {
+          "file": "filter.txt",
+          "sha256": "7C6BA12FEBA4B69479C8CA1F62B0C7548440CDEDEFFC71ABCC5B162425580C24"
+        },
+        {
+          "file": "hashes.json",
+          "sha256": "6AA74F72F39A2365EDDDD30E23E3C61C6BA0186119EC21CDE7933F92B10D7997"
+        },
+        {
+          "file": "tests.log",
+          "sha256": "5174188DDC3BA9171E085616121ACCE9C27083948B12C5315DF0651F48D95A2D"
+        },
+        {
+          "file": "tests.trx",
+          "sha256": "F54DD34D12B607370FD7ACE332686976447C6D26F5F16912A8A47D08CC0ACF5B"
+        }
+      ],
+      "failures": []
+    },
+    {
+      "id": "CL-COURSE03",
+      "build": "CL-COURSE02 reused",
+      "filter": "FullyQualifiedName~TestSceneBmsCourseResults",
+      "total": 13,
+      "passed": 13,
+      "failed": 0,
+      "not_executed": 0,
+      "duration_seconds": 13.5802704,
+      "binaries": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "7BB456529B8EC12FC0F4C4115745E1360C3E03ECDFF83FE7370014D25B97EF82"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "2E0C60C61264AADBA069232A916FFA8735F0D49866E88C5BFC97A736B88B6EC2"
+        }
+      ],
+      "files": [
+        {
+          "file": "filter.txt",
+          "sha256": "7C6BA12FEBA4B69479C8CA1F62B0C7548440CDEDEFFC71ABCC5B162425580C24"
+        },
+        {
+          "file": "hashes.json",
+          "sha256": "6AA74F72F39A2365EDDDD30E23E3C61C6BA0186119EC21CDE7933F92B10D7997"
+        },
+        {
+          "file": "source-inputs.json",
+          "sha256": "4E145AE4123B192CA204108E9F92BB12EBF5298363AA15FE6A455015C5CBA704"
+        },
+        {
+          "file": "tests.log",
+          "sha256": "C13FA15B21E70FE6698252692897E5B7843733DFE0721CEED66262B71B24214C"
+        },
+        {
+          "file": "tests.trx",
+          "sha256": "8A643BC9335E000D0B5742D6903CF80EB99F391B48717C93532BF667C6B6DFE7"
+        }
+      ],
+      "failures": []
+    },
+    {
+      "id": "CL-FIXED01",
+      "build": "CL-COURSE02 reused",
+      "filter": "FullyQualifiedName~BmsFixedJudgeJavaParityTest|FullyQualifiedName~BmsJudgeRateCompatibilityTest|FullyQualifiedName~BmsColumnNoteIndexTest|FullyQualifiedName~BmsJudgementSelectorTest|FullyQualifiedName~BmsExecutedJavaJudgementTest|FullyQualifiedName~BmsMultiBadParityTest|FullyQualifiedName~BmsModNoGoodNoGreatTest",
+      "total": 627,
+      "passed": 627,
+      "failed": 0,
+      "not_executed": 0,
+      "duration_seconds": 1.771649,
+      "binaries": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "7BB456529B8EC12FC0F4C4115745E1360C3E03ECDFF83FE7370014D25B97EF82"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "2E0C60C61264AADBA069232A916FFA8735F0D49866E88C5BFC97A736B88B6EC2"
+        }
+      ],
+      "files": [
+        {
+          "file": "filter.txt",
+          "sha256": "E3CA7E6F12F6A50EEF38276D60A968E276767E6058DEAF9AEA9B61F714D14E4B"
+        },
+        {
+          "file": "hashes.json",
+          "sha256": "6AA74F72F39A2365EDDDD30E23E3C61C6BA0186119EC21CDE7933F92B10D7997"
+        },
+        {
+          "file": "source-inputs.json",
+          "sha256": "4E145AE4123B192CA204108E9F92BB12EBF5298363AA15FE6A455015C5CBA704"
+        },
+        {
+          "file": "tests.log",
+          "sha256": "8B274779DCD4C26A6205EDCD97DDC41C21A0C5F1EDAA337F23E740532B24726C"
+        },
+        {
+          "file": "tests.trx",
+          "sha256": "530BD8303AC3AB2CB897750A836A4965B06A5F01FA881112847FB7589AFE6210"
+        }
+      ],
+      "failures": []
+    },
+    {
+      "id": "CL-INSTRUMENTATION01",
+      "build": "CL-COURSE02 reused",
+      "filter": "FullyQualifiedName!~.Performance.&FullyQualifiedName!~Benchmark&TestCategory!=Performance&TestCategory!=Benchmark&TestCategory=JudgementInstrumentation",
+      "total": 288,
+      "passed": 288,
+      "failed": 0,
+      "not_executed": 0,
+      "duration_seconds": 120.3038217,
+      "binaries": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "7BB456529B8EC12FC0F4C4115745E1360C3E03ECDFF83FE7370014D25B97EF82"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "2E0C60C61264AADBA069232A916FFA8735F0D49866E88C5BFC97A736B88B6EC2"
+        }
+      ],
+      "files": [
+        {
+          "file": "filter.txt",
+          "sha256": "0E75C6F7F9C5F1777062CAD068D4F4E70CF07CB3BE192EBA8322277715089416"
+        },
+        {
+          "file": "hashes.json",
+          "sha256": "6AA74F72F39A2365EDDDD30E23E3C61C6BA0186119EC21CDE7933F92B10D7997"
+        },
+        {
+          "file": "source-inputs.json",
+          "sha256": "509F9EE996EC1BF194381B52475328D759AD0C3D3134D148D37E0319E3D9D6A8"
+        },
+        {
+          "file": "tests.log",
+          "sha256": "B62FBB6EC1850789C561EB9185E8E7EC3F733CC4255F7422E524C0F1D9A19A61"
+        },
+        {
+          "file": "tests.trx",
+          "sha256": "4712337BBDD06A658E88E17EC0FE1C1BE2D4898D089E3042B6CB3E5F73DE5824"
+        }
+      ],
+      "failures": []
+    },
+    {
+      "id": "CL-LOCALISATION01",
+      "build": "CL-COURSE02 reused",
+      "filter": "FullyQualifiedName~BmsLocalisationTest",
+      "total": 20,
+      "passed": 20,
+      "failed": 0,
+      "not_executed": 0,
+      "duration_seconds": 0.9777018,
+      "binaries": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "7BB456529B8EC12FC0F4C4115745E1360C3E03ECDFF83FE7370014D25B97EF82"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "2E0C60C61264AADBA069232A916FFA8735F0D49866E88C5BFC97A736B88B6EC2"
+        }
+      ],
+      "files": [
+        {
+          "file": "filter.txt",
+          "sha256": "4947F0B37AB918CC079A740CBF5A3307DF72E3FA696B7E1156B090B2459150DE"
+        },
+        {
+          "file": "hashes.json",
+          "sha256": "6AA74F72F39A2365EDDDD30E23E3C61C6BA0186119EC21CDE7933F92B10D7997"
+        },
+        {
+          "file": "source-inputs.json",
+          "sha256": "4E145AE4123B192CA204108E9F92BB12EBF5298363AA15FE6A455015C5CBA704"
+        },
+        {
+          "file": "tests.log",
+          "sha256": "CBF43BFDAA761BD74977C155F0AB5CD94C72AD5BB35D77199FF36BA521C04787"
+        },
+        {
+          "file": "tests.trx",
+          "sha256": "72FD90CC533E1DB8E635A3334507EB63B9E029413EC6275B100F4C2D95CE6BF5"
+        }
+      ],
+      "failures": []
+    },
+    {
+      "id": "CL-PROTECTED01",
+      "build": "CL-COURSE02 reused",
+      "filter": "FullyQualifiedName~BmsChargeNoteExecutionTest|FullyQualifiedName~BmsExecutedJavaGaugeTest|FullyQualifiedName~BmsExecutedJavaJudgementTest|FullyQualifiedName~BmsExecutedJavaParserTest|FullyQualifiedName~BmsExScoreTest|FullyQualifiedName~BmsGasCourseParityTest|FullyQualifiedName~BmsGasMixedReplayCertificationTest|FullyQualifiedName~BmsGasOrderParityTest|FullyQualifiedName~BmsGasPolicyReferenceTest|FullyQualifiedName~BmsGaugeCalculatorTest|FullyQualifiedName~BmsHcnFrameReferenceTest|FullyQualifiedName~BmsHellChargeBodyTrackerTest|FullyQualifiedName~BmsHellChargeNoteExecutionTest|FullyQualifiedName~BmsJudgementEngineTest|FullyQualifiedName~BmsJudgementSelectorTest|FullyQualifiedName~BmsLongNoteExecutionTest|FullyQualifiedName~BmsLongNoteModeModsTest|FullyQualifiedName~BmsLr2ComplementaryJudgementTest|FullyQualifiedName~BmsLr2GaugeParityTest|FullyQualifiedName~BmsLr2JudgementParityTest|FullyQualifiedName~BmsLr2PoorPenaltyTest|FullyQualifiedName~BmsMultiBadParityTest|FullyQualifiedName~BmsScoreProcessorTest|FullyQualifiedName~TestCourseAutoGaugeOmitsFailedGaugesFromNextStage|FullyQualifiedName~TestCourseAutoGaugeReplacesRegularGaugeChain|FullyQualifiedName~TestCourseCarriesEveryGaugeStateThroughSameList|FullyQualifiedName~TestCourseGaugeConfigurationInitializesWithCarriedHealth|FullyQualifiedName~TestCourseRecordUsesFinalGaugeTierOverStartingTier|FullyQualifiedName~TestLr2LnModeHeaderPreservesPlayerSelectionAndEndpointCount|FullyQualifiedName~BmsPreviewAudioResolverTest|FullyQualifiedName~BmsGaugeHistoryConfiguredChainTest",
+      "total": 427,
+      "passed": 427,
+      "failed": 0,
+      "not_executed": 0,
+      "duration_seconds": 2.0597099,
+      "binaries": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "7BB456529B8EC12FC0F4C4115745E1360C3E03ECDFF83FE7370014D25B97EF82"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "2E0C60C61264AADBA069232A916FFA8735F0D49866E88C5BFC97A736B88B6EC2"
+        }
+      ],
+      "files": [
+        {
+          "file": "filter.txt",
+          "sha256": "25DE8CEE73649B3AF6304AC9002858A6185F0825004A4053112E8991D24CDD0B"
+        },
+        {
+          "file": "hashes.json",
+          "sha256": "6AA74F72F39A2365EDDDD30E23E3C61C6BA0186119EC21CDE7933F92B10D7997"
+        },
+        {
+          "file": "source-inputs.json",
+          "sha256": "4E145AE4123B192CA204108E9F92BB12EBF5298363AA15FE6A455015C5CBA704"
+        },
+        {
+          "file": "tests.log",
+          "sha256": "38529DB50071B850449E106E5CDE6874A9B6670D836DB9423CEA37F1782ADF3B"
+        },
+        {
+          "file": "tests.trx",
+          "sha256": "FD5D0A447927BD8768C766ED1BA7438A4441148E352E048992B9D4E065DCD702"
+        }
+      ],
+      "failures": []
+    },
+    {
+      "id": "CL-STABILITY01",
+      "build": "CL-COURSE02 reused",
+      "filter": "FullyQualifiedName~BmsReplaySimulationTest|FullyQualifiedName~BmsReplayRebuildTest|FullyQualifiedName~BmsReplayFrameTest|FullyQualifiedName~TestSceneBmsCourseResults|FullyQualifiedName~BmsAutoScratchActionsTest|FullyQualifiedName~BmsModNoBadTest|FullyQualifiedName~BmsScratchPositionConfigTest",
+      "total": 142,
+      "passed": 142,
+      "failed": 0,
+      "not_executed": 0,
+      "duration_seconds": 20.7112766,
+      "binaries": [
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.Tests.dll",
+          "sha256": "7BB456529B8EC12FC0F4C4115745E1360C3E03ECDFF83FE7370014D25B97EF82"
+        },
+        {
+          "file": "osu.Game.Rulesets.BmsRuleset.dll",
+          "sha256": "2E0C60C61264AADBA069232A916FFA8735F0D49866E88C5BFC97A736B88B6EC2"
+        }
+      ],
+      "files": [
+        {
+          "file": "filter.txt",
+          "sha256": "9DF282FFF5B185C3C9C8A3F1A8971C2E7AB5B84AC62FA1807F721C391F9F617D"
+        },
+        {
+          "file": "hashes.json",
+          "sha256": "6AA74F72F39A2365EDDDD30E23E3C61C6BA0186119EC21CDE7933F92B10D7997"
+        },
+        {
+          "file": "source-inputs.json",
+          "sha256": "4E145AE4123B192CA204108E9F92BB12EBF5298363AA15FE6A455015C5CBA704"
+        },
+        {
+          "file": "tests.log",
+          "sha256": "DDDFF111C6ABD47AF0D988691F20E41D4C6A2E04DF96C1043ADC00EDF2A2847E"
+        },
+        {
+          "file": "tests.trx",
+          "sha256": "E614A62A38CBFC10462AAF06A83979A0F2298405D23A62E4A49C22E9D9B73A03"
+        }
+      ],
+      "failures": []
+    }
+  ],
+  "protected_comparison": {
+    "before_cases": 427,
+    "after_cases": 427,
+    "before_sha256": "E26824387C43E2647290E42A54B1FC6163E1DEB4E6EF70766B237486551B9058",
+    "after_sha256": "FD5D0A447927BD8768C766ED1BA7438A4441148E352E048992B9D4E065DCD702",
+    "multiset_changes": []
+  },
+  "stability_comparison": {
+    "before_cases": 140,
+    "after_cases": 142,
+    "before_sha256": "B99630A904E8375812FC5D646A2C7CAF87E35CFBD7E44ECF8FD1BA162408951A",
+    "after_sha256": "E614A62A38CBFC10462AAF06A83979A0F2298405D23A62E4A49C22E9D9B73A03",
+    "multiset_changes": [
+      {
+        "InputObject": "1|osu.Game.Rulesets.BmsRuleset.Tests.Visualize.TestSceneBmsCourseResults|TestLocaleRoundTripRestoresStateEvenWhenVerificationFails(\"\")|Passed",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "1|osu.Game.Rulesets.BmsRuleset.Tests.Visualize.TestSceneBmsCourseResults|TestLocaleRoundTripRestoresStateEvenWhenVerificationFails(\"en\")|Passed",
+        "SideIndicator": "=>"
+      }
+    ]
+  },
+  "course_comparison": {
+    "before_cases": 11,
+    "after_cases": 13,
+    "before_sha256": "CFC5661F5A1A118AAE3CE6AAFE6ECAB5791D34CF858BF389E161147245007587",
+    "after_sha256": "8A643BC9335E000D0B5742D6903CF80EB99F391B48717C93532BF667C6B6DFE7",
+    "multiset_changes": [
+      {
+        "InputObject": "1|osu.Game.Rulesets.BmsRuleset.Tests.Visualize.TestSceneBmsCourseResults|TestCourseSummaryWithCommaDecimalHostLocale|Passed",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "1|osu.Game.Rulesets.BmsRuleset.Tests.Visualize.TestSceneBmsCourseResults|TestFailedStageDoesNotShadeCourseTimeline|Passed",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "1|osu.Game.Rulesets.BmsRuleset.Tests.Visualize.TestSceneBmsCourseResults|TestIntermediateStageEnterAdvancesInsteadOfTogglingStatistics|Passed",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "1|osu.Game.Rulesets.BmsRuleset.Tests.Visualize.TestSceneBmsCourseResults|TestIntermediateStageResultIsRestricted|Passed",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "1|osu.Game.Rulesets.BmsRuleset.Tests.Visualize.TestSceneBmsCourseResults|TestLocaleRoundTripRestoresStateEvenWhenVerificationFails(\"\")|Passed",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "1|osu.Game.Rulesets.BmsRuleset.Tests.Visualize.TestSceneBmsCourseResults|TestLocaleRoundTripRestoresStateEvenWhenVerificationFails(\"en\")|Passed",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "1|osu.Game.Rulesets.BmsRuleset.Tests.Visualize.TestSceneBmsCourseResults|TestCourseSummaryWithCommaDecimalHostLocale|Failed",
+        "SideIndicator": "<="
+      },
+      {
+        "InputObject": "1|osu.Game.Rulesets.BmsRuleset.Tests.Visualize.TestSceneBmsCourseResults|TestFailedStageDoesNotShadeCourseTimeline|Failed",
+        "SideIndicator": "<="
+      },
+      {
+        "InputObject": "1|osu.Game.Rulesets.BmsRuleset.Tests.Visualize.TestSceneBmsCourseResults|TestIntermediateStageEnterAdvancesInsteadOfTogglingStatistics|Failed",
+        "SideIndicator": "<="
+      },
+      {
+        "InputObject": "1|osu.Game.Rulesets.BmsRuleset.Tests.Visualize.TestSceneBmsCourseResults|TestIntermediateStageResultIsRestricted|Failed",
+        "SideIndicator": "<="
+      }
+    ]
+  },
+  "current_source_files": [
+    {
+      "path": "osu.Game.Rulesets.BmsRuleset.Tests/Visualize/TestSceneBmsCourseResults.cs",
+      "sha256": "C1C44D43D3DF72745C0EC1F4AA522861A322A81B13E5CEDBAF098F5A73F3B93C",
+      "sha256_lf_utf8": "BCD48D816703F722ED6EAD82DBD0E5E1A667F98C53C98DECBC2D055D7D5BCBC3",
+      "git_blob": "29a07c81abcd15b47b42f1ddb67f222b902bb202"
+    },
+    {
+      "path": "osu.Game.Rulesets.BmsRuleset.Tests/Visualize/TestSceneBmsCourseResults.Localisation.cs",
+      "sha256": "596C4E8B66F1C03C446E1F07066A430E4602EA78031B922521FDACB00CB476BA",
+      "sha256_lf_utf8": "596C4E8B66F1C03C446E1F07066A430E4602EA78031B922521FDACB00CB476BA",
+      "git_blob": "235dcc83257193ab78fda6679ad4a7fc17a55d89"
+    }
+  ],
+  "production_tree": "77488b1eacb4c5d01af9bce992dcb375db84b538",
+  "production_delta": [],
+  "final_ci": "Pending publication and workflow dispatch; no full-suite pass claimed",
+  "phase2": "Not concluded; requires published Phase1 closure first",
+  "correction_commit": "8775657344b986ede3542043d8ac4fc22ce81210",
+  "current_tests_tree": "77531f9c0fd10215098014a6e238398acb023dc7",
+  "build_provenance": "CL-COURSE02 built with HEAD eb54f7e plus the two fixture changes subsequently committed verbatim in 8775657; production unchanged",
+  "integrity": {
+    "references": {
+      "endless_dream": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "parser": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "osu": "9a10d935b05a3b896f4bd811d620f2023331db93",
+      "framework": "37c3e328c8cc7a018234ec78982ea12d3712096a"
+    },
+    "reference_worktrees": "Verified clean at baseline; read only",
+    "historical_oracle_delta": [],
+    "workflow_and_dependency_delta": []
+  },
+  "baseline_artifacts": [
+    {
+      "name": "test-results-windows-latest",
+      "id": 13691809694,
+      "zip_sha256": "6c48fb0ff1e8bfcaba960766692f15a4ab466d8d5664a5fd1ecc0ffb9b3bddc4"
+    },
+    {
+      "name": "test-results-ubuntu-latest",
+      "id": 13693751052,
+      "zip_sha256": "3b7b0caa67d2fe806c723fad45c416817d466c97b7e018c3bc86879b72262596"
+    }
+  ]
+}
