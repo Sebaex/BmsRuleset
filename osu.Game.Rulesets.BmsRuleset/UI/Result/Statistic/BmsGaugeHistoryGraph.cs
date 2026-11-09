@@ -14,6 +14,7 @@ using osu.Game.Rulesets.BmsRuleset.Beatmaps;
 using osu.Game.Rulesets.BmsRuleset.Beatmaps.Objects;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.Mods.Gauge;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.Scoring.Gauge;
+using osu.Game.Rulesets.BmsRuleset.Localisation;
 using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Objects;
 using osu.Game.Rulesets.Scoring;
@@ -33,11 +34,13 @@ public sealed partial class BmsGaugeHistoryGraph : CompositeDrawable, IBmsResult
     internal const float FAILURE_MARKER_SIZE = 13;
     private const double max_landmine_damage_percent = (36 * 36 - 1) / 2d;
 
-    private readonly ScoreInfo? score;
+    private ScoreInfo? score;
     private readonly IBeatmap? playableBeatmap;
     private readonly IReadOnlyList<(ScoreInfo? Score, IBeatmap Beatmap)>? stages;
     private IReadOnlyList<GaugeSeries>? series;
     private IReadOnlyList<float> stageBoundaries = [];
+    private double? finalHealth;
+    private BmsGaugeType? finalGaugeType;
     private Drawable? graph;
     private Drawable? legend;
 
@@ -85,10 +88,14 @@ public sealed partial class BmsGaugeHistoryGraph : CompositeDrawable, IBmsResult
         rebuild();
     }
 
-    internal void SetData(IReadOnlyList<GaugeSeries> newSeries, IReadOnlyList<float> boundaries)
+    internal void SetData(IReadOnlyList<GaugeSeries> newSeries, IReadOnlyList<float> boundaries, double? newFinalHealth = null, ScoreInfo? newScore = null,
+                          BmsGaugeType? newFinalGaugeType = null)
     {
         series = newSeries;
         stageBoundaries = boundaries;
+        finalHealth = newFinalHealth;
+        score = newScore;
+        finalGaugeType = newFinalGaugeType;
         if (LoadState >= LoadState.Ready)
             rebuild();
     }
@@ -106,7 +113,7 @@ public sealed partial class BmsGaugeHistoryGraph : CompositeDrawable, IBmsResult
             Children =
             [
                 graph = createGraph(currentSeries),
-                legend = createLegend(currentSeries),
+                legend = createLegend(currentSeries, finalHealth),
             ],
         };
         graph.Height = height;
@@ -122,14 +129,15 @@ public sealed partial class BmsGaugeHistoryGraph : CompositeDrawable, IBmsResult
         => CreateSeries(score, playableBeatmap, score.HitEvents, []);
 
     internal static IReadOnlyList<GaugeSeries> CreateSeries(ScoreInfo score, IBeatmap playableBeatmap,
-                                                            IReadOnlyList<HitEvent> hitEvents, IReadOnlyList<BmsGaugeHistoryEvent> gaugeHistory)
+                                                            IReadOnlyList<HitEvent> hitEvents, IReadOnlyList<BmsGaugeHistoryEvent> gaugeHistory,
+                                                            bool truncateAtEnd = false)
     {
         var profileFamily = playableBeatmap is BmsBeatmap bmsBeatmap
             ? BmsGaugeProfileFamilyProvider.FromLayout(bmsBeatmap.LayoutVariant)
             : BmsGaugeProfileFamily.SevenKeys;
 
         if (gaugeHistory.Count > 0)
-            return createSeries(score, gaugeHistory, graphDuration(playableBeatmap, gaugeHistory.Max(e => e.Time)), profileFamily);
+            return createSeries(score, gaugeHistory, graphDuration(playableBeatmap, gaugeHistory.Max(e => e.Time)), profileFamily, truncateAtEnd);
 
         if (hitEvents.Count == 0)
             return [];
@@ -144,7 +152,7 @@ public sealed partial class BmsGaugeHistoryGraph : CompositeDrawable, IBmsResult
         var gaugeTypes = gaugeTypesFor(score.Mods).ToArray();
         var finalGaugeType = finalGaugeTypeFor(score.Mods, gaugeTypes);
 
-        return gaugeTypes.Select(type => createSeries(type, hitEvents, total, noteCount, duration, type == finalGaugeType, profileFamily)).ToArray();
+        return gaugeTypes.Select(type => createSeries(type, hitEvents, total, noteCount, duration, type == finalGaugeType, profileFamily, truncateAtEnd)).ToArray();
     }
 
     internal static IReadOnlyList<GaugeSeries> CreateCourseSeries(IReadOnlyList<(ScoreInfo? Score, IBeatmap Beatmap)> stages)
@@ -158,7 +166,7 @@ public sealed partial class BmsGaugeHistoryGraph : CompositeDrawable, IBmsResult
     }
 
     internal static IReadOnlyList<GaugeSeries> CreateCourseSeries(
-        IReadOnlyList<IReadOnlyList<GaugeSeries>> stageSeries, IReadOnlyList<double> durations)
+        IReadOnlyList<IReadOnlyList<GaugeSeries>> stageSeries, IReadOnlyList<double> durations, IReadOnlyList<bool>? fillZeroStages = null)
     {
         var totalDuration = durations.Sum();
         var stageOffsets = new double[stageSeries.Count];
@@ -180,7 +188,20 @@ public sealed partial class BmsGaugeHistoryGraph : CompositeDrawable, IBmsResult
             {
                 var gauge = matching[i];
                 if (gauge == null)
+                {
+                    if (fillZeroStages?[i] == true)
+                    {
+                        var zeroSegment = new[]
+                        {
+                            new GaugePoint((float)(stageOffsets[i] / totalDuration), 0),
+                            new GaugePoint((float)((stageOffsets[i] + durations[i]) / totalDuration), 0),
+                        };
+                        points.AddRange(zeroSegment);
+                        segments.Add(zeroSegment);
+                    }
+
                     continue;
+                }
 
                 var segment = gauge.Points.Select(point => point with
                 {
@@ -244,7 +265,8 @@ public sealed partial class BmsGaugeHistoryGraph : CompositeDrawable, IBmsResult
         ScoreInfo score,
         IReadOnlyList<BmsGaugeHistoryEvent> gaugeHistory,
         double duration,
-        BmsGaugeProfileFamily profileFamily)
+        BmsGaugeProfileFamily profileFamily,
+        bool truncateAtEnd)
     {
         var ordered = gaugeHistory as BmsGaugeHistoryEvent[] ?? gaugeHistory.ToArray();
 
@@ -255,7 +277,7 @@ public sealed partial class BmsGaugeHistoryGraph : CompositeDrawable, IBmsResult
             .ToArray();
 
         var finalGaugeType = finalGaugeTypeFor(score.Mods, gaugeTypes) ?? ordered[^1].ActiveGaugeType;
-        return gaugeTypes.Select(type => createSeries(type, ordered, duration, type == finalGaugeType, profileFamily)).ToArray();
+        return gaugeTypes.Select(type => createSeries(type, ordered, duration, type == finalGaugeType, profileFamily, truncateAtEnd)).ToArray();
     }
 
     private static double graphDuration(IBeatmap playableBeatmap, double lastEventTime)
@@ -277,7 +299,8 @@ public sealed partial class BmsGaugeHistoryGraph : CompositeDrawable, IBmsResult
         IReadOnlyList<BmsGaugeHistoryEvent> history,
         double duration,
         bool isFinalUsedGauge,
-        BmsGaugeProfileFamily profileFamily)
+        BmsGaugeProfileFamily profileFamily,
+        bool truncateAtEnd)
     {
         var profile = BmsGaugeProfileFactory.Create(type, profileFamily);
         var initialState = history.FirstOrDefault(e => e.Time <= 0)?.States.FirstOrDefault(state => state.GaugeType == type);
@@ -304,7 +327,7 @@ public sealed partial class BmsGaugeHistoryGraph : CompositeDrawable, IBmsResult
             points.Add(new GaugePoint(time, normaliseHealth(profile, health)));
         }
 
-        if (points[^1].Time < 1)
+        if (points[^1].Time < 1 && !truncateAtEnd)
             points.Add(new GaugePoint(1, points[^1].Health));
 
         if (failurePoint == null && profile.ClearThreshold > 0 && health < profile.ClearThreshold)
@@ -375,6 +398,26 @@ public sealed partial class BmsGaugeHistoryGraph : CompositeDrawable, IBmsResult
         };
     }
 
+    private static Drawable createFinalHealthDisplay(ScoreInfo? score, double health, BmsGaugeType? gaugeType)
+    {
+        var displayedHealth = Math.Truncate(Math.Clamp(health, 0, 1) * 1000 + 1e-9) / 1000;
+        var textColour = gaugeType is BmsGaugeType.Class or BmsGaugeType.ExClass or BmsGaugeType.ExHardClass
+            ? BmsResultColours.ClassClearTypeColor(gaugeType.Value)
+            : BmsResultColours.ClearTypeColor(score);
+
+        return new OsuSpriteText
+        {
+            Anchor = Anchor.BottomRight,
+            Origin = Anchor.BottomRight,
+            X = -2,
+            Text = BmsStrings.HealthPercentage(displayedHealth),
+            Colour = textColour,
+            Alpha = 0.85f,
+            Font = OsuFont.GetFont(size: 24, weight: FontWeight.SemiBold),
+            Name = "Final gauge health",
+        };
+    }
+
     private static Drawable createStageBoundary(float fraction) => new Box
     {
         RelativeSizeAxes = Axes.Y,
@@ -433,14 +476,29 @@ public sealed partial class BmsGaugeHistoryGraph : CompositeDrawable, IBmsResult
         };
     }
 
-    private Drawable createLegend(IReadOnlyList<GaugeSeries> series) => new FillFlowContainer
+    private Drawable createLegend(IReadOnlyList<GaugeSeries> series, double? finalHealth)
     {
-        RelativeSizeAxes = Axes.X,
-        AutoSizeAxes = Axes.Y,
-        Direction = FillDirection.Full,
-        Spacing = new Vector2(12, 6),
-        Children = series.Select(createLegendItem).ToArray(),
-    };
+        var legendItems = new FillFlowContainer
+        {
+            RelativeSizeAxes = Axes.X,
+            AutoSizeAxes = Axes.Y,
+            Direction = FillDirection.Full,
+            Spacing = new Vector2(12, 6),
+            Children = series.Select(createLegendItem).ToArray(),
+        };
+
+        if (finalHealth is not { } health)
+            return legendItems;
+
+        legendItems.Padding = new MarginPadding { Right = 55 };
+
+        return new Container
+        {
+            RelativeSizeAxes = Axes.X,
+            AutoSizeAxes = Axes.Y,
+            Children = [legendItems, createFinalHealthDisplay(score, health, finalGaugeType)],
+        };
+    }
 
     private Drawable createLegendItem(GaugeSeries gauge) => new FillFlowContainer
     {
@@ -462,7 +520,7 @@ public sealed partial class BmsGaugeHistoryGraph : CompositeDrawable, IBmsResult
                 Anchor = Anchor.CentreLeft,
                 Origin = Anchor.CentreLeft,
                 Text = gauge.Name,
-                Font = OsuFont.GetFont(size: 12, weight: FontWeight.SemiBold),
+                Font = OsuFont.GetFont(size: 24, weight: FontWeight.SemiBold),
             },
         ],
     };
@@ -502,7 +560,8 @@ public sealed partial class BmsGaugeHistoryGraph : CompositeDrawable, IBmsResult
         int noteCount,
         double duration,
         bool isFinalUsedGauge,
-        BmsGaugeProfileFamily profileFamily)
+        BmsGaugeProfileFamily profileFamily,
+        bool truncateAtEnd)
     {
         var profile = BmsGaugeProfileFactory.Create(type, profileFamily);
         var calculator = new BmsGaugeCalculator(profile, total, noteCount, profileFamily);
@@ -532,7 +591,7 @@ public sealed partial class BmsGaugeHistoryGraph : CompositeDrawable, IBmsResult
             points.Add(new GaugePoint(time, normaliseHealth(profile, health)));
         }
 
-        if (points[^1].Time < 1)
+        if (points[^1].Time < 1 && !truncateAtEnd)
             points.Add(new GaugePoint(1, points[^1].Health));
 
         if (failurePoint == null && profile.ClearThreshold > 0 && health < profile.ClearThreshold)

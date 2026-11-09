@@ -3,8 +3,11 @@ using System.Collections;
 using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Resources;
 using osu.Framework.Localisation;
+using osu.Game.Rulesets.BmsRuleset.Gameplay.Mods.Gauge;
+using osu.Game.Rulesets.BmsRuleset.Gameplay.Scoring.Gauge;
 using osu.Game.Rulesets.BmsRuleset.UI.SongSelect.Lamp;
 using osu.Game.Scoring;
 
@@ -62,6 +65,15 @@ public static class BmsStrings
     public static LocalisableString ResultPerformance => get("result_performance");
 
     public static LocalisableString ResultAccuracy => get("result_accuracy");
+
+    public static LocalisableString ResultCourseType (ScoreInfo? score) =>
+        score.Mods.OfType<BmsModGauge>().FirstOrDefault()?.GaugeType switch
+        {
+            BmsGaugeType.Class => "Course Cleared",
+            BmsGaugeType.ExClass => "Course Hard Cleared",
+            BmsGaugeType.ExHardClass => "Course Ex Hard Cleared",
+            _ => throw new ArgumentOutOfRangeException(),
+        };
 
     public static LocalisableString ResultClearType (ScoreInfo? score) =>
         BmsLampCalculator.Calculate(score) switch

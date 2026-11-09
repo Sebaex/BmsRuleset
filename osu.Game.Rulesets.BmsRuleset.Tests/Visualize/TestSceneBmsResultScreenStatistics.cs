@@ -28,6 +28,7 @@ using osu.Game.Rulesets.BmsRuleset.Beatmaps;
 using osu.Game.Rulesets.BmsRuleset.Beatmaps.Objects;
 using osu.Game.Rulesets.BmsRuleset.BmsParser;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.Mods.Gauge;
+using osu.Game.Rulesets.BmsRuleset.Gameplay.Scoring.Gauge;
 using osu.Game.Rulesets.BmsRuleset.Localisation;
 using osu.Game.Rulesets.BmsRuleset.UI.Icons;
 using osu.Game.Rulesets.BmsRuleset.UI.Ranking;
@@ -839,6 +840,22 @@ public partial class TestSceneBmsResultScreenStatistics : OsuManualInputManagerT
         AddAssert("overview omits mapper", () => screen.ChildrenOfType<BmsResultOverview>().Single()
             .ChildrenOfType<SpriteText>().Any(text => text.Text.ToString() == "mapper"), () => Is.False);
         assertText("Gauge History");
+        AddUntilStep("final gauge health shown beside gauge legend", () => screen.ChildrenOfType<BmsGaugeHistoryGraph>()
+            .Single().ChildrenOfType<OsuSpriteText>().Any(text => text.Name == "Final gauge health"));
+        AddAssert("final gauge health aligned to right edge", () =>
+        {
+            var graph = screen.ChildrenOfType<BmsGaugeHistoryGraph>().Single();
+            return graph.ChildrenOfType<OsuSpriteText>().Single(text => text.Name == "Final gauge health")
+                .ScreenSpaceDrawQuad.AABBFloat.Right;
+        }, () => Is.EqualTo(screen.ChildrenOfType<BmsGaugeHistoryGraph>().Single().ScreenSpaceDrawQuad.AABBFloat.Right - 2).Within(0.5f));
+        AddAssert("final gauge health below plot", () =>
+        {
+            var graph = screen.ChildrenOfType<BmsGaugeHistoryGraph>().Single();
+            var plot = gaugePlotBackgroundFor(graph).ScreenSpaceDrawQuad.AABBFloat;
+            var health = graph.ChildrenOfType<OsuSpriteText>().Single(text => text.Name == "Final gauge health")
+                .ScreenSpaceDrawQuad.AABBFloat;
+            return health.Top >= plot.Bottom;
+        });
         assertText("Hazard");
         assertText("ExHard");
         assertText("Hard");
@@ -859,6 +876,65 @@ public partial class TestSceneBmsResultScreenStatistics : OsuManualInputManagerT
         assertText("Hit Scatter");
         assertText("E-POOR");
         assertHitScatterText("+150 ms");
+    }
+
+    [Test]
+    public void TestFinalGaugeHealthIsOutsidePlotOppositeTheLegend()
+    {
+        BmsGaugeHistoryGraph graph = null!;
+        ScoreInfo score = null!;
+
+        AddStep("load gauge graph with final health", () =>
+        {
+            var beatmap = new BmsBeatmap
+            {
+                LayoutVariant = BmsLayoutVariant.Bme7K,
+                TotalColumns = BmsLayout.GetTotalColumns(BmsLayoutVariant.Bme7K),
+                Total = 200,
+                HitObjects = { new BmsNote { StartTime = 2000 } },
+            };
+            score = new ScoreInfo
+            {
+                Mods = [new BmsModHardGauge()],
+                Statistics = { [HitResult.Ok] = 1 },
+            };
+            var data = BmsResultStatisticsData.Create(score, beatmap,
+            [
+                new BmsGaugeHistoryEvent(2000, BmsGaugeType.Hard,
+                [
+                    new BmsGaugeStateSnapshot(BmsGaugeType.Hard, 0.6579, false),
+                ]),
+            ]);
+
+            graph = new BmsGaugeHistoryGraph(data.Gauges, data.StageBoundaries);
+            graph.SetData(data.Gauges, data.StageBoundaries, data.FinalHealth, score);
+            Child = new Container
+            {
+                Anchor = Anchor.Centre,
+                Origin = Anchor.Centre,
+                Width = 720,
+                AutoSizeAxes = Axes.Y,
+                Child = graph,
+            };
+        });
+
+        AddUntilStep("gauge graph and final health loaded", () => graph.IsLoaded
+            && graph.ChildrenOfType<OsuSpriteText>().Any(text => text.Name == "Final gauge health"));
+        AddAssert("final health uses the clear colour", () => graph.ChildrenOfType<OsuSpriteText>()
+            .Single(text => text.Name == "Final gauge health").Colour.TopLeft.SRGB,
+            () => Is.EqualTo(BmsResultColours.ClearTypeColor(score)));
+        AddAssert("final health aligned to graph right", () =>
+        {
+            return graph.ChildrenOfType<OsuSpriteText>().Single(text => text.Name == "Final gauge health")
+                .ScreenSpaceDrawQuad.AABBFloat.Right;
+        }, () => Is.EqualTo(graph.ScreenSpaceDrawQuad.AABBFloat.Right - 2).Within(0.5f));
+        AddAssert("final health below plot", () =>
+        {
+            var plot = gaugePlotBackgroundFor(graph).ScreenSpaceDrawQuad.AABBFloat;
+            var health = graph.ChildrenOfType<OsuSpriteText>().Single(text => text.Name == "Final gauge health")
+                .ScreenSpaceDrawQuad.AABBFloat;
+            return health.Top >= plot.Bottom;
+        });
     }
 
     [Test]

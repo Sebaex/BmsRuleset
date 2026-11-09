@@ -6,6 +6,7 @@ using osu.Game.Graphics;
 using osu.Game.Graphics.Containers;
 using osu.Game.Graphics.Sprites;
 using osu.Game.Rulesets.BmsRuleset.Localisation;
+using osu.Game.Scoring;
 using osu.Game.Screens.Ranking.Statistics;
 using osuTK;
 
@@ -72,9 +73,9 @@ internal partial class BmsResultStatisticsGrid : CompositeDrawable
         };
     }
 
-    internal void SetData(BmsResultStatisticsData data)
+    internal void SetData(BmsResultStatisticsData data, ScoreInfo? score = null)
     {
-        gauge.SetData(data.Gauges, data.StageBoundaries);
+        gauge.SetData(data.Gauges, data.StageBoundaries, data.FinalHealth, score, data.FinalGaugeType);
         timeline.SetData(data.Timeline);
         scatter.SetData(data.Scatter);
         offset.SetData(data.Offset);

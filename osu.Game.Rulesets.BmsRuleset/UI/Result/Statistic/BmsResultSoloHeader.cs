@@ -45,7 +45,7 @@ internal partial class BmsResultSoloHeader : GridContainer
                                     {
                                         Anchor = Anchor.Centre,
                                         Origin = Anchor.Centre,
-                                        Size = new Vector2(230),
+                                        Size = new Vector2(180),
                                     },
                                 },
                             },

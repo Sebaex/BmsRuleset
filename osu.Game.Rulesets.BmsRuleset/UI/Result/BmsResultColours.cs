@@ -1,6 +1,7 @@
 using System;
 using osu.Framework.Graphics.Colour;
 using osu.Game.Scoring;
+using osu.Game.Rulesets.BmsRuleset.Gameplay.Scoring.Gauge;
 using osu.Game.Rulesets.BmsRuleset.UI.SongSelect.Lamp;
 using osuTK.Graphics;
 
@@ -12,6 +13,14 @@ internal static class BmsResultColours
     internal static readonly Color4 FAST = new(90, 175, 255, 255);
     internal static readonly Color4 SLOW = new(255, 130, 92, 255);
     internal static readonly ColourInfo PROGRESS = ColourInfo.GradientHorizontal(new Color4(64, 174, 255, 255), ACCENT);
+
+    internal static Color4 ClassClearTypeColor(BmsGaugeType gaugeType) => gaugeType switch
+    {
+        BmsGaugeType.Class => new Color4(255, 130, 92, 255),
+        BmsGaugeType.ExClass => new Color4(255, 253, 67, 255),
+        BmsGaugeType.ExHardClass => new Color4(198, 198, 198, 255),
+        _ => throw new ArgumentOutOfRangeException(),
+    };
 
     internal static Color4 ClearTypeColor(ScoreInfo? score) => BmsLampCalculator.Calculate(score) switch
     {

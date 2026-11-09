@@ -73,6 +73,12 @@ internal sealed class BmsCourseSession
 
     internal IReadOnlyList<BmsGaugeStateSnapshot> CurrentGaugeStates { get; private set; }
 
+    internal BmsGaugeType FinalGaugeType =>
+        CurrentStage.Score?.Mods.OfType<BmsModGauge>().FirstOrDefault()?.GaugeType
+        ?? CurrentGaugeStates.FirstOrDefault(state => !state.Failed)?.GaugeType
+        ?? CurrentGaugeStates.LastOrDefault()?.GaugeType
+        ?? GaugeType;
+
     internal bool AdvanceRequested { get; private set; }
 
     internal bool SummaryShown { get; set; }

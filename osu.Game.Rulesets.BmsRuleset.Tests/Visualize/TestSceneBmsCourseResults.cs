@@ -22,7 +22,9 @@ using osu.Game.Rulesets.BmsRuleset.Gameplay.Course;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.Mods;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.Mods.Gauge;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.Scoring.Gauge;
+using osu.Game.Rulesets.BmsRuleset.Localisation;
 using osu.Game.Rulesets.BmsRuleset.UI.Icons;
+using osu.Game.Rulesets.BmsRuleset.UI.Result;
 using osu.Game.Rulesets.BmsRuleset.UI.Result.Course;
 using osu.Game.Rulesets.BmsRuleset.UI.Result.Statistic;
 using osu.Game.Rulesets.Scoring;
@@ -266,6 +268,12 @@ public partial class TestSceneBmsCourseResults : ScreenTestScene
         AddStep("show aborted course summary", () => Stack.Push(screen = new BmsCourseResultsScreen(session)));
         AddUntilStep("course timeline loaded", () => screen.ChildrenOfType<BmsTimelineStatistic>().SingleOrDefault(), () => Is.Not.Null);
         AddAssert("course timeline has no failure shade", () => hasFailureShade(screen), () => Is.False);
+        AddUntilStep("aborted course final health shown", () => screen.ChildrenOfType<BmsGaugeHistoryGraph>()
+            .SelectMany(graph => graph.ChildrenOfType<OsuSpriteText>()).Any(text => text.Name == "Final gauge health"));
+        AddAssert("aborted course health uses the failed colour", () => screen.ChildrenOfType<BmsGaugeHistoryGraph>()
+            .SelectMany(graph => graph.ChildrenOfType<OsuSpriteText>())
+            .Single(text => text.Name == "Final gauge health").Colour.TopLeft.SRGB,
+            () => Is.EqualTo(BmsResultColours.ClearTypeColor(BmsCourseScoreAggregation.CreateScore(session))));
         AddStep("open aborted stage", () => clickCourseStage("Course stage 2 result"));
         AddUntilStep("aborted stage statistics shown", () => screen.SelectedStageIndex == 1
                                                              && screen.ChildrenOfType<BmsStatisticsPanel>()
@@ -385,6 +393,14 @@ public partial class TestSceneBmsCourseResults : ScreenTestScene
         AddAssert("first stage score selected", () => screen.SelectedScore.Value, () => Is.SameAs(session.Stages[0].Score));
         AddUntilStep("stage statistics shown", () => screen.ChildrenOfType<BmsStatisticsPanel>()
             .Single(panel => panel is not BmsCourseAggregateStatistics).State.Value == Visibility.Visible);
+        AddUntilStep("first stage final health shown", () => screen.ChildrenOfType<BmsStatisticsPanel>()
+            .Single(panel => panel is not BmsCourseAggregateStatistics).ChildrenOfType<BmsGaugeHistoryGraph>()
+            .SelectMany(graph => graph.ChildrenOfType<OsuSpriteText>()).Any(text => text.Name == "Final gauge health"));
+        AddAssert("stage health uses its class gauge colour", () => screen.ChildrenOfType<BmsStatisticsPanel>()
+            .Single(panel => panel is not BmsCourseAggregateStatistics).ChildrenOfType<BmsGaugeHistoryGraph>()
+            .SelectMany(graph => graph.ChildrenOfType<OsuSpriteText>())
+            .Single(text => text.Name == "Final gauge health").Colour.TopLeft.SRGB,
+            () => Is.EqualTo(BmsResultColours.ClassClearTypeColor(BmsGaugeType.Class)));
         AddUntilStep("first stage chart shows its own hits", () => screen.ChildrenOfType<BmsStatisticsPanel>()
             .Single(panel => panel is not BmsCourseAggregateStatistics).ChildrenOfType<BmsHitScatterStatistic>()
             .SelectMany(chart => chart.ChildrenOfType<OsuSpriteText>()).Any(text => text.Text.ToString() == "2 hits"));
@@ -468,6 +484,12 @@ public partial class TestSceneBmsCourseResults : ScreenTestScene
         AddStep("show failed course summary", () => Stack.Push(screen = new BmsCourseResultsScreen(session)));
         AddUntilStep("course timeline loaded", () => screen.ChildrenOfType<BmsTimelineStatistic>().SingleOrDefault(), () => Is.Not.Null);
         AddAssert("course timeline has no failure shade", () => hasFailureShade(screen), () => Is.False);
+        AddUntilStep("failed course final health shown", () => screen.ChildrenOfType<BmsGaugeHistoryGraph>()
+            .SelectMany(graph => graph.ChildrenOfType<OsuSpriteText>()).Any(text => text.Name == "Final gauge health"));
+        AddAssert("failed course health uses the failed colour", () => screen.ChildrenOfType<BmsGaugeHistoryGraph>()
+            .SelectMany(graph => graph.ChildrenOfType<OsuSpriteText>())
+            .Single(text => text.Name == "Final gauge health").Colour.TopLeft.SRGB,
+            () => Is.EqualTo(BmsResultColours.ClearTypeColor(BmsCourseScoreAggregation.CreateScore(session))));
     }
 
     [TestCase(1280, 720)]
@@ -481,13 +503,26 @@ public partial class TestSceneBmsCourseResults : ScreenTestScene
         for (var index = 0; index < stages.Length; index++)
         {
             session.BeginCurrentStage();
-            session.CompleteCurrentStage(createScore(beatmaps[index], true, 123456, 0.9), [new BmsGaugeStateSnapshot(BmsGaugeType.Class, 0.8, false)]);
+            var gaugeStates = index == stages.Length - 1
+                ? new[]
+                {
+                    new BmsGaugeStateSnapshot(BmsGaugeType.ExHardClass, 0.35, false),
+                    new BmsGaugeStateSnapshot(BmsGaugeType.ExClass, 0.58, false),
+                    new BmsGaugeStateSnapshot(BmsGaugeType.Class, 0.82, false),
+                }
+                : [new BmsGaugeStateSnapshot(BmsGaugeType.Class, 0.8, false)];
+            session.CompleteCurrentStage(createScore(beatmaps[index], true, 123456, 0.9), gaugeStates);
             if (index < stages.Length - 1)
             {
                 session.RequestAdvance();
                 session.Advance();
             }
         }
+
+        session.Stages[0].Score!.HitEvents =
+        [
+            new HitEvent(0, 1, HitResult.Perfect, new BmsNote { StartTime = 1000 }, null, null),
+        ];
 
         BmsCourseResultsScreen screen = null!;
         AddStep("show completed course", () =>
@@ -498,6 +533,16 @@ public partial class TestSceneBmsCourseResults : ScreenTestScene
             Stack.Push(screen = new BmsCourseResultsScreen(session, recordResult: false));
         });
         AddUntilStep("four cards loaded", () => screen.ChildrenOfType<BmsCourseStageCard>().Count(), () => Is.EqualTo(4));
+        AddUntilStep("completed course health shown in aggregate graph", () => screen.ChildrenOfType<BmsGaugeHistoryGraph>()
+            .Any(graph => graph.ChildrenOfType<OsuSpriteText>().Any(text => text.Name == "Final gauge health")));
+        AddAssert("course health reflects the ending gauge state", () => screen.ChildrenOfType<BmsGaugeHistoryGraph>()
+            .SelectMany(graph => graph.ChildrenOfType<OsuSpriteText>())
+            .Single(text => text.Name == "Final gauge health").Text.ToString(),
+            () => Is.EqualTo(BmsStrings.HealthPercentage(0.35).ToString()));
+        AddAssert("course health uses the final class gauge colour", () => screen.ChildrenOfType<BmsGaugeHistoryGraph>()
+            .SelectMany(graph => graph.ChildrenOfType<OsuSpriteText>())
+            .Single(text => text.Name == "Final gauge health").Colour.TopLeft.SRGB,
+            () => Is.EqualTo(BmsResultColours.ClassClearTypeColor(BmsGaugeType.Class)));
         AddStep("make all song backgrounds opaque", () =>
         {
             foreach (var card in screen.ChildrenOfType<BmsCourseStageCard>())
@@ -510,6 +555,17 @@ public partial class TestSceneBmsCourseResults : ScreenTestScene
             AddStep($"select stage {index + 1}", () => clickCourseStage($"Course stage {stageIndex + 1} result"));
             AddUntilStep($"stage {index + 1} statistics selected", () => screen.SelectedStageIndex == stageIndex
                 && ReferenceEquals(screen.SelectedScore.Value, session.Stages[stageIndex].Score));
+            if (index == 0)
+            {
+                AddUntilStep("selected stage health shown", () => screen.ChildrenOfType<BmsStatisticsPanel>()
+                    .Single(panel => panel is not BmsCourseAggregateStatistics).ChildrenOfType<BmsGaugeHistoryGraph>()
+                    .SelectMany(graph => graph.ChildrenOfType<OsuSpriteText>()).Any(text => text.Name == "Final gauge health"));
+                AddAssert("selected stage health uses its class gauge colour", () => screen.ChildrenOfType<BmsStatisticsPanel>()
+                    .Single(panel => panel is not BmsCourseAggregateStatistics).ChildrenOfType<BmsGaugeHistoryGraph>()
+                    .SelectMany(graph => graph.ChildrenOfType<OsuSpriteText>())
+                    .Single(text => text.Name == "Final gauge health").Colour.TopLeft.SRGB,
+                    () => Is.EqualTo(BmsResultColours.ClassClearTypeColor(BmsGaugeType.Class)));
+            }
             AddStep($"move away from stage {index + 1}", () => InputManager.MoveMouseTo(screen.ScreenSpaceDrawQuad.Centre));
             AddWaitStep($"stage {index + 1} hover fades", 2);
             AddAssert($"stage {index + 1} stays selected", () => screen.ChildrenOfType<BmsCourseStageCard>()
