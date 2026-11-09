@@ -21,6 +21,7 @@
     </ItemGroup>
     <ItemGroup Label="Independent beatoraja reference">
         <EmbeddedResource Include="reference_fixtures\lr2-certification\*.csv"/>
+        <EmbeddedResource Include="reference_fixtures\fixed-judge-parity\*.csv"/>
         <EmbeddedResource Include="reference_fixtures\beatoraja_windows.csv"/>
         <EmbeddedResource Include="reference_fixtures\column_judgement_p1_trace.json"/>
         <EmbeddedResource Include="reference_fixtures\long_note_p2_trace.json"/>

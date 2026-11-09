@@ -146,8 +146,17 @@ public class BmsJudgementSelectorTest
                 var future = BmsJudgementSelector.SelectPress(BmsLayoutVariant.Bme7K, 1, [note(1000), note(1060)], 1050, algorithm);
                 var past = BmsJudgementSelector.SelectPress(BmsLayoutVariant.Bme7K, 1, [note(1000), note(1060)], 1060, algorithm);
 
-                Assert.That(future.Candidate?.StartTime, Is.EqualTo(1000), algorithm.ToString());
+                // Original Java modified-future/modified-at vectors select PG over the older BAD.
+                Assert.That(future.Candidate?.StartTime, Is.EqualTo(1060), algorithm.ToString());
+                Assert.That(future.Result, Is.EqualTo(HitResult.Perfect), algorithm.ToString());
                 Assert.That(past.Candidate?.StartTime, Is.EqualTo(1060), algorithm.ToString());
+                Assert.That(past.Result, Is.EqualTo(HitResult.Perfect), algorithm.ToString());
+                using (BmsJudgementProfileProvider.UseWindowMods([]))
+                {
+                    var unmodified = BmsJudgementSelector.SelectPress(BmsLayoutVariant.Bme7K, 1, [note(1000), note(1060)], 1050, algorithm);
+                    Assert.That(unmodified.Candidate?.StartTime, Is.EqualTo(1000), "The window modifier must actually change selection.");
+                    Assert.That(unmodified.Result, Is.EqualTo(HitResult.Great));
+                }
             }
         }
         finally

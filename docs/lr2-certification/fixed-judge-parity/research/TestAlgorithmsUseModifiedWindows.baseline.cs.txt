@@ -1,0 +1,22 @@
+    [Test]
+    public void TestAlgorithmsUseModifiedWindows()
+    {
+        IReadOnlyList<IApplicableToJudgementWindow> mods = [new BmsModNoGreat()];
+        BmsJudgementProfileProvider.SetActiveWindowMods(mods);
+        try
+        {
+            BmsJudgementAlgorithm[] algorithms = [BmsJudgementAlgorithm.Combo, BmsJudgementAlgorithm.Score];
+            foreach (var algorithm in algorithms)
+            {
+                var future = BmsJudgementSelector.SelectPress(BmsLayoutVariant.Bme7K, 1, [note(1000), note(1060)], 1050, algorithm);
+                var past = BmsJudgementSelector.SelectPress(BmsLayoutVariant.Bme7K, 1, [note(1000), note(1060)], 1060, algorithm);
+
+                Assert.That(future.Candidate?.StartTime, Is.EqualTo(1000), algorithm.ToString());
+                Assert.That(past.Candidate?.StartTime, Is.EqualTo(1060), algorithm.ToString());
+            }
+        }
+        finally
+        {
+            BmsJudgementProfileProvider.ClearActiveWindowMods(mods);
+        }
+    }

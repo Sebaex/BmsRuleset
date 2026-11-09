@@ -1,0 +1,13 @@
+    public void DurationSearchSkipsCloserHeadsWithNoHitWindow()
+    {
+        var beatmap = new BmsBeatmap { LayoutVariant = BmsLayoutVariant.Bme7K, Rank = 3 };
+        var notes = new[] { 900d, 1000, 1060, 1150 }.Select(time => new BmsNote
+        {
+            Beatmap = beatmap, Column = 1, StartTime = time, JudgementRate = time is 1000 or 1060 ? .05 : 1,
+        }).ToArray();
+        var output = new BmsRecordingJudgementOutput();
+        var column = new BmsJudgementEngine(notes, beatmap.LayoutVariant, 1, output).GetColumn(1);
+        column.HandleNotePress(new BmsPressContext(1030, new BmsFrameContext(1030, 1)), BmsJudgementAlgorithm.Duration);
+        Assert.That(output.GetMainResult(notes[3]).Type, Is.EqualTo(HitResult.Good));
+        Assert.That(output.MainResults, Is.EqualTo(1));
+    }
