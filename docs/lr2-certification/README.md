@@ -18,3 +18,5 @@ Reference sources: Endless Dream `d4995153b0a759859ebc8f859dd868abae39db5a`, par
 The evidence commit is recorded after publication in the next index update. The final index records the verdict commit without attempting a self-referential commit hash.
 
 Subsequent phase: [C01-R regression reconciliation](c01-reconciliation/README.md) records three preexisting production corrections, 49 original failures now passing, the final 427-case focus and the remaining broad failures. C01–C06 reports above retain their original historical results.
+
+2026-11-09 successor: [LR2-JF fixed-judge parity](fixed-judge-parity/07_FINAL_VERDICT.md) records536 executed Java vectors, a scoped NoGood/NoGreat selection correction, explicit replacement of F099, the still-deferred heterogeneous defect and the independent Course fixture repair. Historical reports above remain unchanged; current cross-platform CI is pending.
