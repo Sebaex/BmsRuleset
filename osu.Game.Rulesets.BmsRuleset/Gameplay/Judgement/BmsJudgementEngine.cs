@@ -29,6 +29,8 @@ internal sealed class BmsJudgementEngine
     private readonly BmsColumnJudgementRuntime[] bodyColumns;
     private readonly BmsColumnJudgementRuntime[] columnsByIndex;
     private readonly List<BmsJudgementInput> pendingInputs = [];
+    private readonly BmsHitObject[][] judgementObjectSets;
+    internal bool HasFixedJudge { get; private set; }
     private double scheduleTime = double.NaN;
     private bool processing;
 
@@ -37,6 +39,9 @@ internal sealed class BmsJudgementEngine
         if (definitions.Length == 0 || definitions.Any(d => d.Index < 0) || definitions.Select(d => d.Index).Distinct().Count() != definitions.Length)
             throw new ArgumentException(@"Each judgement column needs a unique non-negative index.", nameof(definitions));
 
+        // Gameplay can supply the same whole-chart array for each column; inspect it once.
+        judgementObjectSets = definitions.Select(definition => definition.Objects).Distinct().ToArray();
+        RefreshJudgeRateContext();
         columns = new BmsColumnJudgementRuntime[definitions.Length];
         columnsByIndex = new BmsColumnJudgementRuntime[definitions.Max(d => d.Index) + 1];
         // beatoraja visits each side's ordinary lanes before its scratch; gauge clipping depends on this order.
@@ -54,7 +59,7 @@ internal sealed class BmsJudgementEngine
         for (var i = 0; i < orderedDefinitions.Length; i++)
         {
             var definition = orderedDefinitions[i];
-            var column = new BmsColumnJudgementRuntime(definition.Objects, definition.Layout, definition.Index, definition.Output, rules);
+            var column = new BmsColumnJudgementRuntime(definition.Objects, definition.Layout, definition.Index, definition.Output, rules, this);
             columns[i] = column;
             columnsByIndex[column.Index] = column;
         }
@@ -69,6 +74,26 @@ internal sealed class BmsJudgementEngine
     }
 
     internal bool HasPendingInputs => pendingInputs.Count > 0;
+
+    internal void RefreshJudgeRateContext()
+    {
+        double? commonRate = null;
+        HasFixedJudge = true;
+        foreach (var objects in judgementObjectSets)
+        {
+            foreach (var note in objects)
+            {
+                if (note is not (BmsNote or BmsLongNote)) continue;
+                var rate = note.EffectiveJudgementRate;
+                if (commonRate.HasValue && commonRate.Value != rate)
+                {
+                    HasFixedJudge = false;
+                    return;
+                }
+                commonRate = rate;
+            }
+        }
+    }
 
     internal double CurrentTime => scheduleTime;
 

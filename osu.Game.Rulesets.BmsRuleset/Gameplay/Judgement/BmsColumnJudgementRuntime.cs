@@ -21,6 +21,8 @@ internal sealed class BmsColumnJudgementRuntime
     private readonly BmsHitObject[] columnNotes;
     private readonly Dictionary<BmsHitObject, int> noteSlots = new(ReferenceEqualityComparer.Instance);
     private readonly IBmsJudgementOutput noteOutput;
+    private readonly BmsJudgementEngine engine;
+    private readonly double[] judgementRates;
     private readonly BmsHoldRegistry holds;
     private readonly BmsLandmineRegistry landmines;
     private readonly BmsHitObject[] chartObjects;
@@ -67,8 +69,9 @@ internal sealed class BmsColumnJudgementRuntime
 
     internal int PressedDirections { get; set; }
 
-    internal BmsColumnJudgementRuntime(BmsHitObject[] notes, BmsLayoutVariant layout, int column, IBmsJudgementOutput output, BmsJudgementRules rules)
+    internal BmsColumnJudgementRuntime(BmsHitObject[] notes, BmsLayoutVariant layout, int column, IBmsJudgementOutput output, BmsJudgementRules rules, BmsJudgementEngine engine)
     {
+        this.engine = engine;
         Rules = rules;
         Index = column;
         LayoutVariant = layout;
@@ -77,6 +80,7 @@ internal sealed class BmsColumnJudgementRuntime
         Array.Fill(automaticTimes, double.PositiveInfinity);
         for (var i = 0; i < chartObjects.Length; i++) chartOrders.Add(chartObjects[i], i);
         columnNotes = notes.Where(n => n.Column == column && n is BmsNote or BmsLongNote).OrderBy(n => n.StartTime).ToArray();
+        judgementRates = columnNotes.Select(note => note.EffectiveJudgementRate).ToArray();
         landmines = new BmsLandmineRegistry(notes, column, rules.Landmine, output);
         noteOutput = output;
         var binding = new BmsNoteOperationBinding(this, output);
@@ -167,6 +171,13 @@ internal sealed class BmsColumnJudgementRuntime
             return;
         }
 
+        // Pool reapply normally keeps the rate. Avoid rescanning the chart on that hot path.
+        var rate = note.EffectiveJudgementRate;
+        if (judgementRates[slot] != rate)
+        {
+            judgementRates[slot] = rate;
+            engine.RefreshJudgeRateContext();
+        }
         if (note is BmsLongNote) holds.Configure(slot);
         else NoteWindows[slot] = new BmsNoteJudgementWindows(note);
         RefreshNoteTiming(note);
@@ -241,7 +252,7 @@ internal sealed class BmsColumnJudgementRuntime
 
     private BmsJudgementSelector.PressSearch selectPress(double inputTime, BmsJudgementAlgorithm? algorithm)
     {
-        var search = new BmsJudgementSelector.PressSearch(LayoutVariant, Index, inputTime, algorithm);
+        var search = new BmsJudgementSelector.PressSearch(LayoutVariant, Index, inputTime, algorithm, engine.HasFixedJudge);
         // Chronological traversal preserves invalidation by later LN heads for every algorithm.
         for (var i = findFirstNote(inputTime - 1000); i < columnNotes.Length && columnNotes[i].StartTime < inputTime + 1000; i++)
         {
