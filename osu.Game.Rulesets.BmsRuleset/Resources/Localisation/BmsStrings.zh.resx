@@ -20,6 +20,7 @@
   <data name="result_number" xml:space="preserve"><value>{0:0}</value></data>
   <data name="result_maximum" xml:space="preserve"><value>/{0:0}</value></data>
   <data name="result_percentage" xml:space="preserve"><value>{0:0.00%}</value></data>
+  <data name="health_percentage" xml:space="preserve"><value>{0:0.0%}</value></data>
   <data name="result_judgement_perfect" xml:space="preserve"><value>PGREAT</value></data>
   <data name="result_judgement_great" xml:space="preserve"><value>GREAT</value></data>
   <data name="result_judgement_good" xml:space="preserve"><value>GOOD</value></data>
@@ -359,7 +360,6 @@
   <data name="leaderboard_lamp_noplay" xml:space="preserve"><value>NO PLAY</value></data>
   <data name="leaderboard_lamp_failed" xml:space="preserve"><value>FAILED</value></data>
   <data name="leaderboard_lamp_assistclear" xml:space="preserve"><value>ASSIST CLEAR</value></data>
-  <data name="leaderboard_lamp_lightassistclear" xml:space="preserve"><value>LIGHT ASSIST CLEAR</value></data>
   <data name="leaderboard_lamp_easyclear" xml:space="preserve"><value>EASY CLEAR</value></data>
   <data name="leaderboard_lamp_clear" xml:space="preserve"><value>CLEAR</value></data>
   <data name="leaderboard_lamp_hardclear" xml:space="preserve"><value>HARD CLEAR</value></data>

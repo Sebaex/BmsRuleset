@@ -3,8 +3,13 @@ using System.Collections;
 using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Resources;
 using osu.Framework.Localisation;
+using osu.Game.Rulesets.BmsRuleset.Gameplay.Mods.Gauge;
+using osu.Game.Rulesets.BmsRuleset.Gameplay.Scoring.Gauge;
+using osu.Game.Rulesets.BmsRuleset.UI.SongSelect.Lamp;
+using osu.Game.Scoring;
 
 
 namespace osu.Game.Rulesets.BmsRuleset.Localisation;
@@ -61,6 +66,31 @@ public static class BmsStrings
 
     public static LocalisableString ResultAccuracy => get("result_accuracy");
 
+    public static LocalisableString ResultCourseType (ScoreInfo? score) =>
+        score.Mods.OfType<BmsModGauge>().FirstOrDefault()?.GaugeType switch
+        {
+            BmsGaugeType.Class => "Course Cleared",
+            BmsGaugeType.ExClass => "Course Hard Cleared",
+            BmsGaugeType.ExHardClass => "Course Ex Hard Cleared",
+            _ => throw new ArgumentOutOfRangeException(),
+        };
+
+    public static LocalisableString ResultClearType (ScoreInfo? score) =>
+        BmsLampCalculator.Calculate(score) switch
+        {
+            BmsLamp.NoPlay => "No Play",
+            BmsLamp.Failed => "Failed",
+            BmsLamp.AssistClear => "Assist Clear",
+            BmsLamp.EasyClear => "Easy Clear",
+            BmsLamp.Clear => "Clear",
+            BmsLamp.HardClear => "Hard Clear",
+            BmsLamp.ExHardClear => "Ex Hard Clear",
+            BmsLamp.FullCombo => "Full Combo",
+            BmsLamp.Perfect => "Perfect Clear",
+            BmsLamp.Max => "Max",
+            _ => throw new ArgumentOutOfRangeException(),
+        };
+
     public static LocalisableString ResultCombo => get("result_combo");
 
     public static LocalisableString ResultJudgements => get("result_judgements");
@@ -92,6 +122,8 @@ public static class BmsStrings
     public static LocalisableString ResultMaximum(int value) => get("result_maximum", value);
 
     public static LocalisableString ResultPercentage(double value) => get("result_percentage", value);
+
+    public static LocalisableString HealthPercentage(double value) => get("health_percentage", value);
 
     public static LocalisableString ResultJudgement(osu.Game.Rulesets.Scoring.HitResult result) => get($"result_judgement_{result.ToString().ToLowerInvariant()}");
 

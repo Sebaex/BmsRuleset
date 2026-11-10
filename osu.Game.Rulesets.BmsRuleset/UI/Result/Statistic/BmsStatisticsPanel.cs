@@ -109,7 +109,7 @@ internal partial class BmsStatisticsPanel : VisibilityContainer
 
                 if (data != null)
                 {
-                    statistics!.SetData(data);
+                    statistics!.SetData(data, score);
                     StatisticsLoaded?.Invoke(data.HitEvents);
                 }
                 else

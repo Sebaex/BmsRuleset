@@ -345,6 +345,78 @@ public class BmsGaugeHistoryGraphTest
     }
 
     [Test]
+    public void TestFinalHealthIsAvailableForSoloResultsButNotCourseAggregates()
+    {
+        var beatmap = createBeatmap();
+        var score = new ScoreInfo { Mods = [new BmsModHardGauge()] };
+        BmsGaugeHistoryEvent[] history =
+        [
+            new BmsGaugeHistoryEvent(2000, BmsGaugeType.Hard,
+            [
+                new BmsGaugeStateSnapshot(BmsGaugeType.Hard, 0.6579, false),
+            ]),
+        ];
+
+        var data = BmsResultStatisticsData.Create(score, beatmap, history);
+        var finalGauge = data.Gauges.Single(gauge => gauge.IsFinalUsedGauge);
+
+        Assert.That(data.FinalHealth, Is.EqualTo(finalGauge.Points.Last().Health));
+
+        var courseData = BmsResultStatisticsData.CreateCourse([(beatmap, data)]);
+        Assert.That(courseData.FinalHealth, Is.Null);
+        Assert.That(courseData.FinalGaugeType, Is.Null);
+
+        var completedCourseData = BmsResultStatisticsData.CreateCourse([(beatmap, data)], 0.72, BmsGaugeType.ExClass);
+        Assert.That(completedCourseData.FinalHealth, Is.EqualTo(0.72));
+        Assert.That(completedCourseData.FinalGaugeType, Is.EqualTo(BmsGaugeType.ExClass));
+    }
+
+    [Test]
+    public void TestAbortedStageTruncatesRemainingGaugeHistory()
+    {
+        var beatmap = createBeatmap();
+        var score = new ScoreInfo { Mods = [new BmsModClassGauge()] };
+        BmsGaugeHistoryEvent[] history =
+        [
+            new BmsGaugeHistoryEvent(1000, BmsGaugeType.Class,
+            [
+                new BmsGaugeStateSnapshot(BmsGaugeType.Class, 0.72, false),
+            ]),
+        ];
+
+        var series = BmsGaugeHistoryGraph.CreateSeries(score, beatmap, [], history, truncateAtEnd: true).Single();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(series.Points[^1].Time, Is.EqualTo(0.5f));
+            Assert.That(series.Points[^1].Health, Is.EqualTo(0.72f).Within(0.001f));
+            Assert.That(series.Points.Any(point => point.Time == 1), Is.False);
+        });
+    }
+
+    [Test]
+    public void TestUnplayedCourseStagesUseZeroGaugeHistory()
+    {
+        var beatmap = createBeatmap();
+        var score = new ScoreInfo
+        {
+            Mods = [new BmsModClassGauge()],
+            HitEvents = [new HitEvent(0, 1, HitResult.Great, new BmsNote { StartTime = 500 }, null, null)],
+        };
+        var playedStage = BmsGaugeHistoryGraph.CreateSeries(score, beatmap);
+
+        var courseSeries = BmsGaugeHistoryGraph.CreateCourseSeries([playedStage, []], [1000, 1000], [false, true]);
+        var classGauge = courseSeries.Single();
+        var unplayedSegment = classGauge.Segments[^1];
+
+        Assert.That(unplayedSegment, Is.EqualTo(new[]
+        {
+            new BmsGaugeHistoryGraph.GaugePoint(0.5f, 0),
+            new BmsGaugeHistoryGraph.GaugePoint(1, 0),
+        }));
+    }
+
+    [Test]
     public void TestGrooveGaugeFailurePointIsRecordedAtEndWhenBelowClearThreshold()
     {
         var series = BmsGaugeHistoryGraph.CreateSeries(

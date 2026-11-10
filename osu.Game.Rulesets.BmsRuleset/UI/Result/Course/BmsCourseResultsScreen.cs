@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using osu.Framework.Allocation;
@@ -56,10 +55,9 @@ internal partial class BmsCourseResultsScreen : BmsResultsScreen
         var aggregateScore = BmsCourseScoreAggregation.CreateScore(session);
         if (recordResult)
         {
-            var finalGaugeType = session.CurrentGaugeStates.FirstOrDefault(state => !state.Failed)?.GaugeType;
             var store = BmsRulesetRuntime.CourseResults;
             if (store != null)
-                _ = store.RecordAsync(session.Course.Id, session.Status, aggregateScore.Rank, aggregateScore, BmsCourseAttemptData.From(session), finalGaugeType);
+                _ = store.RecordAsync(session.Course.Id, session.Status, aggregateScore.Rank, aggregateScore, BmsCourseAttemptData.From(session), session.FinalGaugeType);
         }
 
         summaryBeatmap = Beatmap.Value;

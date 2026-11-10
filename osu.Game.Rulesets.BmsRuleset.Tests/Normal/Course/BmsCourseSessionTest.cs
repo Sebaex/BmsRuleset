@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using osu.Game.Beatmaps;
+using osu.Game.Rulesets.BmsRuleset;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.Course;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.Mods;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.Mods.Gauge;
@@ -203,6 +204,29 @@ public class BmsCourseSessionTest
             BmsGaugeType.ExClass,
             BmsGaugeType.Class,
         ]));
+    }
+
+    [Test]
+    public void TestCourseFinalGaugeTypeUsesGaugeThatDeterminedStageResult()
+    {
+        var session = createSession(stageCount: 1, mods: [new BmsModGaugeAutoShift()], gaugeType: BmsGaugeType.ExHardClass);
+        var score = createScore(true);
+        score.Ruleset = new BmsRuleset().RulesetInfo;
+        score.Mods = [new BmsModClassGauge()];
+
+        session.BeginCurrentStage();
+        session.CompleteCurrentStage(score,
+        [
+            new BmsGaugeStateSnapshot(BmsGaugeType.ExHardClass, 0.35, false),
+            new BmsGaugeStateSnapshot(BmsGaugeType.ExClass, 0.58, false),
+            new BmsGaugeStateSnapshot(BmsGaugeType.Class, 0.82, false),
+        ]);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(session.CurrentGaugeStates.First(state => !state.Failed).GaugeType, Is.EqualTo(BmsGaugeType.ExHardClass));
+            Assert.That(session.FinalGaugeType, Is.EqualTo(BmsGaugeType.Class));
+        });
     }
 
     [Test]

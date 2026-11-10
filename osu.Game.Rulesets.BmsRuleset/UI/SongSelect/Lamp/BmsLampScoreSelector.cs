@@ -65,10 +65,9 @@ public static class BmsLampScoreSelector
 
     private static int lampPriority(BmsLamp lamp) => lamp switch
     {
-        BmsLamp.NoPlay => 0,
-        BmsLamp.Failed => 1,
-        BmsLamp.AssistClear => 2,
-        BmsLamp.LightAssistClear => 3,
+        BmsLamp.NoPlay => 1,
+        BmsLamp.Failed => 2,
+        BmsLamp.AssistClear => 3,
         BmsLamp.EasyClear => 4,
         BmsLamp.Clear => 5,
         BmsLamp.HardClear => 6,

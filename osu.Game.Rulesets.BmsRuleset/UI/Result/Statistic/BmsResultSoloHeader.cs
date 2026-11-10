@@ -28,7 +28,8 @@ internal partial class BmsResultSoloHeader : GridContainer
                 new BmsResultSection(new GridContainer
                 {
                     RelativeSizeAxes = Axes.Both,
-                    RowDimensions = [new Dimension(), new Dimension(GridSizeMode.Absolute, 24)],
+                    RowDimensions = [new Dimension(), new Dimension(GridSizeMode.Absolute, 48),
+                    new Dimension(GridSizeMode.Absolute, 24)],
                     Content = new[]
                     {
                         new Drawable[]
@@ -39,16 +40,17 @@ internal partial class BmsResultSoloHeader : GridContainer
                                 Child = new DrawSizePreservingFillContainer
                                 {
                                     // Include the outer badges without reserving extra square margins.
-                                    TargetDrawSize = new Vector2(300, 260),
+                                    TargetDrawSize = new Vector2(300, 230),
                                     Child = new BmsAccuracyCircle(score)
                                     {
                                         Anchor = Anchor.Centre,
                                         Origin = Anchor.Centre,
-                                        Size = new Vector2(230),
+                                        Size = new Vector2(180),
                                     },
                                 },
                             },
                         },
+                        new Drawable[] { new BmsResultClearDisplay(score) },
                         new Drawable[] { new BmsResultModDisplay(score) },
                     },
                 }),

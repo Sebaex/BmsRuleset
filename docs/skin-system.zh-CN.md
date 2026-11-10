@@ -296,6 +296,8 @@ Class、ExClass、ExHard Class 分别使用 Hard、ExHard、Hazard 的填充颜�
   <img src="images/skin-component-health-bar.jpg" width="480" alt="从左到右为低、中、高血量的 Normal 血条，以及 Hard、ExHard 和 Hazard 血条">
 </p>
 
+从 BMS 组件工具箱添加 **BmsHealthValueDisplay**，即可用百分比显示当前血量。它可以独立于血条移动和调整大小。
+
 ### 歌曲进度
 
 用发光指示块显示播放进度：前奏时停在顶部，进入可游玩部分后向下移动。

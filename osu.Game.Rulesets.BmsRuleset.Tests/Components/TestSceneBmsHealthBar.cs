@@ -1,19 +1,24 @@
 ﻿using NUnit.Framework;
-using System.Linq;
 using System.Reflection;
+﻿using System;
+using System.Linq;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Shapes;
 using osu.Framework.Testing;
 using osu.Game.Rulesets.BmsRuleset.Beatmaps;
 using osu.Game.Rulesets.BmsRuleset.Beatmaps.Objects;
 using osu.Game.Rulesets.BmsRuleset.BmsParser;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.Scoring;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.Scoring.Gauge;
+using osu.Game.Rulesets.BmsRuleset.Localisation;
+using osu.Game.Graphics.Sprites;
 using osu.Game.Rulesets.BmsRuleset.UI.HudComponents;
 using osu.Game.Rulesets.Judgements;
 using osu.Game.Rulesets.Scoring;
+using osu.Game.Skinning;
 using osu.Game.Tests.Visual;
 using osuTK.Graphics;
 
@@ -75,6 +80,27 @@ public partial class TestSceneBmsHealthBar : OsuTestScene
         AddStep("set health above clear", () => healthProcessor.Health.Value = 0.65);
     }
 
+    [TestCase(BmsGaugeType.AssistEasy)]
+    [TestCase(BmsGaugeType.Easy)]
+    [TestCase(BmsGaugeType.Normal)]
+    public void TestClearLineAlignsWithStartOfRedZone(BmsGaugeType gaugeType)
+    {
+        BmsHealthDisplay display = null!;
+
+        AddStep("fill gauge", () =>
+        {
+            healthProcessor.SetGaugeType(gaugeType);
+            healthProcessor.Health.Value = 1;
+            display = this.ChildrenOfType<BmsHealthDisplay>().Single();
+        });
+        AddUntilStep("show red clear zone", () => display.ChildrenOfType<Box>().Single(box => box.Name == "Above clear fill").Alpha == 1);
+        AddAssert("clear threshold aligns with red zone edge", () =>
+            Math.Abs(
+                display.ChildrenOfType<Box>().Single(box => box.Name == "Above clear fill").ScreenSpaceDrawQuad.AABBFloat.Bottom
+                - display.ChildrenOfType<Box>().Single(box => box.Name == "Clear threshold line").ScreenSpaceDrawQuad.AABBFloat.Bottom),
+            () => Is.LessThan(0.01f));
+    }
+
     [Test]
     public void TestClearZone()
     {
@@ -134,6 +160,42 @@ public partial class TestSceneBmsHealthBar : OsuTestScene
     public void TestFullHealth()
     {
         AddStep("set health to 100%", () => healthProcessor.Health.Value = 1.0);
+    }
+
+    [Test]
+    public void TestHealthValueDisplayCanBeAddedAndTracksHealth()
+    {
+        BmsHealthValueDisplay display = null!;
+
+        AddStep("create editable health value", () =>
+        {
+            healthProcessor.Health.Value = 0.65;
+            Child = new DependencyProvidingContainer
+            {
+                RelativeSizeAxes = Axes.Both,
+                CachedDependencies =
+                [
+                    (typeof(BmsHealthProcessor), healthProcessor),
+                    (typeof(HealthProcessor), healthProcessor),
+                ],
+                Child = display = new BmsHealthValueDisplay
+                {
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                },
+            };
+        });
+        AddAssert("show current health percentage", () =>
+            display.ChildrenOfType<OsuSpriteText>().Single().Text.ToString(),
+            () => Is.EqualTo(BmsStrings.HealthPercentage(0.65).ToString()));
+        AddAssert("available in skin editor toolbox", () =>
+            SerialisedDrawableInfo.GetAllAvailableDrawables(new BmsRuleset().RulesetInfo).Contains(typeof(BmsHealthValueDisplay)));
+        AddStep("change current health", () => healthProcessor.Health.Value = 0.25);
+        AddUntilStep("update displayed health percentage", () =>
+            display.ChildrenOfType<OsuSpriteText>().Single().Text.ToString() == BmsStrings.HealthPercentage(0.25).ToString());
+        AddStep("set health to a fractional percentage", () => healthProcessor.Health.Value = 0.6579);
+        AddUntilStep("truncate percentage to one decimal", () =>
+            display.ChildrenOfType<OsuSpriteText>().Single().Text.ToString() == BmsStrings.HealthPercentage(0.657).ToString());
     }
 
     [Test]

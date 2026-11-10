@@ -129,7 +129,7 @@ public static class BmsGaugeProfileFactory
         badDelta,
         poorDelta,
         emptyPoorDelta,
-        new BmsGaugeDisplayProfile(clearThreshold, true, BmsGaugeColourMode.GrooveDynamic, green, initialHealth),
+        new BmsGaugeDisplayProfile(clearThreshold, true, BmsGaugeColourMode.GrooveDynamic, blue, initialHealth),
         []);
 
     private static BmsGaugeProfile survival(
@@ -161,5 +161,5 @@ public static class BmsGaugeProfileFactory
 
     private static Color4 gold => new(255, 215, 0, 255);
 
-    private static Color4 green => new(45, 225, 80, 255);
+    private static Color4 blue => new(90, 175, 255, 255);
 }
