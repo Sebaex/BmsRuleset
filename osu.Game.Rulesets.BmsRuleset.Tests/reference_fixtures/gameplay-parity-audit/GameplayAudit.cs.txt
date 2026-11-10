@@ -1,0 +1,203 @@
+#nullable enable
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Text;
+using NUnit.Framework;
+using osu.Game.Beatmaps;
+using osu.Game.Rulesets.BmsRuleset.Beatmaps;
+using osu.Game.Rulesets.BmsRuleset.Beatmaps.Objects;
+using osu.Game.Rulesets.BmsRuleset.BmsParser;
+using osu.Game.Rulesets.BmsRuleset.Gameplay.Configuration;
+using osu.Game.Rulesets.BmsRuleset.Gameplay.Course;
+using osu.Game.Rulesets.BmsRuleset.Gameplay.Judgement;
+using osu.Game.Rulesets.BmsRuleset.Gameplay.Judgement.Framework;
+using osu.Game.Rulesets.BmsRuleset.Gameplay.Replays;
+using osu.Game.Rulesets.BmsRuleset.Gameplay.Scoring;
+using osu.Game.Rulesets.BmsRuleset.Gameplay.Scoring.Gauge;
+using osu.Game.Rulesets.BmsRuleset.IO.Input;
+using osu.Game.Rulesets.BmsRuleset.Tests.Normal.Gameplay.Judgement;
+using osu.Game.Rulesets.Scoring;
+using osu.Game.Scoring;
+
+namespace osu.Game.Rulesets.BmsRuleset.Tests.Audit;
+
+[TestFixture]
+public class GameplayParityAudit
+{
+    private static string[][] rows()
+    {
+        using var stream = typeof(GameplayParityAudit).Assembly.GetManifestResourceStream("BmsGameplayFlow.csv")!;
+        using var reader = new StreamReader(stream);
+        return reader.ReadToEnd().Split('\n', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
+            .Skip(1).Select(line => line.Split(',')).ToArray();
+    }
+
+    public static IEnumerable<TestCaseData> Flows() => rows().GroupBy(row => row[0])
+        .Where(group => group.Key != "simultaneous-key-order" && group.Key != "course-two-stage" && !group.Key.StartsWith("mine-before-key", StringComparison.Ordinal))
+        .Select(group => new TestCaseData(new object[] { group.ToArray() }).SetName("GP_Flow_" + group.Key));
+
+    [TestCaseSource(nameof(Flows))]
+    public void RealProcessorsMatchOriginalJavaStateAfterEveryEvent(string[][] flow)
+    {
+        var start = flow[0];
+        var type = (BmsGaugeType)int.Parse(start[1], CultureInfo.InvariantCulture);
+        var count = int.Parse(start[2], CultureInfo.InvariantCulture);
+        var beatmap = createBeatmap(count, number(start[3]));
+        if (start[0] == "mine-between-pg")
+            beatmap.HitObjects.Add(new BmsLandmine { Beatmap = beatmap, Column = 1, StartTime = 1500, LandmineDamagePercent = 20 });
+        using var score = new BmsScoreProcessor();
+        using var health = new BmsHealthProcessor();
+        score.ApplyBeatmap(beatmap);
+        health.ApplyBeatmap(beatmap);
+        health.SetGaugeTypes([type], true, BmsGaugeProfileFamily.Lr2,
+            [new BmsGaugeStateSnapshot(type, number(start[4]) / 100, false)]);
+        var next = 0;
+        var mismatches = new List<string>();
+        foreach (var row in flow)
+        {
+            var action = row[6];
+            if (action.StartsWith('j'))
+            {
+                var judge = int.Parse(action[1..], CultureInfo.InvariantCulture);
+                var result = resultFor(judge);
+                var note = beatmap.HitObjects.OfType<BmsNote>().ElementAt(next++);
+                if (judge == 5)
+                {
+                    score.RegisterEmptyPoor(note.StartTime);
+                    health.RegisterEmptyPoor(note.StartTime);
+                }
+                else
+                {
+                    var applied = new BmsJudgementResult(note, note.CreateJudgement()) { Type = result };
+                    applied.SetTiming(note.StartTime, 1);
+                    score.ApplyResult(applied);
+                    health.ApplyResult(applied);
+                }
+            }
+            else if (action == "mine20")
+            {
+                var mine = beatmap.HitObjects.OfType<BmsLandmine>().Single();
+                var result = new BmsJudgementResult(mine, mine.CreateJudgement()) { Type = HitResult.Meh };
+                result.SetTiming(mine.StartTime, 1);
+                score.ApplyResult(result);
+                health.ApplyResult(result);
+            }
+            var state = health.CurrentGaugeStates.Single();
+            var ex = BmsExScore.Calculate(score.Statistics);
+            var alive = state.Health > 0 && !state.Failed;
+            var qualified = health.HasPassedAtEnd();
+            TestContext.WriteLine(FormattableString.Invariant($"GPTRACE {row[0]} step={row[5]} event={action} javaHP={row[7]} csharpHP={state.Health * 100:R} javaAlive={row[8]} csharpAlive={alive} javaQualified={row[9]} csharpQualified={qualified} javaCombo={row[10]} csharpCombo={score.Combo.Value} javaEX={row[12]} csharpEX={ex} score={score.TotalScore.Value:R}"));
+            if (alive != bool.Parse(row[8])) mismatches.Add($"{row[5]}: survival Java={row[8]} C#={alive}");
+            if (qualified != bool.Parse(row[9])) mismatches.Add($"{row[5]}: qualification Java={row[9]} C#={qualified}");
+            if (score.Combo.Value != int.Parse(row[10], CultureInfo.InvariantCulture)) mismatches.Add($"{row[5]}: combo Java={row[10]} C#={score.Combo.Value}");
+            if (score.HighestCombo.Value != int.Parse(row[11], CultureInfo.InvariantCulture)) mismatches.Add($"{row[5]}: max combo Java={row[11]} C#={score.HighestCombo.Value}");
+            if (ex != int.Parse(row[12], CultureInfo.InvariantCulture)) mismatches.Add($"{row[5]}: EX-score Java={row[12]} C#={ex}");
+        }
+        Assert.That(mismatches, Is.Empty, "Every independent Java state is retained; differences are research failures, not accepted C# goldens.");
+    }
+
+    [TestCase(false)]
+    [TestCase(true)]
+    public void SimultaneousReplayStateMatchesJavaKeyOrder(bool reverseActions)
+    {
+        var beatmap = createBeatmap(1000, 300);
+        beatmap.HitObjects[0].StartTime = 1000;
+        beatmap.HitObjects[1].StartTime = 850;
+        beatmap.HitObjects[1].Column = 2;
+        foreach (var note in beatmap.HitObjects.Skip(2)) note.StartTime += 100000;
+        var seed = rows().First(row => row[0] == "simultaneous-key-order");
+        var expected = rows().Last(row => row[0] == "simultaneous-key-order");
+        var replay = new osu.Game.Replays.Replay { HasReceivedAllFrames = true, Frames =
+        [new BmsReplayFrame(0), new BmsReplayFrame(1000, reverseActions ? [BmsAction.Key2, BmsAction.Key1] : [BmsAction.Key1, BmsAction.Key2]), new BmsReplayFrame(1001)] };
+        var run = BmsReplaySimulation.Run(beatmap, replay, new ScoreInfo { Passed = false },
+            courseGaugeStates: [new BmsGaugeStateSnapshot(BmsGaugeType.ExClass, number(seed[4]) / 100, false)], courseGaugeProfileFamily: BmsGaugeProfileFamily.Lr2);
+        var after = run.Gauges.Last(history => history.Time <= 1000).States.Single();
+        TestContext.WriteLine(FormattableString.Invariant($"GPORDER reverse={reverseActions} results={string.Join('|',run.Judgements.Select(item => item.Result))} health={after.Health:R} failed={after.Failed} javaHP={expected[7]} javaAlive={expected[8]}"));
+        Assert.That(!after.Failed && after.Health > 0, Is.EqualTo(bool.Parse(expected[8])));
+    }
+
+    [TestCase(false, false)]
+    [TestCase(true, false)]
+    [TestCase(false, true)]
+    [TestCase(true, true)]
+    public void ReplayMineAndNoteAtSameInstantMatchJavaPhases(bool reverseActions, bool control)
+    {
+        var beatmap = createBeatmap(1000,300);
+        foreach(var note in beatmap.HitObjects.Skip(1)) note.StartTime+=100000;
+        beatmap.HitObjects.Add(new BmsLandmine { Beatmap=beatmap, Column=2, StartTime=1000, LandmineDamagePercent=.5 });
+        var id=control ? "mine-before-key-control" : "mine-before-key";
+        var seed=rows().First(row=>row[0]==id);
+        var expected=rows().Last(row=>row[0]==id);
+        var replay=new osu.Game.Replays.Replay { HasReceivedAllFrames=true, Frames=
+        [new BmsReplayFrame(0),new BmsReplayFrame(1000,reverseActions ? [BmsAction.Key2,BmsAction.Key1] : [BmsAction.Key1,BmsAction.Key2]),new BmsReplayFrame(1001)] };
+        var run=BmsReplaySimulation.Run(beatmap,replay,new ScoreInfo { Passed=false },
+            courseGaugeStates:[new BmsGaugeStateSnapshot(BmsGaugeType.ExClass,number(seed[4])/100,false)],courseGaugeProfileFamily:BmsGaugeProfileFamily.Lr2);
+        var state=run.Gauges.Last(history=>history.Time<=1000).States.Single();
+        TestContext.WriteLine(FormattableString.Invariant($"GPMINEPHASE reverse={reverseActions} control={control} events={string.Join('|',run.Judgements.Select(item=>item.Source.Kind))} health={state.Health:R} failed={state.Failed} javaHP={expected[7]} javaAlive={expected[8]}"));
+        Assert.That(!state.Failed && state.Health>0,Is.EqualTo(bool.Parse(expected[8])));
+    }
+
+    private static BmsBeatmap createBeatmap(int count, double total)
+    {
+        var beatmap = new BmsBeatmap { LayoutVariant = BmsLayoutVariant.Bme7K, Rank = 3, TotalColumns = 8, Total = total };
+        for (var i=0;i<count;i++) beatmap.HitObjects.Add(new BmsNote { Beatmap = beatmap, Column = 1, StartTime = 1000+i*1000 });
+        return beatmap;
+    }
+
+    [Test]
+    public void CourseAggregateMatchesOriginalContinuousMaximumCombo()
+    {
+        var stages=Enumerable.Range(1,2).Select(i=>new BmsResolvedCourseStage(
+            new BmsCourseStage("Audit stage "+i,"Audit",BeatmapHash:"audit-"+i),new BeatmapInfo { Hash="audit-"+i })).ToArray();
+        var definition=new BmsCourseDefinition("audit","Audit","Audit course",stages.Select(stage=>stage.Definition).ToArray(),[]);
+        var session=new BmsCourseSession(definition,stages,[],BmsGaugeType.ExClass);
+        for(var index=0;index<2;index++)
+        {
+            session.BeginCurrentStage();
+            var beatmap=createBeatmap(index+2,300);
+            using var score=new BmsScoreProcessor();
+            score.ApplyBeatmap(beatmap);
+            foreach(var note in beatmap.HitObjects) score.ApplyResult(new BmsJudgementResult(note,note.CreateJudgement()){Type=HitResult.Perfect});
+            var saved=new ScoreInfo { BeatmapInfo=stages[index].Beatmap };
+            score.PopulateScore(saved); saved.Passed=true;
+            session.CompleteCurrentStage(saved,[new BmsGaugeStateSnapshot(BmsGaugeType.ExClass,1,false)]);
+            if(index==0){session.RequestAdvance();session.Advance();}
+        }
+        var aggregate=BmsCourseScoreAggregation.CreateScore(session);
+        var expected=int.Parse(rows().Last(row=>row[0]=="course-two-stage")[15],CultureInfo.InvariantCulture);
+        TestContext.WriteLine($"GPCOURSE stageMax={string.Join('|',session.Stages.Select(stage=>stage.Score!.MaxCombo))} aggregateMax={aggregate.MaxCombo} javaCourseMax={expected}");
+        Assert.That(aggregate.MaxCombo,Is.EqualTo(expected));
+    }
+    private static double number(string value) => double.Parse(value,CultureInfo.InvariantCulture);
+
+    [TestCase("01")]
+    [TestCase("0A")]
+    [TestCase("10")]
+    public void IdenticalBmsMineTextProducesJavaDamageAndSurvival(string raw)
+    {
+        using var stream=typeof(GameplayParityAudit).Assembly.GetManifestResourceStream("BmsGameplayMines.csv")!;
+        using var reader=new StreamReader(stream);
+        var expected=reader.ReadToEnd().Split('\n',StringSplitOptions.RemoveEmptyEntries|StringSplitOptions.TrimEntries).Skip(1)
+            .Select(line=>line.Split(',')).Single(row=>row[0]==raw);
+        var text="#PLAYER 1\n#BPM 120\n#RANK 3\n#TOTAL 300\n#00118:01\n#001D2:"+raw+"\n";
+        var decoded=BmsBeatmapDecoder.DecodeBytes(Encoding.ASCII.GetBytes(text));
+        var beatmap=(BmsBeatmap)new BmsBeatmapConverter(decoded,new BmsRuleset()).Convert();
+        var mine=beatmap.HitObjects.OfType<BmsLandmine>().Single();
+        var replay=new osu.Game.Replays.Replay { HasReceivedAllFrames=true, Frames=
+        [new BmsReplayFrame(0),new BmsReplayFrame(mine.StartTime-10,BmsAction.Key2),new BmsReplayFrame(mine.StartTime+1)] };
+        var run=BmsReplaySimulation.Run(beatmap,replay,new ScoreInfo { Passed=false },
+            courseGaugeStates:[new BmsGaugeStateSnapshot(BmsGaugeType.ExClass,number(expected[2])/100,false)],courseGaugeProfileFamily:BmsGaugeProfileFamily.Lr2);
+        var state=run.Gauges.Last(history=>history.Time<=mine.StartTime).States.Single();
+        TestContext.WriteLine(FormattableString.Invariant($"GPPARSER raw={raw} javaDamage={expected[1]} csharpDamage={mine.LandmineDamagePercent:R} javaHP={expected[3]} csharpHP={state.Health*100:R} javaAlive={expected[4]} csharpAlive={!state.Failed && state.Health>0} time={mine.StartTime:R}"));
+        Assert.Multiple(()=>
+        {
+            Assert.That(mine.LandmineDamagePercent,Is.EqualTo(number(expected[1])));
+            Assert.That(!state.Failed && state.Health>0,Is.EqualTo(bool.Parse(expected[4])));
+        });
+    }
+
+    private static HitResult resultFor(int judge) => judge switch { 0=>HitResult.Perfect,1=>HitResult.Great,2=>HitResult.Good,3=>HitResult.Ok,4=>HitResult.Meh,_=>HitResult.Miss };
+}
