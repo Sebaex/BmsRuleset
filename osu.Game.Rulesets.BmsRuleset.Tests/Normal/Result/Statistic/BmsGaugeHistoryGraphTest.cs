@@ -33,27 +33,32 @@ public class BmsGaugeHistoryGraphTest
     };
 
     [Test]
-    public void TestAutoGaugeCreatesParallelGaugeSeries()
+    public void TestAutoGaugeCreatesParallelGaugeSeries([Values] BmsGasLowerLimit limit)
     {
+        var gas = new BmsModGaugeAutoShift { GasMode = { Value = limit } };
         var series = BmsGaugeHistoryGraph.CreateSeries(
             new ScoreInfo
             {
-                Mods = [new BmsModGaugeAutoShift(), new BmsModHardGauge()],
+                Mods = [gas, new BmsModHardGauge()],
                 HitEvents = [new HitEvent(0, 1, HitResult.Ok, new BmsNote { StartTime = 1000 }, null, null)],
             },
             createBeatmap());
 
-        Assert.That(series.Select(s => s.Name), Is.EqualTo([
-            "Hazard",
-            "ExHard",
-            "Hard",
-            "Normal",
-            "Easy",
-            "Assist Easy",
-        ]));
+        string[] expected = limit switch
+        {
+            BmsGasLowerLimit.Normal => ["Hazard", "ExHard", "Hard", "Normal"],
+            BmsGasLowerLimit.Easy => ["Hazard", "ExHard", "Hard", "Normal", "Easy"],
+            _ => ["Hazard", "ExHard", "Hard", "Normal", "Easy", "Assist Easy"],
+        };
+        Assert.That(series.Select(s => s.Name), Is.EqualTo(expected));
+        using var processor = new BmsHealthProcessor();
+        processor.ApplyBeatmap(createBeatmap());
+        gas.ApplyToHealthProcessor(processor);
+        Assert.That(processor.CurrentGaugeStates.Select(s => s.GaugeType == BmsGaugeType.AssistEasy ? "Assist Easy" : s.GaugeType.ToString()), Is.EqualTo(expected));
 
         Assert.That(series.Single(s => s.Name == "Hazard").Points.Last().Health, Is.Zero);
-        Assert.That(series.Single(s => s.Name == "ExHard").Points.Last().Health, Is.GreaterThan(0));
+        Assert.That(series.Single(s => s.Name == "ExHard").Points.Last().Health, Is.Zero);
+        Assert.That(series.Single(s => s.Name == "Hard").Points.Last().Health, Is.EqualTo(1 - .06 * 10).Within(1e-7));
 
         var finalGauge = series.Single(s => s.Name == "Hard");
 
@@ -547,7 +552,9 @@ public class BmsGaugeHistoryGraphTest
             createBeatmap()).Single();
 
         Assert.That(series.FailurePoint, Is.Not.Null);
-        Assert.That(series.FailurePoint!.Value.Time, Is.EqualTo(0.875f).Within(0.001));
+        // N=2 scales ExHard POOR damage by ten, so the first event kills it (1000 / 8000).
+        Assert.That(series.FailurePoint!.Value.Time, Is.EqualTo(1000f / 8000).Within(0.001));
         Assert.That(series.FailurePoint.Value.Health, Is.Zero);
+        Assert.That(series.Points.Last().Health, Is.Zero, "Later Perfect cannot revive a dead survival gauge.");
     }
 }

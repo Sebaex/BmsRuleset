@@ -861,7 +861,11 @@ public partial class TestSceneBmsResultScreenStatistics : OsuManualInputManagerT
         assertText("Hard");
         assertText("Normal");
         assertText("Easy");
-        assertText("Assist Easy");
+        AddAssert("default Easy limit supplies exactly five gauge paths", () => screen.ChildrenOfType<BmsGaugeHistoryGraph.GaugePath>()
+            .Select(path => path.Name).OrderBy(name => name), () => Is.EqualTo(new[]
+            {
+                "Hazard gauge history", "ExHard gauge history", "Hard gauge history", "Normal gauge history", "Easy gauge history"
+            }.OrderBy(name => name)));
         AddAssert("final gauge path drawn last", () => screen.ChildrenOfType<BmsGaugeHistoryGraph.GaugePath>().Last().Name,
             () => Is.EqualTo("Hard gauge history"));
         AddAssert("final gauge and marker draw above secondary gauges", () => screen.ChildrenOfType<Container>()

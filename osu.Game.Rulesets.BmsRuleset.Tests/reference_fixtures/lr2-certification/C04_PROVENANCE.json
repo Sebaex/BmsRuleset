@@ -1,0 +1,37 @@
+{
+  "parser": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+  "files": [
+    {
+      "file": "ParserOracle.java",
+      "sha256_lf_utf8": "0155947D6AED1D45324A9CDA60E4E53E128CE6BC4E4ABB2837047B71212D56A0"
+    },
+    {
+      "file": "parser.csv",
+      "sha256_lf_utf8": "EAD5EFECDEB006E41132FA7AFC3F4B6B383576E4F7AF59C91C004F572A392BC4"
+    },
+    {
+      "file": "BMSModelUtils.java",
+      "sha256_lf_utf8": "7111204AB2F2024C730E5059DD6B6B50E0A8419BE7053601A58F9FA14B781F78"
+    },
+    {
+      "file": "BMSDecoder.java",
+      "sha256_lf_utf8": "473BEE2BE2AD7CDF8E3FC28A472968FF63DA629499ABFE0152973B86E9172E5E"
+    },
+    {
+      "file": "Section.java",
+      "sha256_lf_utf8": "911D1E7459ACFD0CE0E30E324236AA825BD7E099B791ED9B592A0797333BB656"
+    },
+    {
+      "file": "ChartDecoder.java",
+      "sha256_lf_utf8": "69320EED3B76B7C5D2FDD09086AAA174A16A6A06BECFF319720E75D9A0B988EA"
+    },
+    {
+      "file": "ChartInformation.java",
+      "sha256_lf_utf8": "B9B736637167F5032028F2C3653E9465BF5DA39737EA3688B61FDCA3C54B6470"
+    },
+    {
+      "file": "DecodeLog.java",
+      "sha256_lf_utf8": "D8517B4EB4153602BDBAF68C32F26D93DE2DDB2B9923615D983C9F14C37ED9BC"
+    }
+  ]
+}

@@ -20,9 +20,10 @@ namespace osu.Game.Rulesets.BmsRuleset.Tests.Normal.Difficulty;
 public class BmsStarRatingProcessorTest
 {
 
-    [TestCase(BmsLayoutVariant.Bme7K, 2, 45)]
-    [TestCase(BmsLayoutVariant.Bms5K, 2, 37.5)]
-    [TestCase(BmsLayoutVariant.Pms9K, 2, 35)]
+    // Original JudgeProperty.LR2 execution: windows.csv rank=2, NOTE, row=1.
+    [TestCase(BmsLayoutVariant.Bme7K, 2, 40)]
+    [TestCase(BmsLayoutVariant.Bms5K, 2, 40)]
+    [TestCase(BmsLayoutVariant.Pms9K, 2, 40)]
     public void TestStarRatingProcessorHitLeniencyUsesBmsGreatWindow(BmsLayoutVariant layout, int rank, double greatWindow)
     {
         var totalColumns = BmsLayout.GetTotalColumns(layout);

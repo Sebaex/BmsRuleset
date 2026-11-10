@@ -1,0 +1,75 @@
+osu.Game.Rulesets.BmsRuleset\BmsRuleset.cs:350:        addHeadMetrics("Normal note", BmsJudgementProfileProvider.GetTable(layout, column: 1, judgementRate: rate, tail: false));
+osu.Game.Rulesets.BmsRuleset\BmsRuleset.cs:353:            addHeadMetrics("Scratch", BmsJudgementProfileProvider.GetTable(layout, scratchColumn, rate, tail: false));
+osu.Game.Rulesets.BmsRuleset\BmsRuleset.cs:355:        addTailMetrics("LN tail", BmsJudgementProfileProvider.GetTable(layout, column: 1, judgementRate: rate, tail: true));
+osu.Game.Rulesets.BmsRuleset\BmsRuleset.cs:358:            addTailMetrics("Scratch LN tail", BmsJudgementProfileProvider.GetTable(layout, scratchColumn, rate, tail: true));
+osu.Game.Rulesets.BmsRuleset\Beatmaps\BmsBeatmapDecoder.cs:64:        hitObject.JudgementRate = parsedObject.JudgementRate;
+osu.Game.Rulesets.BmsRuleset\BmsParser\BmsParseResult.cs:81:    double JudgementRate = 0.75);
+osu.Game.Rulesets.BmsRuleset\BmsParser\BmsParser.cs:35:    private readonly record struct BmsJudgementRateEvent(long Tick, double Rate, int Sequence);
+osu.Game.Rulesets.BmsRuleset\BmsParser\BmsParser.cs:111:        var judgementRateEvents = collectJudgementRateEvents(state, measureStarts, layoutVariant);
+osu.Game.Rulesets.BmsRuleset\BmsParser\BmsParser.cs:117:        applyJudgementRates(hitObjects, judgementRateEvents);
+osu.Game.Rulesets.BmsRuleset\BmsParser\BmsParser.cs:1014:    private static List<BmsJudgementRateEvent> collectJudgementRateEvents(
+osu.Game.Rulesets.BmsRuleset\BmsParser\BmsParser.cs:1017:        var events = new List<BmsJudgementRateEvent>
+osu.Game.Rulesets.BmsRuleset\BmsParser\BmsParser.cs:1019:            new(long.MinValue, initialJudgementRate(state, layoutVariant), -1),
+osu.Game.Rulesets.BmsRuleset\BmsParser\BmsParser.cs:1030:                    events.Add(new BmsJudgementRateEvent(cell.Tick, BmsJudgementProfileProvider.RateForExRank(layoutVariant, exRank), cell.Sequence));
+osu.Game.Rulesets.BmsRuleset\BmsParser\BmsParser.cs:1034:        events.Sort(default(JudgementRateEventComparer));
+osu.Game.Rulesets.BmsRuleset\BmsParser\BmsParser.cs:1038:    private static double initialJudgementRate(ParseState state, BmsLayoutVariant layoutVariant) =>
+osu.Game.Rulesets.BmsRuleset\BmsParser\BmsParser.cs:1043:    private static void applyJudgementRates(List<BmsParsedHitObject> hitObjects, IReadOnlyList<BmsJudgementRateEvent> judgementRateEvents)
+osu.Game.Rulesets.BmsRuleset\BmsParser\BmsParser.cs:1057:            hitObjects[i] = hitObject with { JudgementRate = judgementRateEvents[eventIndex].Rate };
+osu.Game.Rulesets.BmsRuleset\BmsParser\BmsParser.cs:1571:    private struct JudgementRateEventComparer : IComparer<BmsJudgementRateEvent>
+osu.Game.Rulesets.BmsRuleset\BmsParser\BmsParser.cs:1573:        public int Compare(BmsJudgementRateEvent a, BmsJudgementRateEvent b)
+osu.Game.Rulesets.BmsRuleset\Beatmaps\Objects\BmsHitObject.cs:20:    public double JudgementRate { get; set; } = double.NaN;
+osu.Game.Rulesets.BmsRuleset\Beatmaps\Objects\BmsHitObject.cs:22:    public double EffectiveJudgementRate => double.IsNaN(JudgementRate)
+osu.Game.Rulesets.BmsRuleset\Beatmaps\Objects\BmsHitObject.cs:26:        : JudgementRate;
+osu.Game.Rulesets.BmsRuleset\Beatmaps\Objects\BmsHitObject.cs:58:    protected override BmsHitWindows CreateHitWindows() => new(Beatmap.Rank, Beatmap.LayoutVariant, Column, EffectiveJudgementRate);
+osu.Game.Rulesets.BmsRuleset\Beatmaps\Objects\BmsHitObject.cs:67:        target.JudgementRate = JudgementRate;
+osu.Game.Rulesets.BmsRuleset\UI\Gameplay\BmsGameplayAudioController.cs:143:        BmsJudgementProfileProvider.GetTable(
+osu.Game.Rulesets.BmsRuleset\UI\Gameplay\BmsGameplayAudioController.cs:146:            hitObject.EffectiveJudgementRate,
+osu.Game.Rulesets.BmsRuleset\UI\Gameplay\BmsGameplayAudioController.cs:150:        BmsJudgementProfileProvider.GetTable(
+osu.Game.Rulesets.BmsRuleset\UI\Gameplay\BmsGameplayAudioController.cs:153:            hitObject.EffectiveJudgementRate,
+osu.Game.Rulesets.BmsRuleset\UI\Gameplay\BmsDrawableRuleset.cs:97:        BmsJudgementProfileProvider.ClearActiveWindowMods(windowMods);
+osu.Game.Rulesets.BmsRuleset\UI\Gameplay\BmsDrawableRuleset.cs:158:        BmsJudgementProfileProvider.SetActiveWindowMods(windowMods);
+osu.Game.Rulesets.BmsRuleset\UI\Gameplay\BmsHitObjectLifetimeEntry.cs:237:        var table = BmsJudgementProfileProvider.GetTable(hitObject.Beatmap.LayoutVariant, hitObject.Column, hitObject.EffectiveJudgementRate, tail: false);
+osu.Game.Rulesets.BmsRuleset\UI\Gameplay\BmsHitObjectLifetimeEntry.cs:375:            var tailTable = BmsJudgementProfileProvider.GetTable(hitObject.Beatmap.LayoutVariant, hitObject.Column, hitObject.EffectiveJudgementRate, tail: true);
+osu.Game.Rulesets.BmsRuleset\UI\Gameplay\BmsHitObjectLifetimeEntry.cs:379:        var table = BmsJudgementProfileProvider.GetTable(hitObject.Beatmap.LayoutVariant, hitObject.Column, hitObject.EffectiveJudgementRate, tail: false);
+osu.Game.Rulesets.BmsRuleset\UI\HudComponents\BmsHitErrorMeter.cs:105:        var judgementRate = beatmap?.HitObjects.FirstOrDefault(h => h is not BmsLandmine)?.EffectiveJudgementRate
+osu.Game.Rulesets.BmsRuleset\UI\HudComponents\BmsHitErrorMeter.cs:109:        headWindows = BmsJudgementProfileProvider.GetTable(layout, 1, judgementRate, tail: false);
+osu.Game.Rulesets.BmsRuleset\UI\HudComponents\BmsHitErrorMeter.cs:349:            BmsJudgementProfileProvider.GetTable(layout, column, judgementRate, tail: false),
+osu.Game.Rulesets.BmsRuleset\UI\HudComponents\BmsHitErrorMeter.cs:350:            BmsJudgementProfileProvider.GetTable(layout, column, judgementRate, tail: true),
+osu.Game.Rulesets.BmsRuleset\UI\HudComponents\BmsScoreGraph.cs:428:                using var windows = BmsJudgementProfileProvider.UseWindowMods(mods.OfType<IApplicableToJudgementWindow>().ToArray());
+osu.Game.Rulesets.BmsRuleset\Gameplay\Replays\BmsReplaySimulation.cs:39:        using var windows = BmsJudgementProfileProvider.UseWindowMods(mods.OfType<IApplicableToJudgementWindow>().ToArray());
+osu.Game.Rulesets.BmsRuleset\UI\Result\Course\BmsCourseAggregateStatistics.cs:57:                using var windows = BmsJudgementProfileProvider.UseWindowMods(mods.OfType<IApplicableToJudgementWindow>().ToArray());
+osu.Game.Rulesets.BmsRuleset\UI\Gameplay\Drawables\Objects\Presentation\BmsLongNotePresentation.cs:92:        => note.EndTime + BmsJudgementProfileProvider.GetTable(note.Beatmap.LayoutVariant, note.Column,
+osu.Game.Rulesets.BmsRuleset\UI\Gameplay\Drawables\Objects\Presentation\BmsLongNotePresentation.cs:93:            note.EffectiveJudgementRate, tail: false).SlowWindowFor(HitResult.Ok) + 100;
+osu.Game.Rulesets.BmsRuleset\UI\Result\Statistic\BmsStatisticsPanel.cs:71:            using var windows = BmsJudgementProfileProvider.UseWindowMods(mods.OfType<IApplicableToJudgementWindow>().ToArray());
+osu.Game.Rulesets.BmsRuleset\Gameplay\Difficulty\BmsHitLeniency.cs:13:    public static double FromJudgementRate(double judgementRate, BmsLayoutVariant layout)
+osu.Game.Rulesets.BmsRuleset\Gameplay\Difficulty\BmsHitLeniency.cs:25:        var table = BmsJudgementProfileProvider.GetTable(layout, column, rank, tail: false);
+osu.Game.Rulesets.BmsRuleset\Gameplay\Difficulty\BmsHitLeniency.cs:32:        var table = BmsJudgementProfileProvider.GetTable(layout, column, judgementRate, tail: false);
+osu.Game.Rulesets.BmsRuleset\Gameplay\Difficulty\BmsStarRatingProcessor.cs:621:        HitLeniencyX = judgementRate.HasValue ? BmsHitLeniency.FromJudgementRate(judgementRate.Value, layout) : BmsHitLeniency.FromRank(rank, layout);
+osu.Game.Rulesets.BmsRuleset\Gameplay\Judgement\BmsJudgementEngine.cs:87:                var rate = note.EffectiveJudgementRate;
+osu.Game.Rulesets.BmsRuleset\Gameplay\Judgement\BmsJudgementProfileProvider.cs:29:    internal static IDisposable UseWindowMods(IReadOnlyList<IApplicableToJudgementWindow> mods)
+osu.Game.Rulesets.BmsRuleset\Gameplay\Judgement\BmsJudgementProfileProvider.cs:41:    internal static void SetActiveWindowMods(IReadOnlyList<IApplicableToJudgementWindow> mods)
+osu.Game.Rulesets.BmsRuleset\Gameplay\Judgement\BmsJudgementProfileProvider.cs:44:    internal static void ClearActiveWindowMods(IReadOnlyList<IApplicableToJudgementWindow> mods)
+osu.Game.Rulesets.BmsRuleset\Gameplay\Judgement\BmsJudgementProfileProvider.cs:50:    public static BmsJudgementWindowTable GetTable(BmsLayoutVariant layout, int column, int rank, bool tail)
+osu.Game.Rulesets.BmsRuleset\Gameplay\Judgement\BmsJudgementProfileProvider.cs:53:    public static BmsJudgementWindowTable GetTable(BmsLayoutVariant layout, int column, double judgementRate, bool tail)
+osu.Game.Rulesets.BmsRuleset\Gameplay\Judgement\BmsJudgementSelector.cs:41:                if (count > 0 && candidate.JudgementRate != sortedCandidates[0].JudgementRate)
+osu.Game.Rulesets.BmsRuleset\Gameplay\Judgement\BmsJudgementSelector.cs:92:            var table = BmsJudgementProfileProvider.GetTable(layout, candidate.Column, candidate.JudgementRate, tail: false);
+osu.Game.Rulesets.BmsRuleset\Gameplay\Judgement\BmsColumnJudgementRuntime.cs:46:    internal BmsNoteJudgementWindows[] NoteWindows { get; }
+osu.Game.Rulesets.BmsRuleset\Gameplay\Judgement\BmsColumnJudgementRuntime.cs:83:        judgementRates = columnNotes.Select(note => note.EffectiveJudgementRate).ToArray();
+osu.Game.Rulesets.BmsRuleset\Gameplay\Judgement\BmsColumnJudgementRuntime.cs:88:        NoteWindows = new BmsNoteJudgementWindows[columnNotes.Length];
+osu.Game.Rulesets.BmsRuleset\Gameplay\Judgement\BmsColumnJudgementRuntime.cs:101:                NoteWindows[i] = new BmsNoteJudgementWindows(note);
+osu.Game.Rulesets.BmsRuleset\Gameplay\Judgement\BmsColumnJudgementRuntime.cs:175:        var rate = note.EffectiveJudgementRate;
+osu.Game.Rulesets.BmsRuleset\Gameplay\Judgement\BmsColumnJudgementRuntime.cs:182:        else NoteWindows[slot] = new BmsNoteJudgementWindows(note);
+osu.Game.Rulesets.BmsRuleset\Gameplay\Judgement\BmsColumnJudgementRuntime.cs:243:                var candidate = new BmsJudgementCandidate(note.StartTime, note.GetEndTime(), Index, note.EffectiveJudgementRate,
+osu.Game.Rulesets.BmsRuleset\Gameplay\Judgement\BmsColumnJudgementRuntime.cs:263:            var candidate = new BmsJudgementCandidate(note.StartTime, note.GetEndTime(), Index, note.EffectiveJudgementRate,
+osu.Game.Rulesets.BmsRuleset\Gameplay\Judgement\BmsColumnJudgementRuntime.cs:272:        var table = BmsJudgementProfileProvider.GetTable(LayoutVariant, Index, primary.JudgementRate, false);
+osu.Game.Rulesets.BmsRuleset\Gameplay\Judgement\BmsJudgementCandidate.cs:9:    double JudgementRate,
+osu.Game.Rulesets.BmsRuleset\Gameplay\Mods\BmsModInvert.cs:80:                    JudgementRate = source.JudgementRate,
+osu.Game.Rulesets.BmsRuleset\Gameplay\Mods\BmsModInvert.cs:96:                JudgementRate = last.JudgementRate,
+osu.Game.Rulesets.BmsRuleset\Gameplay\Judgement\Framework\BmsHitWindows.cs:45:        => BmsJudgementProfileProvider.GetTable(layout, column, judgementRate, tail: false);
+osu.Game.Rulesets.BmsRuleset\Gameplay\Judgement\State\BmsHoldRuntime.cs:62:        HeadWindow = BmsJudgementProfileProvider.GetTable(Note.Beatmap.LayoutVariant, Note.Column, Note.EffectiveJudgementRate, false);
+osu.Game.Rulesets.BmsRuleset\Gameplay\Judgement\State\BmsHoldRuntime.cs:63:        TailWindow = BmsJudgementProfileProvider.GetTable(Note.Beatmap.LayoutVariant, Note.Column, Note.EffectiveJudgementRate, true);
+osu.Game.Rulesets.BmsRuleset\Gameplay\Judgement\Rules\BmsNoteJudgementRule.cs:13:    internal HitResult JudgePassive(BmsHitObject target, in BmsNoteJudgementWindows windows, double simulationTime, bool judged)
+osu.Game.Rulesets.BmsRuleset\Gameplay\Judgement\Rules\BmsNoteJudgementRule.cs:27:    internal void CheckPassive(BmsHitObject note, in BmsNoteJudgementWindows windows, in BmsJudgementExecutionContext execution, in BmsFrameContext frame)
+osu.Game.Rulesets.BmsRuleset\Gameplay\Judgement\Rules\BmsNoteJudgementRule.cs:39:internal readonly struct BmsNoteJudgementWindows(BmsHitObject note)
+osu.Game.Rulesets.BmsRuleset\Gameplay\Judgement\Rules\BmsNoteJudgementRule.cs:41:    internal readonly double PassivePoorOffset = BmsJudgementProfileProvider.GetTable(
+osu.Game.Rulesets.BmsRuleset\Gameplay\Judgement\Rules\BmsNoteJudgementRule.cs:42:        note.Beatmap.LayoutVariant, note.Column, note.EffectiveJudgementRate, tail: false).SlowWindowFor(HitResult.Ok);

@@ -45,12 +45,22 @@ public class BmsLongNoteRuleTest
         run.Press(1000, HitResult.Perfect);
         run.Release(1500);
         run.Frame(1699, 199, false);
-        Assert.That(run.State.TailJudged, Is.False);
-        Assert.That(run.Repress(1699), Is.True);
+        Assert.That(run.State.TailJudged, Is.True, "The old PMS grace period is absent in LR2.");
+        Assert.That(run.State.PendingReleaseTime, Is.Null);
+        Assert.That(run.Repress(1699), Is.False);
         run.Frame(1701, 2, true);
-        Assert.That(run.State.TailJudged, Is.False);
+        Assert.That(run.State.TailJudged, Is.True);
+        var mainCount = run.MainResults.Count;
+        var endpointCount = run.Output.SyntheticEndpoints.Count;
         run.Release(3000);
         Assert.That(run.State.TailJudged, Is.True);
+        Assert.That(mode == BmsLongNoteMode.LongNote ? run.Results.Last() : run.Output.SyntheticEndpoints.Last().Result,
+            Is.EqualTo(mode == BmsLongNoteMode.LongNote ? HitResult.Ok : HitResult.Meh));
+        Assert.That(run.MainResults, Has.Count.EqualTo(mainCount));
+        Assert.That(run.Output.SyntheticEndpoints, Has.Count.EqualTo(endpointCount));
+        run.Rewind(1499);
+        Assert.That(run.State.TailJudged, Is.False, "Rewind before the release restores a genuinely unjudged tail.");
+        run.Release(3000);
         Assert.That(mode == BmsLongNoteMode.LongNote ? run.Results.Last() : run.Output.SyntheticEndpoints.Last().Result, Is.EqualTo(HitResult.Perfect));
     }
 
@@ -82,8 +92,8 @@ public class BmsLongNoteRuleTest
     }
 
     [TestCase(-50, HitResult.Perfect, true)]
-    [TestCase(-110, HitResult.Great, true)]
-    [TestCase(-140, HitResult.Good, true)]
+    [TestCase(-110, HitResult.Ok, false)]
+    [TestCase(-140, HitResult.Ok, false)]
     [TestCase(-160, HitResult.Ok, false)]
     [TestCase(-400, HitResult.Meh, false)]
     public void TestHellChargeReleasedVisualFollowsTailResult(double offset, HitResult result, bool heldVisual)
@@ -135,17 +145,23 @@ public class BmsLongNoteRuleTest
         Assert.That(run.State.TailJudged, Is.False);
         Assert.That(run.FinishedPublications, Is.Zero);
         Assert.That(run.Release(2140), Is.True);
-        Assert.That(run.Output.SyntheticEndpoints.Last().Result, Is.EqualTo(HitResult.Good));
+        Assert.That(run.Output.SyntheticEndpoints.Last().Result, Is.EqualTo(HitResult.Ok));
         run.Frame(2140, 40, false);
         Assert.That(run.FinishedPublications, Is.EqualTo(1));
 
         run.Rewind(2100);
         Assert.That(run.State.TailJudged, Is.False);
         Assert.That(run.Release(2110), Is.True);
-        Assert.That(run.Output.SyntheticEndpoints.Last().Result, Is.EqualTo(HitResult.Great));
+        Assert.That(run.Output.SyntheticEndpoints.Last().Result, Is.EqualTo(HitResult.Ok));
+        run.Rewind(2080);
+        Assert.That(run.State.TailJudged, Is.False);
+        Assert.That(run.Release(2090), Is.True);
+        Assert.That(run.Output.SyntheticEndpoints.Last().Result, Is.EqualTo(HitResult.Perfect));
     }
 
-    [TestCase(1699, false)]
+    [TestCase(1500, true)]
+    [TestCase(1500.001, true)]
+    [TestCase(1699, true)]
     [TestCase(1700, true)]
     [TestCase(1701, true)]
     public void TestPmsReleaseExpiresAtExactlyTwoHundredMilliseconds(double time, bool expired)
@@ -153,6 +169,9 @@ public class BmsLongNoteRuleTest
         var run = new BmsLongNoteTestContext(BmsLongNoteMode.LongNote, 1000, 2000, layout: BmsLayoutVariant.Pms9K);
         run.Press(1000, HitResult.Perfect);
         run.Release(1500);
+        Assert.That(run.State.TailJudged, Is.True);
+        Assert.That(run.State.TailTime, Is.EqualTo(1500));
+        Assert.That(run.State.PendingReleaseTime, Is.Null);
         run.Frame(time, time - 1500, false);
         Assert.That(run.State.TailJudged, Is.EqualTo(expired));
         Assert.That(run.Results, Is.EqualTo(expired ? new[] { HitResult.Ok } : System.Array.Empty<HitResult>()));
@@ -165,7 +184,9 @@ public class BmsLongNoteRuleTest
     }
 
     [TestCase(1683, false)]
-    [TestCase(1683.001, true)]
+    [TestCase(1683.001, false)]
+    [TestCase(1700, false)]
+    [TestCase(1700.001, true)]
     public void TestPmsChargeTailTimeoutUsesHeadWindow(double time, bool expired)
     {
         var run = new BmsLongNoteTestContext(BmsLongNoteMode.ChargeNote, 1000, 500, layout: BmsLayoutVariant.Pms9K);
@@ -285,8 +306,8 @@ public class BmsLongNoteRuleTest
     {
         var run = new BmsLongNoteTestContext(BmsLongNoteMode.ChargeNote, 1000, 500, layout: BmsLayoutVariant.Pms9K);
 
-        // PMS head BAD ends at 183ms, unlike the 283ms tail BAD window.
-        Assert.That(run.Presentation().LifetimeEnd, Is.EqualTo(1783));
+        // The LR2 passive head window is 200ms across layouts, followed by the 100ms visual margin.
+        Assert.That(run.Presentation().LifetimeEnd, Is.EqualTo(1500 + 200 + 100));
     }
 
     [Test]

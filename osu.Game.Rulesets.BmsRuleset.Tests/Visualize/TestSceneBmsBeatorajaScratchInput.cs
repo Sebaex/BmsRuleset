@@ -220,7 +220,7 @@ public partial class TestSceneBmsBeatorajaScratchInput : BmsPlayerTestScene
             Assert.That(events.Last().TimingObservations.Last().TimeOffset, Is.EqualTo(-500));
             Assert.That(Player.ScoreProcessor.Combo.Value, Is.Zero);
             if (noteMode != BmsLongNoteMode.HellChargeNote)
-                Assert.That(Player.HealthProcessor.Health.Value, Is.EqualTo(noteMode == BmsLongNoteMode.LongNote ? 0.17 : 0.18).Within(1e-8));
+                Assert.That(Player.HealthProcessor.Health.Value, Is.EqualTo(noteMode == BmsLongNoteMode.LongNote ? 0.2 - 0.04 : 0.18).Within(1e-8));
         });
     }
 

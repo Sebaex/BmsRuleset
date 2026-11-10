@@ -1,0 +1,100 @@
+{
+  "endless_dream": "d4995153b0a759859ebc8f859dd868abae39db5a",
+  "parser": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+  "support_jar_sha256": "38101C00CB6918FEBB9E0671558AD9F11D1DB842A699AF1EE80CA5BA217BB249",
+  "scope": "Verbatim JudgeManager.update selection slice plus original JudgeAlgorithm/JudgeProperty/MultiBadCollector; adapted ordered lane enumeration; no player/updateMicro or graphical loop execution",
+  "slice_start_line": 409,
+  "slice_end_line": 456,
+  "slice_sha256_lf_utf8": "86AF4096507AE86CA832D537653948345867E23B75C6C02AEECF699CD3348D44",
+  "files": [
+    {
+      "file": "JudgeProperty.java",
+      "sha256_lf_utf8": "8395206A0064C13E4895D6DB5BE90D2ACA4586C876987933582E679AB1669155"
+    },
+    {
+      "file": "JudgeAlgorithm.java",
+      "sha256_lf_utf8": "2A5E1EF2077579B08D765914B753BEEBE7650A12D2F2BF3D8D36ADF1881AEF1F"
+    },
+    {
+      "file": "JudgeManager.java",
+      "sha256_lf_utf8": "1C0BC19FC9352265853A64205F1727DF14F0C322A54727F573F175A237222724"
+    },
+    {
+      "file": "GaugeProperty.java",
+      "sha256_lf_utf8": "9C12E47FDBDD3744F3A362549F8F486907D6D782727A38ECACB9BE10FE2E5C44"
+    },
+    {
+      "file": "GrooveGauge.java",
+      "sha256_lf_utf8": "BAF4823245E8C4F867A2B65DA086855E1BD7488806B6EF6CD881826DA6ECD87A"
+    },
+    {
+      "file": "BMSPlayerRule.java",
+      "sha256_lf_utf8": "A06CEFE53CB95BEDB542F7BA703D62C6999C0B1F260F8325F7A8ECB451378751"
+    },
+    {
+      "file": "BMSModel.java",
+      "sha256_lf_utf8": "E18908C92C78820A8A0EA8EED8BBB42A03BC4C4BD391D70038352A14EB38AD88"
+    },
+    {
+      "file": "Note.java",
+      "sha256_lf_utf8": "054F46F51AE648959737F5C1FC34980B4CDBE1A8855406F8364E10A9C3D13170"
+    },
+    {
+      "file": "NormalNote.java",
+      "sha256_lf_utf8": "F61FD9E2DD4B9280B9EB911F25993B1EFE83893BEA86EE045C073C02D2A7C879"
+    },
+    {
+      "file": "MineNote.java",
+      "sha256_lf_utf8": "937A4D25DDDBDEFC30BDD66608FC65050E008C1C66DCBBE94D94ACF68D5C0145"
+    },
+    {
+      "file": "LongNote.java",
+      "sha256_lf_utf8": "C9CE504E100323CC33613B1D3070C6BC126496E8987A0772DF52C6BAF4B4860A"
+    },
+    {
+      "file": "TimeLine.java",
+      "sha256_lf_utf8": "7AD96AF98E8DA6C646A48860F4723A221AFF57EE9AF6E074A70E0812CCC7AEBA"
+    },
+    {
+      "file": "Mode.java",
+      "sha256_lf_utf8": "9C0607E6A7ED2665032950A9555BBE1E34ADC8DAF0B49EF990A7DB7148B0C4F2"
+    },
+    {
+      "file": "BMSModelUtils.java",
+      "sha256_lf_utf8": "7111204AB2F2024C730E5059DD6B6B50E0A8419BE7053601A58F9FA14B781F78"
+    },
+    {
+      "file": "BMSDecoder.java",
+      "sha256_lf_utf8": "473BEE2BE2AD7CDF8E3FC28A472968FF63DA629499ABFE0152973B86E9172E5E"
+    },
+    {
+      "file": "Section.java",
+      "sha256_lf_utf8": "911D1E7459ACFD0CE0E30E324236AA825BD7E099B791ED9B592A0797333BB656"
+    },
+    {
+      "file": "ChartDecoder.java",
+      "sha256_lf_utf8": "69320EED3B76B7C5D2FDD09086AAA174A16A6A06BECFF319720E75D9A0B988EA"
+    },
+    {
+      "file": "ChartInformation.java",
+      "sha256_lf_utf8": "B9B736637167F5032028F2C3653E9465BF5DA39737EA3688B61FDCA3C54B6470"
+    },
+    {
+      "file": "DecodeLog.java",
+      "sha256_lf_utf8": "D8517B4EB4153602BDBAF68C32F26D93DE2DDB2B9923615D983C9F14C37ED9BC"
+    },
+    {
+      "file": "ScoreData.java",
+      "sha256_lf_utf8": "195784878EFCAC2E6316E6499D6E87D234AE4BEDEC01150FB341B5E7F1413E07"
+    },
+    {
+      "file": "FixedJudgeOracle.java",
+      "sha256_lf_utf8": "E88AB7D28476642D9E846DA11E42545F870CFA1BA6991755BCEF96CF776B0C89"
+    },
+    {
+      "file": "JudgeSelectionSlice.java",
+      "sha256_lf_utf8": "EA1A1199B36D6D07ABFEEDA05A241C89EC834918982B76A84884F55B442A29B8"
+    }
+  ],
+  "rows": 536
+}

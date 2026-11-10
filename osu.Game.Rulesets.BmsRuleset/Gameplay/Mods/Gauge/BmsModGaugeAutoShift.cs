@@ -49,7 +49,7 @@ public class BmsModGaugeAutoShift : Mod, IApplicableToHealthProcessor, IApplicab
     public Bindable<BmsGaugeProfileFamily?> GaugeProfileFamily { get; } = new();
 
     [SettingSource(typeof(BmsStrings), nameof(BmsStrings.GasLowerLimit), nameof(BmsStrings.GasLowerLimitDescription))]
-    public Bindable<BmsGasLowerLimit> GasMode { get; } = new() { Value = BmsGasLowerLimit.Easy };
+    public Bindable<BmsGasLowerLimit> GasMode { get; } = new(BmsGasLowerLimit.Easy);
 
     public override IEnumerable<(LocalisableString setting, LocalisableString value)> SettingDescription => [];
 
@@ -80,6 +80,7 @@ public class BmsModGaugeAutoShift : Mod, IApplicableToHealthProcessor, IApplicab
     {
         if (healthProcessor is BmsHealthProcessor bmsHp)
         {
+            bmsHp.IsGaugeAutoShift = true;
             bmsHp.EnableClearThresholdGaugeShift();
             resolvedHealthProcessor = bmsHp;
             switch (GasMode.Value)
@@ -107,21 +108,19 @@ public class BmsModGaugeAutoShift : Mod, IApplicableToHealthProcessor, IApplicab
                 .Select(state => new BmsGaugeStateSnapshot(state.Type, state.Health.GetValueOrDefault(), false)).ToArray();
             if (initialStates.Length > 0)
             {
-                var family = GaugeProfileFamily.Value ?? bmsHp.ConfiguredProfileFamily;
+                var family = GaugeProfileFamily.Value;
                 bmsHp.ConfigureGaugeContext(true, family);
                 bmsHp.SetGaugeTypes(initialStates.Select(state => state.GaugeType), replaceExisting: true,
                     profileFamilyOverride: family, initialStates: initialStates);
                 return;
             }
 
-            var gaugeTypes = bmsHp.IsCourseGaugeMode && bmsHp.CurrentGaugeStates.Count > 0
-                ? bmsHp.CurrentGaugeStates.Select(state => state.GaugeType)
-                : bmsHp.IsCourseGaugeMode
-                    ? COURSE_AUTO_GAUGE_CHAIN
-                    : FINAL_AUTO_GAUGE_CHAIN;
-
+            // Course sessions encode their surviving seeds on GAS. Attribution mods must not
+            // manufacture a course context that the same score cannot reconstruct in replay.
+            bmsHp.ConfigureGaugeContext(false, GaugeProfileFamily.Value);
             bmsHp.SetGaugeTypes(
-                gaugeTypes,
+                FINAL_AUTO_GAUGE_CHAIN,
+                replaceExisting: true,
                 profileFamilyOverride: bmsHp.ConfiguredProfileFamily);
         }
     }

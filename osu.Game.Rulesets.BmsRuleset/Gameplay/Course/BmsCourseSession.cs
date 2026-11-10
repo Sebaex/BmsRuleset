@@ -249,10 +249,10 @@ internal sealed class BmsCourseSession
             family = constraint.ToLowerInvariant() switch
             {
                 "gauge_lr2" => BmsGaugeProfileFamily.Lr2,
-                "gauge_5k" => BmsGaugeProfileFamily.Lr2,
-                "gauge_7k" => BmsGaugeProfileFamily.Lr2,
-                "gauge_9k" => BmsGaugeProfileFamily.Lr2,
-                "gauge_24k" => BmsGaugeProfileFamily.Lr2,
+                "gauge_5k" => BmsGaugeProfileFamily.FiveKeys,
+                "gauge_7k" => BmsGaugeProfileFamily.SevenKeys,
+                "gauge_9k" => BmsGaugeProfileFamily.Pms,
+                "gauge_24k" => BmsGaugeProfileFamily.Keyboard,
                 _ => family,
             };
         }

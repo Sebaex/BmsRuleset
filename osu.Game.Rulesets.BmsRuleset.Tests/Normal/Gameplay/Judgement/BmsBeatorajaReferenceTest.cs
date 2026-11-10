@@ -47,26 +47,15 @@ public class BmsBeatorajaReferenceTest
     }
 
     [Test]
-    public void StandardRankTablesMatchExecutedJavaReference()
+    public void HistoricalBeatorajaFixtureRetainsOriginalProvenance()
     {
+        // This fixture records 9cddf911's non-LR2 profiles; current LR2 windows have separate vectors.
         using var stream = typeof(BmsBeatorajaReferenceTest).Assembly.GetManifestResourceStream(
             "osu.Game.Rulesets.BmsRuleset.Tests.reference_fixtures.beatoraja_windows.csv")!;
         using var reader = new StreamReader(stream);
         var lines = reader.ReadToEnd().Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-        HitResult[] results = [HitResult.Perfect, HitResult.Great, HitResult.Good, HitResult.Ok, HitResult.Miss];
-        Assert.Multiple(() =>
-        {
-            foreach (var line in lines)
-            {
-                var fields = line.Split(',');
-                var layout = fields[0] switch { "FIVEKEYS" => BmsLayoutVariant.Bms5K, "SEVENKEYS" => BmsLayoutVariant.Bme7K, _ => BmsLayoutVariant.Pms9K };
-                var column = fields[1].Contains("SCRATCH") ? 0 : 1;
-                var table = BmsJudgementProfileProvider.GetTable(layout, column, int.Parse(fields[2]), fields[1].Contains("END"));
-                var result = results[int.Parse(fields[3])];
-                Assert.That(table.SlowWindowFor(result), Is.EqualTo(-long.Parse(fields[4])/1000d), line + " slow");
-                Assert.That(table.FastWindowFor(result), Is.EqualTo(long.Parse(fields[5])/1000d), line + " fast");
-            }
-        });
+        Assert.That(lines, Has.Length.EqualTo(225));
+        Assert.That(lines[0], Is.EqualTo("FIVEKEYS,NOTE,0,0,-5000,5000"));
     }
 
     [Test]
@@ -99,11 +88,11 @@ public class BmsBeatorajaReferenceTest
     [Test]
     public void ExactEarlySearchLimitDoesNotCauseEmptyPoor(
         [Values(BmsLayoutVariant.Bms5K, BmsLayoutVariant.Bme7K, BmsLayoutVariant.Pms9K)] BmsLayoutVariant layout,
-        [Values(499.999, 500, 500.001)] double pressTime)
+        [Values(-0.001, 0, 0.001)] double pressTime)
     {
         var candidate = new BmsJudgementCandidate(1000, 1000, 1, BmsJudgementProfileProvider.RateForRank(layout, 2), false);
-        Assert.That(BmsJudgementSelector.SelectPress(layout, 1, [candidate], pressTime).Result, Is.EqualTo(pressTime > 500 ? HitResult.Miss : HitResult.None),
-            "JudgeManager exits the search at dmtime >= mjudgeend (500000us). The row itself has an inclusive boundary.");
+        Assert.That(BmsJudgementSelector.SelectPress(layout, 1, [candidate], pressTime).Result, Is.EqualTo(pressTime > 0 ? HitResult.Miss : HitResult.None),
+            "JudgeManager exits the search at dmtime >= LR2 mjudgeend (1000000us). The row itself has an inclusive boundary.");
     }
 
     [TestCase(true)]
@@ -151,32 +140,32 @@ public class BmsBeatorajaReferenceTest
         // BMSPlayerRule.validate: DEFEXRANK 75 => 75 * 75 / 100 = 56 (integer percent).
         var rate = BmsJudgementProfileProvider.RateForExRank(BmsLayoutVariant.Bme7K, 75);
         var table = BmsJudgementProfileProvider.GetTable(BmsLayoutVariant.Bme7K, 1, rate, false);
-        Assert.That(table.ResultForOffset(11.225), Is.EqualTo(HitResult.Great));
+        Assert.That(table.ResultForOffset(15.721), Is.EqualTo(HitResult.Great));
     }
 
-    [TestCase(BmsLayoutVariant.Bms5K, -1, 0.75, 15)]
-    [TestCase(BmsLayoutVariant.Bms5K, 0, 0.75, 15)]
-    [TestCase(BmsLayoutVariant.Bms5K, 75, 0.56, 11.2)]
-    [TestCase(BmsLayoutVariant.Bms5K, 99, 0.74, 14.8)]
-    [TestCase(BmsLayoutVariant.Bms5K, 101, 0.75, 15)]
-    [TestCase(BmsLayoutVariant.Bms5K, 133, 0.99, 19.8)]
-    [TestCase(BmsLayoutVariant.Bme7K, -1, 0.75, 15)]
-    [TestCase(BmsLayoutVariant.Bme7K, 0, 0.75, 15)]
-    [TestCase(BmsLayoutVariant.Bme7K, 75, 0.56, 11.2)]
-    [TestCase(BmsLayoutVariant.Bme7K, 99, 0.74, 14.8)]
-    [TestCase(BmsLayoutVariant.Bme7K, 101, 0.75, 15)]
-    [TestCase(BmsLayoutVariant.Bme7K, 133, 0.99, 19.8)]
-    [TestCase(BmsLayoutVariant.Pms9K, -1, 0.7, 20)]
-    [TestCase(BmsLayoutVariant.Pms9K, 0, 0.7, 20)]
-    [TestCase(BmsLayoutVariant.Pms9K, 75, 0.52, 20)]
-    [TestCase(BmsLayoutVariant.Pms9K, 99, 0.69, 20)]
-    [TestCase(BmsLayoutVariant.Pms9K, 101, 0.7, 20)]
-    [TestCase(BmsLayoutVariant.Pms9K, 133, 0.93, 20)]
+    [TestCase(BmsLayoutVariant.Bms5K, -1, 0.75, 18)]
+    [TestCase(BmsLayoutVariant.Bms5K, 0, 0.75, 18)]
+    [TestCase(BmsLayoutVariant.Bms5K, 75, 0.56, 15.72)]
+    [TestCase(BmsLayoutVariant.Bms5K, 99, 0.74, 17.88)]
+    [TestCase(BmsLayoutVariant.Bms5K, 101, 0.75, 18)]
+    [TestCase(BmsLayoutVariant.Bms5K, 133, 0.99, 20.88)]
+    [TestCase(BmsLayoutVariant.Bme7K, -1, 0.75, 18)]
+    [TestCase(BmsLayoutVariant.Bme7K, 0, 0.75, 18)]
+    [TestCase(BmsLayoutVariant.Bme7K, 75, 0.56, 15.72)]
+    [TestCase(BmsLayoutVariant.Bme7K, 99, 0.74, 17.88)]
+    [TestCase(BmsLayoutVariant.Bme7K, 101, 0.75, 18)]
+    [TestCase(BmsLayoutVariant.Bme7K, 133, 0.99, 20.88)]
+    [TestCase(BmsLayoutVariant.Pms9K, -1, 0.75, 18)]
+    [TestCase(BmsLayoutVariant.Pms9K, 0, 0.75, 18)]
+    [TestCase(BmsLayoutVariant.Pms9K, 75, 0.56, 15.72)]
+    [TestCase(BmsLayoutVariant.Pms9K, 99, 0.74, 17.88)]
+    [TestCase(BmsLayoutVariant.Pms9K, 101, 0.75, 18)]
+    [TestCase(BmsLayoutVariant.Pms9K, 133, 0.99, 20.88)]
     public void DefExRankMatchesExecutedJavaAtPgreatBoundary(BmsLayoutVariant layout, int exrank, double rate, double pgreat)
     {
-        // DefExReference.java executes the fixed upstream JudgeProperty after BMSPlayerRule's integer validation.
+        // Endless Dream d4995153: integer validation then LR2 interpolation (JudgeProperty.java:185-264).
         var actualRate = BmsJudgementProfileProvider.RateForExRank(layout, exrank);
-        Assert.That(actualRate, Is.EqualTo(rate));
+        Assert.That(actualRate, Is.EqualTo(rate).Within(1e-15));
         var table = BmsJudgementProfileProvider.GetTable(layout, 1, actualRate, false);
         foreach (var direction in new[] { -1, 1 })
         {

@@ -1,0 +1,8 @@
+<Project>
+  <!-- The audit is explicitly built on demand; ordinary tests and their expectations are untouched. -->
+  <ItemGroup Condition="'$(MSBuildProjectName)' == 'osu.Game.Rulesets.BmsRuleset.Tests'">
+    <Compile Include="$(MSBuildThisFileDirectory)GameplayAudit.cs.txt" Link="GameplayAudit.cs" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)flow.csv" LogicalName="BmsGameplayFlow.csv" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)mines.csv" LogicalName="BmsGameplayMines.csv" />
+  </ItemGroup>
+</Project>

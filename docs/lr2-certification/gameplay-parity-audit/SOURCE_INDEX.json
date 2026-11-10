@@ -1,0 +1,1757 @@
+{
+  "purpose": "Content identities, not a claim that every indexed line was fully audited",
+  "sources": [
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset.Tests/Normal/BeatmapTest/Decoding/BmsBeatmapDecoderTest.cs",
+      "git_blob": "2d49a59a875d2c5b62930411e5308b4178f61ffc",
+      "sha256_lf_utf8": "09FFD2300ABB4FE0DE5B6571E30F49D7D9949CA5B1F8FAB0315F77E023A0AADD",
+      "lines": 2889
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Beatmaps/BmsBeatmapDecoder.cs",
+      "git_blob": "ceab037ebee9c0034b0903c581990acee2d416e0",
+      "sha256_lf_utf8": "025C65A80A89F6F9ED1BB605E65AE43F3A02A663ACBA7511C78CD09B24F2D24B",
+      "lines": 197
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/BmsParser/BmsCellSorting.cs",
+      "git_blob": "398509e2aa046cf62521dfc7fd629fb9aff5162e",
+      "sha256_lf_utf8": "6F1D10178F00AE908AD1FD9B987403AF587381BDA72D45085D647E34E385856B",
+      "lines": 82
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/BmsParser/BmsChartMetadata.cs",
+      "git_blob": "80e6603169303048daf6b4f7224c3a1d5f97a353",
+      "sha256_lf_utf8": "C36D8B3C4B355C290326D979BE733E4FE9DF3C1DC23D1E66E877D10170DEA6FD",
+      "lines": 16
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/BmsParser/BmsChartScanner.cs",
+      "git_blob": "889de609e5b761aa22fe3011bc1ac39f682a6e65",
+      "sha256_lf_utf8": "22AAA21C056BCD21CA56EC200EC4E5C5A97C8995A28B4DB614B79522F04B3EA3",
+      "lines": 347
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/BmsParser/BmsControlFlowResolver.cs",
+      "git_blob": "f67f2d9a36c959ff91e074f588169593f99618b7",
+      "sha256_lf_utf8": "644052CBFAB15AF03C31E606CDBA2FBF7EC76D34FDDF05D6221B697F22B3C2CF",
+      "lines": 331
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/BmsParser/BmsImportSummary.cs",
+      "git_blob": "76c60c62a440dd10cb8a913d212bf65360b678dd",
+      "sha256_lf_utf8": "AD6E9595B773787696DD4E8A31C92F03EB35F67FBD3E88CA0DA0E445FB38147B",
+      "lines": 14
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/BmsParser/BmsImportSummaryParser.cs",
+      "git_blob": "0518587487d9448c65e49ea19e04bf5e9d1740ba",
+      "sha256_lf_utf8": "1B633D5E3CD640E323C7B78B5D490214AA6F73403F5506A44D9DE193C0360F0A",
+      "lines": 368
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/BmsParser/BmsLayout.cs",
+      "git_blob": "a421f1e18fcd4f4a362e504e1dbc0eae50dadcb8",
+      "sha256_lf_utf8": "8FBCEB5E5C1DA3D530A3B1293672FD42AE3841165A4D7CD1AC922AD8C40E6BA2",
+      "lines": 314
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/BmsParser/BmsLayoutVariant.cs",
+      "git_blob": "9112a57a909ee99764ade981f81fd5167c643605",
+      "sha256_lf_utf8": "4C3589C47ABC61D9C8D7C73E50D428D0FDA7EB2631B3C3977C42DB0F9541441F",
+      "lines": 15
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/BmsParser/BmsParseResult.cs",
+      "git_blob": "ce4a6cf273b91585af0a2b86b7ebd7192a0505f3",
+      "sha256_lf_utf8": "A94A244B7A77AC81709AFB9E925E4006536233A5E80D4D52D907A355A49301F2",
+      "lines": 128
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/BmsParser/BmsParser.cs",
+      "git_blob": "be90ea114d5ca898ceeeb84fa0ea9344f1e30e48",
+      "sha256_lf_utf8": "31E202A07579079D31D82A747B8F7BCDB41B012221499EECA40B7467A9ED6B55",
+      "lines": 1582
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/BmsParser/BmsTickTimeConverter.cs",
+      "git_blob": "ab2f91a044dcda986892779ac47ad446229999f6",
+      "sha256_lf_utf8": "36921057752CCF82BD2E49084009FFC5316E6B0175ED575D345A9C5B8FAB7C30",
+      "lines": 118
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/BmsParser/BmsTimingMap.cs",
+      "git_blob": "c529c064b2e13d9402f5e1a3fa3199134959dd99",
+      "sha256_lf_utf8": "4264BFA3B56219ED5B996E697883D9192D12D7ACEC028160406E01475E2B050F",
+      "lines": 442
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Configuration/BmsFrameRateUnlock.cs",
+      "git_blob": "bd238bf055e7739a474efaafd475e958c71ea4d7",
+      "sha256_lf_utf8": "C1E71409237250F4ADA2F2FBBA148826F250ED2B09C366ACBCC4875830DE0C60",
+      "lines": 174
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Configuration/BmsJudgementAlgorithm.cs",
+      "git_blob": "ef6729627e61533a29fe1fc12d5a7837535ad265",
+      "sha256_lf_utf8": "BEDF9A5FED928FDC324A0A781CBC26495463A9B26917C73386E80060D9C2D79C",
+      "lines": 20
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Configuration/BmsKeyBindingConfiguration.cs",
+      "git_blob": "6afb56bac1178cc5b0ba4961d07c44ee88b788bb",
+      "sha256_lf_utf8": "958B378C386205C42200A512B3B1C61D463369EE47AB432AAAD8CAC955D70718",
+      "lines": 328
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Configuration/BmsReferenceBpmMode.cs",
+      "git_blob": "e5c495615c5f7b7326bc619e187504b83c3cb41e",
+      "sha256_lf_utf8": "2E3CFF2CEDC30CB18563B6B62D1C458BC8FFFDBC3099F6B4A048DDA2A10D1504",
+      "lines": 20
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Configuration/BmsRulesetConfigManager.cs",
+      "git_blob": "93db538f92b4a2654950a21424d5997a1c1c3e20",
+      "sha256_lf_utf8": "AD85F0B589628919DBB0FA12CF753BA9D8499A40FE65E9AE89FD5AC5B5B0AD71",
+      "lines": 74
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Configuration/BmsScratchPosition.cs",
+      "git_blob": "2de553e650e6f595fbb63f69f275c9cb03ad314c",
+      "sha256_lf_utf8": "9044098FA000A45BF5D8BAF889B0D9026B26125988F79DFBE86CBF78C09C57FD",
+      "lines": 14
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Configuration/BmsVisualOffsetSuggestionStore.cs",
+      "git_blob": "b377751e07816c40244ecfdd5c7ef46202496581",
+      "sha256_lf_utf8": "D81CBF80C108C64990C5117F8CFA3E282034588485B07E4D32B5157C403920C0",
+      "lines": 32
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Course/BmsCourseCatalog.cs",
+      "git_blob": "8be9942ec779f613de385f39b4ba404697c05262",
+      "sha256_lf_utf8": "FFBB09C7505176A8DCE3F907BB95F907FEB588FF72CBF3DE7076294189FC4E60",
+      "lines": 26
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Course/BmsCourseDefinition.cs",
+      "git_blob": "9fb07f19fa85d52fb63abd73f05b2986aaad8bcb",
+      "sha256_lf_utf8": "90E73AFF05211418407B7E113083969F1A96AEB8BE0759F0438EA25A02EA07BE",
+      "lines": 39
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Course/BmsCourseGameplay.cs",
+      "git_blob": "d874c9269a0a045309eaaad80f5cc79afb98da6c",
+      "sha256_lf_utf8": "8337043730D310030E9900BF40021DE71A1C536455187E1EA7858D5783338823",
+      "lines": 240
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Course/BmsCourseResultStore.cs",
+      "git_blob": "e9a1c7cf09ba858392e8016f86cd33001063d74d",
+      "sha256_lf_utf8": "A7068B2C26B9E65D89C8195B74F77B69B1100E796EE8DEC26A0416B3B955F4D6",
+      "lines": 335
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Course/BmsCourseScoreAggregation.cs",
+      "git_blob": "ee7689311a1b4e990689ca509dbd628b3a3cb9c7",
+      "sha256_lf_utf8": "36F1639826ECD183BFCCCA2990791A5F66DC429AD24578A6461EDAAD1712DD3E",
+      "lines": 56
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Course/BmsCourseSession.cs",
+      "git_blob": "b6c02554bc191e433bed6347542bc49ad61e50e8",
+      "sha256_lf_utf8": "188B8AAF3A91F1896BCE1365640A4043713DD43DD3CDFA2F55B55ED02478891F",
+      "lines": 472
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Course/BmsCourseTableConverter.cs",
+      "git_blob": "733b83105f1ba64f49b9b6e2136dc5eefb401be2",
+      "sha256_lf_utf8": "D4C1301CEFC924A48A5FA0F03552FCFB88D0626D859FFF58EE179A345A08680D",
+      "lines": 67
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Difficulty/BmsDifficultyCalculationPatcher.cs",
+      "git_blob": "032183d5ad6d4a68d2e6fd4ee924325b1a9360de",
+      "sha256_lf_utf8": "259E564E00450C47327E7D73EA0F90F00F878F2489B95A39241ACFF94033FE88",
+      "lines": 87
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Difficulty/BmsDifficultyCalculator.cs",
+      "git_blob": "0d74223422c95e2077bdf0ef08aecea892e3b019",
+      "sha256_lf_utf8": "EC1E285BE888E60B96ECD7986E44F7F75073F7859EBD2A53FEC1D69802FAC02E",
+      "lines": 69
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Difficulty/BmsHitLeniency.cs",
+      "git_blob": "dbc5bc8fa774b32461bf71316c33fb3a291c9c58",
+      "sha256_lf_utf8": "ED5F593CCA72937BC1E39CE858FDAF568E2921B0985317E051F32704CF6A3C05",
+      "lines": 36
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Difficulty/BmsNoteTiming.cs",
+      "git_blob": "a506f689c13cf0b3dc2df354278292d60696cbe3",
+      "sha256_lf_utf8": "FD85A66F90360A1A6AFA4E97C5F0C2C21E27166E67B5AF93F967CDD31A88707E",
+      "lines": 11
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Difficulty/BmsStarRatingProcessor.cs",
+      "git_blob": "5ab8c1b0ec062a8638473df087b092bfb08f05ac",
+      "sha256_lf_utf8": "7A6B6EF8AD1D586EE349B7D7654AC48A3C301C17FA9DFC033C9AFE5D3800EDC2",
+      "lines": 1500
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Difficulty/BmsStarRatingResult.cs",
+      "git_blob": "a07af831f11bb0a221c6b1f8af9d5bc88aef886b",
+      "sha256_lf_utf8": "6DCDA9113E7D4B9C1247E383751F895BBC2FE7323CBDD61AEC6E2142FB53A953",
+      "lines": 39
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/DifficultyTable/BmsTableDownload.cs",
+      "git_blob": "4642ea82eb48b3fec5f744510c55839f4cdbcf7c",
+      "sha256_lf_utf8": "75DD848306F99C9E76D51EA7C780702334FCD362F24761EB0B367355A39EF03D",
+      "lines": 39
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/DifficultyTable/BmsTableJsonParser.cs",
+      "git_blob": "8318f3164b017ab844615c0dcad105b9ae55f4bc",
+      "sha256_lf_utf8": "B7C217A03E9174B26D56F452ED85DC3775812F2759BAE5358313BDB3B08D11AB",
+      "lines": 341
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/DifficultyTable/CollectionSyncManager.cs",
+      "git_blob": "f962b34442a9ff2b7e94e003bb4fea2e90aab3ce",
+      "sha256_lf_utf8": "0901AB4B375AE61554606E96E20C1983A18A565E6BDC6C063547B51B10FE3664",
+      "lines": 205
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/DifficultyTable/DifficultyNameUpdater.cs",
+      "git_blob": "7dea1aead0c63fd0eec032af4dfd1dd73fe744b1",
+      "sha256_lf_utf8": "55B76AD1352A6073E3489DD618B822EA011F2007F6E2A5B918DF692F96BBDEEF",
+      "lines": 106
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/DifficultyTable/DifficultyTableAutocomplete.cs",
+      "git_blob": "abc04902190583517de0449f2c8261ac553122cf",
+      "sha256_lf_utf8": "1DFAF8EA7577F92F16FC5A3CC1C40540BA292293B31C59184010E8BD430F7924",
+      "lines": 350
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/DifficultyTable/DifficultyTableStore.cs",
+      "git_blob": "b0f95bc55f77e2eebf655de6036c9a09b40f83dc",
+      "sha256_lf_utf8": "3D7E362DA85CBFD3351EF0EF1A6C5F4A2FC4DEBE23D3A7ABF1A5F79DC5DB64FC",
+      "lines": 578
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/DifficultyTable/ImportOption.cs",
+      "git_blob": "76d8c9ae97c9865e37e06b8f2bf381d07345a9ce",
+      "sha256_lf_utf8": "0180A1D4E4D0DBD5029BD856CB86274FE5CCF1CDB52B4DDB5FA3A3F795A87490",
+      "lines": 7
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/DifficultyTable/TableImportOutcome.cs",
+      "git_blob": "b40ba95f6618693d2f6009b94be11a55a38b73f4",
+      "sha256_lf_utf8": "5A6A9F72527B60B1473F867770C47985F734E3FB01D66088C80C0D2E731DF2CF",
+      "lines": 47
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/DifficultyTable/TableModels.cs",
+      "git_blob": "c02bc9bd6804be575f4fc768eb8b8175a77e454f",
+      "sha256_lf_utf8": "541D23B75BBC926A542DE02059249ECBE04A85ABCEEF62F9255A66F1404824E7",
+      "lines": 99
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/DifficultyTable/UnavailableTableBeatmapFactory.cs",
+      "git_blob": "f2998460ea52c09e3451b701a66dd69a4a45fa57",
+      "sha256_lf_utf8": "9C25BE113E1BF5976222013554B2B45F3BE48E26B4CA74C64B30EABDA495A9FE",
+      "lines": 83
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Judgement/BmsColumnJudgementRuntime.cs",
+      "git_blob": "db8e11a7af3eafdf6ad92552b2f37bee770757c9",
+      "sha256_lf_utf8": "803F67853BC81F1981C70E48F3A629FF6F9DCD54B9915F1A5DA85A6D24F5FFE5",
+      "lines": 415
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Judgement/BmsColumnNoteIndex.cs",
+      "git_blob": "b96ccdd0e37388c0bf4a8b3b04112798cf7391c8",
+      "sha256_lf_utf8": "6C662FED827E6EFD631EC89337BBE6882240B6E0B5088B48B404BE07C53C3E3E",
+      "lines": 151
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Judgement/BmsHoldRegistry.cs",
+      "git_blob": "0890b79a1abae45528dca10c0d9e14b0ecbac466",
+      "sha256_lf_utf8": "FEEB6D9C74DB30E634A48054F41FDFB169E9FE0CFE29CCA867003DB488DF70CA",
+      "lines": 290
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Judgement/BmsJudgementCandidate.cs",
+      "git_blob": "7a46930e1db9c27ed3fd7123abe72dabfb3c4b96",
+      "sha256_lf_utf8": "A4C4F01227A6256E041C6E3FE1A0F6C61263DD28B7F433A2D60D58DF03E061E9",
+      "lines": 18
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Judgement/BmsJudgementEngine.cs",
+      "git_blob": "931bb331d08c17d0e547103a905d394d6acbbc5d",
+      "sha256_lf_utf8": "D2638BAD4CA0053490E586F363B9B227916E351F3E72D135E9987B5E3E9B3EC4",
+      "lines": 216
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Judgement/BmsJudgementExecutionContext.cs",
+      "git_blob": "2450ae9df46dd98edfc7d4db29a619988cec95a7",
+      "sha256_lf_utf8": "575BBB6EC70670A88F23ED32AD0D9A93750A4DA3E18F6145AFC48D836D7CCDA5",
+      "lines": 31
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Judgement/BmsJudgementProfile.cs",
+      "git_blob": "d6afc5c7587db7a5293472cd706c3a7c6c8bf6a4",
+      "sha256_lf_utf8": "96953CEBE9540526F74076C265C21522012930EE1BCD2DABA266FC7CF4417090",
+      "lines": 8
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Judgement/BmsJudgementProfileProvider.cs",
+      "git_blob": "1fa8473368ab49e6e0be789b62138a488b665712",
+      "sha256_lf_utf8": "8A12AA57A545A820691BF57781DF7F94225E0625815F3C9663C7B579B7767E59",
+      "lines": 260
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Judgement/BmsJudgementSelector.cs",
+      "git_blob": "4c4d52b61421f2ad4cd909ee5bd9fda95b2e9fdc",
+      "sha256_lf_utf8": "5B7A5BD88ECC661B3B39D5BC48A2DC78AE8AB82187C742CB7ABD6CB6AC327E40",
+      "lines": 188
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Judgement/BmsJudgementWindow.cs",
+      "git_blob": "317083455e131454e7091fba565453641f93bc4b",
+      "sha256_lf_utf8": "A9F319A584E86EE8BC5C3BE222B3B9C74219488922E0380B304F9FB90FA31422",
+      "lines": 17
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Judgement/BmsJudgementWindowTable.cs",
+      "git_blob": "f585065c4db4ea2db74764b1ef257c9c4c7ffe4b",
+      "sha256_lf_utf8": "C0C045361808F2D4BA53A898F6EF5CC272C60E627AC49088742E48DFD2549F08",
+      "lines": 126
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Judgement/BmsLandmineRegistry.cs",
+      "git_blob": "8e287d6153786c281718bc77d269ebdb7e3c8fc5",
+      "sha256_lf_utf8": "5F132107A73D16B158E977FA74605CE3CCCD282823C6E7F8084DBACAEED82A20",
+      "lines": 36
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Judgement/BmsLongNoteEndpointResult.cs",
+      "git_blob": "0ea75f80834f85409b11c69b318b0fe9cbda6fc8",
+      "sha256_lf_utf8": "E5EBA1063865986EA7D94350AAC4302E68D8E8A6099B17DE2EC1DB533482002A",
+      "lines": 24
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Judgement/BmsNoteOperationBinding.cs",
+      "git_blob": "e309c9a252aa3add0720faeae2038309217e6904",
+      "sha256_lf_utf8": "CDC2411B3995EC0CA45D3F8D5382ACDA3336A23AC0319991DB6132E727A6346B",
+      "lines": 38
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Judgement/Framework/BmsHitWindows.cs",
+      "git_blob": "b8f5dad2b687271e1ddea03bdc16b191f5b60282",
+      "sha256_lf_utf8": "DDC50FB0D256EFD6AE691E970E8771BAAB16B7F45BBA7EE1E8342031E1F0BCA5",
+      "lines": 50
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Judgement/Framework/BmsJudgement.cs",
+      "git_blob": "6a20b31271ff6d2c0518c453226d3e69d227d7e0",
+      "sha256_lf_utf8": "107193F12B10F28F928946D8C5D77AD8EC38E0A7749F7D027BC487DD19AFBC66",
+      "lines": 26
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Judgement/Framework/BmsJudgementResult.cs",
+      "git_blob": "8c44a3222089d304fdaa7a854e49a81eb1ed84d0",
+      "sha256_lf_utf8": "0C237A047FCD516D0D4B95CB4C538731FFAC5933D7E577135610FF6C8B9C041B",
+      "lines": 38
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Judgement/Framework/BmsLongNoteJudgementResult.cs",
+      "git_blob": "0a88cd3249b3fde55e1e50316f89be306631299a",
+      "sha256_lf_utf8": "0F1A618DDB1C1E784C81A4C6293ABB29D8CD7F2C57D2B5FB588271ABA2D56D87",
+      "lines": 62
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Judgement/IBmsJudgementOutput.cs",
+      "git_blob": "f7147d839a589fb3c9316634c1b1bae5b0288997",
+      "sha256_lf_utf8": "4F7140C39FC40A35FAD41AF34323E37BBBFC18D1A5C215E46111264064E74815",
+      "lines": 60
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Judgement/PressOutcome.cs",
+      "git_blob": "3f7bca46db5ba0ad919122d844820c94a3715b82",
+      "sha256_lf_utf8": "D43FA0A13BCDF4D7C175555AE11138817E63602976836EA14849D8319392312D",
+      "lines": 18
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Judgement/Rules/BmsChargeNoteJudgementRule.cs",
+      "git_blob": "5a303858f55c6c545f2960ed4f11d3ea7618f5d3",
+      "sha256_lf_utf8": "81A9E535F0E2E8A43555D1CC9BB30C36C4D1C4A9B4F333FB3CD2E9BFF283785E",
+      "lines": 176
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Judgement/Rules/BmsHellChargeNoteJudgementRule.cs",
+      "git_blob": "6ab3e6529f0dea29a8977784c51ae3c39ff90fdf",
+      "sha256_lf_utf8": "50359CDE510DF6E690EB7BCFAAE56F417C223C50371F4F9D7CAEEA01B6A7E3FD",
+      "lines": 209
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Judgement/Rules/BmsLandmineJudgementRule.cs",
+      "git_blob": "08cbc1dd4b6fd96fdd51ba674f6a7b1628157814",
+      "sha256_lf_utf8": "1ED35CCD317CA55169B6DAEAD627EFE3EE81D785F36E9239FCFEDF2ACEB6057A",
+      "lines": 40
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Judgement/Rules/BmsLongNoteJudgementRule.cs",
+      "git_blob": "2737034db1f663491133b48e07d5987e0bb8a49b",
+      "sha256_lf_utf8": "8C5566ED0E23C632FC91383C1E30DE7DF274F60DCA25AD4CC708B9C86B314E9E",
+      "lines": 151
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Judgement/Rules/BmsNoteJudgementRule.cs",
+      "git_blob": "3d83559e499f947755c73064b8c931ee0f6748b1",
+      "sha256_lf_utf8": "212A222B74D5482A33636AC75CF5C0059E4E1A6176F2E7DFF0273051E8623366",
+      "lines": 46
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Judgement/State/BmsHellChargeBodyTracker.cs",
+      "git_blob": "55ca8a6cba0348abb0f7b84117bd90def431b2e2",
+      "sha256_lf_utf8": "6EC8C179754A35672F0A2E5EA107238D4B6C684F9F520BE58D77D306B809074A",
+      "lines": 104
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Judgement/State/BmsHoldRuntime.cs",
+      "git_blob": "99c5e4d2eaa8779ab65a9422d8c514be3a96bd85",
+      "sha256_lf_utf8": "469D1A23EAA580E64434A05183C5C99D4C419D68C89EEFDF88CBFA7A08993DF4",
+      "lines": 95
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Judgement/State/BmsLongNoteState.cs",
+      "git_blob": "d841c35b8ddc7e9081fdb01329fe11a79710fade",
+      "sha256_lf_utf8": "41481C0FE556023F7C54A9A43B2A33287398B9ADEE9602A119ECCB1EB8461688",
+      "lines": 23
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Judgement/State/BmsNotePressState.cs",
+      "git_blob": "d04ac5fdad4615e6bbfe8ff3979983e192f68ce9",
+      "sha256_lf_utf8": "F92078557695FD59281D694119DFF72D181CB1E9AEB25532569C5F0EA68C73E0",
+      "lines": 22
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/BmsMod2Player.cs",
+      "git_blob": "7c2f3de54d9ada4e8fe98092cf725395f4617d26",
+      "sha256_lf_utf8": "38C6A900C7DEAD434E5F7D5B4583CC276793F98E574574E7B4BCEDAC884E5461",
+      "lines": 37
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/BmsModAutoScratch.cs",
+      "git_blob": "bd5589abfba008e3a38a067396e07359135dc93c",
+      "sha256_lf_utf8": "1215BB0D8677728C7D9BBBCC8B7E2D7A8DD6FD270F9220F093C38F0E000B19AA",
+      "lines": 127
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/BmsModAutoplay.cs",
+      "git_blob": "420c8cb9ec33a1d30d8f7c3897fe478afcb11d93",
+      "sha256_lf_utf8": "A7BFDA7E44CB428AC18C6DCFD68F4951CF0516A7E717B9675D428EA334E273E2",
+      "lines": 45
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/BmsModBackgroundKeysound.cs",
+      "git_blob": "33ed23844ba3a1089b38d7d4337055ef8c8503bf",
+      "sha256_lf_utf8": "57F9F8B1BA5C180056A224BDB3754ACBC9465C454B62DB57CECEE2057979C855",
+      "lines": 50
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/BmsModBranchReplay.cs",
+      "git_blob": "2c9624f74590924ce15f8dee3ddf61f20fb2c7af",
+      "sha256_lf_utf8": "044AD3FA6D85CBC5DD2BE52DE1E22C2A29D56E8AB22955796A1A3D8BCED9F1EC",
+      "lines": 44
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/BmsModConstant.cs",
+      "git_blob": "7280ec0ac207c40dfd86e938ad8aef9450e829bf",
+      "sha256_lf_utf8": "07DEAA78875A9C6F552885049721C2A038E338090A61DD97F310687B4EBC510E",
+      "lines": 35
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/BmsModDoubleTime.cs",
+      "git_blob": "aab5102fd1f66be495cf149f34a26d317742124c",
+      "sha256_lf_utf8": "67D0C1D55CE5340F386CEFC4467B92A2DB390A22401D50A6EDFD8C592EBAC339",
+      "lines": 9
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/BmsModHalfTime.cs",
+      "git_blob": "4315af972321b7df210cb8d80a3f662e79d057d2",
+      "sha256_lf_utf8": "BFD3999CF422648457D84FC516D6FD85F16BE36F5CBF01B87F02DD80D4D704B2",
+      "lines": 9
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/BmsModHideScratch.cs",
+      "git_blob": "f2babad2d6fd3335be6a615d79775ccf97a8dedc",
+      "sha256_lf_utf8": "D8EB9CD1E34EBF4AC07F599F872A60FB2FE9962F3F289459A801AAEF39325232",
+      "lines": 67
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/BmsModInvert.cs",
+      "git_blob": "e94ab4951bdb991080f420ef2c2a389f8a37245b",
+      "sha256_lf_utf8": "5949EE1FF09DDF15F6BE501F34FDE92859DECC6FD0C94B45CDBCEC2A825517F7",
+      "lines": 123
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/BmsModLaneRandom.cs",
+      "git_blob": "ccc9489401cb4eabb8c47bda9185c5502e7b5e77",
+      "sha256_lf_utf8": "4E4AE9CF4FB5895C0CE2DA0F90D49C31C147C29E801F6DE0B26F56B58557A929",
+      "lines": 101
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/BmsModMirror.cs",
+      "git_blob": "0a89415ab2af9f4746c7909643aa714bfac43049",
+      "sha256_lf_utf8": "24A8AA4E05DF8D5DD7DC2D3F4F5AF4A18E0F32A4DD056AE0EEF1FBFD532A1BDA",
+      "lines": 68
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/BmsModNoBad.cs",
+      "git_blob": "20d38692413def65e4cc27fc8ebe3ee9aded8e09",
+      "sha256_lf_utf8": "295BF5FBFC5C1D5DBF760499B89255D559E37B05EC6D751F7E1F966AE45715D5",
+      "lines": 40
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/BmsModNoGood.cs",
+      "git_blob": "c9a2bd64689073e5699adc9b12f0dcac243bd74d",
+      "sha256_lf_utf8": "2E0B21E50D5099F6E4A2F3632D9CC7634FD575E13048A39C32FF5D2DDE548685",
+      "lines": 44
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/BmsModNoGreat.cs",
+      "git_blob": "9a6c35bc6e52987859b764ba9ebd17993e453c24",
+      "sha256_lf_utf8": "2F293A5CEE603BF5AA58FD3C3C80A3382FCE25B11D2BEC5C6B328EE1791DBADD",
+      "lines": 44
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/BmsModNoMine.cs",
+      "git_blob": "d6d844867a7bb13750172cad92725cfcd86304b1",
+      "sha256_lf_utf8": "ADF3DBA2541CCF7EBB5B34373EDE37123F6560E6FAC662BF1FC9E1BD11FCA07B",
+      "lines": 32
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/BmsModNoteRandom.cs",
+      "git_blob": "1a377b4df331d824ec252c8306181f7143149267",
+      "sha256_lf_utf8": "D030C6A1756A6AE9D6A9BA19484F2ECC93DA2CCB05999CDA3571CBA2AEDE3034",
+      "lines": 195
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/BmsModPaused.cs",
+      "git_blob": "8f92b03b4167007f65950d627d6a113e38f39f50",
+      "sha256_lf_utf8": "F77A5049587E8EDFB828C761236F310590801FF5D7969DE0D011DD40889D1D4E",
+      "lines": 37
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/BmsModRotationRandom.cs",
+      "git_blob": "7397424b3132c19f1b478d01a660c1ff86a94d75",
+      "sha256_lf_utf8": "F58519370BC5D120273A03897091E78360D4ADFAC446B244A8CBC31548632C4E",
+      "lines": 86
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/BmsModTypeScoreSelectionRule.cs",
+      "git_blob": "2ed10fbd91ba14f1362a88db8f6513af3fb0fc59",
+      "sha256_lf_utf8": "9BE8DDB59DD6715E0ED093E92E9326477D5F29AA010E955B2EC31FEB1E497474",
+      "lines": 28
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/BmsRateScoreSelection.cs",
+      "git_blob": "8d7093160e1f42b091e3726c1c9c4ec45a2e5688",
+      "sha256_lf_utf8": "4FA322BBD1E1D98DD0BE6B2AEE7ACA892217A6D5331FB8DA830AED562EDD0386",
+      "lines": 33
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/Gauge/BmsCourseGaugeSetting.cs",
+      "git_blob": "b7fb48ee5b8c3cb7b8af1ebe7eab9fe38350181c",
+      "sha256_lf_utf8": "F8F64B7BD123ED6E5DF68B20FE7A7CF4B758B3D8EF894541C64D4A37222123BB",
+      "lines": 31
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/Gauge/BmsModAssistEasyGauge.cs",
+      "git_blob": "2efd328fdc7be9d7d43b8ee54e84976e04ab0d57",
+      "sha256_lf_utf8": "922A2428CC9294627C08D56AFF99D8C2D80629D23FA72CBF9CD6CB63F86480E8",
+      "lines": 19
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/Gauge/BmsModClassGauge.cs",
+      "git_blob": "aabaf7753088c67e2250eea9718da68d2997dde8",
+      "sha256_lf_utf8": "854767FBEAACE408F16BBBC995666202FF2573B742834EB752B9378B267D7053",
+      "lines": 19
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/Gauge/BmsModEasyGauge.cs",
+      "git_blob": "9414ba098fc9bbc276b014c37b7575bccbc8ef78",
+      "sha256_lf_utf8": "57FE7D102CB6FD530638F4EB79EEF8926291EAA9965D3B610C79004836784259",
+      "lines": 19
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/Gauge/BmsModExClassGauge.cs",
+      "git_blob": "0c9e0542e47620ac4f942a046edbc875c063ae8d",
+      "sha256_lf_utf8": "968BAC8628DB610868980F9313B41D00D1F7EAF6B1D105824999592C5611B296",
+      "lines": 19
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/Gauge/BmsModExHardClassGauge.cs",
+      "git_blob": "477753ef9d335d81bad40b4a1fe4b60319a1f148",
+      "sha256_lf_utf8": "12169D84CB29C9C005FE87788411F62AA725D5CC82DA78653960D340FA34E159",
+      "lines": 19
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/Gauge/BmsModExHardGauge.cs",
+      "git_blob": "13a908cbdb1fd01fa0880d30bb296c3316ef5090",
+      "sha256_lf_utf8": "C54FC87E79FA7DB0D86715ED331AFFDB91CE8EE8F606000C89074E084575AA04",
+      "lines": 19
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/Gauge/BmsModGauge.cs",
+      "git_blob": "c0baf69d94574f1c6a0923b5eee61437897ce2c2",
+      "sha256_lf_utf8": "B9817D2630F668D86C52049D38156B61AFC3CCFDF7F350C8FB528E15F410F486",
+      "lines": 77
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/Gauge/BmsModGaugeAutoShift.cs",
+      "git_blob": "b0f8091646eb2e67ba8154dcd322f168bf029fe8",
+      "sha256_lf_utf8": "D00D689A712CA6124469A80E40AE3E15E517F0703DB3242E1009532B59B45BF3",
+      "lines": 143
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/Gauge/BmsModHardGauge.cs",
+      "git_blob": "3b0c845b94887c899c0318b8fcd1e1c00758666f",
+      "sha256_lf_utf8": "E25BF36D8E4534191F69FFDD756DA4EA070931B2A804EBFD47A814FA9548703C",
+      "lines": 19
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/Gauge/BmsModHazardGauge.cs",
+      "git_blob": "0ea03bf0a72021aa81c905fecbe2c554ecd479dd",
+      "sha256_lf_utf8": "4DE91D699CC85D7BADB3A3646994520CCC32336773F43F67F968DA107F821D52",
+      "lines": 19
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/IApplicableToJudgementWindow.cs",
+      "git_blob": "6a1cec99f80554dfe87afd3385ebab352bc1e9e7",
+      "sha256_lf_utf8": "5E828D23CF8CEDF32C353E527418BD537541F8A3BBB32FCF1CE5444C1D002450",
+      "lines": 10
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/IApplicableToScorePopulation.cs",
+      "git_blob": "fc7e7d5befff1b6969f1a5d415a8e6f9f2cc2a9d",
+      "sha256_lf_utf8": "8B8EECC4B07E49491C20CBF91CE05FA446D0E7AB64CDEE7E96CB2E8DC1B677C5",
+      "lines": 14
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/IApplicableToScoreSelection.cs",
+      "git_blob": "f5b6da1c11b6e3c39233c2bc93d9ed240486a493",
+      "sha256_lf_utf8": "AF925422D6D65531762942ED823E563E48D6E3E312B4BCC39697D090B8A06A83",
+      "lines": 14
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/IScoreSelectionRule.cs",
+      "git_blob": "5e6f491c8e7f130c8225bf018a7bd2d28cf9cef4",
+      "sha256_lf_utf8": "50BED1AA92E03583F214C0D3010FC08503C6EFFA0BC56C5A0112B96FD4058AAF",
+      "lines": 13
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/LongNoteMode/BmsModChargeNote.cs",
+      "git_blob": "847cd42fecd120147801b62cfd9055559044fead",
+      "sha256_lf_utf8": "E5F017D691F6DF95E9E4C72C5F3CBD5F4951856C198164B2257E59B3AA862C6E",
+      "lines": 23
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/LongNoteMode/BmsModHellChargeNote.cs",
+      "git_blob": "e5495142e5a168848b3f7b097a0811c1ec3c5e5e",
+      "sha256_lf_utf8": "690AB3CC2140C1D4A265BA4D9D74F7FE834FA6E3DCC7F5206CA280D5FB18A146",
+      "lines": 24
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/LongNoteMode/BmsModLongNote.cs",
+      "git_blob": "a8421fc08a193af6c5489fc5388c02a9be73d154",
+      "sha256_lf_utf8": "A9EA47A796A1EDB90EC4C72AC9E435A0F48C0414C2A07646FCD040235210DC69",
+      "lines": 24
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/LongNoteMode/BmsModLongNoteModeBase.cs",
+      "git_blob": "8b06651a7dde2906cb9e66267e4871e7326c9914",
+      "sha256_lf_utf8": "6FBFC3B6D8926FC031769281DB4D0A8F67DF45A483F1758B04BD164324F732D1",
+      "lines": 33
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Mods/ScoreMultiplierCalculator.cs",
+      "git_blob": "a10678543ad8b6d2156806b925cb4b28d53b8d2f",
+      "sha256_lf_utf8": "AE3909A9CC27EAE5C70D306DD3307353C905BEEB8A116B6E6B0DB2928887F0EE",
+      "lines": 14
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Replays/BmsAutoGenerator.cs",
+      "git_blob": "236c2ea947502d935dd4dee694dfedb7fd0c62f9",
+      "sha256_lf_utf8": "FF7664FA0B377C0742B39487490D7F1743BD52F49539FB36A6693E6C7DB70C90",
+      "lines": 121
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Replays/BmsBranchReplayState.cs",
+      "git_blob": "8c471323fd1bbe791d8e075f7c389cef1f9b6ca5",
+      "sha256_lf_utf8": "3982AB9370604070DD1589EC7BE5D45D3F92E80E85900B1C794BB608BE835E55",
+      "lines": 24
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Replays/BmsFramedReplayInputHandler.cs",
+      "git_blob": "03456b74b0e29c7d17d37735556a9f4e7af80486",
+      "sha256_lf_utf8": "E3D6896E3FF144544E984DE98BB1F14431E0130205AF1727CAB5DD89F9B592EF",
+      "lines": 163
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Replays/BmsReplayArchive.cs",
+      "git_blob": "7f94801568495e2e818978f0dc8963a015d97b1e",
+      "sha256_lf_utf8": "85748EB75510AC18D900B49116C6B19A8E344E9051F712C84C39BC9FACC5CD9C",
+      "lines": 164
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Replays/BmsReplayFrame.cs",
+      "git_blob": "0477c3945cb10bde9bdf5bb0b3c653f36c23afca",
+      "sha256_lf_utf8": "DC2A307FBF07FB30E7C62DC6860D7F3F9182D10871CEE735C4D998DB7A4B7D68",
+      "lines": 44
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Replays/BmsReplayPatcher.cs",
+      "git_blob": "0004290e29ce00a0c817dfccb05496165b403c35",
+      "sha256_lf_utf8": "C7D88B905D765EF69DC420FCF44EF5013F0DB828E3D2EEE4B45EC0EDC2F75878",
+      "lines": 281
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Replays/BmsReplayRebuildScope.cs",
+      "git_blob": "9beaa954a45ac0ca7d0948dd2700c9e7d99a72ea",
+      "sha256_lf_utf8": "A4D6B386D589FD117D2AA515309185714F7AADEFC7879AE10FC73BCE34470DAD",
+      "lines": 45
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Replays/BmsReplayRecorder.cs",
+      "git_blob": "1d52ea364fb0f9e45d6ed2f472f2fffb79742934",
+      "sha256_lf_utf8": "FFB449BD01048AC52AF831B2E784A6C0A1C13A4E8B922EA9E188C607E5E74986",
+      "lines": 49
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Replays/BmsReplaySimulation.cs",
+      "git_blob": "4268d075dfe44037ec8df40083bc4d1b21833f29",
+      "sha256_lf_utf8": "3F12390C077D1FAB408A8A148D26221ABB8FBD3983473E0ED7C0ED98D52CFDA7",
+      "lines": 222
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Scoring/BmsExScore.cs",
+      "git_blob": "7dce86539d18b6e889eb4b71c9fad0c0c5f95469",
+      "sha256_lf_utf8": "E287D2E154EAB97CC9460C94EAB960451E03582127C6F6B908434A058081BEF7",
+      "lines": 100
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Scoring/BmsHealthProcessor.History.cs",
+      "git_blob": "1923e19295fcb6133fd22b8582877e761ff40f07",
+      "sha256_lf_utf8": "B73D154E7AFEB41513C60A60E869B63EAA6FEB54099DFDABF2864DB73D61F98A",
+      "lines": 69
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Scoring/BmsHealthProcessor.cs",
+      "git_blob": "aeeb3448977a517fe4eafe9b08ef3db1ab49e175",
+      "sha256_lf_utf8": "EB4B815BB3A1655457D5E685242BE94E62322D0BD43AB7E3AADE9732362A9C96",
+      "lines": 552
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Scoring/BmsScoreProcessor.cs",
+      "git_blob": "8bd95dfc35e6c1144263c1b9df67cbff05efeb39",
+      "sha256_lf_utf8": "5C6D80ABEE3AB8D42ABA1477AD289A5FC3B0DDA533CAEB8CF55790C1712CB185",
+      "lines": 488
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Scoring/Events/BmsJudgementEvent.cs",
+      "git_blob": "1d3276ffbe2f7392e10c20b8977557c9b4f0e108",
+      "sha256_lf_utf8": "567F822753A75DBADE9E40E18ADEBB4E0E508DF5FA5630642E609A548ADB1275",
+      "lines": 117
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Scoring/Events/BmsJudgementEventProjection.cs",
+      "git_blob": "23bfea1f8b212dac5820dfb71051e9faabd3a8be",
+      "sha256_lf_utf8": "E2D8350CF0E937D793AE73F843E1C8E31F9B64E8AA0DB9F5E16B2434445E16F8",
+      "lines": 124
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Scoring/Gauge/BmsGaugeAlgorithm.cs",
+      "git_blob": "d58406e1643b2b21f8e8aeb1c9ca6c0e0624ff9a",
+      "sha256_lf_utf8": "0EFEE05D91E29C499580804283B64FA4219AEA1AFADE49FDF5EA854A8B9C5451",
+      "lines": 10
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Scoring/Gauge/BmsGaugeCalculator.cs",
+      "git_blob": "d7a889b8bf937c5d16c086f7aebed2d39f2e4a74",
+      "sha256_lf_utf8": "4680D69E8AD1870D911D272B8D75E73C20DF501AB459509AF6B5AA2548ECFF64",
+      "lines": 113
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Scoring/Gauge/BmsGaugeColourMode.cs",
+      "git_blob": "850ce3c81001f38ed2288e3ab8006900b8e35ce1",
+      "sha256_lf_utf8": "29E6B73CD561757AAB5177CE3C94A3CF1316900BE90329E4B5EC336FB9C3441D",
+      "lines": 8
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Scoring/Gauge/BmsGaugeDisplayProfile.cs",
+      "git_blob": "0a30d94359c1750cdddcaea2b02b7439f8913ed9",
+      "sha256_lf_utf8": "4445C3877767582838B0DE999B0C61095C72C9CAB9BFBEB4AB36C00B1AEA3A3C",
+      "lines": 12
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Scoring/Gauge/BmsGaugeGutsRule.cs",
+      "git_blob": "03da4b8f8a7dfa649f8b4681294309f15375f8fe",
+      "sha256_lf_utf8": "EBF05237C1F5892FF6E8CFA6391A594876186CFB541756191A28C2E8E61ADA3F",
+      "lines": 7
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Scoring/Gauge/BmsGaugeHistoryEvent.cs",
+      "git_blob": "b4dbfa96abd1fc00652f72c7c3e5198e2f1db4a2",
+      "sha256_lf_utf8": "62795ED7224767CBE55A5135ECD5A37FEA83AA80041BFC8014742DD29A3FBC25",
+      "lines": 14
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Scoring/Gauge/BmsGaugeProfile.cs",
+      "git_blob": "74c852078f243c77b6fded3cb1da2a9b5fb1edea",
+      "sha256_lf_utf8": "C41657180ACC0650621CA8096EB1E812B7B46B703C01186901976C8AEE436C85",
+      "lines": 31
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Scoring/Gauge/BmsGaugeProfileFactory.cs",
+      "git_blob": "4ed4577300d739a147f500db93e11e50300791a0",
+      "sha256_lf_utf8": "81A57D245C2F63A0A8DEE34D0CF7A46633437DA212A93C1D54BFF1C1387A0337",
+      "lines": 166
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Scoring/Gauge/BmsGaugeProfileFamily.cs",
+      "git_blob": "f6ae16b10b12e4a21ce487c8db94a4ec61df8c88",
+      "sha256_lf_utf8": "4080BCF5B7A504DC4D2B59EC04DA212F7C7F92E6EDCBFDE40AFFB4DE3B80FC9A",
+      "lines": 25
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/Gameplay/Scoring/Gauge/BmsGaugeType.cs",
+      "git_blob": "984298373895f151006b9c6f16ec2c77ff8549a4",
+      "sha256_lf_utf8": "EB660CC852C2EDCF890CDFEE6BEEE00B90C530E07206854002BDC4222BB192C3",
+      "lines": 15
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/UI/Gameplay/BmsPlayfield.Replay.cs",
+      "git_blob": "5d1911f8299911eba4ee7967c702779c6f598a7d",
+      "sha256_lf_utf8": "09F79651F7EDB5F966E76900F9BC7FFC203975C049457248A967D4B11B07B7CE",
+      "lines": 82
+    },
+    {
+      "repository": "BmsRuleset",
+      "commit": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+      "path": "osu.Game.Rulesets.BmsRuleset/UI/Gameplay/BmsPlayfield.cs",
+      "git_blob": "bbaefeb52160c284405d226dfaa1d68dae7e37b7",
+      "sha256_lf_utf8": "BF29ABC7EBA5AED63615FD7E226FC9F3E72AE0A9A0A5909ABF761D6543D6C2E0",
+      "lines": 558
+    },
+    {
+      "repository": "EndlessDream",
+      "commit": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "path": "core/src/bms/player/beatoraja/PlayerResource.java",
+      "git_blob": "06ae3b18cc92f6787c529c712c9dcf735ef28ce6",
+      "sha256_lf_utf8": "D81FC594C11EBEFA3E4B92A50B2BF11AD181EAB65B8ED7EDB5361A0609B25D59",
+      "lines": 676
+    },
+    {
+      "repository": "EndlessDream",
+      "commit": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "path": "core/src/bms/player/beatoraja/ScoreData.java",
+      "git_blob": "d2d90059671408df5e670a13691002444f05173f",
+      "sha256_lf_utf8": "195784878EFCAC2E6316E6499D6E87D234AE4BEDEC01150FB341B5E7F1413E07",
+      "lines": 701
+    },
+    {
+      "repository": "EndlessDream",
+      "commit": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "path": "core/src/bms/player/beatoraja/play/BMSPlayer.java",
+      "git_blob": "8b3de8d0d84dcd52312b8dda45edfedad768563a",
+      "sha256_lf_utf8": "09C556242846F7416D2F927E4D22E6A8955064435E8BD76574ABAA829ECF5782",
+      "lines": 1223
+    },
+    {
+      "repository": "EndlessDream",
+      "commit": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "path": "core/src/bms/player/beatoraja/play/BMSPlayerRule.java",
+      "git_blob": "86a228ee731af8126b556c228c149377e74b25a1",
+      "sha256_lf_utf8": "A06CEFE53CB95BEDB542F7BA703D62C6999C0B1F260F8325F7A8ECB451378751",
+      "lines": 120
+    },
+    {
+      "repository": "EndlessDream",
+      "commit": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "path": "core/src/bms/player/beatoraja/play/ControlInputProcessor.java",
+      "git_blob": "ab40de5b2ef6ef89eddfdfad4d5963e3ef8ff49f",
+      "sha256_lf_utf8": "43BDB01D1EC4EF2E0B635761048C70F6B562BC68642E7D818EC45829B90A485D",
+      "lines": 306
+    },
+    {
+      "repository": "EndlessDream",
+      "commit": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "path": "core/src/bms/player/beatoraja/play/GaugeProperty.java",
+      "git_blob": "e574853151335bb1fca3d484e02560163125297d",
+      "sha256_lf_utf8": "9C12E47FDBDD3744F3A362549F8F486907D6D782727A38ECACB9BE10FE2E5C44",
+      "lines": 174
+    },
+    {
+      "repository": "EndlessDream",
+      "commit": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "path": "core/src/bms/player/beatoraja/play/GhostBattlePlay.java",
+      "git_blob": "1b68d5d8cc47c61f1d48d11bddfcaf004531286d",
+      "sha256_lf_utf8": "83C08931E1ECFBB2425EA769653D7B25E6B2CF15AF8FAD43AF974755648ABE84",
+      "lines": 22
+    },
+    {
+      "repository": "EndlessDream",
+      "commit": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "path": "core/src/bms/player/beatoraja/play/GrooveGauge.java",
+      "git_blob": "581432c53ccb1d8201ebad89a50180179e170ffa",
+      "sha256_lf_utf8": "BAF4823245E8C4F867A2B65DA086855E1BD7488806B6EF6CD881826DA6ECD87A",
+      "lines": 314
+    },
+    {
+      "repository": "EndlessDream",
+      "commit": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "path": "core/src/bms/player/beatoraja/play/JudgeAlgorithm.java",
+      "git_blob": "14e2bffbcc47708878432a5964b9ae3f3aaf804e",
+      "sha256_lf_utf8": "2A5E1EF2077579B08D765914B753BEEBE7650A12D2F2BF3D8D36ADF1881AEF1F",
+      "lines": 70
+    },
+    {
+      "repository": "EndlessDream",
+      "commit": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "path": "core/src/bms/player/beatoraja/play/JudgeManager.java",
+      "git_blob": "d619d52fa1f7c4a024e1d2de2bab504a4a86536a",
+      "sha256_lf_utf8": "1C0BC19FC9352265853A64205F1727DF14F0C322A54727F573F175A237222724",
+      "lines": 1064
+    },
+    {
+      "repository": "EndlessDream",
+      "commit": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "path": "core/src/bms/player/beatoraja/play/JudgeProperty.java",
+      "git_blob": "d359e6db9fafc83ad1c96ac663c64868eb84f831",
+      "sha256_lf_utf8": "8395206A0064C13E4895D6DB5BE90D2ACA4586C876987933582E679AB1669155",
+      "lines": 321
+    },
+    {
+      "repository": "EndlessDream",
+      "commit": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "path": "core/src/bms/player/beatoraja/play/KeyInputProccessor.java",
+      "git_blob": "4ac493fd36c767fad1b929547a5d571a8db6022b",
+      "sha256_lf_utf8": "632C9440FA11D6C18069F45EB85C76BD7E4E305FD9387D801003244FB6990EB3",
+      "lines": 244
+    },
+    {
+      "repository": "EndlessDream",
+      "commit": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "path": "core/src/bms/player/beatoraja/play/KeySoundProcessor.java",
+      "git_blob": "e457a2ea2ceeac2af7adb4d27fd947c886f5ecea",
+      "sha256_lf_utf8": "69ECC16FABA1F08B2B9F5BAB8A0A501B5D300461EEC94C881C7BCEA23AABAD5C",
+      "lines": 110
+    },
+    {
+      "repository": "EndlessDream",
+      "commit": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "path": "core/src/bms/player/beatoraja/play/LaneProperty.java",
+      "git_blob": "612e43f423ae4faf2a6f57c9a37eae226959f5be",
+      "sha256_lf_utf8": "E7A2CE1D21C95959ED2CD5586EBCC46103747606B430E7B958E28732DD811A6C",
+      "lines": 138
+    },
+    {
+      "repository": "EndlessDream",
+      "commit": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "path": "core/src/bms/player/beatoraja/play/LaneRenderer.java",
+      "git_blob": "2039f6c0159905c0cb33b5197a1a65779eb4087a",
+      "sha256_lf_utf8": "4228B6B18CCA392C322A0CFB281BB4DF7F509B9181934860BD66138808F735BD",
+      "lines": 714
+    },
+    {
+      "repository": "EndlessDream",
+      "commit": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "path": "core/src/bms/player/beatoraja/play/PlaySkin.java",
+      "git_blob": "3296fdd600ba2a1f93c4a0513b16c1cb2e3f7a92",
+      "sha256_lf_utf8": "9895CB67864D9883C492FBF316F844700FA1BF77F0161C15772619200173D5BA",
+      "lines": 173
+    },
+    {
+      "repository": "EndlessDream",
+      "commit": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "path": "core/src/bms/player/beatoraja/play/PomyuCharaProcessor.java",
+      "git_blob": "d50142ec0c62cea9a7b1f36e9bcb92ad180f9340",
+      "sha256_lf_utf8": "56AFC677C56500234AC22978F59F5C87548A90E05DFA891A1E582D9924B6FBF0",
+      "lines": 75
+    },
+    {
+      "repository": "EndlessDream",
+      "commit": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "path": "core/src/bms/player/beatoraja/play/PracticeConfiguration.java",
+      "git_blob": "3872367326ad83c6030891c24000d6fdd180ec06",
+      "sha256_lf_utf8": "8986FDFB52299F52010E73F4D25A88DD6A052660E7356B47F5EA9E92B025DE47",
+      "lines": 340
+    },
+    {
+      "repository": "EndlessDream",
+      "commit": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "path": "core/src/bms/player/beatoraja/play/RhythmTimerProcessor.java",
+      "git_blob": "f427b477150079c592fb4c9056c72fe682238ed7",
+      "sha256_lf_utf8": "3F56C8B39D832345A13974723A95931BD3A542C95AD155E8346987E41747763C",
+      "lines": 86
+    },
+    {
+      "repository": "EndlessDream",
+      "commit": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "path": "core/src/bms/player/beatoraja/play/SkinBGA.java",
+      "git_blob": "b83666d2d352c519aaefba1add8866367166b400",
+      "sha256_lf_utf8": "358E023358050155E30CA0D1A497471422D85620C07F85CA486D4A34C97F531B",
+      "lines": 66
+    },
+    {
+      "repository": "EndlessDream",
+      "commit": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "path": "core/src/bms/player/beatoraja/play/SkinGauge.java",
+      "git_blob": "8ef439faed3849fc2954c4f84b8f5e7e7a336eca",
+      "sha256_lf_utf8": "FB85EFB6D5638B1DC6AD9750915461A7007A41CDB67C8B0C49578BE0C565AC1C",
+      "lines": 275
+    },
+    {
+      "repository": "EndlessDream",
+      "commit": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "path": "core/src/bms/player/beatoraja/play/SkinHidden.java",
+      "git_blob": "3a1470ae3f3b4f356887aa42bd7e3e458cd3b5d9",
+      "sha256_lf_utf8": "20EE96CFBD3F4898EFEC0EDF67D0F9C0623ABE456DF8E4ABE56D45ED9BD3F9CC",
+      "lines": 164
+    },
+    {
+      "repository": "EndlessDream",
+      "commit": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "path": "core/src/bms/player/beatoraja/play/SkinJudge.java",
+      "git_blob": "f792b4cad84393aaa29a303b730ba872c6a755dc",
+      "sha256_lf_utf8": "17E5669921D43BD976EA725F7450DA95E8CFEEBA31154F00BCA65C221F0CB19F",
+      "lines": 131
+    },
+    {
+      "repository": "EndlessDream",
+      "commit": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "path": "core/src/bms/player/beatoraja/play/SkinNote.java",
+      "git_blob": "cbb9ba179a8762225d2403f8d743961c44ecde3f",
+      "sha256_lf_utf8": "839508087B92D0ACDC698456A27F5888F67794EE8ED3A0190B3C7FC882D72B18",
+      "lines": 207
+    },
+    {
+      "repository": "EndlessDream",
+      "commit": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "path": "core/src/bms/player/beatoraja/play/TargetProperty.java",
+      "git_blob": "12a119e073be9bb502fd5d6e5cca761432e2dffc",
+      "sha256_lf_utf8": "893383B2625EA934F468A5208397A529A39E1CABD944C40B07845FF0A17EA605",
+      "lines": 479
+    },
+    {
+      "repository": "EndlessDream",
+      "commit": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "path": "core/src/bms/player/beatoraja/play/bga/BGAProcessor.java",
+      "git_blob": "8df1d438f2852de8262ea5f75778b303542c94c9",
+      "sha256_lf_utf8": "330E296FA465A823C5D33249F1F0377D61AE90FA63BDDFF16BC6F9451C18B39B",
+      "lines": 402
+    },
+    {
+      "repository": "EndlessDream",
+      "commit": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "path": "core/src/bms/player/beatoraja/play/bga/BGImageProcessor.java",
+      "git_blob": "6046a7ae2871150e47d9a3c9ccbddefd92de7580",
+      "sha256_lf_utf8": "BF83C190E22B8908B48D333FB41244D14EA4526781B2229F8CA3E9996545F774",
+      "lines": 131
+    },
+    {
+      "repository": "EndlessDream",
+      "commit": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "path": "core/src/bms/player/beatoraja/play/bga/FFmpegProcessor.java",
+      "git_blob": "db0827bb3923cb222bbc3679ca6f58626f14576c",
+      "sha256_lf_utf8": "C1689C876E1596DD9BA997B55DB09A857D3C61BED73D53A684FB12292516D2B5",
+      "lines": 298
+    },
+    {
+      "repository": "EndlessDream",
+      "commit": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "path": "core/src/bms/player/beatoraja/play/bga/GdxVideoProcessor.java",
+      "git_blob": "da92d4784c4c1b216c32aaa2c851488bfc7ce3e1",
+      "sha256_lf_utf8": "D7AD2A9F5314CF15F772B288E229E564B91BF9E85F8107A01D3F89A118C60A6C",
+      "lines": 36
+    },
+    {
+      "repository": "EndlessDream",
+      "commit": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "path": "core/src/bms/player/beatoraja/play/bga/MovieProcessor.java",
+      "git_blob": "576977aa4da7b329196450b9531da79e026495aa",
+      "sha256_lf_utf8": "35ACFC9885E5E5ABA0D0D5E88D007653A557D64EB99A0C5A66F4AE4D15DE3D4A",
+      "lines": 30
+    },
+    {
+      "repository": "EndlessDream",
+      "commit": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "path": "core/src/bms/player/beatoraja/result/CourseResult.java",
+      "git_blob": "bdb028d6abeeb44abb611e9206f76a4fd623cd3c",
+      "sha256_lf_utf8": "2D6BDC87451052FF61065735E66A89971DB2F02A91ED10997F87B796881DE78B",
+      "lines": 358
+    },
+    {
+      "repository": "EndlessDream",
+      "commit": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "path": "core/src/bms/player/beatoraja/result/MusicResult.java",
+      "git_blob": "e89b2d43811fd86dae69593904147db6a1e86564",
+      "sha256_lf_utf8": "20DBEE4A4471AB17E5729F500620962E3A281BB197F63055F7A6F7A4B291BC84",
+      "lines": 502
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/BMSDecoder.java",
+      "git_blob": "389a231dd39a405e43773c0bfec844b41a5f1cf0",
+      "sha256_lf_utf8": "473BEE2BE2AD7CDF8E3FC28A472968FF63DA629499ABFE0152973B86E9172E5E",
+      "lines": 634
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/BMSGenerator.java",
+      "git_blob": "0e413f7f4c6701343a9e18cb8cacded267295328",
+      "sha256_lf_utf8": "18000CB767A956262B93DAB83C01540B8FE2C33C64BAA2E964710E00AAA96387",
+      "lines": 26
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/BMSModel.java",
+      "git_blob": "4386d2f89e2197286f07d958dff036e4a43aca1b",
+      "sha256_lf_utf8": "E18908C92C78820A8A0EA8EED8BBB42A03BC4C4BD391D70038352A14EB38AD88",
+      "lines": 614
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/BMSModelUtils.java",
+      "git_blob": "be7c96ed732b7d22bc0e1bc396cceebc25742a2f",
+      "sha256_lf_utf8": "7111204AB2F2024C730E5059DD6B6B50E0A8419BE7053601A58F9FA14B781F78",
+      "lines": 207
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/BMSONDecoder.java",
+      "git_blob": "aeccc311dee78227743c2dd5545985c48de8d684",
+      "sha256_lf_utf8": "038BC9872BC5B4EF9D4D4113A39F0BC7CBA1DF044C3483BF86DD546CA34173C6",
+      "lines": 471
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/ChartDecoder.java",
+      "git_blob": "243e5300313571c359e16006f983de005154441c",
+      "sha256_lf_utf8": "69320EED3B76B7C5D2FDD09086AAA174A16A6A06BECFF319720E75D9A0B988EA",
+      "lines": 185
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/ChartInformation.java",
+      "git_blob": "979542e8bfd32491455955fb0b2f562bad24f71a",
+      "sha256_lf_utf8": "B9B736637167F5032028F2C3653E9465BF5DA39737EA3688B61FDCA3C54B6470",
+      "lines": 20
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/DecodeLog.java",
+      "git_blob": "045386affc580038537d1834bdeabc2ce902be85",
+      "sha256_lf_utf8": "D8517B4EB4153602BDBAF68C32F26D93DE2DDB2B9923615D983C9F14C37ED9BC",
+      "lines": 31
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/EventLane.java",
+      "git_blob": "8d4c1cf6f808fb60a13e7afecac2dc6a8ec2fb52",
+      "sha256_lf_utf8": "9802E9B81962EB0A8B24F984462FB657EC1B49D0A6A8CD6E0E38EEF774E754A7",
+      "lines": 102
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/Lane.java",
+      "git_blob": "e525866a327e27aad1948d2f71ab508fb3fa7ed4",
+      "sha256_lf_utf8": "14A062B7B882781180028E552141021DF8E33EC74D337D1DCBD14B0C6CA0541E",
+      "lines": 71
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/Layer.java",
+      "git_blob": "58c10e60d5f1b9b6f5487db5250e915c45c8988b",
+      "sha256_lf_utf8": "F134D2907EC07C18C2DB789B12299B04C2B419C211311F14C8E1972190A1240D",
+      "lines": 52
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/LongNote.java",
+      "git_blob": "b1aca70137c016d77ff6891217bf426252323dbb",
+      "sha256_lf_utf8": "C9CE504E100323CC33613B1D3070C6BC126496E8987A0772DF52C6BAF4B4860A",
+      "lines": 93
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/MineNote.java",
+      "git_blob": "1ca22ce647688697e03dc0ef8c2119d080c0ea86",
+      "sha256_lf_utf8": "937A4D25DDDBDEFC30BDD66608FC65050E008C1C66DCBBE94D94ACF68D5C0145",
+      "lines": 36
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/Mode.java",
+      "git_blob": "c43486bf5a5aefe0e97befc75e6eb336bb482e1f",
+      "sha256_lf_utf8": "9C0607E6A7ED2665032950A9555BBE1E34ADC8DAF0B49EF990A7DB7148B0C4F2",
+      "lines": 77
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/NormalNote.java",
+      "git_blob": "6e0cc412c51763a8f749e26506b6cba585928798",
+      "sha256_lf_utf8": "F61FD9E2DD4B9280B9EB911F25993B1EFE83893BEA86EE045C073C02D2A7C879",
+      "lines": 20
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/Note.java",
+      "git_blob": "750a1fa8a7dafd69e55ee9a91d94447d0288c60b",
+      "sha256_lf_utf8": "054F46F51AE648959737F5C1FC34980B4CDBE1A8855406F8364E10A9C3D13170",
+      "lines": 154
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/OSUDecoder.java",
+      "git_blob": "4447b8453e070a1e73dc35518f1023f5dc87fe4c",
+      "sha256_lf_utf8": "F2C9A921F00F92042282BA62EEECF4789E636FD01845AA9A549F28905AE3307B",
+      "lines": 395
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/Section.java",
+      "git_blob": "c540ac9fd19b63cd47fea599f60836145359f036",
+      "sha256_lf_utf8": "911D1E7459ACFD0CE0E30E324236AA825BD7E099B791ED9B592A0797333BB656",
+      "lines": 537
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/TimeLine.java",
+      "git_blob": "b6375176ec15eccd27a60a67acc4830b69685264",
+      "sha256_lf_utf8": "7AD96AF98E8DA6C646A48860F4723A221AFF57EE9AF6E074A70E0812CCC7AEBA",
+      "lines": 329
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/bmson/BGA.java",
+      "git_blob": "1d07d8be3e801658f8e58cc4ab2c852bd08b308e",
+      "sha256_lf_utf8": "32A8A21F2F0E8E2082D9690ED992F356B482B6C034C97061ACBA3D73A6D3E63A",
+      "lines": 46
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/bmson/BGAHeader.java",
+      "git_blob": "de4b6cafceaa77a5607bf2e0611e7bf0a059dabe",
+      "sha256_lf_utf8": "4D7434EE67C353115C5F3AFCB99A34000F297A2483CD1A4B4600D55CA2917D51",
+      "lines": 11
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/bmson/BGASequence.java",
+      "git_blob": "0765275948b716fbbe9e3f0ea615d1b2b9ec5d48",
+      "sha256_lf_utf8": "EBFEE817B258ED49C3E3AC74784D2378D58C4BB3AD35CA929A99135198D2B18A",
+      "lines": 7
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/bmson/BMSInfo.java",
+      "git_blob": "4927c9e3d846b688ed09cba181440c50603ed282",
+      "sha256_lf_utf8": "5DB753049B7A70E0A62F25EFD29664472328A73779673A2D2F9043D3918C0E04",
+      "lines": 45
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/bmson/BMSONObject.java",
+      "git_blob": "02a101e7ea67da296c6c0d8872401d509887a2a0",
+      "sha256_lf_utf8": "9C49C60FC6CDFEF879650B2CC553619F5ACDDD2E919F656F0E65C966F8888E26",
+      "lines": 6
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/bmson/BNote.java",
+      "git_blob": "518e94283029becc8e5995039686aeecd24ff466",
+      "sha256_lf_utf8": "4B08C5935591EAC5834F8E8040B1DF970FBC86713CC943043DFD519FCE78E48E",
+      "lines": 13
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/bmson/BarLine.java",
+      "git_blob": "7d78ed4f9667a5fe707edceb00a15885b604215f",
+      "sha256_lf_utf8": "441A0C45DD7E09925228A0CA0B8C9A8D7CCB86B71370F28464EC3B5DB2DD4AA9",
+      "lines": 12
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/bmson/Bmson.java",
+      "git_blob": "ba8257d93ad36353a471d5a8f6f575cb3b65ced7",
+      "sha256_lf_utf8": "83B0C773B92C65A9C93704B057436F79669F2EC6228B5B29867C812D9F5E1C21",
+      "lines": 43
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/bmson/BpmEvent.java",
+      "git_blob": "4b8ca7c5f058512c42be3f574cf154d0eb4f4ae0",
+      "sha256_lf_utf8": "414E6864F2FA9C56AC03868812D080D75FBE17322F27FFD0EF636CD42EED2C6B",
+      "lines": 13
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/bmson/MineChannel.java",
+      "git_blob": "c0e768a3dbcad364ee01129ee7601c3abe584fac",
+      "sha256_lf_utf8": "FC63EC0790DADAE63394DCA8ECEB7B4CB2978A1753C0C4F0C6A1D44A7A142293",
+      "lines": 7
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/bmson/MineNote.java",
+      "git_blob": "2ca7b0e593ebb5b2cce157a956a4e1b91df31c18",
+      "sha256_lf_utf8": "A44F0D75CC3133CF0802C325A433569A6AFB6713CB2639604DDE43A17A06BA56",
+      "lines": 12
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/bmson/Note.java",
+      "git_blob": "c2e3a11339f4ea78a5e0a0d76d5ba9506b94c41f",
+      "sha256_lf_utf8": "76917440F4E0181362AB307EC45945A0938B9EA4C80110C3E7FA59C853240AF4",
+      "lines": 25
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/bmson/ScrollEvent.java",
+      "git_blob": "2114cad2fb0e72a10d0cdaef9188e1f5386e00f7",
+      "sha256_lf_utf8": "45B8FF3DD1461C3A5B0BD3F28DF20C3BE255AB47FE11FF626FB7CFB1D3A6EB68",
+      "lines": 10
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/bmson/Sequence.java",
+      "git_blob": "fe1a08ba3a44c152cca056390f49853b52001300",
+      "sha256_lf_utf8": "E37881350E5B7364AC5730FCE7F454565786FA585C1DDCA0A4492326879970BE",
+      "lines": 7
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/bmson/SoundChannel.java",
+      "git_blob": "5c2b6920272330cb4403f1f3e920d964bf3951c9",
+      "sha256_lf_utf8": "6E5A338C75F3A1DF7A0223A5D8398DD0C40CB8C4CE5B81892982614698F51610",
+      "lines": 12
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/bmson/StopEvent.java",
+      "git_blob": "1bd747201b6681580ce8a41f50a08734b62d130c",
+      "sha256_lf_utf8": "478FA4A04E917ECE77C18CC80AE35C547B40D78AAF628B41E5F96B25018181FE",
+      "lines": 10
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/osu/Colours.java",
+      "git_blob": "0c7b9f87fba3e4625a2708804170df023fd0f9c4",
+      "sha256_lf_utf8": "A76523BCCB99B0E7BEA73A14B622F61F0BB03B9CAB0B8947D877AADDD18BC99B",
+      "lines": 17
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/osu/Difficulty.java",
+      "git_blob": "67bbf5520a3aede9ffaa3e921e12798b6cbd71ff",
+      "sha256_lf_utf8": "9AEFF84FF3B9706B1A7AF7177292CA192548F9A07B2BCD96439A07652027CFDC",
+      "lines": 11
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/osu/Editor.java",
+      "git_blob": "84526a7331dbbb4bd4f91bea87966e233eaae9d6",
+      "sha256_lf_utf8": "8F22200E1A48F34F1DF0FF7A6D662BB9BC860C8563ED91216CA9A817BB5F0012",
+      "lines": 10
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/osu/Events.java",
+      "git_blob": "6fb4f08aa92069fd9f3f83317243372187c6e5cd",
+      "sha256_lf_utf8": "AEC8E8573233C8F72BDB173A8B6DD697F379C51E70F4F0ABABD7AADD00D846CB",
+      "lines": 10
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/osu/General.java",
+      "git_blob": "432ae2b1d7d0b2aed967b1a0b52a4eb31336fa0c",
+      "sha256_lf_utf8": "4767E3C7406FC7A3DDF7CCD3CE2C04D36262C30F6BBD9EE1AD0C98704D7F84AD",
+      "lines": 24
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/osu/HitObjects.java",
+      "git_blob": "66203a4bdb2c81adf1eb500742c6d244c9b976fa",
+      "sha256_lf_utf8": "DAFF92A6946C1AD2E008D7040AC3A92E0446AC5FB65B6F48F70FC824E60CD9CE",
+      "lines": 21
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/osu/Metadata.java",
+      "git_blob": "6bd46be729be4be53e252b2267c2418460b70e18",
+      "sha256_lf_utf8": "8E43DB91DFD4B20907B34574773DE50FC56043E44EAC5373146F9333DC62896D",
+      "lines": 15
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/osu/Osu.java",
+      "git_blob": "d52342d9d99d9b6f4307e656802390345cb0bd1e",
+      "sha256_lf_utf8": "46338FC07A27C596332E045A61E842EE2BB78BDC7A431F7DFDFDB4D4CD4F581B",
+      "lines": 526
+    },
+    {
+      "repository": "jbms-parser",
+      "commit": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "path": "src/bms/model/osu/TimingPoints.java",
+      "git_blob": "bef6969bf4afc5c5eea4e35202909595bde3fe2a",
+      "sha256_lf_utf8": "894D493D55B3FFEF6FC5D36B048660D518FBF5BFB4489BC2AC5F82234AD27F97",
+      "lines": 13
+    },
+    {
+      "repository": "osu",
+      "commit": "9a10d935b05a3b896f4bd811d620f2023331db93",
+      "path": "osu.Game/Rulesets/Scoring/ScoreProcessor.cs",
+      "git_blob": "32d58b29e1e6564a9f8e9ec75ea7a729160440b1",
+      "sha256_lf_utf8": "E59C4E75CB1B0B5178E140195B423F7000CAAA3B56C9441A8B92C7BCC032C2E5",
+      "lines": 668
+    },
+    {
+      "repository": "osu",
+      "commit": "9a10d935b05a3b896f4bd811d620f2023331db93",
+      "path": "osu.Game/Screens/Play/Player.cs",
+      "git_blob": "77f4a6a3da15ee837ed1598fe4710444823cbf33",
+      "sha256_lf_utf8": "01FEB551D864C598E1FAC4255D38E3E5D5162B2B8BFBCD7F078997CF3BDFCEC5",
+      "lines": 1322
+    }
+  ]
+}

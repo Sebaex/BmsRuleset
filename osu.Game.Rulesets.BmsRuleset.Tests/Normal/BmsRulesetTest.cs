@@ -241,9 +241,9 @@ public class BmsRulesetTest
         Assert.That(exRankAttr.AdjustedValue, Is.EqualTo(200f));
         Assert.That(exRankAttr.MaxValue, Is.EqualTo(200f));
 
-        // EXRANK 200 -> rate 1.5 -> 7K head PGREAT 20 * 1.5 = +/-30ms.
+        // Original Java windows.csv: DEFEXRANK 200 -> rank 150 -> PGREAT +/-31.5ms.
         var metrics = exRankAttr.AdditionalMetrics.ToDictionary(m => m.Name.ToString(), m => m.Value.ToString());
-        Assert.That(metrics["Normal note PGREAT"], Is.EqualTo("-30 to +30 ms"));
+        Assert.That(metrics["Normal note PGREAT"], Is.EqualTo($"-{31.5:0.##} to +{31.5:0.##} ms"));
     }
 
     [Test]
@@ -477,10 +477,10 @@ public class BmsRulesetTest
 
         var metrics = rank.AdditionalMetrics.ToDictionary(metric => metric.Name.ToString(), metric => metric.Value.ToString());
 
-        Assert.That(metrics["Normal note PGREAT"], Is.EqualTo("-20 to +20 ms"));
-        Assert.That(metrics["Scratch BAD"], Is.EqualTo("-230 to +290 ms"));
+        Assert.That(metrics["Normal note PGREAT"], Is.EqualTo("-21 to +21 ms"));
+        Assert.That(metrics["Scratch BAD"], Is.EqualTo("-200 to +200 ms"));
         Assert.That(metrics["LN tail PGREAT"], Is.EqualTo("-120 to +120 ms"));
-        Assert.That(metrics["Scratch LN tail GOOD"], Is.EqualTo("-210 to +210 ms"));
+        Assert.That(metrics["Scratch LN tail GOOD"], Is.EqualTo("-120 to +120 ms"));
     }
 
     [Test]

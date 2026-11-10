@@ -1,0 +1,20 @@
+{
+  "scope": "LR2-JF successor inventory; historical inventories remain unchanged",
+  "defects": [
+    {
+      "id": "JF-VARIABLE-01",
+      "status": "Confirmed, deferred by project decision",
+      "scope": "Heterogeneous-rate Multi-BAD",
+      "evidence": "research/heterogeneous-reproduction.json; preserved U1-C and TM-F09901",
+      "effect": "A future note with its own GOOD window can be consumed as additional BAD using the primary note table",
+      "java_parity": "Not applicable: no equivalent per-note temporal rate in pinned Java",
+      "fixed_judge_successor": "BmsColumnNoteIndexTest.DurationFixedJudgeKeepsEarlierTieAndLeavesGoodNeighboursPending",
+      "resolution": "Not authorized in LR2-JF; existing production collector preserved"
+    }
+  ],
+  "uncertified_scopes": [
+    "Variable-rate selection under window modifiers preserves its previous C# policy; not certified as Java behavior",
+    "Complete Java player state, replay/rewind and arbitrary charts beyond finite component oracles",
+    "HCN frame catch-up difference documented in C04 remains intentional"
+  ]
+}

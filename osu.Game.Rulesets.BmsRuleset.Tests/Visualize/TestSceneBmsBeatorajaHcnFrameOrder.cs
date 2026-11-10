@@ -54,11 +54,11 @@ public partial class TestSceneBmsBeatorajaHcnFrameOrder : BmsPlayerTestScene
     public void BodyBeforeOtherColumnBadAtGaugeCeiling([Values(1, 2)] int column)
     {
         load(column, 320, false);
-        // NORMAL starts at 20%; TOTAL320 / 4 endpoints gives +80% per PG, +40% body, BAD -3%.
+        // LR2 Normal starts at 20%; TOTAL320 / 4 endpoints gives +80% per PG, +40% body, BAD -4%.
         checkpoint(3200, 1, [HitResult.Perfect], [3000], [0]);
-        checkpoint(3201, .97, [HitResult.Perfect, HitResult.Ok], [3000, 3201], [0, -149], [1, .97]);
+        checkpoint(3201, .96, [HitResult.Perfect, HitResult.Ok], [3000, 3201], [0, -149], [1, .96]);
         checkpoint(3200, 1, [HitResult.Perfect], [3000], [0]);
-        checkpoint(3201, .97, [HitResult.Perfect, HitResult.Ok], [3000, 3201], [0, -149], [1, .97]);
+        checkpoint(3201, .96, [HitResult.Perfect, HitResult.Ok], [3000, 3201], [0, -149], [1, .96]);
         assertTimeline();
     }
 
@@ -66,11 +66,11 @@ public partial class TestSceneBmsBeatorajaHcnFrameOrder : BmsPlayerTestScene
     public void UnsaturatedBodyAndOtherColumnBadApplyExactlyOneTick()
     {
         load(1, 12, false);
-        // Without clipping, one +1.5% body and one -3% BAD must net -1.5% in either order.
+        // Without clipping, one +1.5% body and one -4% BAD must net -2.5% in either order.
         checkpoint(3200, .23, [HitResult.Perfect], [3000], [0]);
-        checkpoint(3201, .215, [HitResult.Perfect, HitResult.Ok], [3000, 3201], [0, -149]);
+        checkpoint(3201, .205, [HitResult.Perfect, HitResult.Ok], [3000, 3201], [0, -149]);
         checkpoint(3200, .23, [HitResult.Perfect], [3000], [0]);
-        checkpoint(3201, .215, [HitResult.Perfect, HitResult.Ok], [3000, 3201], [0, -149]);
+        checkpoint(3201, .205, [HitResult.Perfect, HitResult.Ok], [3000, 3201], [0, -149]);
         assertTimeline();
     }
 
@@ -79,11 +79,11 @@ public partial class TestSceneBmsBeatorajaHcnFrameOrder : BmsPlayerTestScene
     {
         load(1, 320, true);
         // The first held millisecond offsets one released millisecond. Body damage comes before
-        // the other column's +80% PG, which clamps to 100%; reversing them leaves 98.5%.
+        // the other column's +80% PG, which clamps to 100%; reversing them leaves 98%.
         checkpoint(3202, .94, [HitResult.Perfect, HitResult.Meh], [3000, 3001], [0, -1999]);
-        checkpoint(3203, 1, [HitResult.Perfect, HitResult.Meh, HitResult.Perfect], [3000, 3001, 3203], [0, -1999, 0], [.925, 1]);
+        checkpoint(3203, 1, [HitResult.Perfect, HitResult.Meh, HitResult.Perfect], [3000, 3001, 3203], [0, -1999, 0], [.92, 1]);
         checkpoint(3202, .94, [HitResult.Perfect, HitResult.Meh], [3000, 3001], [0, -1999]);
-        checkpoint(3203, 1, [HitResult.Perfect, HitResult.Meh, HitResult.Perfect], [3000, 3001, 3203], [0, -1999, 0], [.925, 1]);
+        checkpoint(3203, 1, [HitResult.Perfect, HitResult.Meh, HitResult.Perfect], [3000, 3001, 3203], [0, -1999, 0], [.92, 1]);
         assertTimeline();
     }
 

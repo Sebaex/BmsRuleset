@@ -1,6 +1,7 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
@@ -17,6 +18,7 @@ using osu.Game.Rulesets.BmsRuleset.Gameplay.Replays;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.Scoring;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.Scoring.Gauge;
 using osu.Game.Rulesets.BmsRuleset.IO.Input;
+using osu.Game.Rulesets.BmsRuleset.Tests.Normal.Gameplay.Judgement;
 using osu.Game.Rulesets.BmsRuleset.UI.Gameplay;
 using osu.Game.Rulesets.BmsRuleset.UI.Gameplay.Drawables.Objects;
 using osu.Game.Rulesets.Mods;
@@ -48,10 +50,10 @@ public partial class TestSceneBmsLongNoteJudgement : BmsPlayerTestScene
     private static readonly double? very_slow_press = 340;
     private static readonly double? bad_fast_press = -150;
     private static readonly double? bad_slow_press = 180;
-    private const double bad_fast_edge = -165;
-    private const double before_bad_fast_edge = -166;
-    private const double bad_slow_edge = 210;
-    private const double after_bad_slow_edge = 211;
+    private const double bad_fast_edge = -200;
+    private const double before_bad_fast_edge = -200.001;
+    private const double bad_slow_edge = 200;
+    private const double after_bad_slow_edge = 200.001;
 
     private static readonly double? normal_release = 0;
     private static readonly double? fast_release = -160;
@@ -486,9 +488,9 @@ public partial class TestSceneBmsLongNoteJudgement : BmsPlayerTestScene
         if (firstPress == null)
             return null;
 
-        var headTable = BmsJudgementProfileProvider.GetTable(BmsLayoutVariant.Bme7K, columns[0], rank: 2, tail: false);
+        var headTable = oracleHead;
 
-        if (headTable.ResultForOffset(firstPress.Value) == HitResult.None)
+        if (acceptedHeadResult(firstPress.Value) == HitResult.None)
             return null;
 
         var firstFastRelease = testCase.FirstReleaseOffsetAfter(firstPress.Value, onlyBeforeTail: true);
@@ -496,7 +498,7 @@ public partial class TestSceneBmsLongNoteJudgement : BmsPlayerTestScene
         if (firstFastRelease == null)
             return null;
 
-        var tailTable = BmsJudgementProfileProvider.GetTable(BmsLayoutVariant.Bme7K, columns[0], rank: 2, tail: true);
+        var tailTable = oracleTail;
 
         if (tailResultForRelease(mode, firstPress.Value, firstFastRelease.Value, tailTable) != HitResult.Meh)
             return null;
@@ -591,14 +593,14 @@ public partial class TestSceneBmsLongNoteJudgement : BmsPlayerTestScene
     // tail table and can replace the head offset when the release-side miss is worse.
     private static IReadOnlyList<HitResult> expectedJudgementSequence(LongNoteVisualCase testCase, BmsLongNoteMode mode)
     {
-        var headTable = BmsJudgementProfileProvider.GetTable(BmsLayoutVariant.Bme7K, columns[0], rank: 2, tail: false);
-        var tailTable = BmsJudgementProfileProvider.GetTable(BmsLayoutVariant.Bme7K, columns[0], rank: 2, tail: true);
+        var headTable = oracleHead;
+        var tailTable = oracleTail;
         var firstPress = testCase.FirstPressOffset;
 
         if (firstPress == null)
             return missedLongNoteSequence(mode, emptyPoor: false);
 
-        var headResult = headTable.ResultForOffset(firstPress.Value);
+        var headResult = acceptedHeadResult(firstPress.Value);
 
         if (headResult == HitResult.None)
         {
@@ -642,7 +644,7 @@ public partial class TestSceneBmsLongNoteJudgement : BmsPlayerTestScene
             return tailResultForRelease(releaseFromHead, tailTable);
 
         var tailOffset = releaseFromHead - long_note_duration;
-        var headTable = BmsJudgementProfileProvider.GetTable(BmsLayoutVariant.Bme7K, columns[0], rank: 2, tail: false);
+        var headTable = oracleHead;
         var headResult = headTable.ResultForOffset(firstPress);
         var releaseResult = tailTable.ResultForOffset(tailOffset);
         var result = (HitResult)Math.Min((int)headResult, (int)(releaseResult == HitResult.None ? HitResult.Meh : releaseResult));
@@ -670,12 +672,12 @@ public partial class TestSceneBmsLongNoteJudgement : BmsPlayerTestScene
     private static IEnumerable<HealthEvent> healthEvents(LongNoteVisualCase testCase, BmsLongNoteMode mode, IReadOnlyList<HitResult> sequence)
     {
         var firstPress = testCase.FirstPressOffset;
-        var headTable = BmsJudgementProfileProvider.GetTable(BmsLayoutVariant.Bme7K, columns[0], rank: 2, tail: false);
+        var headTable = oracleHead;
 
         if (mode == BmsLongNoteMode.HellChargeNote
-            && (firstPress == null || headTable.ResultForOffset(firstPress.Value) == HitResult.None))
+            && (firstPress == null || acceptedHeadResult(firstPress.Value) == HitResult.None))
         {
-            var tailTable = BmsJudgementProfileProvider.GetTable(BmsLayoutVariant.Bme7K, columns[0], rank: 2, tail: true);
+            var tailTable = oracleTail;
             var headPoorOffset = headTable.SlowWindowFor(HitResult.Ok) + 0.001;
             var sequenceIndex = 0;
 
@@ -718,12 +720,12 @@ public partial class TestSceneBmsLongNoteJudgement : BmsPlayerTestScene
         if (bodyStartOffset == null && firstPress == null)
             yield break;
 
-        var headTable = BmsJudgementProfileProvider.GetTable(BmsLayoutVariant.Bme7K, columns[0], rank: 2, tail: false);
+        var headTable = oracleHead;
 
-        if (bodyStartOffset == null && headTable.ResultForOffset(firstPress!.Value) == HitResult.None)
+        if (bodyStartOffset == null && acceptedHeadResult(firstPress!.Value) == HitResult.None)
             yield break;
 
-        var tailTable = BmsJudgementProfileProvider.GetTable(BmsLayoutVariant.Bme7K, columns[0], rank: 2, tail: true);
+        var tailTable = oracleTail;
         var offset = bodyStartOffset ?? Math.Max(0, firstPress!.Value);
         var accumulator = 0d;
         var boundaries = testCase.Inputs
@@ -787,9 +789,28 @@ public partial class TestSceneBmsLongNoteJudgement : BmsPlayerTestScene
         if (firstReleaseBeforeTail == null || firstReleaseBeforeTail.Value > offset)
             return false;
 
-        var headTable = BmsJudgementProfileProvider.GetTable(BmsLayoutVariant.Bme7K, columns[0], rank: 2, tail: false);
-        return headTable.ResultForOffset(firstPress.Value) != HitResult.None
+        var headTable = oracleHead;
+        return acceptedHeadResult(firstPress.Value) != HitResult.None
                && tailTable.ResultForOffset(firstReleaseBeforeTail.Value - long_note_duration) is HitResult.Perfect or HitResult.Great or HitResult.Good;
+    }
+
+    private static readonly BmsJudgementWindowTable oracleHead = readJavaWindow("NOTE");
+    private static readonly BmsJudgementWindowTable oracleTail = readJavaWindow("LONGNOTE_END");
+
+    private static HitResult acceptedHeadResult(double offset)
+        // JudgeManager's late-LN predicate rejects heads beyond GOOD, even inside BAD.
+        => offset > 100 ? HitResult.None : oracleHead.ResultForOffset(offset);
+
+    private static BmsJudgementWindowTable readJavaWindow(string table)
+    {
+        HitResult[] results = [HitResult.Perfect, HitResult.Great, HitResult.Good, HitResult.Ok, HitResult.Miss];
+        var rows = BmsExecutedJavaJudgementTest.ReadOracle("windows")
+            .Where(row => row[0] == "rank" && row[1] == "2" && row[2] == table)
+            .Select(row => new BmsJudgementWindow(results[int.Parse(row[3], CultureInfo.InvariantCulture)],
+                double.Parse(row[4], CultureInfo.InvariantCulture) / 1000,
+                double.Parse(row[5], CultureInfo.InvariantCulture) / 1000)).ToArray();
+        Assert.That(rows, Has.Length.EqualTo(table == "NOTE" ? 5 : 4));
+        return new BmsJudgementWindowTable(rows);
     }
 
     private static IReadOnlyList<LongNoteVisualCase> cases { get; } = createCases();
@@ -825,13 +846,22 @@ public partial class TestSceneBmsLongNoteJudgement : BmsPlayerTestScene
     {
         public double HealthAfter(double startingHealth)
         {
-            var calculator = new BmsGaugeCalculator(BmsGaugeProfileFactory.Create(BmsGaugeType.Normal), 160, cases.Count * (Mode == BmsLongNoteMode.LongNote ? 1 : 2));
+            var perfectGain = 1.6 / (cases.Count * (Mode == BmsLongNoteMode.LongNote ? 1 : 2));
             var health = startingHealth;
 
             foreach (var result in HealthEvents.OrderBy(e => e.Offset))
             {
-                var delta = calculator.GetDeltaFor(result.Result, health) * result.Scale;
-                health = calculator.ApplyDelta(health, delta);
+                // C03's LR2 Normal contract is independent of the production calculator/profile.
+                var delta = result.Result switch
+                {
+                    HitResult.Perfect or HitResult.Great => perfectGain,
+                    HitResult.Good => perfectGain / 2,
+                    HitResult.Ok => -.04,
+                    HitResult.Meh => -.06,
+                    HitResult.Miss => -.02,
+                    _ => 0,
+                };
+                health = health <= 0 ? 0 : Math.Clamp(health + delta * result.Scale, .02, 1);
             }
 
             return health;

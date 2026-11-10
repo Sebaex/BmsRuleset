@@ -1,11 +1,15 @@
 using System.Linq;
 using NUnit.Framework;
+using osu.Framework.Bindables;
+using osu.Game.Beatmaps;
 using osu.Game.Configuration;
 using osu.Game.IO.Serialization;
 using osu.Game.Online.API;
 using osu.Game.Rulesets.BmsRuleset.Beatmaps;
 using osu.Game.Rulesets.BmsRuleset.Beatmaps.Objects;
 using osu.Game.Rulesets.BmsRuleset.BmsParser;
+using osu.Game.Rulesets.BmsRuleset.Gameplay.Course;
+using osu.Game.Overlays.Settings;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.Mods.Gauge;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.Scoring;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.Scoring.Gauge;
@@ -21,12 +25,10 @@ public class BmsModGaugeAutoShiftTest
 {
 
     /// <summary>
-    ///     Builds an Auto Gauge whose resolved worst gauge is ExHard: the six-tier chain is
-    ///     installed via <see cref="BmsModGaugeAutoShift.ApplyToHealthProcessor" />, then a single
-    ///     BAD (Ok) fails Hazard (survival gauge, −1) so the first non-failed survival tier
-    ///     (ExHard) becomes the resolved worst once <see cref="BmsHealthProcessor.HasPassedAtEnd" /> runs.
+    ///     LR2's N=1 damage multiplier is ten: one BAD kills Hazard and ExHard,
+    ///     leaving Hard at 40%. Attribution must follow that surviving tier.
     /// </summary>
-    private static (BmsModGaugeAutoShift autoGauge, BmsHealthProcessor hp) createAutoGaugeResolvedToExHard()
+    private static (BmsModGaugeAutoShift autoGauge, BmsHealthProcessor hp) createAutoGaugeResolvedToHard()
     {
         var hp = new BmsHealthProcessor();
         var autoGauge = new BmsModGaugeAutoShift();
@@ -43,6 +45,8 @@ public class BmsModGaugeAutoShiftTest
         hp.ApplyResult(new JudgementResult(beatmap.HitObjects[0], beatmap.HitObjects[0].CreateJudgement())
             { Type = HitResult.Ok });
         hp.HasPassedAtEnd();
+        Assert.That(hp.WorstGaugeType, Is.EqualTo(BmsGaugeType.Hard));
+        Assert.That(hp.Health.Value, Is.EqualTo(1 - .06 * 10).Within(1e-7));
 
         return (autoGauge, hp);
     }
@@ -59,22 +63,21 @@ public class BmsModGaugeAutoShiftTest
     [Test]
     public void TestAutoGaugeAppendsResolvedGaugeModOnApplyToScore()
     {
-        var (autoGauge, hp) = createAutoGaugeResolvedToExHard();
-        Assert.That(hp.WorstGaugeType, Is.EqualTo(BmsGaugeType.ExHard));
+        var (autoGauge, hp) = createAutoGaugeResolvedToHard();
+        Assert.That(hp.WorstGaugeType, Is.EqualTo(BmsGaugeType.Hard));
 
         var score = new ScoreInfo { Mods = [autoGauge] };
 
         autoGauge.ApplyToScore(score);
 
-        // Auto Gauge is preserved; the resolved tier mod (ExHard) is appended alongside.
-        Assert.That(score.Mods, Has.One.TypeOf<BmsModExHardGauge>());
+        Assert.That(score.Mods, Has.One.TypeOf<BmsModHardGauge>());
         Assert.That(score.Mods, Contains.Item(autoGauge));
     }
 
     [Test]
     public void TestAutoGaugeAttributionDispatchedFromPopulateScore()
     {
-        var (autoGauge, _) = createAutoGaugeResolvedToExHard();
+        var (autoGauge, _) = createAutoGaugeResolvedToHard();
 
         var scoreProcessor = new BmsScoreProcessor();
         scoreProcessor.Mods.Value = new Mod[] { autoGauge };
@@ -82,19 +85,19 @@ public class BmsModGaugeAutoShiftTest
 
         scoreProcessor.PopulateScore(score);
 
-        Assert.That(score.Mods, Has.One.TypeOf<BmsModExHardGauge>());
+        Assert.That(score.Mods, Has.One.TypeOf<BmsModHardGauge>());
     }
 
     [Test]
     public void TestAutoGaugeAttributionIsIdempotent()
     {
-        var (autoGauge, _) = createAutoGaugeResolvedToExHard();
+        var (autoGauge, _) = createAutoGaugeResolvedToHard();
         var score = new ScoreInfo { Mods = [autoGauge] };
 
         autoGauge.ApplyToScore(score);
         autoGauge.ApplyToScore(score);
 
-        Assert.That(score.Mods.Count(m => m is BmsModExHardGauge), Is.EqualTo(1));
+        Assert.That(score.Mods.Count(m => m is BmsModHardGauge), Is.EqualTo(1));
     }
 
     [Test]
@@ -124,7 +127,7 @@ public class BmsModGaugeAutoShiftTest
         autoGauge.ApplyToScore(score);
 
         Assert.That(score.Mods, Has.None.TypeOf<BmsModHazardGauge>());
-        Assert.That(score.Mods, Has.One.TypeOf<BmsModExHardGauge>());
+        Assert.That(score.Mods, Has.One.TypeOf<BmsModHardGauge>());
         Assert.That(score.Mods, Contains.Item(autoGauge));
     }
 
@@ -141,9 +144,14 @@ public class BmsModGaugeAutoShiftTest
     {
         var hp = new BmsHealthProcessor();
         hp.ApplyBeatmap(new BmsBeatmap { LayoutVariant = BmsLayoutVariant.Bme7K });
-        hp.ConfigureGaugeContext(true, BmsGaugeProfileFamily.FiveKeys);
-
-        new BmsModGaugeAutoShift().ApplyToHealthProcessor(hp);
+        var stage = new BmsResolvedCourseStage(new BmsCourseStage("stage", "1", BeatmapHash: "course-seed"), new BeatmapInfo { Hash = "course-seed" });
+        var session = new BmsCourseSession(
+            new BmsCourseDefinition("course", "table", "course", [stage.Definition], ["gauge_5k"]),
+            [stage], [new BmsModGaugeAutoShift()], BmsGaugeType.ExHardClass);
+        session.BeginCurrentStage();
+        session.ConfigureHealthProcessor(hp);
+        var saved = new APIMod(session.Mods.OfType<BmsModGaugeAutoShift>().Single().DeepClone()).Serialize().Deserialize<APIMod>();
+        ((BmsModGaugeAutoShift)saved.ToMod(new BmsRuleset())).ApplyToHealthProcessor(hp);
 
         Assert.Multiple(() =>
         {
@@ -154,6 +162,9 @@ public class BmsModGaugeAutoShiftTest
                 BmsGaugeType.Class,
             ]));
             Assert.That(hp.GaugeProfile.PerfectGain, Is.EqualTo(0.0001).Within(0.000001));
+            Assert.That(hp.IsCourseGaugeMode, Is.True);
+            Assert.That(hp.ConfiguredProfileFamily, Is.EqualTo(BmsGaugeProfileFamily.FiveKeys));
+            Assert.That(hp.CurrentGaugeStates.Select(s => s.Health), Is.All.EqualTo(1));
         });
     }
 
@@ -195,13 +206,106 @@ public class BmsModGaugeAutoShiftTest
                 new BmsGaugeStateSnapshot(BmsGaugeType.Class, 0.81, false),
             }));
             Assert.That(restored.ExHardClassHealth.Value, Is.Null);
+            Assert.That(restored.GasMode.Value, Is.EqualTo(BmsGasLowerLimit.Easy));
         });
-
-        foreach (var control in restored.CreateSettingsControls())
+        var controls = restored.CreateSettingsControls().ToArray();
+        try
         {
-            Assert.That(control.IsPresent, Is.False);
-            control.Dispose();
+            Assert.That(controls, Has.Length.EqualTo(5));
+            var carriedHealth = controls.OfType<BmsCourseGaugeSetting<double?>>().ToArray();
+            Assert.That(carriedHealth, Has.Length.EqualTo(3));
+            assertHiddenCarry(restored.ClassHealth);
+            assertHiddenCarry(restored.ExClassHealth);
+            assertHiddenCarry(restored.ExHardClassHealth);
+            var family = controls.OfType<BmsCourseGaugeSetting<BmsGaugeProfileFamily?>>().Single();
+            Assert.That(family.SettingSourceObject, Is.SameAs(restored));
+            Assert.That(family.Current.Value, Is.EqualTo(BmsGaugeProfileFamily.Lr2));
+            Assert.That(family.CanBeShown.Value, Is.False);
+            Assert.That(family.IsPresent, Is.False);
+            var limit = controls.OfType<SettingsDropdown<BmsGasLowerLimit>>().Single();
+            Assert.That(limit.CanBeShown.Value, Is.True);
+            Assert.That(limit.IsPresent, Is.True);
+            Assert.That(limit.Current.Value, Is.EqualTo(BmsGasLowerLimit.Easy));
+            restored.GasMode.Value = BmsGasLowerLimit.Normal;
+            Assert.That(limit.Current.Value, Is.EqualTo(BmsGasLowerLimit.Normal));
+            restored.GasMode.Value = BmsGasLowerLimit.Easy;
+
+            void assertHiddenCarry(Bindable<double?> source)
+            {
+                var original = source.Value;
+                try
+                {
+                    source.Value = .314159;
+                    var control = carriedHealth.Single(c => c.Current.Value == .314159);
+                    Assert.That(control.SettingSourceObject, Is.SameAs(restored));
+                    Assert.That(control.CanBeShown.Value, Is.False);
+                    Assert.That(control.IsPresent, Is.False);
+                }
+                finally { source.Value = original; }
+            }
         }
+        finally { foreach (var control in controls) control.Dispose(); }
+    }
+
+    [TestCase(BmsGasLowerLimit.Normal)]
+    [TestCase(BmsGasLowerLimit.Easy)]
+    [TestCase(BmsGasLowerLimit.Assist)]
+    public void TestGasLowerLimitSurvivesCloneAndSerialisation(BmsGasLowerLimit limit)
+    {
+        // Retain a real Course seed, as in the original serialization fixture, to isolate
+        // lower-limit preservation from the framework's unrelated empty-settings JSON path.
+        var mod = new BmsModGaugeAutoShift { GasMode = { Value = limit }, ClassHealth = { Value = .81 } };
+        var clone = (BmsModGaugeAutoShift)mod.DeepClone();
+        var api = new APIMod(clone);
+        var restored = (BmsModGaugeAutoShift)api.Serialize().Deserialize<APIMod>().ToMod(new BmsRuleset());
+        TestContext.WriteLine($"GAS_SERIALISATION requested={limit} default={mod.GasMode.Default} clone={clone.GasMode.Value} settings=[{string.Join(",", api.Settings.Keys)}] restored={restored.GasMode.Value}");
+        Assert.Multiple(() =>
+        {
+            Assert.That(mod.GasMode.Default, Is.EqualTo(BmsGasLowerLimit.Easy), "The serialized default matches a freshly constructed mod.");
+            Assert.That(api.Settings.ContainsKey("gas_mode"), Is.EqualTo(limit != BmsGasLowerLimit.Easy), "Only the actual default may be omitted.");
+            Assert.That(clone.GasMode.Value, Is.EqualTo(limit), "Clone preserves the selected lower limit.");
+            Assert.That(restored.GasMode.Value, Is.EqualTo(limit), "Serialisation preserves the selected lower limit.");
+            Assert.That(restored.ClassHealth.Value, Is.EqualTo(.81), "The carried Course seed remains independent of the lower limit.");
+        });
+    }
+
+    [Test]
+    public void TestGasLowerLimitResetUsesConstructionDefault()
+    {
+        var mod = new BmsModGaugeAutoShift();
+        Assert.That(mod.GasMode.Value, Is.EqualTo(BmsGasLowerLimit.Easy));
+        Assert.That(mod.GasMode.IsDefault, Is.True);
+        mod.GasMode.Value = BmsGasLowerLimit.Assist;
+        Assert.That(mod.GasMode.IsDefault, Is.False);
+        mod.GasMode.SetDefault();
+        Assert.That(mod.GasMode.Value, Is.EqualTo(BmsGasLowerLimit.Easy));
+        Assert.That(mod.GasMode.IsDefault, Is.True);
+    }
+
+    [TestCase(BmsGasLowerLimit.Normal)]
+    [TestCase(BmsGasLowerLimit.Easy)]
+    [TestCase(BmsGasLowerLimit.Assist)]
+    public void TestRegularGasLowerLimitSurvivesScorePersistence(BmsGasLowerLimit limit)
+    {
+        var mod = new BmsModGaugeAutoShift { GasMode = { Value = limit } };
+        var saved = new ScoreInfo { Ruleset = new BmsRuleset().RulesetInfo, Mods = [mod] };
+        // ScoreInfo persists ModsJson using JsonConvert's settings, not the global
+        // IgnoreAndPopulate helper that replaces an omitted APIMod.Settings with null.
+        var reloaded = new ScoreInfo { Ruleset = saved.Ruleset, ModsJson = saved.ModsJson };
+        var restored = (BmsModGaugeAutoShift)reloaded.Mods.Single();
+        Assert.That(restored.GasMode.Value, Is.EqualTo(limit));
+        Assert.That(((BmsModGaugeAutoShift)new APIMod(mod).ToMod(new BmsRuleset())).GasMode.Value, Is.EqualTo(limit));
+        using var health = new BmsHealthProcessor();
+        health.ApplyBeatmap(new BmsBeatmap { LayoutVariant = BmsLayoutVariant.Bme7K });
+        restored.ApplyToHealthProcessor(health);
+        BmsGaugeType[] expected = limit switch
+        {
+            BmsGasLowerLimit.Normal => [BmsGaugeType.Hazard, BmsGaugeType.ExHard, BmsGaugeType.Hard, BmsGaugeType.Normal],
+            BmsGasLowerLimit.Easy => [BmsGaugeType.Hazard, BmsGaugeType.ExHard, BmsGaugeType.Hard, BmsGaugeType.Normal, BmsGaugeType.Easy],
+            _ => [BmsGaugeType.Hazard, BmsGaugeType.ExHard, BmsGaugeType.Hard, BmsGaugeType.Normal, BmsGaugeType.Easy, BmsGaugeType.AssistEasy],
+        };
+        Assert.That(health.CurrentGaugeStates.Select(state => state.GaugeType), Is.EqualTo(expected));
+        Assert.That(health.IsCourseGaugeMode, Is.False);
     }
 
     [TestCase(BmsGaugeType.Class)]

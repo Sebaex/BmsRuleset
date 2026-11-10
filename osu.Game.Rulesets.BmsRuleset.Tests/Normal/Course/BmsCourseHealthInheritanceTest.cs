@@ -127,7 +127,7 @@ public class BmsCourseHealthInheritanceTest
     [Test]
     public void NearlyEmptyGaugeIsNotRoundedOrRefilledAtTheNextStage(
         [Values(BmsGaugeType.Class, BmsGaugeType.ExClass, BmsGaugeType.ExHardClass)] BmsGaugeType type,
-        [Values(0.000000001, 0.005, 0.999999999, 1)] double remaining)
+        [Values(0.000000001, 0.005, 0.02, 0.020000001, 0.999999999, 1)] double remaining)
     {
         var session = createSession(type, BmsGaugeProfileFamily.Lr2, false);
         session.BeginCurrentStage();
@@ -139,10 +139,13 @@ public class BmsCourseHealthInheritanceTest
         using var health = createHealth(1);
         applyMods(persistMods(session.Mods), health);
         session.ConfigureHealthProcessor(health);
-        Assert.That(health.Health.Value, Is.EqualTo(remaining));
-        Assert.That(health.HasPassedAtEnd(), Is.True);
+        // Original Java gauges compare float percentage against the 2% death threshold.
+        // Keep invalid historical seeds as dead/no-refill controls and add genuinely living low seeds.
+        var expectedAlive = (float)(remaining * 100) >= 2f;
+        Assert.That(health.Health.Value, Is.EqualTo(expectedAlive ? remaining : 0));
+        Assert.That(health.HasPassedAtEnd(), Is.EqualTo(expectedAlive));
         health.RegisterNonConsumingJudgement(HitResult.Ok, 1000);
-        if (remaining <= 0.005)
+        if (remaining <= 0.020000001)
         {
             Assert.That(health.Health.Value, Is.Zero);
             Assert.That(health.HasEverFailed, Is.True);
@@ -160,7 +163,7 @@ public class BmsCourseHealthInheritanceTest
     {
         var session = createSession(type, BmsGaugeProfileFamily.Lr2, false);
         session.BeginCurrentStage();
-        session.CompleteCurrentStage(new ScoreInfo { Passed = true }, [new(type, 0.001, false)]);
+        session.CompleteCurrentStage(new ScoreInfo { Passed = true }, [new(type, 0.02, false)]);
         session.RequestAdvance();
         session.Advance();
         using var health = createHealth(1);
@@ -173,7 +176,7 @@ public class BmsCourseHealthInheritanceTest
         Assert.Multiple(() =>
         {
             Assert.That(health.CurrentGaugeStates, Is.EqualTo(initial));
-            Assert.That(health.Health.Value, Is.EqualTo(0.001));
+            Assert.That(health.Health.Value, Is.EqualTo(0.02));
             Assert.That(health.HasFailed, Is.False);
             Assert.That(health.HasEverFailed, Is.False);
             Assert.That(health.HasPassedAtEnd(), Is.True);
@@ -191,7 +194,7 @@ public class BmsCourseHealthInheritanceTest
         [
             new(BmsGaugeType.ExHardClass, 0, true),
             new(BmsGaugeType.ExClass, 0, true),
-            new(BmsGaugeType.Class, 0.001, false),
+            new(BmsGaugeType.Class, 0.02, false),
         ]);
         session.RequestAdvance();
         session.Advance();
@@ -199,7 +202,7 @@ public class BmsCourseHealthInheritanceTest
         using var health = createHealth(1);
         applyMods(persistMods(session.Mods), health);
         session.ConfigureHealthProcessor(health);
-        BmsGaugeStateSnapshot[] expected = [new(BmsGaugeType.Class, 0.001, false)];
+        BmsGaugeStateSnapshot[] expected = [new(BmsGaugeType.Class, 0.02, false)];
         Assert.That(health.CurrentGaugeStates, Is.EqualTo(expected));
         health.RegisterNonConsumingJudgement(HitResult.Ok, 1000);
         Assert.That(health.HasFailed, Is.True);

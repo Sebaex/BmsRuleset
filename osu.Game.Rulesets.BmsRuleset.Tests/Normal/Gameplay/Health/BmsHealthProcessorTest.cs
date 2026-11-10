@@ -195,7 +195,8 @@ public class BmsHealthProcessorTest
     public void TestAutoGaugeClearThresholdBoundary([Values] BmsGaugeProfileFamily family, [Values(-1, 0, 1)] int boundary)
     {
         var processor = new BmsHealthProcessor();
-        processor.SetGaugeTypes(BmsModGaugeAutoShift.AUTO_GAUGE_CHAIN, profileFamilyOverride: family);
+        processor.SetGaugeTypes([.. BmsModGaugeAutoShift.AUTO_GAUGE_CHAIN, BmsGaugeType.Easy, BmsGaugeType.AssistEasy],
+            profileFamilyOverride: family);
         var threshold = BmsGaugeProfileFactory.Create(BmsGaugeType.Normal, family).ClearThreshold;
         var normalHealth = boundary switch
         {
@@ -335,11 +336,12 @@ public class BmsHealthProcessorTest
         processor.ApplyResult(new JudgementResult(beatmap.HitObjects[0], beatmap.HitObjects[0].CreateJudgement())
             { Type = HitResult.Ok });
 
-        // Hazard should be failed, now active should be ExHard. Framework failure NOT triggered.
+        // Java LR2 short-chart damage: N=3 multiplier=10, so both Hazard and ExHard fail.
         Assert.That(processor.HasFailed, Is.False);
         Assert.That(processor.HasEverFailed, Is.False);
-        Assert.That(processor.GaugeType, Is.EqualTo(BmsGaugeType.ExHard));
+        Assert.That(processor.GaugeType, Is.EqualTo(BmsGaugeType.Hard));
         Assert.That(processor.Health.Value, Is.GreaterThan(0));
+        Assert.That(processor.Health.Value, Is.EqualTo(1 - .06 * 10).Within(1e-7));
     }
 
     [Test]
@@ -559,7 +561,7 @@ public class BmsHealthProcessorTest
             Type = HitResult.Ok,
         });
 
-        var expectedHealth = Math.Max(0.0, initialHealth - 0.03);
+        var expectedHealth = Math.Max(0.02, initialHealth - 0.04);
         Assert.That(processor.Health.Value, Is.EqualTo(expectedHealth).Within(0.001));
     }
 
@@ -885,7 +887,7 @@ public class BmsHealthProcessorTest
         Assert.Multiple(() =>
         {
             Assert.That(processor.GaugeType, Is.EqualTo(BmsGaugeType.ExHardClass));
-            Assert.That(processor.DisplayProfile.Value.FillColour, Is.EqualTo(new Color4(255, 215, 0, 255)));
+            Assert.That(processor.DisplayProfile.Value.FillColour, Is.EqualTo(new Color4(198, 198, 198, 255)));
         });
     }
 
@@ -900,7 +902,9 @@ public class BmsHealthProcessorTest
 
         Assert.Multiple(() =>
         {
-            Assert.That(processor.Health.Value, Is.GreaterThan(0).And.LessThan(1e-15));
+            // Five ExHardClass POORs reach zero; a floating residue below 2% is dead in LR2.
+            Assert.That(processor.GaugeType, Is.EqualTo(BmsGaugeType.ExClass));
+            Assert.That(processor.Health.Value, Is.EqualTo(0.5).Within(1e-15));
             Assert.That(processor.HasFailed, Is.False);
             Assert.That(processor.HasEverFailed, Is.False);
         });
@@ -974,9 +978,9 @@ public class BmsHealthProcessorTest
         Assert.That(processor.GaugeProfile.PerfectGain, Is.EqualTo(0.0001).Within(0.000001));
     }
 
-    [TestCase(BmsLayoutVariant.Bms5K, 0.75, -0.03)]
-    [TestCase(BmsLayoutVariant.Bme7K, 0.80, -0.03)]
-    [TestCase(BmsLayoutVariant.Pms9K, 0.85, -0.02)]
+    [TestCase(BmsLayoutVariant.Bms5K, 0.80, -0.04)]
+    [TestCase(BmsLayoutVariant.Bme7K, 0.80, -0.04)]
+    [TestCase(BmsLayoutVariant.Pms9K, 0.80, -0.04)]
     public void TestRegularGameplayGaugeProfileFollowsLayout(BmsLayoutVariant layout, double clearThreshold, double badDelta)
     {
         var processor = new BmsHealthProcessor();

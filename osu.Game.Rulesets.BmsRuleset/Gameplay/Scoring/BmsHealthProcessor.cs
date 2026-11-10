@@ -41,6 +41,8 @@ public partial class BmsHealthProcessor : HealthProcessor
 
     internal bool IsCourseGaugeMode { get; private set; }
 
+    internal bool IsGaugeAutoShift { get; set; }
+
     internal BmsGaugeProfileFamily? ConfiguredProfileFamily { get; private set; }
 
     private IReadOnlyList<BmsGaugeStateSnapshot>? replayInitialStates;
@@ -213,8 +215,8 @@ public partial class BmsHealthProcessor : HealthProcessor
             {
                 GaugeType = type,
                 Profile = profile,
-                CurrentHp = Math.Clamp(initialState?.Health ?? profile.InitialHealth, 0, profile.MaxHealth),
-                IsHpFailed = initialState?.Failed == true || initialState?.Health <= 0,
+                CurrentHp = profile.ClampHealth(initialState?.Health ?? profile.InitialHealth),
+                IsHpFailed = initialState?.Failed == true || profile.ClampHealth(initialState?.Health ?? profile.InitialHealth) <= 0,
             });
         }
 
@@ -248,7 +250,7 @@ public partial class BmsHealthProcessor : HealthProcessor
             if (restored is null)
                 continue;
 
-            state.CurrentHp = Math.Clamp(restored.Health, 0, state.Profile.MaxHealth);
+            state.CurrentHp = state.Profile.ClampHealth(restored.Health);
             state.IsHpFailed = restored.Failed || state.CurrentHp <= 0;
         }
 

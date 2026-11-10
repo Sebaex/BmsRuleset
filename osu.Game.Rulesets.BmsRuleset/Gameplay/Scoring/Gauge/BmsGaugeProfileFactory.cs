@@ -26,7 +26,7 @@ public static class BmsGaugeProfileFactory
 
     private static readonly IReadOnlyList<BmsGaugeGutsRule> lr2_guts =
     [
-        new(0.30, 0.6),
+        new(0.32, 0.6),
     ];
 
     public static BmsGaugeProfile Create(BmsGaugeType type, BmsGaugeProfileFamily family = BmsGaugeProfileFamily.SevenKeys) => family switch
@@ -95,7 +95,7 @@ public static class BmsGaugeProfileFactory
         _ => throw new ArgumentOutOfRangeException(nameof(type), type, null),
     };
 
-    private static BmsGaugeProfile lr2(BmsGaugeType type) => type switch
+    private static BmsGaugeProfile lr2(BmsGaugeType type) => (type switch
     {
         BmsGaugeType.AssistEasy => total(0.2, 1, 0.6, 1.2, 1.2, 0.6, -0.032, -0.048, -0.016),
         BmsGaugeType.Easy => total(0.2, 1, 0.8, 1.2, 1.2, 0.6, -0.032, -0.048, -0.016),
@@ -107,7 +107,7 @@ public static class BmsGaugeProfileFactory
         BmsGaugeType.ExClass => survival(BmsGaugeAlgorithm.Fixed, gold, 0.001, 0.001, 0.0005, -0.06, -0.10, -0.02, lr2_guts),
         BmsGaugeType.ExHardClass => survival(BmsGaugeAlgorithm.Fixed, gray, 0.001, 0.001, 0.0005, -0.12, -0.20, -0.02, []),
         _ => throw new ArgumentOutOfRangeException(nameof(type), type, null),
-    };
+    }) with { DeathThreshold = type is BmsGaugeType.Hard or BmsGaugeType.ExHard or BmsGaugeType.Hazard or BmsGaugeType.Class or BmsGaugeType.ExClass or BmsGaugeType.ExHardClass ? 0.02 : 0 };
 
     private static BmsGaugeProfile total(
         double initialHealth,

@@ -36,7 +36,7 @@ public class BmsBeatorajaFrameHistoryTest
     }
 
     // GaugeProperty.NORMAL: TOTAL12 / three endpoints => +4%,
-    // half GREAT +2%, half BAD -1.5%. These expectations do not call the calculator.
+    // half GREAT +2%, LR2 half BAD -2%. These expectations do not call the calculator.
     [TestCase(1650)]
     [TestCase(1650.5)]
     public void DelayedUpdateSettlesAllTicksAndRewindRestoresElapsedTime(double rewindTime)
@@ -62,10 +62,10 @@ public class BmsBeatorajaFrameHistoryTest
         run.Frame(1400, 150, true); run.Expect(0.24);
         run.Frame(1401, 1, true); run.Expect(0.26);
         run.Frame(1602, 201, false); run.Expect(0.26);
-        run.Frame(1603, 1, false); run.Expect(0.245);
+        run.Frame(1603, 1, false); run.Expect(0.24);
         run.Rewind(1250); run.Expect(0.24);
         run.Frame(1400, 150, true); run.Frame(1401, 1, true);
-        run.Frame(1602, 201, false); run.Frame(1603, 1, false); run.Expect(0.245);
+        run.Frame(1602, 201, false); run.Frame(1603, 1, false); run.Expect(0.24);
     }
 
     [Test]
@@ -76,10 +76,10 @@ public class BmsBeatorajaFrameHistoryTest
         run.Frame(1650, 650, true); run.Expect(0.30);
         run.Release(1650); run.Expect(0.24);
         run.Frame(1750, 100, false); run.Expect(0.24);
-        run.Frame(2301, 551, false); run.Expect(0.195);
-        run.Frame(2951, 650, true); run.Expect(0.255);
+        run.Frame(2301, 551, false); run.Expect(0.18);
+        run.Frame(2951, 650, true); run.Expect(0.24);
         run.Rewind(1750); run.Expect(0.24);
-        run.Frame(2301, 551, false); run.Frame(2951, 650, true); run.Expect(0.255);
+        run.Frame(2301, 551, false); run.Frame(2951, 650, true); run.Expect(0.24);
     }
 
     [TestCase(2999)]

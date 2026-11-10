@@ -21,12 +21,19 @@ namespace osu.Game.Rulesets.BmsRuleset.Tests.Normal.Difficulty;
 [TestFixture]
 public class BmsDifficultyPerformanceRegressionTest
 {
-    [TestCase(20000, 10.748954856597857)]
+    [TestCase(20000, 10.98694842655334)]
     public void MixedChartKeepsOriginalStarRating(int count, double expected)
     {
         var notes = CreateBeatmap(count).HitObjects
             .Select(n => new BmsNoteTiming(n.Column, n.StartTime, n is BmsLongNote ln ? ln.EndTime : n.StartTime)).ToArray();
-        Assert.That(new BmsStarRatingProcessor().ComputeStarRating(notes, 8, 2), Is.EqualTo(expected).Within(1e-12));
+        var processor = new BmsStarRatingProcessor();
+        var rating = processor.ComputeStarRating(notes, 8, 2);
+        // U1-B recovered the old golden by changing only GREAT 40 -> 45 ms.
+        // Keep the independently derived input invariant beside the full mixed-chart snapshot.
+        var x = 0.3 * Math.Sqrt(40d / 500);
+        var expectedLeniency = Math.Min(x, 0.6 * (x - 0.09) + 0.09);
+        Assert.That(processor.HitLeniencyX, Is.EqualTo(expectedLeniency).Within(1e-12));
+        Assert.That(rating, Is.EqualTo(expected).Within(1e-12));
     }
 
     [TestCase(false)]

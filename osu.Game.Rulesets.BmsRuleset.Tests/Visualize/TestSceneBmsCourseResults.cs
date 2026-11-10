@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using osu.Framework.Allocation;
 using osu.Framework.Audio;
+using osu.Framework.Configuration;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Cursor;
 using osu.Framework.Graphics.Shapes;
+using osu.Framework.Localisation;
 using osu.Framework.Platform;
 using osu.Framework.Testing;
 using osu.Game.Beatmaps;
@@ -42,6 +45,15 @@ namespace osu.Game.Rulesets.BmsRuleset.Tests.Visualize;
 public partial class TestSceneBmsCourseResults : ScreenTestScene
 {
     private RealmDetachedBeatmapStore beatmapStore = null!;
+
+    [Resolved]
+    private FrameworkConfigManager frameworkConfig { get; set; } = null!;
+
+    [Resolved]
+    private LocalisationManager localisation { get; set; } = null!;
+
+    [Resolved]
+    private GameHost host { get; set; } = null!;
 
     protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent)
     {
@@ -198,7 +210,8 @@ public partial class TestSceneBmsCourseResults : ScreenTestScene
         return overview != null && Math.Abs(overview.Score.Accuracy - accuracy) < 0.00001
                                 && overview.Score.MaxCombo == combo
                                 && overview.ChildrenOfType<BmsResultJudgementRow>().SingleOrDefault(row => row.Result == HitResult.Perfect)?.Count == perfect
-                                && overview.ChildrenOfType<OsuSpriteText>().Any(text => text.Text.ToString() == $"{accuracy * 100:F2}%")
+                                // LocalisableString.ToString() is invariant, independently of the host's rendered locale.
+                                && overview.ChildrenOfType<OsuSpriteText>().Any(text => text.Text.ToString() == BmsStrings.ResultPercentage(accuracy).ToString())
                                 && overview.ChildrenOfType<GridContainer>().SingleOrDefault(grid => grid.Name == "Result combo")?
                                     .ChildrenOfType<OsuSpriteText>().Any(text => text.Text.ToString() == combo.ToString()) == true
                                 && timing?.FastCount == fast && timing.SlowCount == slow;
@@ -281,6 +294,37 @@ public partial class TestSceneBmsCourseResults : ScreenTestScene
                                                                  .State.Value == Visibility.Visible);
         AddUntilStep("aborted stage timeline loaded", () => screen.ChildrenOfType<BmsTimelineStatistic>().Count(), () => Is.EqualTo(2));
         AddAssert("aborted stage timeline has no failure shade", () => hasFailureShade(screen), () => Is.False);
+    }
+
+    [Test]
+    public void TestCourseSummaryWithCommaDecimalHostLocale()
+    {
+        AddStep("capture locale and establish registered English control", () =>
+        {
+            captureHostLocale();
+            var locale = frameworkConfig.GetBindable<string>(FrameworkSetting.Locale);
+            // A registered language is required; es-CL is rejected by osu!'s locale mapping.
+            locale.Value = "en";
+            locale.TriggerChange();
+        });
+        AddUntilStep("English control reaches update thread", () => CultureInfo.CurrentCulture.Name == "en");
+        AddStep("set registered Spanish test host locale", () =>
+        {
+            var locale = frameworkConfig.GetBindable<string>(FrameworkSetting.Locale);
+            locale.Value = "es";
+            locale.TriggerChange();
+        });
+        AddUntilStep("Spanish reaches update thread", () => CultureInfo.CurrentCulture.Name == "es" && CultureInfo.CurrentUICulture.Name == "es");
+        AddAssert("registered locale, culture and localised formatting agree", () =>
+        {
+            Assert.That(frameworkConfig.GetBindable<string>(FrameworkSetting.Locale).Value, Is.EqualTo("es"));
+            Assert.That(CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator, Is.EqualTo(","));
+            Assert.That(localisation.CurrentParameters.Value.Store!.EffectiveCulture.Name, Is.EqualTo("es"));
+            Assert.That(localisation.GetLocalisedString(BmsStrings.ResultPercentage(.77)), Is.EqualTo("77,00%"));
+            return true;
+        });
+        AddAssert("localisable percentage representation stays invariant", () => BmsStrings.ResultPercentage(.77).ToString(), () => Is.EqualTo("77.00%"));
+        TestCourseSummaryShowsPlayedAndEmptyStages(1280, 720);
     }
 
     [TestCase(1280, 720)]

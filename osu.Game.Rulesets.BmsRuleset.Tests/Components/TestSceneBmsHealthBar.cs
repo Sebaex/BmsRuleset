@@ -1,7 +1,10 @@
+﻿using NUnit.Framework;
+using System.Reflection;
 ﻿using System;
 using System.Linq;
-using NUnit.Framework;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.Colour;
+using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Testing;
@@ -143,13 +146,14 @@ public partial class TestSceneBmsHealthBar : OsuTestScene
     public void TestExHardGaugeDisplay()
     {
         AddStep("set EX Hard gauge", () => healthProcessor.SetGaugeType(BmsGaugeType.ExHard));
-        AddAssert("display is Fixed purple", () =>
+        AddAssert("display is Fixed gold", () =>
         {
             var dp = healthProcessor.DisplayProfile.Value;
-            return dp.ColourMode == BmsGaugeColourMode.Fixed && dp.FillColour == new Color4(195, 55, 210, 255);
+            return dp.ColourMode == BmsGaugeColourMode.Fixed && dp.FillColour == new Color4(255, 215, 0, 255);
         });
         AddAssert("no clear line", () => !healthProcessor.DisplayProfile.Value.ShowClearLine);
         AddStep("set health to 100%", () => healthProcessor.Health.Value = 1.0);
+        assertActualFill(new Color4(255, 215, 0, 255));
     }
 
     [Test]
@@ -211,10 +215,10 @@ public partial class TestSceneBmsHealthBar : OsuTestScene
     public void TestHazardGaugeDisplay()
     {
         AddStep("set Hazard gauge", () => healthProcessor.SetGaugeType(BmsGaugeType.Hazard));
-        AddAssert("display is Fixed gold", () =>
+        AddAssert("display is Fixed gray", () =>
         {
             var dp = healthProcessor.DisplayProfile.Value;
-            return dp.ColourMode == BmsGaugeColourMode.Fixed && dp.FillColour == new Color4(255, 215, 0, 255);
+            return dp.ColourMode == BmsGaugeColourMode.Fixed && dp.FillColour == new Color4(198, 198, 198, 255);
         });
         AddAssert("no clear line", () => !healthProcessor.DisplayProfile.Value.ShowClearLine);
         AddStep("set health to 100%", () => healthProcessor.Health.Value = 1.0);
@@ -225,15 +229,25 @@ public partial class TestSceneBmsHealthBar : OsuTestScene
     {
         AddStep("set Hazard gauge", () => healthProcessor.SetGaugeType(BmsGaugeType.Hazard));
         AddStep("set health to 50%", () => healthProcessor.Health.Value = 0.50);
-        AddAssert("display still Fixed gold", () =>
+        AddAssert("display still Fixed gray", () =>
         {
             var dp = healthProcessor.DisplayProfile.Value;
-            return dp.ColourMode == BmsGaugeColourMode.Fixed && dp.FillColour == new Color4(255, 215, 0, 255);
+            return dp.ColourMode == BmsGaugeColourMode.Fixed && dp.FillColour == new Color4(198, 198, 198, 255);
         });
+        assertActualFill(new Color4(198, 198, 198, 255));
         AddStep("drop health to 5%", () => healthProcessor.Health.Value = 0.05);
         AddAssert("display colour unchanged (Fixed)", () =>
-            healthProcessor.DisplayProfile.Value.ColourMode == BmsGaugeColourMode.Fixed);
+            healthProcessor.DisplayProfile.Value.ColourMode == BmsGaugeColourMode.Fixed
+            && healthProcessor.DisplayProfile.Value.FillColour == new Color4(198, 198, 198, 255));
+        assertActualFill(new Color4(198, 198, 198, 255));
     }
+
+    private void assertActualFill(Color4 expected) => AddUntilStep("actual HUD fill matches fixed palette", () =>
+    {
+        var display = this.ChildrenOfType<BmsHealthDisplay>().Single();
+        var fill = (Box)typeof(BmsHealthDisplay).GetField("normalFill", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(display)!;
+        return fill.Colour.Equals(ColourInfo.SingleColour(expected));
+    });
 
     [Test]
     public void TestInitialState()

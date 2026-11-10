@@ -11,6 +11,7 @@ using osu.Game.Rulesets.BmsRuleset.Beatmaps.Objects;
 using osu.Game.Rulesets.BmsRuleset.BmsParser;
 using osu.Game.Rulesets.BmsRuleset.Tests.Performance;
 using osu.Game.Rulesets.BmsRuleset.UI.Gameplay;
+using osu.Game.Rulesets.Objects;
 
 namespace osu.Game.Rulesets.BmsRuleset.Tests.Normal.BeatmapTest.Decoding;
 
@@ -18,8 +19,8 @@ namespace osu.Game.Rulesets.BmsRuleset.Tests.Normal.BeatmapTest.Decoding;
 [NonParallelizable]
 public class BmsTimingMapQueryTest
 {
-    private const string CAUTION_LIFETIMES = "FB282145C2C0AC8E90BBC4C4FFC9F2C9CB2E818D81A0E1EBCBE8342043D0FFFD";
-    private const string SCROLLPLUS_LIFETIMES = "13D57E0EB00D932CC736B71494A633B0BB68707A8380B0616B1CADB3F10C570C";
+    private const string CAUTION_LIFETIMES = "96F06BC3CA3385E245C4A4A4A945E36845B9DAE2640336A894DF7BEE1BD2DF39";
+    private const string SCROLLPLUS_LIFETIMES = "5929033CF48AAF4CAA224FF09A27CA029E1322AE70E43E72DE9BF39737074BB7";
 
     private static int binarySearches;
     private static BmsTimingMap observedMap;
@@ -40,6 +41,7 @@ public class BmsTimingMapQueryTest
         var (map, selected) = loadChart(chart);
         var actual = refreshLifetimes(map, selected);
         Assert.That(actual, Has.Length.EqualTo(192));
+        assertLr2LifetimeBounds(map, selected, actual);
         Assert.That(fingerprint(actual), Is.EqualTo(expectedFingerprint));
     }
 
@@ -76,6 +78,7 @@ public class BmsTimingMapQueryTest
                 Assert.That(fingerprint(reference), Is.EqualTo(expectedFingerprint));
                 TestContext.WriteLine($"TIMING_LIFETIME_REFERENCE chart={chart} count={reference.Length} sha256={fingerprint(reference)}");
             }
+            assertLr2LifetimeBounds(map, selected, actual);
         }
         finally
         {
@@ -107,6 +110,80 @@ public class BmsTimingMapQueryTest
             foreach (var entry in entries) entry.RefreshLifetime();
             return entries.Select(entry => (entry.LifetimeStart, entry.LifetimeEnd)).ToArray();
         }).ToArray();
+    }
+
+    private static void assertLr2LifetimeBounds(BmsTimingMap map, BmsHitObject[] notes, (double Start, double End)[] actual)
+    {
+        var points = readPoints(map);
+        var times = points.Select(p => p.Time).ToArray();
+        Point at(double time)
+        {
+            var low = 0;
+            var high = times.Length;
+            while (low < high)
+            {
+                var middle = (low + high) / 2;
+                if (times[middle] <= time) low = middle + 1;
+                else high = middle;
+            }
+            return points[Math.Max(0, low - 1)];
+        }
+        double position(double time)
+        {
+            var p = at(time);
+            var ticks = (time - p.Time) * (p.Bpm * (map.TickResolution / 4d)) / 60000;
+            return p.IsStop ? p.ScrollPos : ticks * p.ScrollFactor * p.ScrollDir
+                * (60000 / map.ScrollReferenceBpm) / (map.TickResolution / 4d) + p.ScrollPos;
+        }
+
+        // A separate immutable-point interpolation and spatial predicate check the start,
+        // rather than blessing a hash produced by the lifetime entry itself.
+        double[] speeds = [8, 12, 6];
+        for (var s = 0; s < speeds.Length; s++)
+        {
+            for (var n = 0; n < notes.Length; n++)
+            {
+                var note = notes[n];
+                var head = position(note.StartTime);
+                var tail = position(note.GetEndTime());
+                bool visible(double time)
+                {
+                    var factor = Math.Abs(at(time).SpeedFactor);
+                    var distance = !double.IsFinite(factor) || factor < .001
+                        ? double.PositiveInfinity : (11485d / 8) / Math.Max(.001, speeds[s] / 8 * factor);
+                    var current = position(time);
+                    return Math.Abs(head - current) <= distance
+                           || note is BmsLongNote && Math.Abs(tail - current) <= distance;
+                }
+
+                var earliest = Math.Min(0, note.StartTime - 11485);
+                var firstVisible = note.StartTime;
+                for (var later = note.StartTime; later > earliest;)
+                {
+                    var earlier = Math.Max(earliest, later - 100);
+                    if (visible(earlier)) firstVisible = earlier;
+                    else if (visible(later))
+                    {
+                        var low = earlier;
+                        var high = later;
+                        while (high - low > 1)
+                        {
+                            var middle = (low + high) / 2;
+                            if (visible(middle)) high = middle;
+                            else low = middle;
+                        }
+                        firstVisible = high;
+                    }
+                    later = earlier;
+                }
+                var interval = actual[s * notes.Length + n];
+                // Java LR2 NOTE/LONGNOTE_END BAD=200 and fast empty POOR=1000 (C02 windows.csv).
+                Assert.That(interval.End, Is.EqualTo(note.GetEndTime() + (200 + 100)), $"end at speed {speeds[s]}, sample {n}");
+                Assert.That(interval.Start, Is.LessThanOrEqualTo(note.StartTime - 1000));
+                // The accepted visibility refinement has 1ms precision; the two searches bracket differently.
+                Assert.That(interval.Start, Is.EqualTo(Math.Min(firstVisible, note.StartTime - 1000)).Within(1), $"start at speed {speeds[s]}, sample {n}");
+            }
+        }
     }
 
     private static string fingerprint((double Start, double End)[] lifetimes)

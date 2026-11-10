@@ -45,6 +45,10 @@ public abstract class BmsModGauge : Mod, IApplicableToHealthProcessor
         if (healthProcessor is not BmsHealthProcessor health)
             return;
 
+        // GAS owns its configured chain; ordinary gauge mods also carry score attribution.
+        if (health.IsGaugeAutoShift)
+            return;
+
         var family = GaugeProfileFamily.Value ?? health.ConfiguredProfileFamily;
         if (GaugeType is BmsGaugeType.Class or BmsGaugeType.ExClass or BmsGaugeType.ExHardClass)
             health.ConfigureGaugeContext(true, family);

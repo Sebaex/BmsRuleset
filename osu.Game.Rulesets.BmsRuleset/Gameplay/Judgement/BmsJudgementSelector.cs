@@ -24,6 +24,7 @@ public static class BmsJudgementSelector
             : 16;
         var sortedCandidates = ArrayPool<BmsJudgementCandidate>.Shared.Rent(initialCapacity);
         var count = 0;
+        var fixedJudge = true;
 
         try
         {
@@ -37,11 +38,13 @@ public static class BmsJudgementSelector
                     sortedCandidates = expanded;
                 }
 
+                if (count > 0 && candidate.JudgementRate != sortedCandidates[0].JudgementRate)
+                    fixedJudge = false;
                 sortedCandidates[count++] = candidate;
             }
 
             Array.Sort(sortedCandidates, 0, count, candidate_comparer);
-            var search = new PressSearch(layout, column, inputTime, algorithm);
+            var search = new PressSearch(layout, column, inputTime, algorithm, fixedJudge);
             for (var i = 0; i < count; i++)
             {
                 if (!search.Consider(sortedCandidates[i], i)) break;
@@ -57,7 +60,7 @@ public static class BmsJudgementSelector
 
     // Gameplay already owns ordered notes. Feed them directly, retaining the selected slot
     // instead of copying, sorting and finding the chosen note a second time.
-    internal struct PressSearch(BmsLayoutVariant layout, int column, double inputTime, BmsJudgementAlgorithm? algorithm)
+    internal struct PressSearch(BmsLayoutVariant layout, int column, double inputTime, BmsJudgementAlgorithm? algorithm, bool fixedJudge)
     {
         private BmsJudgementCandidate? selected;
         private HitResult selectedResult;
@@ -79,7 +82,7 @@ public static class BmsJudgementSelector
 
             var offset = inputTime - candidate.StartTime;
             // beatoraja stops its candidate search before the inclusive E-POOR table edge.
-            if (offset <= -500)
+            if (offset <= -1000)
                 return false;
 
             if (selected is { } current && algorithm == BmsJudgementAlgorithm.Duration
@@ -87,14 +90,21 @@ public static class BmsJudgementSelector
                 return false;
 
             var table = BmsJudgementProfileProvider.GetTable(layout, candidate.Column, candidate.JudgementRate, tail: false);
-            var result = candidate.IsJudged ? HitResult.None : table.ResultForOffset(offset);
-            if (BmsJudgementProfileProvider.IsPms(layout)
-                && (candidate.IsJudged || (candidate.HasMistake && result is not (HitResult.Perfect or HitResult.Great or HitResult.Good))))
+            // LR2 excludes late BAD heads without starting the hold or emitting empty POOR.
+            if (candidate.IsLongNote && !candidate.IsJudged && offset > selectionWindow(table, HitResult.Good, fixedJudge, false))
+            {
+                // Java invalidates tnote only after this candidate wins the algorithm comparison.
+                if (selected == null || shouldReplaceSelected(selected.Value, candidate, inputTime, selectedTable!, table, algorithm, fixedJudge))
+                {
+                    selected = null;
+                    emptyPoorCandidate = null;
+                }
                 return true;
-
+            }
+            var result = candidate.IsJudged ? HitResult.None : table.ResultForOffset(offset);
             if (result != HitResult.None)
             {
-                if (selected == null || shouldReplaceSelected(selected.Value, candidate, inputTime, selectedTable!, table, algorithm))
+                if (selected == null || shouldReplaceSelected(selected.Value, candidate, inputTime, selectedTable!, table, algorithm, fixedJudge))
                 {
                     selected = candidate;
                     selectedResult = result;
@@ -111,8 +121,8 @@ public static class BmsJudgementSelector
                 {
                     BmsJudgementAlgorithm.Lowest => false,
                     BmsJudgementAlgorithm.Duration => selected.Value.StartTime < inputTime,
-                    BmsJudgementAlgorithm.Combo => selected.Value.StartTime - inputTime < -selectedTable!.SlowWindowFor(HitResult.Good),
-                    BmsJudgementAlgorithm.Score => selected.Value.StartTime - inputTime < -selectedTable!.SlowWindowFor(HitResult.Great),
+                    BmsJudgementAlgorithm.Combo => selected.Value.StartTime - inputTime < -selectionWindow(selectedTable!, HitResult.Good, fixedJudge, false),
+                    BmsJudgementAlgorithm.Score => selected.Value.StartTime - inputTime < -selectionWindow(selectedTable!, HitResult.Great, fixedJudge, false),
                     _ => throw new ArgumentOutOfRangeException(nameof(algorithm), algorithm, null),
                 };
             }
@@ -134,7 +144,8 @@ public static class BmsJudgementSelector
         double inputTime,
         BmsJudgementWindowTable currentTable,
         BmsJudgementWindowTable nextTable,
-        BmsJudgementAlgorithm? algorithm)
+        BmsJudgementAlgorithm? algorithm,
+        bool fixedJudge)
     {
         // Match beatoraja's JudgeAlgorithm comparisons, including strict late and inclusive early
         // boundaries. Use each note's own table because BMS judgement rates can change mid-chart.
@@ -148,8 +159,21 @@ public static class BmsJudgementSelector
         };
 
         bool isPastWindow(HitResult threshold) =>
-            current.StartTime - inputTime < -currentTable.SlowWindowFor(threshold)
-            && next.StartTime - inputTime <= nextTable.FastWindowFor(threshold);
+            current.StartTime - inputTime < -selectionWindow(currentTable, threshold, fixedJudge, false)
+            && next.StartTime - inputTime <= selectionWindow(nextTable, threshold, fixedJudge, true);
+    }
+
+    private static double selectionWindow(BmsJudgementWindowTable table, HitResult result, bool fixedJudge, bool fast)
+    {
+        var window = fast ? table.FastWindowFor(result) : table.SlowWindowFor(result);
+        if (!fixedJudge) return window;
+
+        // Java nests disabled rows into the preceding row. The result is unchanged, but
+        // selection and late-LN eligibility must still use those bounds on fixed charts.
+        window = Math.Max(window, fast ? table.FastWindowFor(HitResult.Perfect) : table.SlowWindowFor(HitResult.Perfect));
+        if (result == HitResult.Good)
+            window = Math.Max(window, fast ? table.FastWindowFor(HitResult.Great) : table.SlowWindowFor(HitResult.Great));
+        return window;
     }
 
     private sealed class CandidateComparer : IComparer<BmsJudgementCandidate>

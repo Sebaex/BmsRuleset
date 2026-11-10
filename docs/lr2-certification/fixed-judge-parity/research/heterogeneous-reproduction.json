@@ -1,0 +1,25 @@
+{
+  "id": "JF-VARIABLE-01",
+  "status": "Known heterogeneous-rate defect; deliberately not corrected or blessed by an ordinary-suite expected result",
+  "baseline": "b84d77d56814c3ae9ab95de02102fbcfd4e9a8bc",
+  "layout": "Bme7K",
+  "rank": 3,
+  "algorithm": "Duration",
+  "press_ms": 1030,
+  "notes": [
+    {
+      "effective_rate": 0.05,
+      "time_ms": 1000
+    },
+    {
+      "effective_rate": 1.0,
+      "time_ms": 1150
+    }
+  ],
+  "own_result_of_second": "Good",
+  "observed_at_U1": "Second note consumed prematurely as additional Ok using the primary table",
+  "u1_trx_sha256": "503FC65950EE1878D1670C7BEE8C0434B488E4D22E954E42EBC44A643A3D04CA",
+  "original_test_archive": "F099-original.cs.txt",
+  "java_equivalent": "None for per-note heterogeneous tables",
+  "reproduce": "Construct the two BmsNotes with these explicit JudgementRate values; real BmsJudgementEngine.GetColumn(1).HandleNotePress at1030 using Duration; inspect BmsRecordingJudgementOutput.GetMainResult for each note. No assertion of the erroneous additional result as a valid contract."
+}

@@ -9,8 +9,7 @@ namespace osu.Game.Rulesets.BmsRuleset.Gameplay.Judgement;
 
 public static class BmsJudgementProfileProvider
 {
-    private static readonly double[] rank_rates = [0.25, 0.50, 0.75, 1.00, 1.25];
-    private static readonly double[] pms_rank_rates = [0.33, 0.50, 0.70, 1.00, 1.33];
+    private static readonly double[] rank_rates = [0.25, 0.50, 0.75, 1.00, 0.75];
     private static readonly ConcurrentDictionary<ProfileKey, BmsJudgementProfile> profiles = new();
 
     // Most chart updates reuse one layout/rate. Keep the shared profile identity while avoiding
@@ -109,12 +108,7 @@ public static class BmsJudgementProfileProvider
         return table;
     }
 
-    private static double rateForLayoutRank(BmsLayoutVariant layout, int rank)
-        => layout switch
-        {
-            BmsLayoutVariant.Pms9K or BmsLayoutVariant.Pms9K2P or BmsLayoutVariant.Pms9KDouble => pms_rank_rates[rank],
-            _ => rank_rates[rank],
-        };
+    private static double rateForLayoutRank(BmsLayoutVariant layout, int rank) => rank_rates[rank];
 
     private static BmsJudgementProfile createProfile(BmsLayoutVariant layout, double rate)
         => layout switch
@@ -128,7 +122,7 @@ public static class BmsJudgementProfileProvider
 
     private static BmsJudgementProfile lr2Profile(double rate)
     {
-        // #RANK 4 (Very Easy) is not listed in the LR2 reference, so it shares Easy windows.
+        // LR2 maps Very Easy to the Normal rank percentage.
         var rank = Array.IndexOf(rank_rates, rate);
         var perfect = 18d;
         var great = 40d;
@@ -146,11 +140,10 @@ public static class BmsJudgementProfileProvider
                 (perfect, great, good) = (21, 60, 120);
                 break;
             default:
-                // EXRANK scales PG/GR/GD relative to RANK 2 (Normal).
-                rate /= rank_rates[2];
-                perfect *= rate;
-                great *= rate;
-                good *= rate;
+                var judgeRank = (int)Math.Round(rate * 100);
+                perfect = scaleLr2Window(21000, judgeRank);
+                great = scaleLr2Window(60000, judgeRank);
+                good = scaleLr2Window(120000, judgeRank);
                 break;
         }
 
@@ -160,13 +153,37 @@ public static class BmsJudgementProfileProvider
             (-great, great),
             (-good, good),
             (-200, 200),
-            (-200, 1000),
+            (0, 1000),
         };
         var table = createTable(1, false, windows, fixedBadAndPoor: true);
-        return new BmsJudgementProfile(table, table, table, table);
+        var tailRadius = scaleLr2Window(120000, (int)Math.Round(rate * 100));
+        var tail = createTable(1, false,
+            [(-tailRadius, tailRadius), (-tailRadius, tailRadius), (-tailRadius, tailRadius), (-200, 200)], fixedBadAndPoor: true);
+        return new BmsJudgementProfile(table, table, tail, tail);
     }
 
     private readonly record struct ProfileKey(BmsLayoutVariant Layout, double Rate);
+
+    private static double scaleLr2Window(long basis, int judgeRank)
+    {
+        long scaled;
+        if (judgeRank >= 100)
+            scaled = basis * judgeRank / 100;
+        else
+        {
+            // Integer microseconds preserve Java's truncation before the BAD clamp.
+            ReadOnlySpan<long> points = basis switch
+            {
+                21000 => [0, 8000, 15000, 18000, 21000],
+                60000 => [0, 24000, 30000, 40000, 60000],
+                120000 => [0, 40000, 60000, 100000, 120000],
+                _ => throw new ArgumentOutOfRangeException(nameof(basis)),
+            };
+            var index = judgeRank / 25;
+            scaled = points[index] + (judgeRank - index * 25) * (points[index + 1] - points[index]) / 25;
+        }
+        return Math.Min(scaled, 200000) / 1000d;
+    }
 
     private readonly record struct WindowTableCache(
         ProfileKey Key,
@@ -184,7 +201,7 @@ public static class BmsJudgementProfileProvider
         => layout is BmsLayoutVariant.Pms9K or BmsLayoutVariant.Pms9K2P or BmsLayoutVariant.Pms9KDouble;
 
     public static bool EmptyPoorBreaksCombo(BmsLayoutVariant layout)
-        => IsPms(layout) || layout is BmsLayoutVariant.Bms5K or BmsLayoutVariant.Bms5K2P or BmsLayoutVariant.Bms5KDouble;
+        => false;
 
 
     private static BmsJudgementWindowTable pmsHead(

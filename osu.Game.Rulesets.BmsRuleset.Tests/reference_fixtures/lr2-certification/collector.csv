@@ -1,0 +1,10 @@
+id,press_ms,primary,types,times_ms,additional_indices
+early,850,0,NN,1000|1020,1
+late,1150,1,NN,1000|1020,0
+better,1150,1,NNN,1000|1080|1100,0
+long-primary,850,0,LN,1000|1020,-
+long-extra,850,0,NL,1000|1020,1
+equal,850,0,NN,1000|1000,1
+leading-long,1150,2,LNN,1000|1010|1100,1
+long-after-normal,1150,2,NLN,1000|1010|1100,0|1
+three-early,850,0,NNN,1000|1010|1020,1|2

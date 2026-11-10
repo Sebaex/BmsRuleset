@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using NUnit.Framework;
+using osu.Framework.Bindables;
+using osu.Framework.Testing;
 using osu.Game.Beatmaps;
 using osu.Game.Rulesets.BmsRuleset.Beatmaps;
 using osu.Game.Rulesets.BmsRuleset.Beatmaps.Objects;
@@ -17,6 +20,7 @@ using osu.Game.Rulesets.BmsRuleset.IO.Input;
 using osu.Game.Rulesets.BmsRuleset.UI.Gameplay;
 using osu.Game.Rulesets.BmsRuleset.UI.Gameplay.Components;
 using osu.Game.Rulesets.BmsRuleset.UI.Gameplay.Drawables.Objects;
+using osu.Game.Rulesets.BmsRuleset.UI.HudComponents;
 using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Replays;
 using osu.Game.Rulesets.Scoring;
@@ -109,9 +113,8 @@ public partial class TestSceneBmsMods : BmsPlayerTestScene
     public void TestAutoGauge()
     {
         // Autoplay raises the groove gauges past their clear threshold, then the replay stops pressing so the
-        // remaining notes miss and the survival tiers fail one by one — the cascade the AG
-        // mod exists to demonstrate. The 0.2 groove-tier start would otherwise drain them
-        // dead before the survival tiers fail, so the pre-fill is what makes Normal reachable.
+        // remaining notes miss and the survival tiers fail. A buffered total gauge must
+        // still meet its clear threshold to become the displayed tier.
         const double auto_play_until = 13250;
 
         this.AddSetupStep("load player with AG mod + autoplay-then-idle replay", () =>
@@ -131,13 +134,57 @@ public partial class TestSceneBmsMods : BmsPlayerTestScene
         AddUntilStep("autoplay phase complete", () =>
             Player.GameplayClockContainer.CurrentTime >= auto_play_until);
 
-        // Idle: missed notes drain the survival tiers in order (Hazard, ExHard, Hard) and the
-        // active gauge steps down Hazard → ExHard → Hard → Normal. Recording Normal is also the
-        // proof that the pre-fill worked — from the 0.2 groove start Normal would be dead long
-        // before Hard fails, so the cascade could never land on it without the autoplay buffer.
-        AddUntilStep("gauge downgraded through Normal", () =>
+        AddUntilStep("gauge downgraded to qualified Easy", () =>
             Player.GameplayState.HealthProcessor is BmsHealthProcessor hp
-            && hp.GaugeHistory.Any(e => e.ActiveGaugeType == BmsGaugeType.Normal));
+            && hp.GaugeHistory.Any(e => e.ActiveGaugeType == BmsGaugeType.Easy));
+        AddStep("freeze replay after downgrade", () => Player.GameplayClockContainer.Stop());
+        AddAssert("recorded transition respects clear thresholds", () =>
+        {
+            var hp = (BmsHealthProcessor)Player.GameplayState.HealthProcessor;
+            var firstEasy = hp.GaugeHistory.First(e => e.ActiveGaugeType == BmsGaugeType.Easy);
+            Assert.That(hp.GaugeHistory.TakeWhile(e => e != firstEasy).Select(e => e.ActiveGaugeType), Does.Contain(BmsGaugeType.Hazard).And.Contain(BmsGaugeType.Hard));
+            Assert.That(firstEasy.States.Single(s => s.GaugeType == BmsGaugeType.Hard).Failed, Is.True);
+            Assert.That(firstEasy.States.Single(s => s.GaugeType == BmsGaugeType.Normal).Health, Is.LessThan(.8));
+            Assert.That(firstEasy.States.Single(s => s.GaugeType == BmsGaugeType.Easy).Health, Is.GreaterThanOrEqualTo(.8));
+            return true;
+        });
+        assertGasHudProfile("replay downgrade", BmsGaugeType.Easy);
+
+        foreach (var normalHealth in new[] { .79, .8, .81 })
+        {
+            var expected = normalHealth < .8 ? BmsGaugeType.Easy : BmsGaugeType.Normal;
+            AddStep($"restore Normal at {normalHealth}", () =>
+            {
+                var hp = (BmsHealthProcessor)Player.GameplayState.HealthProcessor;
+                hp.RestoreGaugeStates([
+                    new(BmsGaugeType.Hazard, 0, true), new(BmsGaugeType.ExHard, 0, true), new(BmsGaugeType.Hard, 0, true),
+                    new(BmsGaugeType.Normal, normalHealth, false), new(BmsGaugeType.Easy, .9, false)
+                ]);
+                hp.RegisterNonConsumingJudgement(HitResult.None, Player.GameplayClockContainer.CurrentTime);
+            });
+            AddAssert($"history selects {expected} at Normal {normalHealth}", () =>
+            {
+                var hp = (BmsHealthProcessor)Player.GameplayState.HealthProcessor;
+                Assert.That(hp.GaugeHistory.Last().ActiveGaugeType, Is.EqualTo(expected));
+                Assert.That(hp.CurrentGaugeStates.Single(s => s.GaugeType == BmsGaugeType.Normal).Health, Is.EqualTo(normalHealth));
+                return true;
+            });
+            assertGasHudProfile($"Normal {normalHealth}", expected);
+        }
+    }
+
+    private void assertGasHudProfile(string checkpoint, BmsGaugeType expected)
+    {
+        AddAssert($"loaded HUD follows {checkpoint}", () =>
+        {
+            var hp = (BmsHealthProcessor)Player.GameplayState.HealthProcessor;
+            var hud = Player.ChildrenOfType<BmsHealthDisplay>().Single();
+            var profile = (Bindable<BmsGaugeDisplayProfile>)typeof(BmsHealthDisplay)
+                .GetField("displayProfile", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(hud)!;
+            Assert.That(hp.GaugeType, Is.EqualTo(expected));
+            Assert.That(profile.Value, Is.EqualTo(hp.DisplayProfile.Value));
+            return true;
+        });
     }
 
     [Test]

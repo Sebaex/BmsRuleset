@@ -165,13 +165,21 @@ public class BmsCourseSessionTest
 
         var healthProcessor = new BmsHealthProcessor();
         session.ConfigureHealthProcessor(healthProcessor);
-        new BmsModGaugeAutoShift().ApplyToHealthProcessor(healthProcessor);
+        // The real Course pipeline carries surviving seeds on its cloned GAS mod.
+        var courseMod = (BmsModGaugeAutoShift)session.Mods.OfType<BmsModGaugeAutoShift>().Single().DeepClone();
+        courseMod.ApplyToHealthProcessor(healthProcessor);
 
         Assert.That(healthProcessor.CurrentGaugeStates.Select(state => state.GaugeType), Is.EqualTo(
         [
             BmsGaugeType.ExClass,
             BmsGaugeType.Class,
         ]));
+        Assert.That(healthProcessor.CurrentGaugeStates, Is.EqualTo(new[]
+        {
+            new BmsGaugeStateSnapshot(BmsGaugeType.ExClass, .42, false),
+            new BmsGaugeStateSnapshot(BmsGaugeType.Class, .81, false),
+        }));
+        Assert.That(courseMod.ExHardClassHealth.Value, Is.Null);
     }
 
     [Test]

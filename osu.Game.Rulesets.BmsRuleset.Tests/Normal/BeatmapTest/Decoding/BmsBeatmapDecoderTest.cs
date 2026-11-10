@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -24,6 +24,39 @@ namespace osu.Game.Rulesets.BmsRuleset.Tests.Normal.BeatmapTest.Decoding;
 [TestFixture]
 public class BmsBeatmapDecoderTest
 {
+    [TestCase("")]
+    [TestCase("#LNMODE 0")]
+    [TestCase("#LNMODE 1")]
+    [TestCase("#LNMODE 2")]
+    [TestCase("#LNMODE 3")]
+    public void TestLr2LnModeHeaderPreservesPlayerSelectionAndEndpointCount(string header)
+    {
+        foreach (var mode in new[] { BmsLongNoteMode.Undefined, BmsLongNoteMode.LongNote, BmsLongNoteMode.ChargeNote, BmsLongNoteMode.HellChargeNote })
+        {
+            var decoded = decode(header + "\n#BPM 120\n#LNTYPE 1\n#00151:0102\n");
+            Assert.That(((BmsDecodedBeatmap)decoded).LockedLongNoteMode, Is.EqualTo(BmsLongNoteMode.Undefined));
+            var beatmap = (BmsBeatmap)new BmsBeatmapConverter(decoded, new BmsRuleset()).Convert();
+            if (mode == BmsLongNoteMode.LongNote)
+                new osu.Game.Rulesets.BmsRuleset.Gameplay.Mods.LongNoteMode.BmsModLongNote().ApplyToBeatmap(beatmap);
+            else if (mode == BmsLongNoteMode.ChargeNote)
+                new osu.Game.Rulesets.BmsRuleset.Gameplay.Mods.LongNoteMode.BmsModChargeNote().ApplyToBeatmap(beatmap);
+            else if (mode == BmsLongNoteMode.HellChargeNote)
+                new osu.Game.Rulesets.BmsRuleset.Gameplay.Mods.LongNoteMode.BmsModHellChargeNote().ApplyToBeatmap(beatmap);
+            var note = (BmsLongNote)beatmap.HitObjects.Single();
+            Assert.That(note.Beatmap.LockedLongNoteMode, Is.EqualTo(mode));
+            var replay = new osu.Game.Replays.Replay { HasReceivedAllFrames = true };
+            replay.Frames.Add(new BmsReplayFrame(0));
+            replay.Frames.Add(new BmsReplayFrame(note.StartTime, osu.Game.Rulesets.BmsRuleset.IO.Input.BmsAction.Key1));
+            replay.Frames.Add(new BmsReplayFrame(note.EndTime));
+            replay.Frames.Add(new BmsReplayFrame(note.EndTime + 201));
+            var run = BmsReplaySimulation.Run(beatmap, replay, new osu.Game.Scoring.ScoreInfo());
+            var expectedCount = mode is BmsLongNoteMode.ChargeNote or BmsLongNoteMode.HellChargeNote ? 2 : 1;
+            Assert.That(run.Judgements.Count, Is.EqualTo(expectedCount));
+            Assert.That(run.Judgements.All(j => j.Result == HitResult.Perfect), Is.True);
+            Assert.That(osu.Game.Rulesets.BmsRuleset.Gameplay.Scoring.BmsExScore.CreateProgression(run.Judgements).Last(), Is.EqualTo(2 * expectedCount));
+        }
+    }
+
     private static Beatmap decode(string text)
     {
         using var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(text));
@@ -1503,7 +1536,7 @@ public class BmsBeatmapDecoderTest
     }
 
     [Test]
-    public void TestLnMode1ParsesAsLongNote()
+    public void TestLnMode1LeavesPlayerModeUnchanged()
     {
         var beatmap = decode("""
                              #LNMODE 1
@@ -1514,13 +1547,13 @@ public class BmsBeatmapDecoderTest
         var decoded = (BmsDecodedBeatmap)beatmap;
         var note = (BmsHitObject)beatmap.HitObjects[0];
 
-        Assert.That(decoded.LockedLongNoteMode, Is.EqualTo(BmsLongNoteMode.LongNote));
+        Assert.That(decoded.LockedLongNoteMode, Is.EqualTo(BmsLongNoteMode.Undefined));
         Assert.That(note is BmsLongNote, Is.True);
-        Assert.That(note.Beatmap.LockedLongNoteMode, Is.EqualTo(BmsLongNoteMode.LongNote));
+        Assert.That(note.Beatmap.LockedLongNoteMode, Is.EqualTo(BmsLongNoteMode.Undefined));
     }
 
     [Test]
-    public void TestLnMode2ParsesAsChargeNote()
+    public void TestLnMode2LeavesPlayerModeUnchanged()
     {
         var beatmap = decode("""
                              #LNMODE 2
@@ -1531,13 +1564,13 @@ public class BmsBeatmapDecoderTest
         var decoded = (BmsDecodedBeatmap)beatmap;
         var note = (BmsHitObject)beatmap.HitObjects[0];
 
-        Assert.That(decoded.LockedLongNoteMode, Is.EqualTo(BmsLongNoteMode.ChargeNote));
+        Assert.That(decoded.LockedLongNoteMode, Is.EqualTo(BmsLongNoteMode.Undefined));
         Assert.That(note is BmsLongNote, Is.True);
-        Assert.That(note.Beatmap.LockedLongNoteMode, Is.EqualTo(BmsLongNoteMode.ChargeNote));
+        Assert.That(note.Beatmap.LockedLongNoteMode, Is.EqualTo(BmsLongNoteMode.Undefined));
     }
 
     [Test]
-    public void TestLnMode3ParsesAsHellChargeNote()
+    public void TestLnMode3LeavesPlayerModeUnchanged()
     {
         var beatmap = decode("""
                              #LNMODE 3
@@ -1548,9 +1581,9 @@ public class BmsBeatmapDecoderTest
         var decoded = (BmsDecodedBeatmap)beatmap;
         var note = (BmsHitObject)beatmap.HitObjects[0];
 
-        Assert.That(decoded.LockedLongNoteMode, Is.EqualTo(BmsLongNoteMode.HellChargeNote));
+        Assert.That(decoded.LockedLongNoteMode, Is.EqualTo(BmsLongNoteMode.Undefined));
         Assert.That(note is BmsLongNote, Is.True);
-        Assert.That(note.Beatmap.LockedLongNoteMode, Is.EqualTo(BmsLongNoteMode.HellChargeNote));
+        Assert.That(note.Beatmap.LockedLongNoteMode, Is.EqualTo(BmsLongNoteMode.Undefined));
     }
 
     [Test]
@@ -1714,9 +1747,8 @@ public class BmsBeatmapDecoderTest
         var note = (BmsHitObject)beatmap.HitObjects[0];
 
         Assert.That(note is not BmsLongNote, Is.True);
-        // The beatmap's locked LN mode is independent of note type;
-        // the chart above sets LNMODE=2 (ChargeNote).
-        Assert.That(note.Beatmap.LockedLongNoteMode, Is.EqualTo(BmsLongNoteMode.ChargeNote));
+        // LNMODE does not override player selection in the LR2 parser.
+        Assert.That(note.Beatmap.LockedLongNoteMode, Is.EqualTo(BmsLongNoteMode.Undefined));
     }
 
     [Test]

@@ -57,7 +57,7 @@ public partial class TestSceneBmsBeatorajaJudgements : BmsPlayerTestScene
         new BmsReplayFrame(11000),
     ];
 
-    [TestCase(BmsLayoutVariant.Pms9K, 1, 1, 1)]
+    [TestCase(BmsLayoutVariant.Pms9K, 2, 0, 2)]
     [TestCase(BmsLayoutVariant.Bme7K, 2, 0, 2)]
     public void TestPressRulesAndRewind(BmsLayoutVariant variant, int bad, int perfect, int emptyPoor)
     {
@@ -67,51 +67,40 @@ public partial class TestSceneBmsBeatorajaJudgements : BmsPlayerTestScene
             LoadPlayer();
         });
         AddUntilStep("player loaded", () => Player.IsLoaded && Player.Alpha == 1);
-        checkpoint(2900, "after BAD", () => assertState(variant == BmsLayoutVariant.Pms9K ? 0.28 : 0.17, 0, 0,
-            variant == BmsLayoutVariant.Pms9K ? 0 : 1));
-        checkpoint(3100, "after rehit", () => assertState(variant == BmsLayoutVariant.Pms9K ? 0.38 : 0.15,
-            variant == BmsLayoutVariant.Pms9K ? 1 : 0, variant == BmsLayoutVariant.Pms9K ? 1 : 0, 1));
-        checkpoint(5700, "after empty POOR", () => assertState(variant == BmsLayoutVariant.Pms9K ? 0.32 : 0.13,
-            0, variant == BmsLayoutVariant.Pms9K ? 1 : 0, 1));
+        checkpoint(2900, "after BAD", () => assertState(.16, 0, 0, 1));
+        checkpoint(3100, "after rehit", () => assertState(.14, 0, 0, 1));
+        checkpoint(5700, "after empty POOR", () => assertState(.12, 0, 0, 1));
         checkpoint(6300, "after passive judgement", finalState);
-        checkpoint(5700, "rewind after empty POOR", () => assertState(variant == BmsLayoutVariant.Pms9K ? 0.32 : 0.13,
-            0, variant == BmsLayoutVariant.Pms9K ? 1 : 0, 1));
+        checkpoint(5700, "rewind after empty POOR", () => assertState(.12, 0, 0, 1));
         checkpoint(6300, "replay suppressed miss", finalState);
-        checkpoint(3100, "rewind before combo-breaking empty POOR", () => assertState(variant == BmsLayoutVariant.Pms9K ? 0.38 : 0.15,
-            variant == BmsLayoutVariant.Pms9K ? 1 : 0, variant == BmsLayoutVariant.Pms9K ? 1 : 0, 1));
+        checkpoint(3100, "rewind before next empty POOR", () => assertState(.14, 0, 0, 1));
         checkpoint(6300, "replay combo-breaking empty POOR", finalState);
-        checkpoint(2900, "rewind after BAD before rehit", () => assertState(variant == BmsLayoutVariant.Pms9K ? 0.28 : 0.17,
-            0, 0, variant == BmsLayoutVariant.Pms9K ? 0 : 1));
+        checkpoint(2900, "rewind after BAD before rehit", () => assertState(.16, 0, 0, 1));
         checkpoint(6300, "replay from non-consuming BAD", finalState);
 
         void finalState()
         {
             matches();
-            assertState(variant == BmsLayoutVariant.Pms9K ? 0.32 : 0.10, 0, variant == BmsLayoutVariant.Pms9K ? 1 : 0, 2);
+            assertState(.08, 0, 0, 2);
             var processor = (BmsScoreProcessor)Player.ScoreProcessor;
-            Assert.That(processor.Accuracy.Value, Is.EqualTo(variant == BmsLayoutVariant.Pms9K ? 0.5 : 0));
-            Assert.That(processor.TotalScoreWithoutMods.Value, Is.EqualTo(variant == BmsLayoutVariant.Pms9K ? 333333 : 0));
+            Assert.That(processor.Accuracy.Value, Is.Zero);
+            Assert.That(processor.TotalScoreWithoutMods.Value, Is.Zero);
             var saved = new ScoreInfo();
             processor.PopulateScore(saved);
-            Assert.That(saved.Accuracy, Is.EqualTo(variant == BmsLayoutVariant.Pms9K ? 0.5 : 0));
-            Assert.That(saved.MaxCombo, Is.EqualTo(variant == BmsLayoutVariant.Pms9K ? 1 : 0));
+            Assert.That(saved.Accuracy, Is.Zero);
+            Assert.That(saved.MaxCombo, Is.Zero);
             Assert.That(saved.Statistics.GetValueOrDefault(HitResult.Ok), Is.EqualTo(bad));
             Assert.That(saved.Statistics.GetValueOrDefault(HitResult.Miss), Is.EqualTo(emptyPoor));
             Assert.That(saved.Statistics.GetValueOrDefault(HitResult.Meh), Is.Zero);
-            var expectedSequence = variant == BmsLayoutVariant.Pms9K
-                ? new[] { HitResult.Ok, HitResult.Perfect, HitResult.Miss }
-                : new[] { HitResult.Ok, HitResult.Miss, HitResult.Miss, HitResult.Ok };
+            var expectedSequence = new[] { HitResult.Ok, HitResult.Miss, HitResult.Miss, HitResult.Ok };
             Assert.That(processor.JudgementEvents.Where(e => !e.SuppressPenalty).Select(e => e.Result), Is.EqualTo(expectedSequence));
             var suppressed = processor.JudgementEvents.Where(e => e.SuppressPenalty).ToArray();
-            Assert.That(suppressed.Length, Is.EqualTo(variant == BmsLayoutVariant.Pms9K ? 1 : 0));
-            if (variant == BmsLayoutVariant.Pms9K)
-            {
-                Assert.That(suppressed[0].Source.StartTime, Is.EqualTo(6000));
-                Assert.That(suppressed[0].Source.Column, Is.EqualTo(1));
-                Assert.That(suppressed[0].Source.IsScoring, Is.True);
-                Assert.That(suppressed[0].Result, Is.EqualTo(HitResult.Meh));
-                Assert.That(BmsExScore.CreateProgression(processor.JudgementEvents), Is.EqualTo(new[] { 0, 2, 2 }));
-            }
+            Assert.That(suppressed, Is.Empty, "LR2 ALWAYS keeps both consumed BAD results, with no later suppressed POOR.");
+            var consumed = processor.JudgementEvents.Where(e => e.Source.IsScoring).ToArray();
+            Assert.That(consumed.Select(e => e.Source.StartTime), Is.EqualTo(new[] { 3000d, 6000d }));
+            Assert.That(consumed.Select(e => e.Source.Column), Is.EqualTo(new[] { 1, 1 }));
+            Assert.That(consumed.Select(e => e.Result), Is.EqualTo(new[] { HitResult.Ok, HitResult.Ok }));
+            Assert.That(BmsExScore.CreateProgression(processor.JudgementEvents), Is.EqualTo(new[] { 0, 0, 0 }));
             Assert.That(saved.HitEvents.Select(e => e.Result), Is.EqualTo(expectedSequence));
         }
 
@@ -137,8 +126,7 @@ public partial class TestSceneBmsBeatorajaJudgements : BmsPlayerTestScene
         AddStep("assert " + description, assertion);
     }
 
-    // GaugeProperty.NORMAL/PMS at beatoraja 9cddf911: initial 20/30%, BAD -3/-2%,
-    // empty POOR -2/-6%; TOTAL 30 / three notes gives 10% per PGREAT.
+    // Pinned LR2: initial20%, consuming BAD-4%, early empty POOR-2% in both layouts.
     private void assertState(double health, int combo, int highestCombo, int consumed)
     {
         Assert.That(Player.HealthProcessor.Health.Value, Is.EqualTo(health).Within(1e-8), "health");

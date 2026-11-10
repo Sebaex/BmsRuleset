@@ -34,6 +34,9 @@ public class BmsGaugeCalculator
     {
         noteCount = Math.Max(1, noteCount);
 
+        if (profileFamily == BmsGaugeProfileFamily.Lr2)
+            return 160.0 + (noteCount + Math.Min(Math.Max(noteCount - 400, 0), 200)) * 0.16;
+
         return profileFamily == BmsGaugeProfileFamily.Keyboard
             ? Math.Max(300.0, 7.605 * (noteCount + 100) / (0.01 * noteCount + 6.5))
             : Math.Max(260.0, 7.605 * noteCount / (0.01 * noteCount + 6.5));
@@ -59,7 +62,7 @@ public class BmsGaugeCalculator
     }
 
     public double ApplyDelta(double currentHealth, double delta)
-        => currentHealth <= 0 ? 0 : Math.Clamp(currentHealth + delta, Profile.MinHealth, Profile.MaxHealth);
+        => currentHealth <= 0 ? 0 : Profile.ClampHealth(Math.Clamp(currentHealth + delta, Profile.MinHealth, Profile.MaxHealth));
 
     private double gain(double value)
     {
@@ -75,30 +78,20 @@ public class BmsGaugeCalculator
 
     private double calculateDamageScale()
     {
-        var totalScale = Total switch
+        var totalScale = (float)(10.0 / Math.Min(10.0, Math.Max(1.0, Math.Floor(Total / 16.0) - 5.0)));
+
+        // LR2 uses distinct slopes at these chart-size boundaries.
+        var noteScale = NoteCount switch
         {
-            >= 240 => 1,
-            >= 230 => 1.11,
-            >= 210 => 1.25,
-            >= 200 => 1.5,
-            >= 180 => 1.666,
-            >= 160 => 2,
-            >= 150 => 2.5,
-            >= 130 => 3.333,
-            >= 120 => 5,
-            _ => 10,
+            <= 20 => 10f,
+            < 30 => 8f + 0.2f * (30 - NoteCount),
+            < 60 => 5f + 0.2f * (60 - NoteCount) / 3f,
+            < 125 => 4f + (125 - NoteCount) / 65f,
+            < 250 => 3f + 0.008f * (250 - NoteCount),
+            < 500 => 2f + 0.004f * (500 - NoteCount),
+            < 1000 => 1f + 0.002f * (1000 - NoteCount),
+            _ => 1f,
         };
-
-        var noteScale = 1.0;
-        var note = 1000;
-        var modifier = 0.002;
-
-        while (note > NoteCount || note > 1)
-        {
-            noteScale += modifier * (note - Math.Max(NoteCount, note / 2));
-            note /= 2;
-            modifier *= 2;
-        }
 
         return Math.Max(totalScale, noteScale);
     }

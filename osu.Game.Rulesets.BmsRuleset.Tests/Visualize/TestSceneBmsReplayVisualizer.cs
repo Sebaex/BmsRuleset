@@ -13,6 +13,7 @@ using osu.Game.Rulesets.BmsRuleset.Gameplay.Configuration;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.Mods.LongNoteMode;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.Replays;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.Scoring;
+using osu.Game.Rulesets.BmsRuleset.Gameplay.Scoring.Events;
 using osu.Game.Rulesets.BmsRuleset.IO.Input;
 using osu.Game.Rulesets.BmsRuleset.UI;
 using osu.Game.Rulesets.BmsRuleset.UI.HudComponents;
@@ -173,7 +174,16 @@ public partial class TestSceneBmsReplayVisualizer : BmsPlayerTestScene
                 Is.True, $"missed note: {details}; {string.Join(", ", lane.Select(drawable => $"{drawable.Outline}:{drawable.Colour}"))}");
             Assert.That(lane.Any(drawable => drawable.Kind == BmsReplayVisualizer.PlotElementKind.Input && drawable.Colour == (Colour4)BmsHitResultColours.ForHitResult(HitResult.Miss)),
                 Is.True, $"empty press: {details}");
-            Assert.That(lane.Any(drawable => drawable.Kind == BmsReplayVisualizer.PlotElementKind.Input && drawable.Colour == Colour4.White), Is.True, $"unjudged press: {details}");
+            var emptyPresses = ((BmsScoreProcessor)Player.ScoreProcessor).JudgementEvents
+                .Where(judgement => judgement.Source.Kind == BmsJudgementSourceKind.EmptyPoor && judgement.Source.Column == 3).ToArray();
+            Assert.That(emptyPresses.SelectMany(judgement => judgement.TimingObservations).Select(observation => (observation.ActualTime, observation.TimeOffset)),
+                Is.EqualTo(new[] { (3500d, -500d), (3600d, -400d) }), "LR2 ALWAYS penalizes both early presses.");
+            Assert.That(emptyPresses.All(judgement => judgement.Result == HitResult.Miss && !judgement.SuppressPenalty), Is.True);
+            var laneInputs = lane.Where(drawable => drawable.Kind == BmsReplayVisualizer.PlotElementKind.Input).ToArray();
+            Assert.That(laneInputs, Has.Length.EqualTo(2));
+            Assert.That(laneInputs.All(drawable => drawable.Colour == (Colour4)BmsHitResultColours.ForHitResult(HitResult.Miss)), Is.True,
+                "Both archived early empty POOR presses use their exact result colour.");
+            Assert.That(laneInputs.Any(drawable => drawable.Colour == Colour4.White), Is.False);
             Assert.That(lane.Any(drawable => drawable.Kind == BmsReplayVisualizer.PlotElementKind.Connection), Is.False);
         });
 

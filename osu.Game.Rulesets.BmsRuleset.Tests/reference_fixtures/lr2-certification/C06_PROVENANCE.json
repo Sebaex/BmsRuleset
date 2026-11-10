@@ -1,0 +1,65 @@
+{
+  "reference_commits": [
+    "d4995153b0a759859ebc8f859dd868abae39db5a",
+    "52c5ddcb6bf96a2688c36fee30586c89bfe49f99"
+  ],
+  "source_provenance": [
+    "PROVENANCE.json at C02",
+    "C03_PROVENANCE.json",
+    "C04_PROVENANCE.json"
+  ],
+  "files": [
+    {
+      "file": "AlgorithmOracle.java",
+      "sha256_lf_utf8": "4052A7CDDD4FF6E568054091A69A0FB18949A67097CA9FD92EAAD28681B47206"
+    },
+    {
+      "file": "algorithms.csv",
+      "sha256_lf_utf8": "19214F8A4A68A943562C1D97AEF3107280030508E721EB3ED43720EE7C53F359"
+    },
+    {
+      "file": "collector.csv",
+      "sha256_lf_utf8": "B3F767DAAD61D0F966F80397E0A1E8C14D5C401DED296459CD974D3096C77A09"
+    },
+    {
+      "file": "CollectorOracle.java",
+      "sha256_lf_utf8": "9BFDA41B54F289369C708773BFB7469FEE6E851096F307164525C98A36B3CF96"
+    },
+    {
+      "file": "GaugeOracle.java",
+      "sha256_lf_utf8": "A82422C3C828A9E4CE3BD8BA546EFCBB41B937BC9AC9A322DA7A9E9FB05BF84F"
+    },
+    {
+      "file": "gauges.csv",
+      "sha256_lf_utf8": "612CE6ECC182142C43D366F9908E7720649DD203A4A4CC3BF6F8253DF0DADDD2"
+    },
+    {
+      "file": "Generate.ps1",
+      "sha256_lf_utf8": "935AE5800CD9DECFC1CFBF3C5F2972CE9A4A865F9BCFD68B1FB319F2C3F46E0B"
+    },
+    {
+      "file": "parser.csv",
+      "sha256_lf_utf8": "EAD5EFECDEB006E41132FA7AFC3F4B6B383576E4F7AF59C91C004F572A392BC4"
+    },
+    {
+      "file": "ParserOracle.java",
+      "sha256_lf_utf8": "0155947D6AED1D45324A9CDA60E4E53E128CE6BC4E4ABB2837047B71212D56A0"
+    },
+    {
+      "file": "ScoreOracle.java",
+      "sha256_lf_utf8": "C6220B2F65C3C9C277D250ED0B17C7547B95EE511740CCADBA21D87D41E0167A"
+    },
+    {
+      "file": "scores.csv",
+      "sha256_lf_utf8": "62D728EF3434B185B936304FCB49E9FED9A2DA5F8A98162BE89E6B281EE8B155"
+    },
+    {
+      "file": "WindowOracle.java",
+      "sha256_lf_utf8": "AEEBA586D051F346D42930B2CD755E2A1B862FD33030329168FC0C353623FEEA"
+    },
+    {
+      "file": "windows.csv",
+      "sha256_lf_utf8": "4458BC2EE4477307884F56669E370103183325F2BCC77EDFF0455F297595A5C2"
+    }
+  ]
+}
