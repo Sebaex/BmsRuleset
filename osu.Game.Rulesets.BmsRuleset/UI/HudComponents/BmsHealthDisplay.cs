@@ -120,6 +120,7 @@ public sealed partial class BmsHealthDisplay : BmsHudComponent
                     },
                     aboveClearFill = new Box
                     {
+                        Name = "Above clear fill",
                         Anchor = Anchor.BottomLeft,
                         Origin = Anchor.BottomLeft,
                         RelativeSizeAxes = Axes.Both,
@@ -129,8 +130,9 @@ public sealed partial class BmsHealthDisplay : BmsHudComponent
                     },
                     clearLine = new Box
                     {
+                        Name = "Clear threshold line",
                         Anchor = Anchor.BottomLeft,
-                        Origin = Anchor.CentreLeft,
+                        Origin = Anchor.BottomLeft,
                         RelativeSizeAxes = Axes.X,
                         RelativePositionAxes = Axes.Y,
                         Y = -clear_threshold,

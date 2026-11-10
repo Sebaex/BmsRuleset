@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Shapes;
 using osu.Framework.Testing;
 using osu.Game.Rulesets.BmsRuleset.Beatmaps;
 using osu.Game.Rulesets.BmsRuleset.Beatmaps.Objects;
@@ -73,6 +75,27 @@ public partial class TestSceneBmsHealthBar : OsuTestScene
             return dp.ShowClearLine && dp.ClearThreshold == 0.6;
         });
         AddStep("set health above clear", () => healthProcessor.Health.Value = 0.65);
+    }
+
+    [TestCase(BmsGaugeType.AssistEasy)]
+    [TestCase(BmsGaugeType.Easy)]
+    [TestCase(BmsGaugeType.Normal)]
+    public void TestClearLineAlignsWithStartOfRedZone(BmsGaugeType gaugeType)
+    {
+        BmsHealthDisplay display = null!;
+
+        AddStep("fill gauge", () =>
+        {
+            healthProcessor.SetGaugeType(gaugeType);
+            healthProcessor.Health.Value = 1;
+            display = this.ChildrenOfType<BmsHealthDisplay>().Single();
+        });
+        AddUntilStep("show red clear zone", () => display.ChildrenOfType<Box>().Single(box => box.Name == "Above clear fill").Alpha == 1);
+        AddAssert("clear threshold aligns with red zone edge", () =>
+            Math.Abs(
+                display.ChildrenOfType<Box>().Single(box => box.Name == "Above clear fill").ScreenSpaceDrawQuad.AABBFloat.Bottom
+                - display.ChildrenOfType<Box>().Single(box => box.Name == "Clear threshold line").ScreenSpaceDrawQuad.AABBFloat.Bottom),
+            () => Is.LessThan(0.01f));
     }
 
     [Test]
