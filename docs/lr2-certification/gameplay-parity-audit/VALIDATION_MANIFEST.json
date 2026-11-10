@@ -1,0 +1,1723 @@
+{
+  "phase": "LR2-GP",
+  "baseline": "afa95e3a5d9881adbf29e1f89fd61329173ccc29",
+  "production_tree": "77488b1eacb4c5d01af9bce992dcb375db84b538",
+  "historical_tests_tree": "77531f9c0fd10215098014a6e238398acb023dc7",
+  "production_changes": [],
+  "sdk": "10.0.401",
+  "configuration": "Release net10.0",
+  "localisation_dependency": "Removed by owner; LR2-CL not certified here",
+  "f099": "Excluded; two exploratory derived controls removed from final harness; historical source untouched",
+  "references": [
+    {
+      "head": "d4995153b0a759859ebc8f859dd868abae39db5a",
+      "status": "clean",
+      "name": "EndlessDream"
+    },
+    {
+      "head": "52c5ddcb6bf96a2688c36fee30586c89bfe49f99",
+      "status": "clean",
+      "name": "jbms-parser"
+    },
+    {
+      "head": "9a10d935b05a3b896f4bd811d620f2023331db93",
+      "status": "clean",
+      "name": "osu"
+    },
+    {
+      "head": "37c3e328c8cc7a018234ec78982ea12d3712096a",
+      "status": "clean",
+      "name": "osu-framework"
+    }
+  ],
+  "support_jar_sha256": "38101C00CB6918FEBB9E0671558AD9F11D1DB842A699AF1EE80CA5BA217BB249",
+  "support_jar_limit": "Auxiliary MathUtils/ClearType dependencies; no complete source identity or full-player certification",
+  "java_execution_scope": "Original gauge, ScoreData, literal updateMicro prefix, actual parser; input phases and course carry composed from static callers",
+  "java_runs": [
+    {
+      "id": "java-01",
+      "files": [
+        {
+          "file": "FlowOracle.java",
+          "sha256": "EF1B9254485C4B5975C8239321B1828AAF7AE9D49F7F780BF7EF3D44E8F68DC6"
+        },
+        {
+          "file": "javac.log",
+          "sha256": "6B24309E303C7CFE00F62337DF696504382872955F513241056D03F6CF18B902"
+        }
+      ]
+    },
+    {
+      "id": "java-02",
+      "files": [
+        {
+          "file": "flow.csv",
+          "sha256": "1472AFFBAC701FD58B08D9DA371A37CBF436CAB74AFB9DBE8E716436C79DE739"
+        },
+        {
+          "file": "FlowOracle.java",
+          "sha256": "A8266E6462660A5F8DCC66E33B98513EBDE5746893BADD75278A63F5A8749430"
+        },
+        {
+          "file": "java-stderr.log",
+          "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+        },
+        {
+          "file": "javac.log",
+          "sha256": "1EA03474CDD8A3152A24A9DAF6488A45CD026E0DCBF89143A709430697C8A372"
+        },
+        {
+          "file": "PROVENANCE.json",
+          "sha256": "02AC7012695EEA0D0F0BB1CAA78A06A480187AF6862BB5F114255538F8EAEBB6"
+        }
+      ]
+    },
+    {
+      "id": "java-03",
+      "files": [
+        {
+          "file": "flow.csv",
+          "sha256": "B9CE66E51ADDBF601D2CA652C526429CEF9FBD8CBFBB597697598590FFA7BF51"
+        },
+        {
+          "file": "FlowOracle.java",
+          "sha256": "A340ACD7C173305BA195711C9A610EEF87A6D2F244D37F9A59F274509EEBDD5E"
+        },
+        {
+          "file": "java-stderr.log",
+          "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+        },
+        {
+          "file": "javac.log",
+          "sha256": "1EA03474CDD8A3152A24A9DAF6488A45CD026E0DCBF89143A709430697C8A372"
+        },
+        {
+          "file": "PROVENANCE.json",
+          "sha256": "7CE14C6CBBF1ABB33186C0D16985803376AD7CE42D2ADA3E2C9ADC7CE835E7EB"
+        }
+      ]
+    },
+    {
+      "id": "java-04",
+      "files": [
+        {
+          "file": "flow.csv",
+          "sha256": "4C5C5CE60D0AA7E02718962ACB346D364428C747FB81115206F7A2C8E6648C95"
+        },
+        {
+          "file": "FlowOracle.java",
+          "sha256": "E2E63A072DF1D8BE86A9E5FE936088B91F32EC49679B0710771345C509F1886F"
+        },
+        {
+          "file": "java-stderr.log",
+          "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+        },
+        {
+          "file": "javac.log",
+          "sha256": "1EA03474CDD8A3152A24A9DAF6488A45CD026E0DCBF89143A709430697C8A372"
+        },
+        {
+          "file": "PROVENANCE.json",
+          "sha256": "695587741316FF9B8E3B25F6A9D291D0A9EB71B9993B1FDE1F92DF6BF6005791"
+        }
+      ]
+    },
+    {
+      "id": "java-05",
+      "files": [
+        {
+          "file": "flow.csv",
+          "sha256": "4C5C5CE60D0AA7E02718962ACB346D364428C747FB81115206F7A2C8E6648C95"
+        },
+        {
+          "file": "FlowOracle.java",
+          "sha256": "7256BB40381B59BECFFE0085E8436182A00D9C9BB91E4F9A18A9B20814F1D2EF"
+        },
+        {
+          "file": "java-stderr.log",
+          "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+        },
+        {
+          "file": "javac.log",
+          "sha256": "1EA03474CDD8A3152A24A9DAF6488A45CD026E0DCBF89143A709430697C8A372"
+        },
+        {
+          "file": "PROVENANCE.json",
+          "sha256": "7795A966736561593F1C63BDE4D55465657C350E8E91C96063800BB3013E3024"
+        }
+      ]
+    },
+    {
+      "id": "java-06",
+      "files": [
+        {
+          "file": "flow.csv",
+          "sha256": "7BA2D534DAF12482674DD8E3CC3F456EA20564AEC4815718382AB230AA5F05B7"
+        },
+        {
+          "file": "FlowOracle.java",
+          "sha256": "F821D277B2B319CCC8C3161B6A2CDEA19D1495C1E008D7326598D73FB595B096"
+        },
+        {
+          "file": "java-stderr.log",
+          "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+        },
+        {
+          "file": "javac.log",
+          "sha256": "1EA03474CDD8A3152A24A9DAF6488A45CD026E0DCBF89143A709430697C8A372"
+        },
+        {
+          "file": "PROVENANCE.json",
+          "sha256": "F42910FF13060BBF5B8B311AA88F5E725349E78F8DEA26E5D02E2AD1018672E0"
+        }
+      ]
+    },
+    {
+      "id": "java-07",
+      "files": [
+        {
+          "file": "flow.csv",
+          "sha256": "AD381F114B05F89D728ECF679E155CA1EFE781DCF2F9DD23567D05C554C9E531"
+        },
+        {
+          "file": "FlowOracle.java",
+          "sha256": "167E332C9D66DB4BBDD80408AF315BB4F80303929F36F8006FC0BB51885A0AB7"
+        },
+        {
+          "file": "java-stderr.log",
+          "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+        },
+        {
+          "file": "javac.log",
+          "sha256": "1EA03474CDD8A3152A24A9DAF6488A45CD026E0DCBF89143A709430697C8A372"
+        },
+        {
+          "file": "mines.csv",
+          "sha256": "01EF2386236B01A79E5E9C4E5ED0A4D3003D78DD4099B97D3B54053E9361331D"
+        },
+        {
+          "file": "parser-stderr.log",
+          "sha256": "F066FF7D76E04AA8B99321A41AB1AFC4E59A5CF31337BA79457B8D32BC8B386B"
+        },
+        {
+          "file": "PROVENANCE.json",
+          "sha256": "CADC9BF3641C6B0AAC8B65316B475B69CDE88A9A52BAA555C078AD985A736EE6"
+        }
+      ]
+    },
+    {
+      "id": "java-08",
+      "files": [
+        {
+          "file": "flow.csv",
+          "sha256": "F8B80D2E0FC96FFF2F80677F835E92CF27FA516975F1FF2E526669E2849B50F4"
+        },
+        {
+          "file": "FlowOracle.java",
+          "sha256": "B92596C69AD1F7C997A660D3DE6800DB154F87A36718A960B221118B4BC94C05"
+        },
+        {
+          "file": "java-stderr.log",
+          "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+        },
+        {
+          "file": "javac.log",
+          "sha256": "1EA03474CDD8A3152A24A9DAF6488A45CD026E0DCBF89143A709430697C8A372"
+        },
+        {
+          "file": "mines.csv",
+          "sha256": "01EF2386236B01A79E5E9C4E5ED0A4D3003D78DD4099B97D3B54053E9361331D"
+        },
+        {
+          "file": "parser-stderr.log",
+          "sha256": "358DBFF2E4ADEA6F58B85FA6110473C68A841D583F65A4B21C8833A9C3D1925D"
+        },
+        {
+          "file": "PROVENANCE.json",
+          "sha256": "30AFD18F07E06B7BE85A3838F1319B2E3045F4823237EF723225B5C3CE1B89C6"
+        }
+      ]
+    },
+    {
+      "id": "java-09",
+      "files": [
+        {
+          "file": "flow.csv",
+          "sha256": "F8B80D2E0FC96FFF2F80677F835E92CF27FA516975F1FF2E526669E2849B50F4"
+        },
+        {
+          "file": "FlowOracle.java",
+          "sha256": "B92596C69AD1F7C997A660D3DE6800DB154F87A36718A960B221118B4BC94C05"
+        },
+        {
+          "file": "java-stderr.log",
+          "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+        },
+        {
+          "file": "javac.log",
+          "sha256": "1EA03474CDD8A3152A24A9DAF6488A45CD026E0DCBF89143A709430697C8A372"
+        },
+        {
+          "file": "mines.csv",
+          "sha256": "01EF2386236B01A79E5E9C4E5ED0A4D3003D78DD4099B97D3B54053E9361331D"
+        },
+        {
+          "file": "parser-stderr.log",
+          "sha256": "D269191E9B47EC0CD5E4BF8B3D3C219E45EB0C27DD0A78304E8663275739B27E"
+        },
+        {
+          "file": "PROVENANCE.json",
+          "sha256": "30AFD18F07E06B7BE85A3838F1319B2E3045F4823237EF723225B5C3CE1B89C6"
+        }
+      ]
+    }
+  ],
+  "csharp_runs": [
+    {
+      "id": "audit-01",
+      "filter": "FullyQualifiedName~GameplayParityAudit",
+      "total": 11,
+      "passed": 5,
+      "failed": 6,
+      "omitted": 0,
+      "test_dll_sha256": "DDBC4BA9A75400E26E629C5CDBA0C625EE25E794461645DA12CC479CFE9E140A",
+      "production_dll_sha256": "ECD30CFBD3DFCB86598628657C1E9097751421C5346AEE9A44824CC27BA90C87",
+      "evidence": [
+        {
+          "file": "build.log",
+          "sha256": "F602557AD58F941D4A562AAB47BFE0624F28ED95F60D52CB5284AAD5F4A33BF7"
+        },
+        {
+          "file": "filter.txt",
+          "sha256": "D8FAE64A5270CA623CEC63E711DC2FBB21B03B14C7738F39FAF2F8E869F181CB"
+        },
+        {
+          "file": "hashes.json",
+          "sha256": "42CD5055EA0CE416D21D7688C537E3FD6C74DB7D0C5F9F4E5384F019A72CC48F"
+        },
+        {
+          "file": "result.json",
+          "sha256": "03DA29110C9466F804B858C58A57B3632406992ECF71210D6413BF34E55764C0"
+        },
+        {
+          "file": "tests.log",
+          "sha256": "08A0DF4A24210A03762755F46F369E29E115ECED2C36195C65D3851070C74871"
+        },
+        {
+          "file": "tests.trx",
+          "sha256": "F88172FB3566902A68F665B1B3F703720739DDF1B876A01AE2B96D1A16B89668"
+        }
+      ],
+      "cases": [
+        {
+          "name": "GP_Flow_class-fifteen-bad",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPTRACE class-fifteen-bad step=15 event=j3 javaHP=0.0000000000000000 csharpHP=1.9999999999999973 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=0 csharpCombo=0 javaEX=0 csharpEX=0 score=0",
+            "GPTRACE class-fifteen-bad step=16 event=j0 javaHP=0.0000000000000000 csharpHP=2.0999999999999974 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=1 csharpCombo=1 javaEX=2 csharpEX=2 score=1000"
+          ]
+        },
+        {
+          "name": "GP_Flow_exclass-five-bad",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPTRACE exclass-five-bad step=5 event=j3 javaHP=0.0000000000000000 csharpHP=2.0000000000000004 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=0 csharpCombo=0 javaEX=0 csharpEX=0 score=0",
+            "GPTRACE exclass-five-bad step=6 event=j0 javaHP=0.0000000000000000 csharpHP=2.1000000000000005 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=1 csharpCombo=1 javaEX=2 csharpEX=2 score=1000"
+          ]
+        },
+        {
+          "name": "GP_Flow_f099-fixed-flow",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPTRACE f099-fixed-flow step=3 event=j0 javaHP=22.000000000000000 csharpHP=22 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=2 csharpCombo=2 javaEX=3 csharpEX=3 score=375000",
+            "GPTRACE f099-fixed-flow step=4 event=j0 javaHP=25.000000000000000 csharpHP=25 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=3 csharpCombo=3 javaEX=5 csharpEX=5 score=625000"
+          ]
+        },
+        {
+          "name": "GP_Flow_hard-five-bad",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPTRACE hard-five-bad step=5 event=j3 javaHP=0.0000000000000000 csharpHP=2.0000000000000004 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=0 csharpCombo=0 javaEX=0 csharpEX=0 score=0",
+            "GPTRACE hard-five-bad step=6 event=j0 javaHP=0.0000000000000000 csharpHP=2.1000000000000005 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=1 csharpCombo=1 javaEX=2 csharpEX=2 score=1000"
+          ]
+        },
+        {
+          "name": "GP_Flow_mine-between-pg",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPTRACE mine-between-pg step=2 event=mine20 javaHP=66.000000000000000 csharpHP=66.00000000000001 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=1 csharpCombo=0 javaEX=2 csharpEX=2 score=666667",
+            "GPTRACE mine-between-pg step=3 event=j0 javaHP=72.000000000000000 csharpHP=72.00000000000001 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=2 csharpCombo=1 javaEX=4 csharpEX=4 score=1000000"
+          ]
+        },
+        {
+          "name": "GP_Flow_mixed",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPTRACE mixed step=6 event=j5 javaHP=68.750007629394530 csharpHP=68.75 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=0 csharpCombo=0 javaEX=3 csharpEX=3 score=1500",
+            "GPTRACE mixed step=7 event=j0 javaHP=69.050010681152340 csharpHP=69.05 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=1 csharpCombo=1 javaEX=5 csharpEX=5 score=2500"
+          ]
+        },
+        {
+          "name": "GP_Flow_normal-clear-200",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPTRACE normal-clear-200 step=200 event=j0 javaHP=80.000053405761720 csharpHP=80.00000000000004 javaAlive=true csharpAlive=True javaQualified=true csharpQualified=True javaCombo=200 csharpCombo=200 javaEX=400 csharpEX=400 score=200000",
+            "GPTRACE normal-clear-200 step=201 event=j0 javaHP=80.300056457519530 csharpHP=80.30000000000005 javaAlive=true csharpAlive=True javaQualified=true csharpQualified=True javaCombo=201 csharpCombo=201 javaEX=402 csharpEX=402 score=201000"
+          ]
+        },
+        {
+          "name": "GP_Flow_normal-clear-300",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPTRACE normal-clear-300 step=300 event=j0 javaHP=79.999923706054690 csharpHP=80.00000000000004 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=True javaCombo=300 csharpCombo=300 javaEX=600 csharpEX=600 score=300000",
+            "GPTRACE normal-clear-300 step=301 event=j0 javaHP=80.199920654296880 csharpHP=80.20000000000005 javaAlive=true csharpAlive=True javaQualified=true csharpQualified=True javaCombo=301 csharpCombo=301 javaEX=602 csharpEX=602 score=301000"
+          ]
+        },
+        {
+          "name": "RealEngineF099ContinuationKeepsJavaResultAndGaugeOrder",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "SimultaneousReplayStateMatchesJavaKeyOrder(False)",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPORDER reverse=False results=Perfect|Ok health=0.020500001907348638 failed=False javaHP=2.0499999523162840 javaAlive=true"
+          ]
+        },
+        {
+          "name": "SimultaneousReplayStateMatchesJavaKeyOrder(True)",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPORDER reverse=True results=Ok|Perfect health=0 failed=True javaHP=2.0499999523162840 javaAlive=true"
+          ]
+        }
+      ],
+      "inputs_snapshot": null
+    },
+    {
+      "id": "audit-02",
+      "filter": "FullyQualifiedName~GameplayParityAudit",
+      "total": 15,
+      "passed": 7,
+      "failed": 8,
+      "omitted": 0,
+      "test_dll_sha256": "D719189269DA150ED80A4F47E0FA8CD0912448511DBCD5C858BB60F029060CCC",
+      "production_dll_sha256": "0A1AF2BCDC14F29FA86170C4885CEF57A5E059A332C588DD4E982511B1F8DD8B",
+      "evidence": [
+        {
+          "file": "build.log",
+          "sha256": "174D0D4E97D8ADA2AA5E114742007ABF21064EFB7805C8D15397C07075947C5B"
+        },
+        {
+          "file": "filter.txt",
+          "sha256": "D8FAE64A5270CA623CEC63E711DC2FBB21B03B14C7738F39FAF2F8E869F181CB"
+        },
+        {
+          "file": "hashes.json",
+          "sha256": "D7A6335D9D69C6893767A7FE72EE55601350A782EFEBA12CF7FFEE39A38F8C87"
+        },
+        {
+          "file": "result.json",
+          "sha256": "03DA29110C9466F804B858C58A57B3632406992ECF71210D6413BF34E55764C0"
+        },
+        {
+          "file": "tests.log",
+          "sha256": "1CAF2CDFE47364A05E2441784C57C287F2D6053D29BE022F0300977048ADABBE"
+        },
+        {
+          "file": "tests.trx",
+          "sha256": "CBF9FAD05FB26C69B96F00C9FA2F61CA4EE9A69A101B25AB582491DE23740D0E"
+        }
+      ],
+      "cases": [
+        {
+          "name": "GP_Flow_class-fifteen-bad",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPTRACE class-fifteen-bad step=15 event=j3 javaHP=0.0000000000000000 csharpHP=1.9999999999999973 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=0 csharpCombo=0 javaEX=0 csharpEX=0 score=0",
+            "GPTRACE class-fifteen-bad step=16 event=j0 javaHP=0.0000000000000000 csharpHP=2.0999999999999974 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=1 csharpCombo=1 javaEX=2 csharpEX=2 score=1000"
+          ]
+        },
+        {
+          "name": "GP_Flow_exclass-five-bad",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPTRACE exclass-five-bad step=5 event=j3 javaHP=0.0000000000000000 csharpHP=2.0000000000000004 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=0 csharpCombo=0 javaEX=0 csharpEX=0 score=0",
+            "GPTRACE exclass-five-bad step=6 event=j0 javaHP=0.0000000000000000 csharpHP=2.1000000000000005 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=1 csharpCombo=1 javaEX=2 csharpEX=2 score=1000"
+          ]
+        },
+        {
+          "name": "GP_Flow_f099-fixed-flow",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPTRACE f099-fixed-flow step=3 event=j0 javaHP=22.000000000000000 csharpHP=22 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=2 csharpCombo=2 javaEX=3 csharpEX=3 score=375000",
+            "GPTRACE f099-fixed-flow step=4 event=j0 javaHP=25.000000000000000 csharpHP=25 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=3 csharpCombo=3 javaEX=5 csharpEX=5 score=625000"
+          ]
+        },
+        {
+          "name": "GP_Flow_hard-five-bad",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPTRACE hard-five-bad step=5 event=j3 javaHP=0.0000000000000000 csharpHP=2.0000000000000004 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=0 csharpCombo=0 javaEX=0 csharpEX=0 score=0",
+            "GPTRACE hard-five-bad step=6 event=j0 javaHP=0.0000000000000000 csharpHP=2.1000000000000005 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=1 csharpCombo=1 javaEX=2 csharpEX=2 score=1000"
+          ]
+        },
+        {
+          "name": "GP_Flow_mine-between-pg",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPTRACE mine-between-pg step=2 event=mine20 javaHP=66.000000000000000 csharpHP=66.00000000000001 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=1 csharpCombo=0 javaEX=2 csharpEX=2 score=666667",
+            "GPTRACE mine-between-pg step=3 event=j0 javaHP=72.000000000000000 csharpHP=72.00000000000001 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=2 csharpCombo=1 javaEX=4 csharpEX=4 score=1000000"
+          ]
+        },
+        {
+          "name": "GP_Flow_mixed",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPTRACE mixed step=6 event=j5 javaHP=68.750007629394530 csharpHP=68.75 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=0 csharpCombo=0 javaEX=3 csharpEX=3 score=1500",
+            "GPTRACE mixed step=7 event=j0 javaHP=69.050010681152340 csharpHP=69.05 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=1 csharpCombo=1 javaEX=5 csharpEX=5 score=2500"
+          ]
+        },
+        {
+          "name": "GP_Flow_normal-clear-200",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPTRACE normal-clear-200 step=200 event=j0 javaHP=80.000053405761720 csharpHP=80.00000000000004 javaAlive=true csharpAlive=True javaQualified=true csharpQualified=True javaCombo=200 csharpCombo=200 javaEX=400 csharpEX=400 score=200000",
+            "GPTRACE normal-clear-200 step=201 event=j0 javaHP=80.300056457519530 csharpHP=80.30000000000005 javaAlive=true csharpAlive=True javaQualified=true csharpQualified=True javaCombo=201 csharpCombo=201 javaEX=402 csharpEX=402 score=201000"
+          ]
+        },
+        {
+          "name": "GP_Flow_normal-clear-300",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPTRACE normal-clear-300 step=300 event=j0 javaHP=79.999923706054690 csharpHP=80.00000000000004 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=True javaCombo=300 csharpCombo=300 javaEX=600 csharpEX=600 score=300000",
+            "GPTRACE normal-clear-300 step=301 event=j0 javaHP=80.199920654296880 csharpHP=80.20000000000005 javaAlive=true csharpAlive=True javaQualified=true csharpQualified=True javaCombo=301 csharpCombo=301 javaEX=602 csharpEX=602 score=301000"
+          ]
+        },
+        {
+          "name": "RealEngineF099ContinuationKeepsJavaResultAndGaugeOrder",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "ReplayMineAndNoteAtSameInstantMatchJavaPhases(False,False)",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPMINEPHASE reverse=False control=False events=Note|Landmine health=0.020500000476837157 failed=False javaHP=0.0000000000000000 javaAlive=false"
+          ]
+        },
+        {
+          "name": "ReplayMineAndNoteAtSameInstantMatchJavaPhases(False,True)",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPMINEPHASE reverse=False control=True events=Note|Landmine health=0.096 failed=False javaHP=9.6000003814697270 javaAlive=true"
+          ]
+        },
+        {
+          "name": "ReplayMineAndNoteAtSameInstantMatchJavaPhases(True,False)",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPMINEPHASE reverse=True control=False events=Note|Landmine health=0.020500000476837157 failed=False javaHP=0.0000000000000000 javaAlive=false"
+          ]
+        },
+        {
+          "name": "ReplayMineAndNoteAtSameInstantMatchJavaPhases(True,True)",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPMINEPHASE reverse=True control=True events=Note|Landmine health=0.096 failed=False javaHP=9.6000003814697270 javaAlive=true"
+          ]
+        },
+        {
+          "name": "SimultaneousReplayStateMatchesJavaKeyOrder(False)",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPORDER reverse=False results=Perfect|Ok health=0.020500001907348638 failed=False javaHP=2.0499999523162840 javaAlive=true"
+          ]
+        },
+        {
+          "name": "SimultaneousReplayStateMatchesJavaKeyOrder(True)",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPORDER reverse=True results=Ok|Perfect health=0 failed=True javaHP=2.0499999523162840 javaAlive=true"
+          ]
+        }
+      ],
+      "inputs_snapshot": null
+    },
+    {
+      "id": "audit-03",
+      "filter": "FullyQualifiedName~GameplayParityAudit",
+      "total": 16,
+      "passed": 7,
+      "failed": 9,
+      "omitted": 0,
+      "test_dll_sha256": "834B6EC589F785C1C251FABB08C95F1E86081E7121CAB6635D058FF23DF90E5F",
+      "production_dll_sha256": "640648DA28A2D9C356760E109E1AE3EFCC8CE5126F9699071B6EF16A58A106C8",
+      "evidence": [
+        {
+          "file": "build.log",
+          "sha256": "EBC38B5BEE35F5E28E6DFD82F1F00F45D2D714075F7210B1C8B44DD812BDD637"
+        },
+        {
+          "file": "filter.txt",
+          "sha256": "D8FAE64A5270CA623CEC63E711DC2FBB21B03B14C7738F39FAF2F8E869F181CB"
+        },
+        {
+          "file": "hashes.json",
+          "sha256": "34EA15E8EE1200204D075AD17E4F53CCF9BC0C66720BCB08812F4DA79C097316"
+        },
+        {
+          "file": "result.json",
+          "sha256": "03DA29110C9466F804B858C58A57B3632406992ECF71210D6413BF34E55764C0"
+        },
+        {
+          "file": "tests.log",
+          "sha256": "4144CA30F7C51F410C808BAA3747226CA2A4509E204DD58304E871626899F748"
+        },
+        {
+          "file": "tests.trx",
+          "sha256": "F954CF4ABFDA473E9D2852CC47F26AD159D45BAF11F439EB1085380070967021"
+        }
+      ],
+      "cases": [
+        {
+          "name": "CourseAggregateMatchesOriginalContinuousMaximumCombo",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPCOURSE stageMax=2|3 aggregateMax=3 javaCourseMax=5"
+          ]
+        },
+        {
+          "name": "GP_Flow_class-fifteen-bad",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPTRACE class-fifteen-bad step=15 event=j3 javaHP=0.0000000000000000 csharpHP=1.9999999999999973 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=0 csharpCombo=0 javaEX=0 csharpEX=0 score=0",
+            "GPTRACE class-fifteen-bad step=16 event=j0 javaHP=0.0000000000000000 csharpHP=2.0999999999999974 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=1 csharpCombo=1 javaEX=2 csharpEX=2 score=1000"
+          ]
+        },
+        {
+          "name": "GP_Flow_exclass-five-bad",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPTRACE exclass-five-bad step=5 event=j3 javaHP=0.0000000000000000 csharpHP=2.0000000000000004 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=0 csharpCombo=0 javaEX=0 csharpEX=0 score=0",
+            "GPTRACE exclass-five-bad step=6 event=j0 javaHP=0.0000000000000000 csharpHP=2.1000000000000005 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=1 csharpCombo=1 javaEX=2 csharpEX=2 score=1000"
+          ]
+        },
+        {
+          "name": "GP_Flow_f099-fixed-flow",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPTRACE f099-fixed-flow step=3 event=j0 javaHP=22.000000000000000 csharpHP=22 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=2 csharpCombo=2 javaEX=3 csharpEX=3 score=375000",
+            "GPTRACE f099-fixed-flow step=4 event=j0 javaHP=25.000000000000000 csharpHP=25 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=3 csharpCombo=3 javaEX=5 csharpEX=5 score=625000"
+          ]
+        },
+        {
+          "name": "GP_Flow_hard-five-bad",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPTRACE hard-five-bad step=5 event=j3 javaHP=0.0000000000000000 csharpHP=2.0000000000000004 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=0 csharpCombo=0 javaEX=0 csharpEX=0 score=0",
+            "GPTRACE hard-five-bad step=6 event=j0 javaHP=0.0000000000000000 csharpHP=2.1000000000000005 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=1 csharpCombo=1 javaEX=2 csharpEX=2 score=1000"
+          ]
+        },
+        {
+          "name": "GP_Flow_mine-between-pg",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPTRACE mine-between-pg step=2 event=mine20 javaHP=66.000000000000000 csharpHP=66.00000000000001 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=1 csharpCombo=0 javaEX=2 csharpEX=2 score=666667",
+            "GPTRACE mine-between-pg step=3 event=j0 javaHP=72.000000000000000 csharpHP=72.00000000000001 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=2 csharpCombo=1 javaEX=4 csharpEX=4 score=1000000"
+          ]
+        },
+        {
+          "name": "GP_Flow_mixed",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPTRACE mixed step=6 event=j5 javaHP=68.750007629394530 csharpHP=68.75 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=0 csharpCombo=0 javaEX=3 csharpEX=3 score=1500",
+            "GPTRACE mixed step=7 event=j0 javaHP=69.050010681152340 csharpHP=69.05 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=1 csharpCombo=1 javaEX=5 csharpEX=5 score=2500"
+          ]
+        },
+        {
+          "name": "GP_Flow_normal-clear-200",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPTRACE normal-clear-200 step=200 event=j0 javaHP=80.000053405761720 csharpHP=80.00000000000004 javaAlive=true csharpAlive=True javaQualified=true csharpQualified=True javaCombo=200 csharpCombo=200 javaEX=400 csharpEX=400 score=200000",
+            "GPTRACE normal-clear-200 step=201 event=j0 javaHP=80.300056457519530 csharpHP=80.30000000000005 javaAlive=true csharpAlive=True javaQualified=true csharpQualified=True javaCombo=201 csharpCombo=201 javaEX=402 csharpEX=402 score=201000"
+          ]
+        },
+        {
+          "name": "GP_Flow_normal-clear-300",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPTRACE normal-clear-300 step=300 event=j0 javaHP=79.999923706054690 csharpHP=80.00000000000004 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=True javaCombo=300 csharpCombo=300 javaEX=600 csharpEX=600 score=300000",
+            "GPTRACE normal-clear-300 step=301 event=j0 javaHP=80.199920654296880 csharpHP=80.20000000000005 javaAlive=true csharpAlive=True javaQualified=true csharpQualified=True javaCombo=301 csharpCombo=301 javaEX=602 csharpEX=602 score=301000"
+          ]
+        },
+        {
+          "name": "RealEngineF099ContinuationKeepsJavaResultAndGaugeOrder",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "ReplayMineAndNoteAtSameInstantMatchJavaPhases(False,False)",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPMINEPHASE reverse=False control=False events=Note|Landmine health=0.020500000476837157 failed=False javaHP=0.0000000000000000 javaAlive=false"
+          ]
+        },
+        {
+          "name": "ReplayMineAndNoteAtSameInstantMatchJavaPhases(False,True)",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPMINEPHASE reverse=False control=True events=Note|Landmine health=0.096 failed=False javaHP=9.6000003814697270 javaAlive=true"
+          ]
+        },
+        {
+          "name": "ReplayMineAndNoteAtSameInstantMatchJavaPhases(True,False)",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPMINEPHASE reverse=True control=False events=Note|Landmine health=0.020500000476837157 failed=False javaHP=0.0000000000000000 javaAlive=false"
+          ]
+        },
+        {
+          "name": "ReplayMineAndNoteAtSameInstantMatchJavaPhases(True,True)",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPMINEPHASE reverse=True control=True events=Note|Landmine health=0.096 failed=False javaHP=9.6000003814697270 javaAlive=true"
+          ]
+        },
+        {
+          "name": "SimultaneousReplayStateMatchesJavaKeyOrder(False)",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPORDER reverse=False results=Perfect|Ok health=0.020500001907348638 failed=False javaHP=2.0499999523162840 javaAlive=true"
+          ]
+        },
+        {
+          "name": "SimultaneousReplayStateMatchesJavaKeyOrder(True)",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPORDER reverse=True results=Ok|Perfect health=0 failed=True javaHP=2.0499999523162840 javaAlive=true"
+          ]
+        }
+      ],
+      "inputs_snapshot": null
+    },
+    {
+      "id": "audit-04",
+      "filter": "FullyQualifiedName~GameplayParityAudit",
+      "total": 20,
+      "passed": 8,
+      "failed": 12,
+      "omitted": 0,
+      "test_dll_sha256": "4E417B4FA0F0B1879FC11F53A9FFFB5629AB7C0A607028E458D9A9D870A1C43E",
+      "production_dll_sha256": "6920E6741CF3128D6BC58CC60F7DDE7E35EA3BFF1B95C7161DD99A19145944BF",
+      "evidence": [
+        {
+          "file": "build.log",
+          "sha256": "19A635A72F347642BC71375D67D7CBA0929259821350C82BCF1EC5CF4221B2C7"
+        },
+        {
+          "file": "filter.txt",
+          "sha256": "D8FAE64A5270CA623CEC63E711DC2FBB21B03B14C7738F39FAF2F8E869F181CB"
+        },
+        {
+          "file": "hashes.json",
+          "sha256": "5EA63CE2E40AE70DCFA06A85CF2FFD5C2818A75C374B1BA82EECF29F7E1B5088"
+        },
+        {
+          "file": "result.json",
+          "sha256": "03DA29110C9466F804B858C58A57B3632406992ECF71210D6413BF34E55764C0"
+        },
+        {
+          "file": "tests.log",
+          "sha256": "AAA5F2B804796DFD87085644D2932BE182AA048DF855BBDD0D31CE4234013928"
+        },
+        {
+          "file": "tests.trx",
+          "sha256": "8C220E829B4A1B32312A425633B72D3A80B5EABD24CEB3FBDC7D569A613B569F"
+        }
+      ],
+      "cases": [
+        {
+          "name": "CourseAggregateMatchesOriginalContinuousMaximumCombo",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPCOURSE stageMax=2|3 aggregateMax=3 javaCourseMax=5"
+          ]
+        },
+        {
+          "name": "GP_Flow_class-fifteen-bad",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPTRACE class-fifteen-bad step=15 event=j3 javaHP=0.0000000000000000 csharpHP=1.9999999999999973 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=0 csharpCombo=0 javaEX=0 csharpEX=0 score=0",
+            "GPTRACE class-fifteen-bad step=16 event=j0 javaHP=0.0000000000000000 csharpHP=2.0999999999999974 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=1 csharpCombo=1 javaEX=2 csharpEX=2 score=1000"
+          ]
+        },
+        {
+          "name": "GP_Flow_empty-poor-positive-combo",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPTRACE empty-poor-positive-combo step=2 event=j5 javaHP=78.300003051757810 csharpHP=78.3 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=1 csharpCombo=1 javaEX=2 csharpEX=2 score=1000",
+            "GPTRACE empty-poor-positive-combo step=3 event=j0 javaHP=78.600006103515620 csharpHP=78.60000000000001 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=2 csharpCombo=2 javaEX=4 csharpEX=4 score=2000"
+          ]
+        },
+        {
+          "name": "GP_Flow_exclass-five-bad",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPTRACE exclass-five-bad step=5 event=j3 javaHP=0.0000000000000000 csharpHP=2.0000000000000004 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=0 csharpCombo=0 javaEX=0 csharpEX=0 score=0",
+            "GPTRACE exclass-five-bad step=6 event=j0 javaHP=0.0000000000000000 csharpHP=2.1000000000000005 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=1 csharpCombo=1 javaEX=2 csharpEX=2 score=1000"
+          ]
+        },
+        {
+          "name": "GP_Flow_f099-fixed-flow",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPTRACE f099-fixed-flow step=3 event=j0 javaHP=22.000000000000000 csharpHP=22 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=2 csharpCombo=2 javaEX=3 csharpEX=3 score=375000",
+            "GPTRACE f099-fixed-flow step=4 event=j0 javaHP=25.000000000000000 csharpHP=25 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=3 csharpCombo=3 javaEX=5 csharpEX=5 score=625000"
+          ]
+        },
+        {
+          "name": "GP_Flow_hard-five-bad",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPTRACE hard-five-bad step=5 event=j3 javaHP=0.0000000000000000 csharpHP=2.0000000000000004 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=0 csharpCombo=0 javaEX=0 csharpEX=0 score=0",
+            "GPTRACE hard-five-bad step=6 event=j0 javaHP=0.0000000000000000 csharpHP=2.1000000000000005 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=1 csharpCombo=1 javaEX=2 csharpEX=2 score=1000"
+          ]
+        },
+        {
+          "name": "GP_Flow_mine-between-pg",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPTRACE mine-between-pg step=2 event=mine20 javaHP=66.000000000000000 csharpHP=66.00000000000001 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=1 csharpCombo=0 javaEX=2 csharpEX=2 score=666667",
+            "GPTRACE mine-between-pg step=3 event=j0 javaHP=72.000000000000000 csharpHP=72.00000000000001 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=2 csharpCombo=1 javaEX=4 csharpEX=4 score=1000000"
+          ]
+        },
+        {
+          "name": "GP_Flow_mixed",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPTRACE mixed step=6 event=j5 javaHP=68.750007629394530 csharpHP=68.75 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=0 csharpCombo=0 javaEX=3 csharpEX=3 score=1500",
+            "GPTRACE mixed step=7 event=j0 javaHP=69.050010681152340 csharpHP=69.05 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=1 csharpCombo=1 javaEX=5 csharpEX=5 score=2500"
+          ]
+        },
+        {
+          "name": "GP_Flow_normal-clear-200",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPTRACE normal-clear-200 step=200 event=j0 javaHP=80.000053405761720 csharpHP=80.00000000000004 javaAlive=true csharpAlive=True javaQualified=true csharpQualified=True javaCombo=200 csharpCombo=200 javaEX=400 csharpEX=400 score=200000",
+            "GPTRACE normal-clear-200 step=201 event=j0 javaHP=80.300056457519530 csharpHP=80.30000000000005 javaAlive=true csharpAlive=True javaQualified=true csharpQualified=True javaCombo=201 csharpCombo=201 javaEX=402 csharpEX=402 score=201000"
+          ]
+        },
+        {
+          "name": "GP_Flow_normal-clear-300",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPTRACE normal-clear-300 step=300 event=j0 javaHP=79.999923706054690 csharpHP=80.00000000000004 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=True javaCombo=300 csharpCombo=300 javaEX=600 csharpEX=600 score=300000",
+            "GPTRACE normal-clear-300 step=301 event=j0 javaHP=80.199920654296880 csharpHP=80.20000000000005 javaAlive=true csharpAlive=True javaQualified=true csharpQualified=True javaCombo=301 csharpCombo=301 javaEX=602 csharpEX=602 score=301000"
+          ]
+        },
+        {
+          "name": "IdenticalBmsMineTextProducesJavaDamageAndSurvival(\"01\")",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPPARSER raw=01 javaDamage=1.0000000000000000 csharpDamage=0.5 javaHP=10.500000000000000 csharpHP=11 javaAlive=true csharpAlive=True time=2000"
+          ]
+        },
+        {
+          "name": "IdenticalBmsMineTextProducesJavaDamageAndSurvival(\"0A\")",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPPARSER raw=0A javaDamage=10.000000000000000 csharpDamage=5 javaHP=0.0000000000000000 csharpHP=6.5 javaAlive=false csharpAlive=True time=2000"
+          ]
+        },
+        {
+          "name": "IdenticalBmsMineTextProducesJavaDamageAndSurvival(\"10\")",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPPARSER raw=10 javaDamage=36.000000000000000 csharpDamage=18 javaHP=0.0000000000000000 csharpHP=0 javaAlive=false csharpAlive=False time=2000"
+          ]
+        },
+        {
+          "name": "RealEngineF099ContinuationKeepsJavaResultAndGaugeOrder",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "ReplayMineAndNoteAtSameInstantMatchJavaPhases(False,False)",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPMINEPHASE reverse=False control=False events=Note|Landmine health=0.020500000476837157 failed=False javaHP=0.0000000000000000 javaAlive=false"
+          ]
+        },
+        {
+          "name": "ReplayMineAndNoteAtSameInstantMatchJavaPhases(False,True)",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPMINEPHASE reverse=False control=True events=Note|Landmine health=0.096 failed=False javaHP=9.6000003814697270 javaAlive=true"
+          ]
+        },
+        {
+          "name": "ReplayMineAndNoteAtSameInstantMatchJavaPhases(True,False)",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPMINEPHASE reverse=True control=False events=Note|Landmine health=0.020500000476837157 failed=False javaHP=0.0000000000000000 javaAlive=false"
+          ]
+        },
+        {
+          "name": "ReplayMineAndNoteAtSameInstantMatchJavaPhases(True,True)",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPMINEPHASE reverse=True control=True events=Note|Landmine health=0.096 failed=False javaHP=9.6000003814697270 javaAlive=true"
+          ]
+        },
+        {
+          "name": "SimultaneousReplayStateMatchesJavaKeyOrder(False)",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPORDER reverse=False results=Perfect|Ok health=0.020500001907348638 failed=False javaHP=2.0499999523162840 javaAlive=true"
+          ]
+        },
+        {
+          "name": "SimultaneousReplayStateMatchesJavaKeyOrder(True)",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPORDER reverse=True results=Ok|Perfect health=0 failed=True javaHP=2.0499999523162840 javaAlive=true"
+          ]
+        }
+      ],
+      "inputs_snapshot": [
+        {
+          "file": "audit.targets",
+          "sha256": "7124CF8BD456D929A823F66DFE74CCA8462B0E58C038DA3DD73BCB57F7F66D4F"
+        },
+        {
+          "file": "flow.csv",
+          "sha256": "AD381F114B05F89D728ECF679E155CA1EFE781DCF2F9DD23567D05C554C9E531"
+        },
+        {
+          "file": "FlowOracle.java",
+          "sha256": "3FA22AA7795123063FAB1643847B26FC0D71B83F98F004695B183D707B7363A2"
+        },
+        {
+          "file": "GameplayAudit.cs.txt",
+          "sha256": "50776BF86931FBBAFB8B1EB5C2F8854897DDAC20C7B244B076B6B70654102D12"
+        },
+        {
+          "file": "Generate.ps1",
+          "sha256": "07F2D8966A5C06E6EFF72DF90854FBD76B3D7FE19747CAA1EFDD28E38903F839"
+        },
+        {
+          "file": "MineParserOracle.java",
+          "sha256": "CF959340E2157734F17CC2D590291DCEDB8074CA9184186260E0FA5E3DFA5CDA"
+        },
+        {
+          "file": "mines.csv",
+          "sha256": "01EF2386236B01A79E5E9C4E5ED0A4D3003D78DD4099B97D3B54053E9361331D"
+        },
+        {
+          "file": "PROVENANCE.json",
+          "sha256": "CADC9BF3641C6B0AAC8B65316B475B69CDE88A9A52BAA555C078AD985A736EE6"
+        },
+        {
+          "file": "Run-Audit.ps1",
+          "sha256": "7AD47E118AB394C2A9C0673A95835784A164833B1B82CBDBA6DE8FFACAE487A1"
+        }
+      ]
+    },
+    {
+      "id": "audit-05",
+      "filter": "FullyQualifiedName~GameplayParityAudit",
+      "total": 18,
+      "passed": 6,
+      "failed": 12,
+      "omitted": 0,
+      "test_dll_sha256": "90893882F84C8C80C91F0E4ACF68800A2B7679C43A8408894B3EC0C8E4905774",
+      "production_dll_sha256": "65D11AC0E9279A78235833A46E7DBDE0DBD53F4197E746A2F9C5B67042D338F9",
+      "evidence": [
+        {
+          "file": "build.log",
+          "sha256": "79203A0288DE7550A61508E7C4DC7322560EF38A01FBEA248FC1B31EDB758320"
+        },
+        {
+          "file": "filter.txt",
+          "sha256": "D8FAE64A5270CA623CEC63E711DC2FBB21B03B14C7738F39FAF2F8E869F181CB"
+        },
+        {
+          "file": "hashes.json",
+          "sha256": "CA9E23A0C1CE385EDB92296F8466137D72A12E373685D79DF1CEA627065D689B"
+        },
+        {
+          "file": "result.json",
+          "sha256": "03DA29110C9466F804B858C58A57B3632406992ECF71210D6413BF34E55764C0"
+        },
+        {
+          "file": "tests.log",
+          "sha256": "8D8C9CD6F9BB70FEA35129F0F4FC497BA0A11BAC99FBFC5EE423A495ADA10DFC"
+        },
+        {
+          "file": "tests.trx",
+          "sha256": "D7F895D655492B0C17CC9D5E050571E021E264C5A34BB53219D15B6A95CCA25F"
+        }
+      ],
+      "cases": [
+        {
+          "name": "CourseAggregateMatchesOriginalContinuousMaximumCombo",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPCOURSE stageMax=2|3 aggregateMax=3 javaCourseMax=5"
+          ]
+        },
+        {
+          "name": "GP_Flow_class-fifteen-bad",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPTRACE class-fifteen-bad step=15 event=j3 javaHP=0.0000000000000000 csharpHP=1.9999999999999973 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=0 csharpCombo=0 javaEX=0 csharpEX=0 score=0",
+            "GPTRACE class-fifteen-bad step=16 event=j0 javaHP=0.0000000000000000 csharpHP=2.0999999999999974 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=1 csharpCombo=1 javaEX=2 csharpEX=2 score=1000"
+          ]
+        },
+        {
+          "name": "GP_Flow_empty-poor-positive-combo",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPTRACE empty-poor-positive-combo step=2 event=j5 javaHP=78.300003051757810 csharpHP=78.3 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=1 csharpCombo=1 javaEX=2 csharpEX=2 score=1000",
+            "GPTRACE empty-poor-positive-combo step=3 event=j0 javaHP=78.600006103515620 csharpHP=78.60000000000001 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=2 csharpCombo=2 javaEX=4 csharpEX=4 score=2000"
+          ]
+        },
+        {
+          "name": "GP_Flow_exclass-five-bad",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPTRACE exclass-five-bad step=5 event=j3 javaHP=0.0000000000000000 csharpHP=2.0000000000000004 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=0 csharpCombo=0 javaEX=0 csharpEX=0 score=0",
+            "GPTRACE exclass-five-bad step=6 event=j0 javaHP=0.0000000000000000 csharpHP=2.1000000000000005 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=1 csharpCombo=1 javaEX=2 csharpEX=2 score=1000"
+          ]
+        },
+        {
+          "name": "GP_Flow_hard-five-bad",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPTRACE hard-five-bad step=5 event=j3 javaHP=0.0000000000000000 csharpHP=2.0000000000000004 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=0 csharpCombo=0 javaEX=0 csharpEX=0 score=0",
+            "GPTRACE hard-five-bad step=6 event=j0 javaHP=0.0000000000000000 csharpHP=2.1000000000000005 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=1 csharpCombo=1 javaEX=2 csharpEX=2 score=1000"
+          ]
+        },
+        {
+          "name": "GP_Flow_mine-between-pg",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPTRACE mine-between-pg step=2 event=mine20 javaHP=66.000000000000000 csharpHP=66.00000000000001 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=1 csharpCombo=0 javaEX=2 csharpEX=2 score=666667",
+            "GPTRACE mine-between-pg step=3 event=j0 javaHP=72.000000000000000 csharpHP=72.00000000000001 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=2 csharpCombo=1 javaEX=4 csharpEX=4 score=1000000"
+          ]
+        },
+        {
+          "name": "GP_Flow_mixed",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPTRACE mixed step=6 event=j5 javaHP=68.750007629394530 csharpHP=68.75 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=0 csharpCombo=0 javaEX=3 csharpEX=3 score=1500",
+            "GPTRACE mixed step=7 event=j0 javaHP=69.050010681152340 csharpHP=69.05 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=1 csharpCombo=1 javaEX=5 csharpEX=5 score=2500"
+          ]
+        },
+        {
+          "name": "GP_Flow_normal-clear-200",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPTRACE normal-clear-200 step=200 event=j0 javaHP=80.000053405761720 csharpHP=80.00000000000004 javaAlive=true csharpAlive=True javaQualified=true csharpQualified=True javaCombo=200 csharpCombo=200 javaEX=400 csharpEX=400 score=200000",
+            "GPTRACE normal-clear-200 step=201 event=j0 javaHP=80.300056457519530 csharpHP=80.30000000000005 javaAlive=true csharpAlive=True javaQualified=true csharpQualified=True javaCombo=201 csharpCombo=201 javaEX=402 csharpEX=402 score=201000"
+          ]
+        },
+        {
+          "name": "GP_Flow_normal-clear-300",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPTRACE normal-clear-300 step=300 event=j0 javaHP=79.999923706054690 csharpHP=80.00000000000004 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=True javaCombo=300 csharpCombo=300 javaEX=600 csharpEX=600 score=300000",
+            "GPTRACE normal-clear-300 step=301 event=j0 javaHP=80.199920654296880 csharpHP=80.20000000000005 javaAlive=true csharpAlive=True javaQualified=true csharpQualified=True javaCombo=301 csharpCombo=301 javaEX=602 csharpEX=602 score=301000"
+          ]
+        },
+        {
+          "name": "IdenticalBmsMineTextProducesJavaDamageAndSurvival(\"01\")",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPPARSER raw=01 javaDamage=1.0000000000000000 csharpDamage=0.5 javaHP=10.500000000000000 csharpHP=11 javaAlive=true csharpAlive=True time=2000"
+          ]
+        },
+        {
+          "name": "IdenticalBmsMineTextProducesJavaDamageAndSurvival(\"0A\")",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPPARSER raw=0A javaDamage=10.000000000000000 csharpDamage=5 javaHP=0.0000000000000000 csharpHP=6.5 javaAlive=false csharpAlive=True time=2000"
+          ]
+        },
+        {
+          "name": "IdenticalBmsMineTextProducesJavaDamageAndSurvival(\"10\")",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPPARSER raw=10 javaDamage=36.000000000000000 csharpDamage=18 javaHP=0.0000000000000000 csharpHP=0 javaAlive=false csharpAlive=False time=2000"
+          ]
+        },
+        {
+          "name": "ReplayMineAndNoteAtSameInstantMatchJavaPhases(False,False)",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPMINEPHASE reverse=False control=False events=Note|Landmine health=0.020500000476837157 failed=False javaHP=0.0000000000000000 javaAlive=false"
+          ]
+        },
+        {
+          "name": "ReplayMineAndNoteAtSameInstantMatchJavaPhases(False,True)",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPMINEPHASE reverse=False control=True events=Note|Landmine health=0.096 failed=False javaHP=9.6000003814697270 javaAlive=true"
+          ]
+        },
+        {
+          "name": "ReplayMineAndNoteAtSameInstantMatchJavaPhases(True,False)",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPMINEPHASE reverse=True control=False events=Note|Landmine health=0.020500000476837157 failed=False javaHP=0.0000000000000000 javaAlive=false"
+          ]
+        },
+        {
+          "name": "ReplayMineAndNoteAtSameInstantMatchJavaPhases(True,True)",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPMINEPHASE reverse=True control=True events=Note|Landmine health=0.096 failed=False javaHP=9.6000003814697270 javaAlive=true"
+          ]
+        },
+        {
+          "name": "SimultaneousReplayStateMatchesJavaKeyOrder(False)",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPORDER reverse=False results=Perfect|Ok health=0.020500001907348638 failed=False javaHP=2.0499999523162840 javaAlive=true"
+          ]
+        },
+        {
+          "name": "SimultaneousReplayStateMatchesJavaKeyOrder(True)",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPORDER reverse=True results=Ok|Perfect health=0 failed=True javaHP=2.0499999523162840 javaAlive=true"
+          ]
+        }
+      ],
+      "inputs_snapshot": [
+        {
+          "file": "audit.targets",
+          "sha256": "7124CF8BD456D929A823F66DFE74CCA8462B0E58C038DA3DD73BCB57F7F66D4F"
+        },
+        {
+          "file": "flow.csv",
+          "sha256": "F8B80D2E0FC96FFF2F80677F835E92CF27FA516975F1FF2E526669E2849B50F4"
+        },
+        {
+          "file": "FlowOracle.java",
+          "sha256": "2C321E9E74BFD0E57D5B2222EFE31B5D55B87A5493925EB87A7499BA758E8687"
+        },
+        {
+          "file": "GameplayAudit.cs.txt",
+          "sha256": "0EEA7CB15FF01D8B9A68D5F1135855DB0AD0EBB7E7949190FFC51AECE4E544CE"
+        },
+        {
+          "file": "Generate.ps1",
+          "sha256": "07F2D8966A5C06E6EFF72DF90854FBD76B3D7FE19747CAA1EFDD28E38903F839"
+        },
+        {
+          "file": "MineParserOracle.java",
+          "sha256": "CF959340E2157734F17CC2D590291DCEDB8074CA9184186260E0FA5E3DFA5CDA"
+        },
+        {
+          "file": "mines.csv",
+          "sha256": "01EF2386236B01A79E5E9C4E5ED0A4D3003D78DD4099B97D3B54053E9361331D"
+        },
+        {
+          "file": "PROVENANCE.json",
+          "sha256": "30AFD18F07E06B7BE85A3838F1319B2E3045F4823237EF723225B5C3CE1B89C6"
+        },
+        {
+          "file": "Run-Audit.ps1",
+          "sha256": "5F7A89B735775F20C2E2F038CD4B723CAD376F9673DDF66A922A595E592E0578"
+        }
+      ]
+    },
+    {
+      "id": "audit-05-repeat",
+      "filter": "FullyQualifiedName~GameplayParityAudit",
+      "total": 18,
+      "passed": 6,
+      "failed": 12,
+      "omitted": 0,
+      "test_dll_sha256": "90893882F84C8C80C91F0E4ACF68800A2B7679C43A8408894B3EC0C8E4905774",
+      "production_dll_sha256": "65D11AC0E9279A78235833A46E7DBDE0DBD53F4197E746A2F9C5B67042D338F9",
+      "evidence": [
+        {
+          "file": "hashes.json",
+          "sha256": "366E9DB2F11002881E848B8D7B95E37C96CD7F82CECE4E0F59925539973D9D2B"
+        },
+        {
+          "file": "tests.log",
+          "sha256": "83E077BB09E10A51D418726EACCCDDFA8B68166E6C0DC7EC1FF90ED90CB3061C"
+        },
+        {
+          "file": "tests.trx",
+          "sha256": "B12682B20867CAE97404EED9DDB38B376DB08B9DD532B65A93452B7D6AC2B6AB"
+        }
+      ],
+      "cases": [
+        {
+          "name": "CourseAggregateMatchesOriginalContinuousMaximumCombo",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPCOURSE stageMax=2|3 aggregateMax=3 javaCourseMax=5"
+          ]
+        },
+        {
+          "name": "GP_Flow_class-fifteen-bad",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPTRACE class-fifteen-bad step=15 event=j3 javaHP=0.0000000000000000 csharpHP=1.9999999999999973 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=0 csharpCombo=0 javaEX=0 csharpEX=0 score=0",
+            "GPTRACE class-fifteen-bad step=16 event=j0 javaHP=0.0000000000000000 csharpHP=2.0999999999999974 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=1 csharpCombo=1 javaEX=2 csharpEX=2 score=1000"
+          ]
+        },
+        {
+          "name": "GP_Flow_empty-poor-positive-combo",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPTRACE empty-poor-positive-combo step=2 event=j5 javaHP=78.300003051757810 csharpHP=78.3 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=1 csharpCombo=1 javaEX=2 csharpEX=2 score=1000",
+            "GPTRACE empty-poor-positive-combo step=3 event=j0 javaHP=78.600006103515620 csharpHP=78.60000000000001 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=2 csharpCombo=2 javaEX=4 csharpEX=4 score=2000"
+          ]
+        },
+        {
+          "name": "GP_Flow_exclass-five-bad",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPTRACE exclass-five-bad step=5 event=j3 javaHP=0.0000000000000000 csharpHP=2.0000000000000004 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=0 csharpCombo=0 javaEX=0 csharpEX=0 score=0",
+            "GPTRACE exclass-five-bad step=6 event=j0 javaHP=0.0000000000000000 csharpHP=2.1000000000000005 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=1 csharpCombo=1 javaEX=2 csharpEX=2 score=1000"
+          ]
+        },
+        {
+          "name": "GP_Flow_hard-five-bad",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPTRACE hard-five-bad step=5 event=j3 javaHP=0.0000000000000000 csharpHP=2.0000000000000004 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=0 csharpCombo=0 javaEX=0 csharpEX=0 score=0",
+            "GPTRACE hard-five-bad step=6 event=j0 javaHP=0.0000000000000000 csharpHP=2.1000000000000005 javaAlive=false csharpAlive=True javaQualified=false csharpQualified=True javaCombo=1 csharpCombo=1 javaEX=2 csharpEX=2 score=1000"
+          ]
+        },
+        {
+          "name": "GP_Flow_mine-between-pg",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPTRACE mine-between-pg step=2 event=mine20 javaHP=66.000000000000000 csharpHP=66.00000000000001 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=1 csharpCombo=0 javaEX=2 csharpEX=2 score=666667",
+            "GPTRACE mine-between-pg step=3 event=j0 javaHP=72.000000000000000 csharpHP=72.00000000000001 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=2 csharpCombo=1 javaEX=4 csharpEX=4 score=1000000"
+          ]
+        },
+        {
+          "name": "GP_Flow_mixed",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPTRACE mixed step=6 event=j5 javaHP=68.750007629394530 csharpHP=68.75 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=0 csharpCombo=0 javaEX=3 csharpEX=3 score=1500",
+            "GPTRACE mixed step=7 event=j0 javaHP=69.050010681152340 csharpHP=69.05 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=False javaCombo=1 csharpCombo=1 javaEX=5 csharpEX=5 score=2500"
+          ]
+        },
+        {
+          "name": "GP_Flow_normal-clear-200",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPTRACE normal-clear-200 step=200 event=j0 javaHP=80.000053405761720 csharpHP=80.00000000000004 javaAlive=true csharpAlive=True javaQualified=true csharpQualified=True javaCombo=200 csharpCombo=200 javaEX=400 csharpEX=400 score=200000",
+            "GPTRACE normal-clear-200 step=201 event=j0 javaHP=80.300056457519530 csharpHP=80.30000000000005 javaAlive=true csharpAlive=True javaQualified=true csharpQualified=True javaCombo=201 csharpCombo=201 javaEX=402 csharpEX=402 score=201000"
+          ]
+        },
+        {
+          "name": "GP_Flow_normal-clear-300",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPTRACE normal-clear-300 step=300 event=j0 javaHP=79.999923706054690 csharpHP=80.00000000000004 javaAlive=true csharpAlive=True javaQualified=false csharpQualified=True javaCombo=300 csharpCombo=300 javaEX=600 csharpEX=600 score=300000",
+            "GPTRACE normal-clear-300 step=301 event=j0 javaHP=80.199920654296880 csharpHP=80.20000000000005 javaAlive=true csharpAlive=True javaQualified=true csharpQualified=True javaCombo=301 csharpCombo=301 javaEX=602 csharpEX=602 score=301000"
+          ]
+        },
+        {
+          "name": "IdenticalBmsMineTextProducesJavaDamageAndSurvival(\"01\")",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPPARSER raw=01 javaDamage=1.0000000000000000 csharpDamage=0.5 javaHP=10.500000000000000 csharpHP=11 javaAlive=true csharpAlive=True time=2000"
+          ]
+        },
+        {
+          "name": "IdenticalBmsMineTextProducesJavaDamageAndSurvival(\"0A\")",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPPARSER raw=0A javaDamage=10.000000000000000 csharpDamage=5 javaHP=0.0000000000000000 csharpHP=6.5 javaAlive=false csharpAlive=True time=2000"
+          ]
+        },
+        {
+          "name": "IdenticalBmsMineTextProducesJavaDamageAndSurvival(\"10\")",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPPARSER raw=10 javaDamage=36.000000000000000 csharpDamage=18 javaHP=0.0000000000000000 csharpHP=0 javaAlive=false csharpAlive=False time=2000"
+          ]
+        },
+        {
+          "name": "ReplayMineAndNoteAtSameInstantMatchJavaPhases(False,False)",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPMINEPHASE reverse=False control=False events=Note|Landmine health=0.020500000476837157 failed=False javaHP=0.0000000000000000 javaAlive=false"
+          ]
+        },
+        {
+          "name": "ReplayMineAndNoteAtSameInstantMatchJavaPhases(False,True)",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPMINEPHASE reverse=False control=True events=Note|Landmine health=0.096 failed=False javaHP=9.6000003814697270 javaAlive=true"
+          ]
+        },
+        {
+          "name": "ReplayMineAndNoteAtSameInstantMatchJavaPhases(True,False)",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPMINEPHASE reverse=True control=False events=Note|Landmine health=0.020500000476837157 failed=False javaHP=0.0000000000000000 javaAlive=false"
+          ]
+        },
+        {
+          "name": "ReplayMineAndNoteAtSameInstantMatchJavaPhases(True,True)",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPMINEPHASE reverse=True control=True events=Note|Landmine health=0.096 failed=False javaHP=9.6000003814697270 javaAlive=true"
+          ]
+        },
+        {
+          "name": "SimultaneousReplayStateMatchesJavaKeyOrder(False)",
+          "outcome": "Passed",
+          "diagnostic_tail": [
+            "GPORDER reverse=False results=Perfect|Ok health=0.020500001907348638 failed=False javaHP=2.0499999523162840 javaAlive=true"
+          ]
+        },
+        {
+          "name": "SimultaneousReplayStateMatchesJavaKeyOrder(True)",
+          "outcome": "Failed",
+          "diagnostic_tail": [
+            "GPORDER reverse=True results=Ok|Perfect health=0 failed=True javaHP=2.0499999523162840 javaAlive=true"
+          ]
+        }
+      ],
+      "inputs_snapshot": null
+    },
+    {
+      "id": "ordinary-focus",
+      "filter": "FullyQualifiedName~BmsBeatmapDecoderTest.TestBase62Landmine|FullyQualifiedName~BmsBeatmapDecoderTest.TestDecoderParsesLandmine|FullyQualifiedName~BmsBeatmapDecoderTest.TestDecoderParsesSecondPlayerLandmine|FullyQualifiedName~BmsReplaySimulationTest",
+      "total": 39,
+      "passed": 39,
+      "failed": 0,
+      "omitted": 0,
+      "test_dll_sha256": "90893882F84C8C80C91F0E4ACF68800A2B7679C43A8408894B3EC0C8E4905774",
+      "production_dll_sha256": "65D11AC0E9279A78235833A46E7DBDE0DBD53F4197E746A2F9C5B67042D338F9",
+      "evidence": [
+        {
+          "file": "filter.txt",
+          "sha256": "0BADCB6EFA4C79DA9A1C751CB6C1880A3A4A0ABCA9DA7DCDA800CEDFF8DC8C5D"
+        },
+        {
+          "file": "tests.log",
+          "sha256": "56A00D489E9AE701C9DDAFFECFDB34E054F684ADE067842EEA15BC7DE22F0747"
+        },
+        {
+          "file": "tests.trx",
+          "sha256": "A0B4AA1CFD1CEEC47BD7FC183D562A3D822AA1B41CE80C38CD7CE3FAEA5DF148"
+        }
+      ],
+      "cases": [
+        {
+          "name": "AbortedHoldSettlesAtTheTerminalTimeWithoutPauseMetadata(ChargeNote,0,Meh)",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "AbortedHoldSettlesAtTheTerminalTimeWithoutPauseMetadata(ChargeNote,1,Meh)",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "AbortedHoldSettlesAtTheTerminalTimeWithoutPauseMetadata(HellChargeNote,0,Meh)",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "AbortedHoldSettlesAtTheTerminalTimeWithoutPauseMetadata(HellChargeNote,1,Meh)",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "AbortedHoldSettlesAtTheTerminalTimeWithoutPauseMetadata(LongNote,1,Ok)",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "AttemptEndUsesTheTerminalBoundaryWithoutCompletingTheChart",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "AutomaticLongNoteTailPrecedesALaterRelease",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "CourseChartsConsumeSimulatedDataWithoutWritingStageScores",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "DetectsHeldKeyLandmines",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "FailedAttemptStopsAtItsLastRecordedFrame",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "HellChargeGaugeDoesNotDependOnUnchangedReplayFrames",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "HellChargeTicksFollowElapsedTimeAcrossCompaction",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "JudgementsAndGaugeOrderingDoNotDependOnIdleFrames(ChargeNote)",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "JudgementsAndGaugeOrderingDoNotDependOnIdleFrames(HellChargeNote)",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "JudgementsAndGaugeOrderingDoNotDependOnIdleFrames(LongNote)",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "LandmineUsesTheStateAtItsTimestamp(1100,0)",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "LandmineUsesTheStateAtItsTimestamp(1100.001d,1)",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "PassiveMissesUseTheirDeadlineWithoutRecordedUpdates",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "PauseMetadataDoesNotAlterInputJudgements",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "PreservesReleaseThenPressAtTheSameTime",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "RebuildsInputTimingAndPassiveMisses",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "RebuildsLongNoteEndpoints(ChargeNote,2)",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "RebuildsLongNoteEndpoints(HellChargeNote,2)",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "RebuildsLongNoteEndpoints(LongNote,1)",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "RecalculatesTimingStatisticsWithoutMutatingSavedHitEvents",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "RejectsIncompleteReplaysAndSupportsCancellation",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "ReopeningDetailsRecalculatesWithoutMutatingTheScore",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "RestoresSurvivingCourseAutoGaugesWithoutApplyingTheAttributedGauge",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "RestoresTheInitialCourseGaugeState",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "SimultaneousHellChargeTicksKeepTheOrdinaryLaneBeforeScratch",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "TestBase62LandmineChannelWithLowercaseIsUnaffected",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "TestBase62LandmineChannelZzIsInstantDeath",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "TestDecoderParsesLandmineChannels",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "TestDecoderParsesSecondPlayerLandmineChannels",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "UsesTheArchivedAlgorithm(Combo,1000,Good)",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "UsesTheArchivedAlgorithm(Duration,1100,Perfect)",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "UsesTheArchivedAlgorithm(Lowest,1000,Good)",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "UsesTheArchivedAlgorithm(Score,1100,Perfect)",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        },
+        {
+          "name": "UsesTheScoresRateAndWindowMods",
+          "outcome": "Passed",
+          "diagnostic_tail": []
+        }
+      ],
+      "inputs_snapshot": null
+    }
+  ],
+  "java_final": {
+    "flow_rows": 565,
+    "repeat": "java-08/java-09 identical flow/mines/provenance bytes",
+    "mine_rows": 3
+  },
+  "default_build_items": {
+    "receipt_sha256": "698B5F166D51AF3A8AB4D353EF5ABD2AF7A4B1286C2E26F3BD8E90A7664FE215",
+    "compile": 352,
+    "audit_compile_or_resource": 0,
+    "resources": 4433
+  },
+  "build_final": {
+    "classification": "Preexisting NU1902/NU1903 and CS8629; no dependency changes",
+    "errors": 0,
+    "warnings": 55
+  },
+  "reused": [
+    {
+      "sha256": "393482328B483528F4BF8B147596AECF79F576544C729FA4F271FDA2F3D1ACB3",
+      "path": "docs/lr2-certification/C02_JUDGEMENT.md",
+      "meaning": "Historical evidence reused in stated finite scope, not rerun"
+    },
+    {
+      "sha256": "6530DC3D90354461B1829DCD4A4C45FB52077F3F7A80F95DB7E907464EB0BFB7",
+      "path": "docs/lr2-certification/C03_GAUGE_AND_SCORING.md",
+      "meaning": "Historical evidence reused in stated finite scope, not rerun"
+    },
+    {
+      "sha256": "41B0C59352884CF2ABEAF8B6B0398EAEA5B2971B1535AF057FBF2C1AE04801A0",
+      "path": "docs/lr2-certification/C04_LONG_NOTES.md",
+      "meaning": "Historical evidence reused in stated finite scope, not rerun"
+    },
+    {
+      "sha256": "0D8DF008DA1148D34243B80D84E852B7A1E41A10AFFBA0540DB48F1E115F07AF",
+      "path": "docs/lr2-certification/C05_GAS_AND_REPLAY.md",
+      "meaning": "Historical evidence reused in stated finite scope, not rerun"
+    },
+    {
+      "sha256": "77C81D187C6943FBFBB5B7B7F6638B19658C0753492A51DACC15C83729879738",
+      "path": "docs/lr2-certification/C06_EVIDENCE.json",
+      "meaning": "Historical evidence reused in stated finite scope, not rerun"
+    },
+    {
+      "sha256": "FFF0EC081B9DFD51B28B3FEF03C6A15C1F2A0C8DC8F4E21C723D5A81B87BF29E",
+      "path": "docs/lr2-certification/fixed-judge-parity/VALIDATION_MANIFEST.json",
+      "meaning": "Historical evidence reused in stated finite scope, not rerun"
+    },
+    {
+      "sha256": "30E74BD8EE8EE4AA57675335C6C3CA92CD464BD83B0D22AEA997C734F7BF3963",
+      "path": "docs/lr2-certification/localisation-closure/VALIDATION_MANIFEST.json",
+      "meaning": "Historical evidence reused in stated finite scope, not rerun"
+    },
+    {
+      "sha256": "7EF601ACA5676AD9B75950763A1D638965FCCC5FFAAD74134CED96CC6FC2EE65",
+      "path": "docs/lr2-certification/c01-reconciliation/test-modernization/POLICY_EXPECTATIONS.md",
+      "meaning": "Historical evidence reused in stated finite scope, not rerun"
+    }
+  ],
+  "benchmarks_run": false,
+  "full_suite_run": false,
+  "new_cross_platform_ci": false,
+  "publication": "Normal documentation/research fixture commits only; no production correction, PR or merge",
+  "coverage_limit": "Partial, no integral parity claim",
+  "artifacts": [
+    {
+      "sha256": "55868C39A97E098B71A82188E75FA9FCACFB440FE922EE15FA20806AC87F4969",
+      "path": "docs/lr2-certification/gameplay-parity-audit/00_SCOPE_AND_BASELINE.md",
+      "sha256_lf_utf8": "55868C39A97E098B71A82188E75FA9FCACFB440FE922EE15FA20806AC87F4969"
+    },
+    {
+      "sha256": "C15B4D90F870A578CD11E40F8069F338BA75C9337E8610EBE36CC1E3517F8DE1",
+      "path": "docs/lr2-certification/gameplay-parity-audit/01_JAVA_CSHARP_GAMEPLAY_MAP.md",
+      "sha256_lf_utf8": "C15B4D90F870A578CD11E40F8069F338BA75C9337E8610EBE36CC1E3517F8DE1"
+    },
+    {
+      "sha256": "B22043AC133F26BC4CF593606901D5EAC0EB88C941E9970E1F8C5A92FC52B792",
+      "path": "docs/lr2-certification/gameplay-parity-audit/02_GAUGE_AND_HEALTH.md",
+      "sha256_lf_utf8": "B22043AC133F26BC4CF593606901D5EAC0EB88C941E9970E1F8C5A92FC52B792"
+    },
+    {
+      "sha256": "FCB25BFF72A343FA4DCC14AB6181B6B89D0713BFE36FECF47205F0ACBC8E41D7",
+      "path": "docs/lr2-certification/gameplay-parity-audit/03_JUDGEMENT_AND_MULTIBAD.md",
+      "sha256_lf_utf8": "FCB25BFF72A343FA4DCC14AB6181B6B89D0713BFE36FECF47205F0ACBC8E41D7"
+    },
+    {
+      "sha256": "42A45CBE37EC3304C85E0286E6D78610681B458812E4FB551AC068C62DA06CD5",
+      "path": "docs/lr2-certification/gameplay-parity-audit/04_LONG_NOTES_CN_HCN.md",
+      "sha256_lf_utf8": "42A45CBE37EC3304C85E0286E6D78610681B458812E4FB551AC068C62DA06CD5"
+    },
+    {
+      "sha256": "A6977F83DA3D325E7EBB748127D7E20D16CB0059593A23960A95E3D8125F4574",
+      "path": "docs/lr2-certification/gameplay-parity-audit/05_SCORING_AND_COMBO.md",
+      "sha256_lf_utf8": "A6977F83DA3D325E7EBB748127D7E20D16CB0059593A23960A95E3D8125F4574"
+    },
+    {
+      "sha256": "D38E12CEAA176DC49F2A27B80C592081706393FDC0FCE90373175BE90FC6FFE2",
+      "path": "docs/lr2-certification/gameplay-parity-audit/06_GAMEPLAY_MODIFIERS.md",
+      "sha256_lf_utf8": "D38E12CEAA176DC49F2A27B80C592081706393FDC0FCE90373175BE90FC6FFE2"
+    },
+    {
+      "sha256": "74EEAEEEE929894FDF828BC5EFD3A596928D56F68FD36FD9665E3A78AA3DF2FA",
+      "path": "docs/lr2-certification/gameplay-parity-audit/07_TIMING_AND_LIFECYCLE.md",
+      "sha256_lf_utf8": "74EEAEEEE929894FDF828BC5EFD3A596928D56F68FD36FD9665E3A78AA3DF2FA"
+    },
+    {
+      "sha256": "046D3E0BABEA851E9863B6B07DFEC81ECE241D523F67783026F2F76CDBA77F01",
+      "path": "docs/lr2-certification/gameplay-parity-audit/08_REPLAY_AND_COURSE.md",
+      "sha256_lf_utf8": "046D3E0BABEA851E9863B6B07DFEC81ECE241D523F67783026F2F76CDBA77F01"
+    },
+    {
+      "sha256": "0DE418932E9E42627EA245542AE87558F4F35296A1246E1CBAA8B5503723BC10",
+      "path": "docs/lr2-certification/gameplay-parity-audit/09_FINDINGS_AND_RISKS.md",
+      "sha256_lf_utf8": "0DE418932E9E42627EA245542AE87558F4F35296A1246E1CBAA8B5503723BC10"
+    },
+    {
+      "sha256": "B87A5CB958188C3A4552BCA1F79F0D8E1AECB0D291E9E640E2D47D88C899C397",
+      "path": "docs/lr2-certification/gameplay-parity-audit/10_VALIDATION_REPORT.md",
+      "sha256_lf_utf8": "B87A5CB958188C3A4552BCA1F79F0D8E1AECB0D291E9E640E2D47D88C899C397"
+    },
+    {
+      "sha256": "F73EC8ED03173547F28BC9C7B07F70F32A6DC9C0FD33AE3CE34C119E51AAC026",
+      "path": "docs/lr2-certification/gameplay-parity-audit/11_FINAL_VERDICT.md",
+      "sha256_lf_utf8": "F73EC8ED03173547F28BC9C7B07F70F32A6DC9C0FD33AE3CE34C119E51AAC026"
+    },
+    {
+      "sha256": "C8212BE336803EA7FED60759EE1634A1E9718795DBF70254955562BC183ED4D3",
+      "path": "docs/lr2-certification/gameplay-parity-audit/COVERAGE_MATRIX.csv",
+      "sha256_lf_utf8": "D7BEB80BD69F2715C8B098B58FE1D9342EFC31E528DEFD328C9A3CBC84FDF7CC"
+    },
+    {
+      "sha256": "84B619C0D12F34498275210587CA598971C99823C697186C9E9435EFEC06EF19",
+      "path": "docs/lr2-certification/gameplay-parity-audit/FINDINGS.csv",
+      "sha256_lf_utf8": "2CF42B71988A66E886128B025ED3D798A55CE8C35B4339BE5FB43CD2908E1296"
+    },
+    {
+      "sha256": "8E0CC653493786AFAE9B0D2844F2C35E11084C71B5EC29FA57C9E54635726FE9",
+      "path": "docs/lr2-certification/gameplay-parity-audit/GAMEPLAY_PARITY_MATRIX.csv",
+      "sha256_lf_utf8": "5ECFABC71806A9F6AAF760DD43EBC91573116B048F27C4CB6002DF59B80B5778"
+    },
+    {
+      "sha256": "6528DB1CA39AA9F256FB98DFDB70EFF36E136B6AF71A4325D2940D3FC74EC8BD",
+      "path": "docs/lr2-certification/gameplay-parity-audit/SOURCE_INDEX.json",
+      "sha256_lf_utf8": "987C6D49FC1E88FA3C5F1669B8DA76D9752FEC3CC4E88B515D44F986B8B3490F"
+    },
+    {
+      "sha256": "7124CF8BD456D929A823F66DFE74CCA8462B0E58C038DA3DD73BCB57F7F66D4F",
+      "path": "osu.Game.Rulesets.BmsRuleset.Tests/reference_fixtures/gameplay-parity-audit/audit.targets",
+      "sha256_lf_utf8": "7124CF8BD456D929A823F66DFE74CCA8462B0E58C038DA3DD73BCB57F7F66D4F"
+    },
+    {
+      "sha256": "F8B80D2E0FC96FFF2F80677F835E92CF27FA516975F1FF2E526669E2849B50F4",
+      "path": "osu.Game.Rulesets.BmsRuleset.Tests/reference_fixtures/gameplay-parity-audit/flow.csv",
+      "sha256_lf_utf8": "F45E85C072CE5AC1603852F3494F33958C93E45AA88F054E69B6523FFB36C3EF"
+    },
+    {
+      "sha256": "2C321E9E74BFD0E57D5B2222EFE31B5D55B87A5493925EB87A7499BA758E8687",
+      "path": "osu.Game.Rulesets.BmsRuleset.Tests/reference_fixtures/gameplay-parity-audit/FlowOracle.java",
+      "sha256_lf_utf8": "2C321E9E74BFD0E57D5B2222EFE31B5D55B87A5493925EB87A7499BA758E8687"
+    },
+    {
+      "sha256": "0EEA7CB15FF01D8B9A68D5F1135855DB0AD0EBB7E7949190FFC51AECE4E544CE",
+      "path": "osu.Game.Rulesets.BmsRuleset.Tests/reference_fixtures/gameplay-parity-audit/GameplayAudit.cs.txt",
+      "sha256_lf_utf8": "0EEA7CB15FF01D8B9A68D5F1135855DB0AD0EBB7E7949190FFC51AECE4E544CE"
+    },
+    {
+      "sha256": "07F2D8966A5C06E6EFF72DF90854FBD76B3D7FE19747CAA1EFDD28E38903F839",
+      "path": "osu.Game.Rulesets.BmsRuleset.Tests/reference_fixtures/gameplay-parity-audit/Generate.ps1",
+      "sha256_lf_utf8": "07F2D8966A5C06E6EFF72DF90854FBD76B3D7FE19747CAA1EFDD28E38903F839"
+    },
+    {
+      "sha256": "CF959340E2157734F17CC2D590291DCEDB8074CA9184186260E0FA5E3DFA5CDA",
+      "path": "osu.Game.Rulesets.BmsRuleset.Tests/reference_fixtures/gameplay-parity-audit/MineParserOracle.java",
+      "sha256_lf_utf8": "CF959340E2157734F17CC2D590291DCEDB8074CA9184186260E0FA5E3DFA5CDA"
+    },
+    {
+      "sha256": "01EF2386236B01A79E5E9C4E5ED0A4D3003D78DD4099B97D3B54053E9361331D",
+      "path": "osu.Game.Rulesets.BmsRuleset.Tests/reference_fixtures/gameplay-parity-audit/mines.csv",
+      "sha256_lf_utf8": "4EDEA5CB513B0E2249F8EDB77D7848594B5CC295380E4EC343F3CE34AB1877F2"
+    },
+    {
+      "sha256": "30AFD18F07E06B7BE85A3838F1319B2E3045F4823237EF723225B5C3CE1B89C6",
+      "path": "osu.Game.Rulesets.BmsRuleset.Tests/reference_fixtures/gameplay-parity-audit/PROVENANCE.json",
+      "sha256_lf_utf8": "0CFC2FC847D49C5F6238A0DD25F0ED98801EF2041235CB80334D384D1F4E1AC7"
+    },
+    {
+      "sha256": "57D3B90F26C4508B395DEC0144563D5BA8527C7605E38A74B5D528000C2302D7",
+      "path": "osu.Game.Rulesets.BmsRuleset.Tests/reference_fixtures/gameplay-parity-audit/REPRODUCIBILITY.md",
+      "sha256_lf_utf8": "57D3B90F26C4508B395DEC0144563D5BA8527C7605E38A74B5D528000C2302D7"
+    },
+    {
+      "sha256": "FC0D69F0AAC5B88D55840FC403F88A8C91D096A022C5C12222F9ABBF4707D5DC",
+      "path": "osu.Game.Rulesets.BmsRuleset.Tests/reference_fixtures/gameplay-parity-audit/Run-Audit.ps1",
+      "sha256_lf_utf8": "FC0D69F0AAC5B88D55840FC403F88A8C91D096A022C5C12222F9ABBF4707D5DC"
+    },
+    {
+      "sha256": "0146A488E0BD54F9105E8DCB4E68FC4F5DA9902CD1F6B8CF03BA979687CE0F44",
+      "path": "docs/lr2-certification/README.md",
+      "sha256_lf_utf8": "0146A488E0BD54F9105E8DCB4E68FC4F5DA9902CD1F6B8CF03BA979687CE0F44"
+    }
+  ],
+  "fixture_commit": "6bcf180bfe3540fb5e5d4f77a8a2792ca44be281"
+}
