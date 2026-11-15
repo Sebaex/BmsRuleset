@@ -44,7 +44,6 @@ using osu.Game.Online.API;
 using osu.Game.Online.API.Requests.Responses;
 using osu.Game.Overlays;
 using osu.Game.Overlays.Mods;
-using osu.Game.Overlays.Volume;
 using osu.Game.Rulesets.BmsRuleset.Beatmaps;
 using osu.Game.Rulesets.BmsRuleset.Beatmaps.Conversion;
 using osu.Game.Rulesets.BmsRuleset.Gameplay.DifficultyTable;
@@ -144,8 +143,6 @@ public abstract partial class BmsSongSelect : ScreenWithBeatmapBackground, IKeyB
 
     public override bool? ApplyModTrackAdjustments => true;
 
-    public override bool ShowFooter => true;
-
     private Sample? errorSample;
 
     [Resolved]
@@ -182,13 +179,17 @@ public abstract partial class BmsSongSelect : ScreenWithBeatmapBackground, IKeyB
     private int backgroundMetadataGeneration;
 
 
+    protected BmsSongSelect()
+    {
+        FooterContent.Value = ScreenFooterContent.Argon(leftButtons: CreateFooterButtons);
+    }
+
     [BackgroundDependencyLoader]
     private void load(AudioManager audio, OsuConfigManager config)
     {
         errorSample = audio.Samples.Get(@"UI/generic-error");
 
         AddRangeInternal([
-            new GlobalScrollAdjustsVolume(),
             onlineLookupSource,
             mainContent = new Container
             {
@@ -365,7 +366,7 @@ public abstract partial class BmsSongSelect : ScreenWithBeatmapBackground, IKeyB
     /// </summary>
     protected abstract void OnStart();
 
-    public override IReadOnlyList<ScreenFooterButton> CreateFooterButtons() =>
+    public virtual IReadOnlyList<ScreenFooterButton> CreateFooterButtons() =>
     [
         new FooterButtonMods(ModSelectOverlay)
         {
