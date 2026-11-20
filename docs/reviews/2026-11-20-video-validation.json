@@ -1,0 +1,39 @@
+{
+  "Date": "2026-11-20",
+  "Upstream": "Sebaex/BmsRuleset:dev",
+  "Base": "a1ab55d16eee20aa37efb47ba96910e8f319e474",
+  "Platform": "Windows x64",
+  "Sdk": "10.0.401",
+  "BenchmarksRun": false,
+  "FullUnfilteredSuiteRun": false,
+  "Results": [
+    {
+      "Run": "video-before-valid",
+      "Passed": 1,
+      "Failed": 2,
+      "Skipped": 0,
+      "Total": 3,
+      "Failures": [
+        {
+          "Test": "TestWorkerCompletesAtEndOfStreamAndLeavesQueuedFrameAvailable",
+          "Message": "A fully drained in-memory decoder must not keep polling until the drawable is disposed.\r\nAssert.That(SpinWait.SpinUntil(() => BmsVideoTestAccess.IsWorkerCompleted(source), TimeSpan.FromSeconds(3)), Is.True)\r\n  Expected: True\r\n  But was:  False"
+        },
+        {
+          "Test": "TestQueuedUploadKeepsPixelsUntilRendererConsumesIt",
+          "Message": "The draw thread has not consumed the queued upload.\r\nAssert.That(pool.Returns, Is.Zero)\r\n  Expected: 0\r\n  But was:  1"
+        }
+      ],
+      "TrxSha256": "2C4F87624C53C51E70056E45CD1A009176C43E1F55DA016CE6C8339A198172AE"
+    },
+    {
+      "Run": "video-final-complete",
+      "Passed": 221,
+      "Failed": 0,
+      "Skipped": 2,
+      "Total": 223,
+      "Failures": [],
+      "TrxSha256": "99BA0C403006707C7D839063934103C2DE711B1A8C3F81DAA98F7C07A00DDFFC"
+    }
+  ],
+  "ComparisonNote": "Results overlap; do not sum test counts across runs."
+}
