@@ -1,0 +1,39 @@
+{
+  "Date": "2026-11-20",
+  "Upstream": "Sebaex/BmsRuleset:dev",
+  "Base": "a1ab55d16eee20aa37efb47ba96910e8f319e474",
+  "Platform": "Windows x64",
+  "Sdk": "10.0.401",
+  "BenchmarksRun": false,
+  "FullUnfilteredSuiteRun": false,
+  "Results": [
+    {
+      "Run": "memory-before",
+      "Passed": 4,
+      "Failed": 2,
+      "Skipped": 0,
+      "Total": 6,
+      "Failures": [
+        {
+          "Test": "TestSharedEditorDoesNotRetainDisposedHuds",
+          "Message": "Assert.That(references, Has.All.Matches<WeakReference>(reference => !reference.IsAlive))\r\n  Expected: all items value matching lambda expression\r\n  But was:  < <System.WeakReference>, <System.WeakReference> >\r\n  First non-matching item at index [0]:  <System.WeakReference>"
+        },
+        {
+          "Test": "TestDisposedHudStopsObservingSkinEditor",
+          "Message": "Assert.That(getMainText(textHud).Text.ToString(), Is.EqualTo(\"Sample Text Event\"))\r\n  Expected string length 17 but was 10. Strings differ at index 0.\r\n  Expected: \"Sample Text Event\"\r\n  But was:  \"Game Start\"\r\n  -----------^"
+        }
+      ],
+      "TrxSha256": "96B2FC6BF1F5176100899F3028DD71933C3D563740D92F56EE16CFA3FD1CC9A7"
+    },
+    {
+      "Run": "memory-after",
+      "Passed": 380,
+      "Failed": 0,
+      "Skipped": 2,
+      "Total": 382,
+      "Failures": [],
+      "TrxSha256": "9310EF4C642BB60D5737F9E11439AEECDB5AE6D58A0E7F2D7F4CBB584CAA4B3A"
+    }
+  ],
+  "ComparisonNote": "Results overlap; do not sum test counts across runs."
+}
