@@ -83,7 +83,15 @@ internal sealed class BmsSupplementalVideoFrameSource(byte[] data) : IDisposable
                 if (!decoder.TryDecodeNextFrame(out var decoded, out error))
                 {
                     if (!string.IsNullOrWhiteSpace(error))
+                    {
                         fault(error);
+                        return;
+                    }
+
+                    // A drained in-memory decoder cannot receive more input. Keep its final
+                    // queued frame available, but release the decoder instead of polling forever.
+                    if (decoder.IsFinished)
+                        return;
 
                     wakeSignal.WaitOne(8);
                     continue;
