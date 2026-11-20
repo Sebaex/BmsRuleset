@@ -299,14 +299,4 @@ public partial class BmsSoloSongSelect : BmsSongSelect
         Mods.Value = modsAtGameplayStart;
         playerLoader = null;
     }
-
-    private partial class PlayerLoader : osu.Game.Screens.Play.PlayerLoader
-    {
-        public override bool ShowFooter => !QuickRestart;
-
-        public PlayerLoader(Func<Player> createPlayer)
-            : base(createPlayer)
-        {
-        }
-    }
 }
