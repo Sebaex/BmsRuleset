@@ -1,6 +1,11 @@
+using System;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using NUnit.Framework;
+using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
+using osu.Game.Graphics.Containers;
+using osu.Game.Overlays.SkinEditor;
 using osu.Game.Rulesets.BmsRuleset.UI.HudComponents;
 
 namespace osu.Game.Rulesets.BmsRuleset.Tests.Normal.SkinTest;
@@ -28,6 +33,73 @@ public class BmsTextHudEditModeTest
         applyEditModeVisibility(hud, false);
 
         Assert.That(getMainText(hud).Text.ToString(), Is.EqualTo("Game Start"));
+    }
+
+    [Test]
+    public void TestDisposedHudStopsObservingSkinEditor()
+    {
+        using var editor = new SkinEditorOverlay(new ScalingContainer());
+        using var textHud = new BmsTextHud();
+        using var stageHud = new BmsStageHud();
+        completeLoadWithEditor(textHud, editor);
+        completeLoadWithEditor(stageHud, editor);
+
+        editor.State.Value = Visibility.Visible;
+        Assert.That(getMainText(textHud).Text.ToString(), Is.EqualTo("Sample Text Event"));
+        Assert.That(stageHud.Alpha, Is.EqualTo(1));
+
+        textHud.Dispose();
+        editor.State.Value = Visibility.Hidden;
+        Assert.That(stageHud.Alpha, Is.EqualTo(0));
+        Assert.That(getMainText(textHud).Text.ToString(), Is.EqualTo("Sample Text Event"));
+
+        stageHud.Dispose();
+        editor.State.Value = Visibility.Visible;
+        Assert.That(stageHud.Alpha, Is.EqualTo(0));
+    }
+
+    [TestCase(Visibility.Hidden)]
+    [TestCase(Visibility.Visible)]
+    public void TestInitialEditorStateIsApplied(Visibility visibility)
+    {
+        using var editor = new SkinEditorOverlay(new ScalingContainer());
+        editor.State.Value = visibility;
+        using var textHud = new BmsTextHud();
+        using var stageHud = new BmsStageHud();
+        completeLoadWithEditor(textHud, editor);
+        completeLoadWithEditor(stageHud, editor);
+
+        Assert.That(stageHud.Alpha, Is.EqualTo(visibility == Visibility.Visible ? 1 : 0));
+        Assert.That(getMainText(textHud).Text.ToString(), Is.EqualTo(visibility == Visibility.Visible ? "Sample Text Event" : "Game Start"));
+    }
+
+    [Test]
+    public void TestSharedEditorDoesNotRetainDisposedHuds()
+    {
+        using var editor = new SkinEditorOverlay(new ScalingContainer());
+        var references = createDisposedHuds(editor);
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+        GC.Collect();
+
+        Assert.That(references, Has.All.Matches<WeakReference>(reference => !reference.IsAlive));
+        GC.KeepAlive(editor);
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static WeakReference[] createDisposedHuds(SkinEditorOverlay editor)
+    {
+        using var textHud = new BmsTextHud();
+        using var stageHud = new BmsStageHud();
+        completeLoadWithEditor(textHud, editor);
+        completeLoadWithEditor(stageHud, editor);
+        return [new WeakReference(textHud), new WeakReference(stageHud)];
+    }
+
+    private static void completeLoadWithEditor(BmsHudComponent hud, SkinEditorOverlay editor)
+    {
+        typeof(BmsHudComponent).GetProperty("SkinEditor", BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(hud, editor);
+        hud.GetType().GetMethod("LoadComplete", BindingFlags.Instance | BindingFlags.NonPublic)!.Invoke(hud, []);
     }
 
     private static void applyEditModeVisibility(BmsTextHud hud, bool isEditing)
