@@ -90,6 +90,7 @@ public partial class TestSceneBmsSettings : OsuTestScene
     {
         SettingsItemV2 fadeInItem = null!;
         SettingsItemV2 toggleItem = null!;
+        SettingsItemV2 judgementItem = null!;
         ExpandableSettingsGroup expandable = null!;
         BmsRulesetConfigManager config = null!;
 
@@ -98,6 +99,8 @@ public partial class TestSceneBmsSettings : OsuTestScene
             .Single(item => item.Control is FormSliderBar<double> slider && slider.Caption.Equals(BmsStrings.SoftConstantFadeIn)));
         AddStep("find slider group", () => expandable = settings.ChildrenOfType<ExpandableSettingsGroup>().Single());
         AddStep("find toggle", () => toggleItem = expandable.ChildrenOfType<SettingsItemV2>().Single(item => item.Control is FormCheckBox));
+        AddStep("find judgement algorithm setting", () => judgementItem = settings.ChildrenOfType<SettingsItemV2>()
+            .Single(item => item.Control is FormEnumDropdown<BmsJudgementAlgorithm>));
         AddStep("disable soft constant", () => config.SetValue(BmsRulesetSetting.SoftConstant, false));
         AddUntilStep("slider hidden", () => !fadeInItem.IsPresent);
         AddStep("enable soft constant", () => config.SetValue(BmsRulesetSetting.SoftConstant, true));
@@ -119,8 +122,10 @@ public partial class TestSceneBmsSettings : OsuTestScene
             && Math.Abs(expandable.Height - toggleItem.Height) < 0.01f);
         AddStep("clear search", () => search.SearchTerm = string.Empty);
         AddUntilStep("full group spacing restored", () => Math.Abs(expandable.Height - toggleItem.Height - fadeInItem.Height - SettingsSection.ITEM_SPACING_V2) < 0.01f);
-        AddStep("search for other setting", () => search.SearchTerm = "judgement");
-        AddUntilStep("unmatched slider leaves no gap", () => !expandable.IsPresent && !fadeInItem.MatchingFilter);
+        // The Soft Constant hint also matches "judgement" now that lazer searches hints.
+        AddStep("search for another setting by its caption", () => search.SearchTerm = BmsStrings.JudgementAlgorithm.ToString());
+        AddUntilStep("only the matching setting takes up space", () => judgementItem.IsPresent && !expandable.IsPresent
+            && !toggleItem.MatchingFilter && !fadeInItem.MatchingFilter);
         AddStep("restore defaults", () =>
         {
             search.SearchTerm = string.Empty;
