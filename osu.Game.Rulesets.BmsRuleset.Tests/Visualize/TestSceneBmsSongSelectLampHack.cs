@@ -482,7 +482,7 @@ public partial class TestSceneBmsSongSelectLampHack : ScreenTestScene
     private static BmsLamp lampFromDisplay(BmsLampDisplay display) => (BmsLamp)lamp_field.GetValue(display)!;
 
     [Test]
-    public void TestLampColoursMatchBeatoraja()
+    public void TestLampUsesRulesetPalette()
     {
         AddStep("clear previous lamp displays", () =>
         {
@@ -502,7 +502,7 @@ public partial class TestSceneBmsSongSelectLampHack : ScreenTestScene
                      (BmsLamp.Failed, new Color4(233, 47, 10, 255), new Color4(15, 3, 0, 255)),
                      (BmsLamp.AssistClear, new Color4(206, 1, 214, 255), Color4.Transparent),
                      (BmsLamp.EasyClear, new Color4(86, 202, 67, 255), Color4.Transparent),
-                     (BmsLamp.Clear, new Color4(245, 199, 88, 255), Color4.Transparent),
+                     (BmsLamp.Clear, new Color4(90, 175, 255, 255), Color4.Transparent),
                      (BmsLamp.HardClear, new Color4(248, 247, 245, 255), Color4.Transparent),
                      (BmsLamp.ExHardClear, new Color4(239, 253, 9, 255), new Color4(253, 9, 9, 255)),
                      (BmsLamp.FullCombo, new Color4(255, 255, 255, 255), new Color4(9, 250, 253, 255)),
@@ -510,12 +510,12 @@ public partial class TestSceneBmsSongSelectLampHack : ScreenTestScene
                      (BmsLamp.Max, new Color4(255, 255, 255, 255), new Color4(255, 235, 66, 255)),
                  })
         {
-            AddAssert($"{lampValue} base colour matches beatoraja", () =>
+            AddAssert($"{lampValue} uses the configured base colour", () =>
             {
                 var display = lampDisplays().Single(d => d.Lamp == lampValue);
                 return getBaseFill(display).Colour == expectedBase;
             });
-            AddAssert($"{lampValue} flash colour matches beatoraja", () =>
+            AddAssert($"{lampValue} uses the configured flash colour", () =>
             {
                 var display = lampDisplays().Single(d => d.Lamp == lampValue);
                 return getFlashFill(display).Colour == expectedFlash;
