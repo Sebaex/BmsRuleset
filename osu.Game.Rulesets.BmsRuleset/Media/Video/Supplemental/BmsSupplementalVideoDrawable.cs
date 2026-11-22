@@ -19,6 +19,7 @@ internal sealed partial class BmsSupplementalVideoDrawable : CompositeDrawable
     private IRenderer? renderer;
     private Texture? texture;
     private BmsSupplementalVideoFrameSource? frameSource;
+    private BmsSupplementalVideoFrame? pendingFrame;
 
     private BmsSupplementalVideoDrawable(Stream? stream, BmsSupplementalVideoFrameSource? frameSource, IClock playbackClock, double eventStartTime)
     {
@@ -96,13 +97,21 @@ internal sealed partial class BmsSupplementalVideoDrawable : CompositeDrawable
         var playbackTime = Math.Max(0, (playbackClock.CurrentTime - eventStartTime) / 1000.0);
         frameSource.SetTargetTime(playbackTime);
 
-        if (!frameSource.TryTakeLatestFrame(out var frame))
+        if (frameSource.TryTakeLatestFrame(out var frame))
+        {
+            pendingFrame?.Dispose();
+            pendingFrame = frame;
+        }
+
+        // Keep only the newest decoded frame while the draw thread is behind. It must
+        // survive EOF so the final image can still be submitted when drawing resumes.
+        if (pendingFrame == null || texture?.UploadComplete == false)
             return;
 
-        var currentFrame = frame;
+        var currentFrame = pendingFrame;
+        pendingFrame = null;
 
         using (currentFrame)
-        using (var upload = currentFrame.CreateUpload())
         {
             if (texture == null || texture.Width != currentFrame.Width || texture.Height != currentFrame.Height)
             {
@@ -110,13 +119,25 @@ internal sealed partial class BmsSupplementalVideoDrawable : CompositeDrawable
                 sprite.Texture = texture;
             }
 
-            texture.SetData(upload);
+            var upload = currentFrame.CreateUpload();
+            try
+            {
+                // SetData queues consumption on the draw thread, which owns the pixels until then.
+                texture.SetData(upload);
+            }
+            catch
+            {
+                upload.Dispose();
+                throw;
+            }
         }
     }
 
     protected override void Dispose(bool isDisposing)
     {
         frameSource?.Dispose();
+        pendingFrame?.Dispose();
+        pendingFrame = null;
         stream?.Dispose();
         base.Dispose(isDisposing);
     }

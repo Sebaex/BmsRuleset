@@ -38,6 +38,8 @@ internal sealed unsafe class BmsSupplementalVideoDecoder : IDisposable
     private double timeBaseInSeconds;
     private long streamStartTime;
 
+    public bool IsFinished => decoderFullyDrained;
+
     private BmsSupplementalVideoDecoder(BmsSupplementalFFmpegFuncs ffmpeg, byte[] data, ArrayPool<Rgba32>? framePool = null)
     {
         this.ffmpeg = ffmpeg;
