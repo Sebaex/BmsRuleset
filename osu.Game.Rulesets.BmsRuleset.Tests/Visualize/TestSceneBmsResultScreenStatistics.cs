@@ -239,11 +239,15 @@ public partial class TestSceneBmsResultScreenStatistics : OsuManualInputManagerT
             var bounds = circle.ScreenSpaceDrawQuad.AABBFloat;
             return text.Width < bounds.Width * 0.8f && text.Height < bounds.Height * 0.8f;
         });
-        AddAssert("rank composition fills the narrowed column", () =>
+        AddAssert("rating circle is centred and fits its row", () =>
         {
-            var overview = screen.ChildrenOfType<BmsResultOverview>().Single();
-            var circle = overview.ChildrenOfType<BmsAccuracyCircle>().Single().ScreenSpaceDrawQuad.AABBFloat;
-            return circle.Width >= overview.ScreenSpaceDrawQuad.AABBFloat.Width * 0.6f;
+            var circle = screen.ChildrenOfType<BmsResultOverview>().Single().ChildrenOfType<BmsAccuracyCircle>().Single();
+            var row = circle.FindClosestParent<DrawSizePreservingFillContainer>()!.ScreenSpaceDrawQuad.AABBFloat;
+            var bounds = circle.ScreenSpaceDrawQuad.AABBFloat;
+            return bounds.Width > 0 && bounds.Height > 0
+                                    && bounds.Width <= row.Width && bounds.Height <= row.Height
+                                    && Math.Abs(bounds.Centre.X - row.Centre.X) < 1
+                                    && Math.Abs(bounds.Centre.Y - row.Centre.Y) < 1;
         });
         AddStep("record metadata positions", () => metadataPositions = screen.ChildrenOfType<BmsResultOverview>().Single()
             .ChildrenOfType<MarqueeContainer>().ToDictionary(row => row, row => row.ChildrenOfType<FillFlowContainer>().Single().X));
