@@ -1,4 +1,5 @@
-﻿using osu.Framework.Allocation;
+using osu.Framework.Allocation;
+using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
@@ -12,6 +13,7 @@ namespace osu.Game.Rulesets.BmsRuleset.UI.HudComponents;
 
 public sealed partial class BmsTextHud : BmsHudComponent
 {
+    private readonly Bindable<Visibility> skinEditorVisibility = new(Visibility.Hidden);
     private readonly SpriteText mainText;
     private readonly SpriteText arrowText;
 
@@ -86,12 +88,10 @@ public sealed partial class BmsTextHud : BmsHudComponent
         }
 
         if (SkinEditor != null)
-            SkinEditor.State.BindValueChanged(_ => updateEditModeVisibility(), true);
-        else
-            applyEditModeVisibility(false);
-    }
+            skinEditorVisibility.BindTo(SkinEditor.State);
 
-    private void updateEditModeVisibility() => applyEditModeVisibility(SkinEditor?.State.Value == Visibility.Visible);
+        skinEditorVisibility.BindValueChanged(state => applyEditModeVisibility(state.NewValue == Visibility.Visible), true);
+    }
 
     private void applyEditModeVisibility(bool isEditing)
     {

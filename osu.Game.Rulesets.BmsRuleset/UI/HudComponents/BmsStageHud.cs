@@ -44,6 +44,7 @@ internal sealed partial class BmsStageHud : BmsHudComponent
         Precision = 0.01f,
     };
 
+    private readonly Bindable<Visibility> skinEditorVisibility = new(Visibility.Hidden);
     private readonly Container editHandle;
     private BmsStageHudController? controller;
     private float currentStageWidth;
@@ -112,9 +113,9 @@ internal sealed partial class BmsStageHud : BmsHudComponent
         }
 
         if (SkinEditor != null)
-            SkinEditor.State.BindValueChanged(_ => updateEditModeVisibility(), true);
-        else
-            applyEditModeVisibility(false);
+            skinEditorVisibility.BindTo(SkinEditor.State);
+
+        skinEditorVisibility.BindValueChanged(state => applyEditModeVisibility(state.NewValue == Visibility.Visible), true);
     }
 
     protected override void Dispose(bool isDisposing)
@@ -153,8 +154,6 @@ internal sealed partial class BmsStageHud : BmsHudComponent
         if (LightPositionOffset.MaxValue != maximum)
             LightPositionOffset.MaxValue = maximum;
     }
-
-    private void updateEditModeVisibility() => applyEditModeVisibility(SkinEditor?.State.Value == Visibility.Visible);
 
     private void applyEditModeVisibility(bool isEditing)
     {
