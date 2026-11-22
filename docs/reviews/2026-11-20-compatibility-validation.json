@@ -1,0 +1,101 @@
+{
+  "Date": "2026-11-20",
+  "Upstream": "Sebaex/BmsRuleset:dev",
+  "Base": "a1ab55d16eee20aa37efb47ba96910e8f319e474",
+  "Platform": "Windows x64",
+  "Sdk": "10.0.401",
+  "BenchmarksRun": false,
+  "FullUnfilteredSuiteRun": false,
+  "Results": [
+    {
+      "Run": "compatibility-final",
+      "Passed": 682,
+      "Failed": 2,
+      "Skipped": 2,
+      "Total": 686,
+      "Failures": [
+        {
+          "Test": "TestLampColoursMatchBeatoraja",
+          "Message": "Clear base colour matches beatoraja"
+        },
+        {
+          "Test": "TestHistoricalBestComparison(1280,720,False)",
+          "Message": "\"historical EXSCORE loaded without replay\" timed out"
+        }
+      ],
+      "TrxSha256": "653168BCB94B92D4A6801E70B78800FFD98A4E555C5FD2AB09F3EE91B9A2E9D8"
+    },
+    {
+      "Run": "compatibility-volume",
+      "Passed": 11,
+      "Failed": 0,
+      "Skipped": 0,
+      "Total": 11,
+      "Failures": [],
+      "TrxSha256": "8CE546FEA388B9779982B89408B84A8935FAC328A57D8D0BD0BF6FCAEF7F4A1D"
+    },
+    {
+      "Run": "baseline-result-controls",
+      "Passed": 3,
+      "Failed": 3,
+      "Skipped": 0,
+      "Total": 6,
+      "Failures": [
+        {
+          "Test": "TestStatisticsFitViewportAndStayOpen(1600,900)",
+          "Message": "rank composition fills the narrowed column"
+        },
+        {
+          "Test": "TestStatisticsFitViewportAndStayOpen(1280,720)",
+          "Message": "rank composition fills the narrowed column"
+        },
+        {
+          "Test": "TestStatisticsFitViewportAndStayOpen(1024,600)",
+          "Message": "rank composition fills the narrowed column"
+        }
+      ],
+      "TrxSha256": "FC02F99DFC1C9391EC39A8E8649C9E004259E9B9FB4CD48E9C386DCC4C5BE4CF"
+    },
+    {
+      "Run": "compatibility-result-controls",
+      "Passed": 3,
+      "Failed": 3,
+      "Skipped": 0,
+      "Total": 6,
+      "Failures": [
+        {
+          "Test": "TestStatisticsFitViewportAndStayOpen(1280,720)",
+          "Message": "rank composition fills the narrowed column"
+        },
+        {
+          "Test": "TestStatisticsFitViewportAndStayOpen(1600,900)",
+          "Message": "rank composition fills the narrowed column"
+        },
+        {
+          "Test": "TestStatisticsFitViewportAndStayOpen(1024,600)",
+          "Message": "rank composition fills the narrowed column"
+        }
+      ],
+      "TrxSha256": "64BAD1C879661D57B8ABC27E992084A6A540A66AC074DD6DD8C7CEBD6C188D9B"
+    },
+    {
+      "Run": "baseline-aggregate",
+      "Passed": 682,
+      "Failed": 2,
+      "Skipped": 2,
+      "Total": 686,
+      "Failures": [
+        {
+          "Test": "TestLampColoursMatchBeatoraja",
+          "Message": "Clear base colour matches beatoraja"
+        },
+        {
+          "Test": "TestHistoricalBestComparison(1280,720,False)",
+          "Message": "\"historical EXSCORE loaded without replay\" timed out"
+        }
+      ],
+      "TrxSha256": "25C1B6F6F358C1C5912D4C293D299AA724C67C2B4DDAA1B0A099F462E20D94A3"
+    }
+  ],
+  "ComparisonNote": "Results overlap; do not sum test counts across runs."
+}

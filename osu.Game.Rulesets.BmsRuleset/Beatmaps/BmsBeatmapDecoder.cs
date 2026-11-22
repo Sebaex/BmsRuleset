@@ -87,7 +87,7 @@ public class BmsBeatmapDecoder(Func<int, int>? randomValueSelector = null, BmsRe
         }
     }
 
-    protected override Beatmap CreateTemplateObject() => new BmsDecodedBeatmap();
+    public override Beatmap CreateTemplateObject() => new BmsDecodedBeatmap();
 
     internal static Beatmap DecodeBytes(byte[] content, BeatmapInfo? beatmapInfo = null, Func<int, int>? randomValueSelector = null, BmsReferenceBpmMode? referenceBpmMode = null)
     {
